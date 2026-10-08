@@ -1,64 +1,25 @@
-"use client";
-
-import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
-import { useIndustries } from "@/lib/wp";
 
-type Industry = {
+type Sector = {
+  id: string;
   title: string;
   image: string;
-  href: string;
-  description: string;
+  headline: string;
 };
 
+/**
+ * Industries — the home page teaser grid. Cards reuse the same sector data
+ * (title/image/headline) as the /industries page itself, and each links
+ * straight to that sector's slide there (`/industries#sec-<id>`), so the two
+ * pages never drift out of sync.
+ */
 export default function Industries() {
   const t = useTranslations("Industries");
-  // Designed content from the locale files — also the graceful fallback
-  // while the CMS query loads or when the CMS returns nothing.
-  const fallback = t.raw("items") as Industry[];
-
-  // Industries from the CMS (WPGraphQL `industries`), locale-aware via the hook.
-  const { data: industriesPage } = useIndustries();
-
-  const items: Industry[] = useMemo(() => {
-    // CMS cards (entries without a hero image are skipped — the card design is
-    // photo-led). Titles/links/images come from the CMS; copy prefers the CMS
-    // intro and falls back to the designed description for the same sector.
-    const fromCms = (industriesPage?.items ?? [])
-      .filter((i) => i.image?.src)
-      .map((i) => {
-        const slug = i.uri.split("/").filter(Boolean).pop() ?? i.title;
-        return {
-          title: i.title,
-          image: i.image!.src,
-          href: `/industries/${slug}`,
-          description:
-            i.intro ??
-            fallback.find((f) => f.href === `#${slug}`)?.description ??
-            "",
-        };
-      })
-      .filter((i) => i.description);
-
-    if (fromCms.length === 0) return fallback;
-
-    // Merge: CMS entries replace the matching designed card (same slug),
-    // designed cards fill the remaining grid so it never renders half-empty
-    // while the CMS is still being populated, and CMS-only sectors append.
-    const cmsBySlug = new Map(
-      fromCms.map((i) => [i.href.replace("/industries/", ""), i]),
-    );
-    const merged = fallback.map((f) => cmsBySlug.get(f.href.replace(/^#/, "")) ?? f);
-    const mergedSlugs = new Set(merged.map((i) => i.href.replace("/industries/", "").replace(/^#/, "")));
-    const extras = fromCms.filter((i) => {
-      const slug = i.href.replace("/industries/", "");
-      return !mergedSlugs.has(slug) && !fallback.some((f) => f.href === `#${slug}`);
-    });
-    return [...merged, ...extras];
-  }, [industriesPage, fallback]);
+  const tIndustries = useTranslations("IndustriesPage");
+  const items = tIndustries.raw("sectors.items") as Sector[];
 
   return (
     <section className="bg-white py-20 text-[#0a1014] sm:py-24 lg:py-28">
@@ -70,7 +31,7 @@ export default function Industries() {
           stagger={0.15}
         >
           <StaggerItem direction="start">
-            <p className="text-[12px] overline-sm-medium uppercase tracking-[0.28em] text-slate-400">
+            <p className="text-[12px] overline-sm-medium uppercase tracking-[0.28em] text-slate-600">
               {t("eyebrow")}
             </p>
             <MaskText
@@ -84,7 +45,7 @@ export default function Industries() {
           <StaggerItem
             as="p"
             direction="end"
-            className="max-w-[55ch] body-lg-regular leading-relaxed text-slate-500"
+            className="max-w-[55ch] body-lg-regular leading-relaxed text-slate-600"
           >
             {t("description")}
           </StaggerItem>
@@ -97,9 +58,9 @@ export default function Industries() {
           stagger={0.11}
         >
           {items.map((item) => (
-            <StaggerItem as="li" key={item.title}>
+            <StaggerItem as="li" key={item.id}>
               <Link
-                href={item.href}
+                href={`/industries#sec-${item.id}`}
                 className="group relative block aspect-[4/3] max-h-[254px] w-full overflow-hidden rounded-2xl"
               >
                 {/* 1. Image — bottom layer */}
@@ -127,7 +88,7 @@ export default function Industries() {
                   {/* Description: revealed on hover */}
                   <div className="grid grid-rows-[0fr] transition-all duration-500 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:grid-rows-[1fr] group-hover:mt-2">
                     <p className="line-clamp-2 max-w-[90%] overflow-hidden text-[14px] leading-relaxed text-white/75 opacity-0 -translate-y-1 transition-all duration-500 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:opacity-100 group-hover:translate-y-0">
-                      {item.description}
+                      {item.headline}
                     </p>
                   </div>
                 </div>

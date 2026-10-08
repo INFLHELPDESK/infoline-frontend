@@ -55,17 +55,17 @@ export default function Scale() {
           {stats.map((stat) => (
             <StaggerItem
               key={stat.label}
-              className="px-8 py-9 lg:px-10 lg:py-11"
+              className="flex flex-col-reverse px-8 py-9 lg:px-10 lg:py-11"
             >
+              <dt className="mt-3 max-w-[26ch] body-sm-regular text-slate-400">
+                {stat.label}
+              </dt>
               <dd className="text-4xl font-bold tracking-tight text-brandblue-400 sm:text-5xl">
                 <CountUp
                   value={stat.value}
                   duration={stat.value.replace(/\D/g, "").length > 2 ? 0.9 : 2}
                 />
               </dd>
-              <dt className="mt-3 max-w-[26ch] body-sm-regular text-slate-400">
-                {stat.label}
-              </dt>
             </StaggerItem>
           ))}
         </Stagger>

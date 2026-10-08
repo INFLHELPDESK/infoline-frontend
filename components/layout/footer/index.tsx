@@ -29,7 +29,7 @@ export const Footer = () => {
             <Link href="/" className="flex items-baseline gap-3">
               <Image
                 src="/assets/logo.svg"
-                alt="Infoline Logo"
+                alt={t("logoAlt")}
                 width={100}
                 height={24}
               />

@@ -1,12 +1,6 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import {
-  MaskText,
-  Reveal,
-  Stagger,
-  StaggerItem,
-  ClipReveal,
-} from "@/components/ui/motion";
+import { MaskText, Reveal, Stagger, StaggerItem } from "@/components/ui/motion";
 
 /**
  * Vision & mission. Two-column: statement copy on the left, a supporting photo

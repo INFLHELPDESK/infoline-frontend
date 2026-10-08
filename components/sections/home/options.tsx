@@ -7,6 +7,7 @@ import {
   Reveal,
   MaskText,
   Parallax,
+  SpotlightCard,
   Stagger,
   StaggerItem,
 } from "@/components/ui/motion";
@@ -32,7 +33,7 @@ export default function Options() {
           stagger={0.15}
         >
           <StaggerItem direction="start">
-            <p className="overline-sm-medium text-slate-500 mb-sm">
+            <p className="overline-sm-medium text-slate-600 mb-sm">
               {t("eyebrow")}
             </p>
             <MaskText
@@ -58,27 +59,25 @@ export default function Options() {
           stagger={0.12}
         >
           {pillars.map((pillar) => (
-            <StaggerItem
-              as="div"
-              key={pillar.title}
-              className={`rounded-xl max-h-67 py-10 px-6.5 bg-white flex flex-col solutions-card-shadow`}
-            >
-              <p className="overline-sm-medium text-slate-300 mb-5">
-                {pillar.eyebrow}
-              </p>
-              <h3 className="heading-lg-semibold text-slate-900 mb-4">
-                {pillar.title}
-              </h3>
-              <p className="body-md-regular text-slate-700 mb-2xl">
-                {pillar.description}
-              </p>
-              <Link
-                href={pillar.href}
-                className="group mt-auto overline-sm-medium text-brandblue-500 hover:text-brandblue-700 transition-colors inline-flex items-center gap-xs"
-              >
-                {pillar.cta}
-                <ArrowRight className="size-4 rtl:rotate-180 transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-              </Link>
+            <StaggerItem as="div" key={pillar.title} className="h-full">
+              <SpotlightCard className="rounded-xl max-h-67 h-full py-10 px-6.5 bg-white flex flex-col solutions-card-shadow">
+                <p className="overline-sm-medium text-slate-300 mb-5">
+                  {pillar.eyebrow}
+                </p>
+                <h3 className="heading-lg-semibold text-slate-900 mb-4">
+                  {pillar.title}
+                </h3>
+                <p className="body-md-regular text-slate-700 mb-2xl">
+                  {pillar.description}
+                </p>
+                <Link
+                  href={pillar.href}
+                  className="group mt-auto overline-sm-medium text-brandblue-500 hover:text-brandblue-700 transition-colors inline-flex items-center gap-xs"
+                >
+                  {pillar.cta}
+                  <ArrowRight className="size-4 rtl:rotate-180 transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                </Link>
+              </SpotlightCard>
             </StaggerItem>
           ))}
         </Stagger>

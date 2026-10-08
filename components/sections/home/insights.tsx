@@ -1,8 +1,13 @@
+"use client";
+
+import { useMemo } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
+import { usePosts } from "@/lib/wp";
+import { toInsight } from "@/lib/content-adapters";
 
 type Insight = {
   category: string;
@@ -13,7 +18,16 @@ type Insight = {
 
 export default function Insights() {
   const t = useTranslations("Insights");
-  const insights = t.raw("items") as Insight[];
+  // Designed items from the locale files — graceful fallback while the CMS
+  // query loads or when it has no posts.
+  const fallback = t.raw("items") as Insight[];
+
+  // Latest posts from the CMS (WP `posts`, locale-aware); home teaser shows 3.
+  const { data: posts } = usePosts();
+  const insights = useMemo(() => {
+    const fromCms = (posts ?? []).map(toInsight);
+    return fromCms.length > 0 ? fromCms.slice(0, 3) : fallback;
+  }, [posts, fallback]);
 
   return (
     <section className="insights flex items-center justify-center py-20 lg:py-26">
@@ -37,7 +51,7 @@ export default function Insights() {
           </StaggerItem>
           <StaggerItem direction="end">
             <Link
-              href={t("allCta.href")}
+              href="/blog"
               className="group overline-sm-medium uppercase text-brandblue-500 hover:text-brandblue-300 transition-colors whitespace-nowrap flex items-center gap-xs"
             >
               {t("allCta.label")}

@@ -333,6 +333,14 @@ body {
   margin-right: auto;
 }
 
+/* Faint blueprint grid wash used behind content (insights proof card). */
+@utility grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(13, 22, 27, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(13, 22, 27, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
 /* Typography */
 
 @utility heading-hero-semibold {
@@ -882,4 +890,17 @@ body {
   font-size: 12px;
   color: #94a3b8;
   white-space: nowrap;
+}
+
+/* ── Arabic typography ────────────────────────────────────────────────────
+   Arabic is a cursive script: any letter-spacing pulls joined letters apart
+   (the tracked overlines/eyebrows rendered as disconnected glyphs), and the
+   monospace stack has no Arabic glyphs so it fell back to a system font.
+   In RTL, reset tracking and map the mono labels to the Arabic face. These
+   rules are unlayered, so they win over Tailwind's layered utilities. */
+html[dir="rtl"] body * {
+  letter-spacing: 0;
+}
+html[dir="rtl"] .font-mono {
+  font-family: var(--font-arabic);
 }

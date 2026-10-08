@@ -2,16 +2,25 @@
 
 import { useTransition, type ReactNode } from "react";
 import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
-const styles = {
-  container: "bg-white/8",
-  inactive: "text-slate-500 hover:text-slate-300",
-  active: "text-white",
-  highlight: "bg-black/20",
-};
+const tones = {
+  dark: {
+    container: "bg-white/8",
+    inactive: "text-slate-500 hover:text-slate-300",
+    active: "text-white",
+    highlight: "bg-black/20",
+  },
+  // Light header (Contact): slate-50 pill with a white active chip.
+  light: {
+    container: "bg-slate-50",
+    inactive: "text-slate-500 hover:text-slate-700",
+    active: "text-slate-900",
+    highlight: "bg-white shadow-[0_1px_3px_rgba(15,40,60,0.12)]",
+  },
+} as const;
 
 // The Arabic glyph exported from Figma (fill driven by currentColor).
 const ArabicGlyph = (
@@ -40,8 +49,14 @@ const localeNames: Record<string, string> = {
   en: "English",
 };
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({
+  tone = "dark",
+}: {
+  tone?: keyof typeof tones;
+}) {
+  const styles = tones[tone];
   const locale = useLocale();
+  const t = useTranslations("Header");
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -57,8 +72,8 @@ export default function LanguageSwitcher() {
   return (
     <div
       role="group"
-      aria-label="Language"
-      className={`flex h-9 w-[90px] shrink-0 flex-row items-center gap-px rounded-full px-1 ${styles.container}`}
+      aria-label={t("languageLabel")}
+      className={`flex h-9 w-[90px] shrink-0 flex-row items-center gap-px rounded-full px-1 transition-colors duration-300 ${styles.container}`}
     >
       {routing.locales.map((l) => {
         const isActive = l === locale;

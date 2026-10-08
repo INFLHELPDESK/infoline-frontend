@@ -292,3 +292,134 @@ export function normalizeClient(raw: RawClient | null): Client | null {
     logo: normalizeImage(raw.clientContent?.clientLogo),
   };
 }
+
+/* ------------------------------------------------------------------ */
+/* Careers                                                             */
+/* ------------------------------------------------------------------ */
+
+import type { Career } from "./types";
+
+type RawCareer = {
+  databaseId: number | null;
+  title: string | null;
+  uri: string | null;
+  slug: string | null;
+  careersCoreContent: {
+    location: string | null;
+    discipline: string | null;
+    jobType: string | null;
+  } | null;
+};
+
+export function normalizeCareer(raw: RawCareer | null): Career | null {
+  if (!raw?.uri) return null;
+  const c = raw.careersCoreContent;
+  return {
+    databaseId: raw.databaseId ?? 0,
+    title: raw.title ?? "",
+    uri: raw.uri,
+    slug: raw.slug ?? "",
+    // CMS values can carry trailing whitespace/newlines (seen in the seed).
+    location: c?.location?.trim() || null,
+    discipline: c?.discipline?.trim() || null,
+    jobType: c?.jobType?.trim() || null,
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Blog / insights — posts                                             */
+/* ------------------------------------------------------------------ */
+
+import type { Post, PostListItem } from "./types";
+
+type RawPost = {
+  databaseId: number | null;
+  title: string | null;
+  slug: string | null;
+  uri: string | null;
+  date: string | null;
+  excerpt: string | null;
+  content?: string | null;
+  featuredImage: Parameters<typeof normalizeImage>[0];
+  categories: { nodes: { name: string | null; slug: string | null }[] } | null;
+};
+
+export function normalizePostListItem(raw: RawPost | null): PostListItem | null {
+  if (!raw?.slug) return null;
+  return {
+    databaseId: raw.databaseId ?? 0,
+    title: raw.title ?? "",
+    slug: raw.slug,
+    uri: raw.uri ?? `/blog/${raw.slug}`,
+    date: raw.date ?? "",
+    excerpt: raw.excerpt ?? null,
+    image: normalizeImage(raw.featuredImage),
+    categories: (raw.categories?.nodes ?? []).flatMap((t) =>
+      t.name ? [{ name: t.name, slug: t.slug ?? "" }] : [],
+    ) as Term[],
+  };
+}
+
+export function normalizePost(raw: RawPost | null): Post | null {
+  const base = normalizePostListItem(raw);
+  if (!base) return null;
+  return { ...base, content: raw?.content ?? null };
+}
+
+/* ------------------------------------------------------------------ */
+/* Company profile (About downloads)                                   */
+/* ------------------------------------------------------------------ */
+
+import type { CompanyProfile, CompanyProfileFile } from "./types";
+
+type RawProfileFile = {
+  node?: {
+    mediaItemUrl?: string | null;
+    fileSize?: number | string | null;
+    mimeType?: string | null;
+  } | null;
+} | null;
+
+function normalizeProfileFile(file: RawProfileFile): CompanyProfileFile | null {
+  const url = file?.node?.mediaItemUrl;
+  if (!url) return null;
+  const rawSize = file?.node?.fileSize;
+  const fileSize =
+    typeof rawSize === "number"
+      ? rawSize
+      : typeof rawSize === "string" && /^\d+$/.test(rawSize.trim())
+        ? Number(rawSize.trim())
+        : null;
+  return { url, fileSize, mimeType: file?.node?.mimeType ?? null };
+}
+
+type RawCompanyProfile = {
+  aboutSettings: {
+    companyProfile: {
+      sectionHeading: string | null;
+      sectionIntro: string | null;
+      profileEnLabel: string | null;
+      profileEnFile: RawProfileFile;
+      profileArLabel: string | null;
+      profileArFile: RawProfileFile;
+    } | null;
+  } | null;
+};
+
+export function normalizeCompanyProfile(
+  raw: RawCompanyProfile | null,
+): CompanyProfile {
+  const p = raw?.aboutSettings?.companyProfile;
+  return {
+    heading: p?.sectionHeading ?? null,
+    intro: p?.sectionIntro ?? null,
+    en: {
+      label: p?.profileEnLabel ?? null,
+      file: normalizeProfileFile(p?.profileEnFile ?? null),
+    },
+    ar: {
+      label: p?.profileArLabel ?? null,
+      file: normalizeProfileFile(p?.profileArFile ?? null),
+    },
+  };
+}

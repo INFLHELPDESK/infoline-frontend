@@ -12,8 +12,7 @@ type Props = {
   durationSeconds?: number;
 };
 
-// Replace with data fetched from your backend.
-const DEMO_LOGOS: LogoItem[] = [
+const LOGOS: LogoItem[] = [
   { src: "/assets/clients/moh.svg", alt: "Ministry of Health" },
   {
     src: "/assets/clients/tra.svg",
@@ -36,13 +35,13 @@ export default function PartnerLogos({ durationSeconds = 30 }: Props) {
   const t = useTranslations("Proof");
 
   // Client logos from the CMS (WPGraphQL `clients`), locale-aware via the hook.
-  // Falls back to the bundled demo set while loading or if the CMS has none.
+  // Falls back to the bundled set while loading or if the CMS has none.
   const { data: clients } = useClients();
   const logos: LogoItem[] = useMemo(() => {
     const fromCms = (clients ?? [])
       .filter((c) => c.logo?.src)
       .map((c) => ({ src: c.logo!.src, alt: c.logo!.alt || c.name }));
-    return fromCms.length > 0 ? fromCms : DEMO_LOGOS;
+    return fromCms.length > 0 ? fromCms : LOGOS;
   }, [clients]);
 
   return (
@@ -56,7 +55,7 @@ export default function PartnerLogos({ durationSeconds = 30 }: Props) {
         >
           <StaggerItem
             as="p"
-            className="text-[12px] font-medium uppercase tracking-[0.28em] text-slate-400"
+            className="text-[12px] font-medium uppercase tracking-[0.28em] text-slate-600"
           >
             {t("eyebrow")}
           </StaggerItem>

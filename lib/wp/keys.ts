@@ -27,4 +27,13 @@ export const wpKeys = {
   clients: (locale: WpLocale) => [...wpKeys.all, "clients", locale] as const,
 
   hubs: (locale: WpLocale) => [...wpKeys.all, "hubs", locale] as const,
+
+  careers: (locale: WpLocale) => [...wpKeys.all, "careers", locale] as const,
+
+  posts: (locale: WpLocale) => [...wpKeys.all, "posts", locale] as const,
+  post: (slug: string, locale: WpLocale) =>
+    [...wpKeys.all, "post", locale, slug] as const,
+
+  companyProfile: (locale: WpLocale) =>
+    [...wpKeys.all, "companyProfile", locale] as const,
 };

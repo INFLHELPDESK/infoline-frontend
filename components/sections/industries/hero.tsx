@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import Button from "@/components/ui/button";
-import { MainBackground } from "@/components/ui/background/main";
+import { MainBackground } from "@/components/ui/background";
 import { Reveal, Stagger, StaggerItem, MaskText } from "@/components/ui/motion";
 import { Link } from "@/i18n/navigation";
 
@@ -17,6 +17,27 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden">
+      {/* Layer 1 — background video. Muted/looped/playsInline so it autoplays
+          everywhere; aria-hidden because it is decorative. */}
+      <video
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-1 h-full w-full object-cover opacity-45"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+      >
+        <source src="/assets/industries-bg.webm" type="video/webm" />
+      </video>
+
+      {/* Layer 2 — melt the video into ink at the edges so the copy and the
+          sector index stay readable over the moving backdrop. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-2 bg-gradient-to-b from-ink via-ink/55 to-ink"
+      />
+
       <div className="mx-auto w-full max-w-360 px-6 py-24 lg:px-10 lg:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-[1.3fr_.7fr] lg:gap-20">
           {/* Left column */}
@@ -93,7 +114,7 @@ export default function Hero() {
                       no locale prefixing). */}
                   <Link
                     href={`#sec-${s.id}`}
-                    className="group flex items-center gap-5 border-b border-white/5 py-3 transition-colors hover:bg-white/[.02] hover:translate-x-3"
+                    className="group flex items-center gap-5 border-b border-white/5 py-3 transition-[background-color,transform] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-white/[.02] hover:translate-x-3 rtl:hover:-translate-x-3"
                   >
                     <span className="font-mono text-[13px] tabular-nums text-slate-400 group-hover:text-brandblue-400">
                       {s.number}
@@ -108,7 +129,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      <MainBackground />
+      <MainBackground tone="translucent" />
     </section>
   );
 }

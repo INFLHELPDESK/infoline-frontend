@@ -75,7 +75,7 @@ export default function Button({
   const s = sizeClasses[size];
 
   const baseClasses = [
-    "group inline-flex flex-none items-center justify-center whitespace-nowrap font-semibold uppercase",
+    "group inline-flex flex-none flex-wrap items-center justify-center whitespace-nowrap font-semibold uppercase",
     isIconOnly ? "rounded-full" : "rounded-md",
     isIconOnly ? s.iconPadding : `${s.padding} ${s.gap}`,
     s.text,

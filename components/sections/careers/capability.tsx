@@ -1,5 +1,10 @@
 import { useTranslations } from "next-intl";
-import { Stagger, StaggerItem, CountUp, MaskText } from "@/components/ui/motion";
+import {
+  Stagger,
+  StaggerItem,
+  CountUp,
+  MaskText,
+} from "@/components/ui/motion";
 
 /**
  * Omani capability — light band with the three proof numbers from the catalogue
@@ -42,20 +47,26 @@ export default function Capability() {
 
           <Stagger
             as="ul"
-            className="mt-14 grid w-full grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6"
+            className="mt-14 grid w-full grid-cols-1 gap-10 sm:grid-cols-[0.7fr_1.6fr_0.7fr] sm:gap-6 lg:w-[760]"
             stagger={0.12}
             delayChildren={0.15}
             amount={0.25}
           >
             {stats.map((s) => (
-              <StaggerItem as="li" key={s.label} distance={32} blur={false}>
+              <StaggerItem
+                as="li"
+                key={s.label}
+                distance={32}
+                blur={false}
+                className=""
+              >
                 {/* Top rule per stat, matching the design's ticked columns */}
-                <div className="mx-auto mb-7 h-px w-full max-w-52 bg-brandblue-500" />
+                <div className="mx-auto h-[2px] w-full bg-brandblue-500" />
                 <CountUp
                   value={s.value}
-                  className="block text-[44px] font-bold leading-none tracking-tight text-brandblue-500 lg:text-[56px]"
+                  className="block font-mono mt-3 text-[44px] font-bold tracking-tight text-brandblue-500 lg:text-[56px]"
                 />
-                <p className="body-md-regular mx-auto mt-4 max-w-[30ch] text-slate-600">
+                <p className="body-md-regular mx-auto mt-3 max-w-[30ch] text-slate-600">
                   {s.label}
                 </p>
               </StaggerItem>

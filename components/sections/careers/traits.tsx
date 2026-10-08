@@ -1,23 +1,6 @@
 import { useTranslations } from "next-intl";
-import {
-  Sparkles,
-  MessagesSquare,
-  BookOpen,
-  Zap,
-  Target,
-  MousePointerClick,
-  type LucideIcon,
-} from "lucide-react";
+import Image from "next/image";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
-
-const ICONS: Record<string, LucideIcon> = {
-  sparkles: Sparkles,
-  messages: MessagesSquare,
-  book: BookOpen,
-  zap: Zap,
-  target: Target,
-  pointer: MousePointerClick,
-};
 
 /**
  * "What we look for" — six outlined trait pills with icons, wrapping freely
@@ -25,7 +8,12 @@ const ICONS: Record<string, LucideIcon> = {
  */
 export default function Traits() {
   const t = useTranslations("CareersPage");
-  const items = t.raw("traits.items") as { icon: string; label: string }[];
+  const items = t.raw("traits.items") as {
+    icon: string;
+    height?: number;
+    width?: number;
+    label: string;
+  }[];
 
   return (
     <section className="bg-white pb-24 lg:pb-32">
@@ -59,18 +47,26 @@ export default function Traits() {
             amount={0.2}
           >
             {items.map((item) => {
-              const Icon = ICONS[item.icon] ?? Sparkles;
               return (
                 <StaggerItem
                   as="li"
                   key={item.label}
                   distance={24}
-                  className="flex items-center gap-3 rounded-full border border-grey-300 bg-white px-6 py-4"
+                  className="group box-border flex flex-none cursor-default items-center gap-4 rounded-full border border-slate-100  py-4 ps-6 pe-7 shadow-[0px_24px_40px_-34px_rgba(38,50,56,0.1)] transition-colors duration-200 hover:border-brandblue-200 hover:bg-[#F3FAFD]"
                 >
-                  <Icon className="size-5 text-brandblue-500" strokeWidth={1.8} />
-                  <span className="text-[15px] font-medium text-ink lg:text-base">
-                    {item.label}
+                  <span className="relative flex size-7 flex-none items-center justify-center">
+                    <Image
+                      src={item.icon}
+                      height={item.height || 20}
+                      width={item.width || 20}
+                      className="object-contain transition-transform duration-200 [&_path]:fill-brandblue-500"
+                      alt=""
+                      aria-hidden
+                    />
                   </span>
+                  <h3 className="items-center text-wrap body-xl-medium text-slate-700">
+                    {item.label}
+                  </h3>
                 </StaggerItem>
               );
             })}

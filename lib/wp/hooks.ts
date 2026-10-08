@@ -13,6 +13,10 @@ import {
   getIndustries,
   getClients,
   getHubs,
+  getCareers,
+  getPosts,
+  getPost,
+  getCompanyProfile,
   type WpLocale,
 } from "./api";
 import { wpKeys } from "./keys";
@@ -23,6 +27,10 @@ import type {
   Industry,
   Service,
   Solution,
+  Career,
+  Post,
+  PostListItem,
+  CompanyProfile,
 } from "./types";
 
 /**
@@ -161,5 +169,42 @@ export function useHubs(options?: WpQueryOptions<Hubs>) {
     ...options,
     queryKey: wpKeys.hubs(locale),
     queryFn: () => getHubs(),
+  });
+}
+
+export function useCareers(options?: WpQueryOptions<Career[]>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.careers(locale),
+    queryFn: () => getCareers(locale),
+  });
+}
+
+export function usePosts(options?: WpQueryOptions<PostListItem[]>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.posts(locale),
+    queryFn: () => getPosts(locale),
+  });
+}
+
+export function usePost(slug: string, options?: WpQueryOptions<Post | null>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.post(slug, locale),
+    queryFn: () => getPost(slug),
+    enabled: options?.enabled ?? Boolean(slug),
+  });
+}
+
+export function useCompanyProfile(options?: WpQueryOptions<CompanyProfile>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.companyProfile(locale),
+    queryFn: () => getCompanyProfile(),
   });
 }

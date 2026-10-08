@@ -176,3 +176,57 @@ export type Hubs = {
   } & CtaBand;
   solutions: { heading: string; intro: string };
 };
+
+/* ------------------------------------------------------------------ */
+/* Careers — careersCoreContent                                        */
+/* ------------------------------------------------------------------ */
+
+export type Career = {
+  databaseId: number;
+  title: string;
+  uri: string;
+  slug: string;
+  location: string | null;
+  discipline: string | null;
+  jobType: string | null;
+};
+
+/* ------------------------------------------------------------------ */
+/* Blog / insights — WP posts                                          */
+/* ------------------------------------------------------------------ */
+
+export type PostListItem = {
+  databaseId: number;
+  title: string;
+  slug: string;
+  uri: string;
+  /** ISO date string from WP. */
+  date: string;
+  /** Raw HTML excerpt (WP wraps it in <p>…</p>). */
+  excerpt: string | null;
+  image: ImageField | null;
+  categories: Term[];
+};
+
+export type Post = PostListItem & {
+  /** Raw HTML post body. */
+  content: string | null;
+};
+
+/* ------------------------------------------------------------------ */
+/* Company profile — aboutSettings.companyProfile (About downloads)    */
+/* ------------------------------------------------------------------ */
+
+export type CompanyProfileFile = {
+  url: string;
+  /** Size in bytes (WP returns a number or a formatted string). */
+  fileSize: number | null;
+  mimeType: string | null;
+};
+
+export type CompanyProfile = {
+  heading: string | null;
+  intro: string | null;
+  en: { label: string | null; file: CompanyProfileFile | null };
+  ar: { label: string | null; file: CompanyProfileFile | null };
+};

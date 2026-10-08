@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import Icon from "@/components/ui/icon";
 import Button from "@/components/ui/button";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 import { EASE } from "@/components/ui/motion/shared";
+import { useSolutions } from "@/lib/wp";
 
 type Service = {
   id: string;
@@ -28,11 +29,29 @@ type Service = {
 
 export default function Catalogue() {
   const t = useTranslations("SolutionsPage");
-  const services = t.raw("catalogue.services") as Service[];
+  const fallback = t.raw("catalogue.services") as Service[];
   const coversLabel = t("catalogue.coversLabel");
   const reduce = useReducedMotion();
 
-  const [activeId, setActiveId] = useState(services[0].id);
+  // Pillars from the CMS (WPGraphQL `solutions`). CMS drives title/icon/problem
+  // statement; the designed slot (matched positionally) supplies the detail
+  // copy, photo, tags and CTA the listing API doesn't expose. Ids stay from the
+  // designed slot so the hero deep-links (#cat-<id>) keep working.
+  const { data: solutionsPage } = useSolutions();
+  const services: Service[] = useMemo(() => {
+    const fromCms = (solutionsPage?.items ?? []).map((s, idx) => {
+      const base = fallback[idx % fallback.length];
+      return {
+        ...base,
+        title: s.title || base.title,
+        icon: s.icon?.src || base.icon,
+        summary: s.problemStatement || base.summary,
+      };
+    });
+    return fromCms.length > 0 ? fromCms : fallback;
+  }, [solutionsPage, fallback]);
+
+  const [activeId, setActiveId] = useState(fallback[0].id);
 
   // Sync from hero deep-links (#cat-<id>) on mount and on hashchange.
   useEffect(() => {
@@ -102,7 +121,7 @@ export default function Catalogue() {
         </div>
 
         {/* Interactive card */}
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_24px_60px_-45px_rgba(38,50,56,0.55)] lg:grid-cols-[minmax(0,220px)_1fr]">
+        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_24px_60px_-45px_rgba(38,50,56,0.55)] lg:grid-cols-[minmax(0,240px)_1fr]">
           {/* LEFT RAIL */}
           <div className="border-b border-slate-100 lg:border-e lg:border-b-0">
             <div className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
@@ -145,7 +164,7 @@ export default function Catalogue() {
                         {s.title}
                       </span>
                       <span
-                        className={`body-xs-regular mt-2 uppercase tracking-[0.1em] ${
+                        className={`body-xs-regular mt-2 ${
                           isActive ? "text-brandblue-400" : "text-slate-400"
                         }`}
                       >
@@ -223,14 +242,14 @@ export default function Catalogue() {
 
 function ServicePhoto({ src }: { src: string }) {
   return (
-    <div className="relative w-full  border rounded-xl border-brandblue-500">
+    <div className="relative lg:h-[520px] lg:max-w-[290px] w-full border rounded-xl border-brandblue-500">
       <Image
         src={src}
         alt=""
-        height={530}
+        height={520}
         width={290}
         aria-hidden
-        className="object-cover h-full min-w-[290px] w-full rounded-xl"
+        className="object-cover lg:h-[520px] lg:max-w-[290px] w-full rounded-xl"
       />
 
       {/* Gradient overlay */}

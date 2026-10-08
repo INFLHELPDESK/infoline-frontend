@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
+import { useTranslations } from "next-intl";
 import {
   motion,
   useMotionValue,
@@ -73,6 +74,7 @@ const CARDS = [
 ] as const;
 
 export default function HeroVisual() {
+  const t = useTranslations("Main");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const prefersReduced = useReducedMotion();
   const enabled = isDesktop && !prefersReduced;
@@ -110,6 +112,11 @@ export default function HeroVisual() {
       onMouseLeave={resetMove}
       className="relative h-full w-full"
     >
+      {/* Art box — vertically centred in the column and height-capped
+          (min of 92% of the column and 46vw) so the 675×550 artwork can never
+          scale past the column width or the fold on tall/short viewports.
+          object-bottom-left keeps people + circle pinned to the box's own
+          baseline. Mobile stays in normal flow (relative, w-full). */}
       {/* Blue backdrop shape — its own layer behind the arc so it can mirror
           in RTL (rtl:-scale-x-100 on the image). Shares arc.svg's 675×550
           viewBox + identical object-fit and the same yImg parallax, so it
@@ -117,7 +124,7 @@ export default function HeroVisual() {
       <motion.div
         style={enabled ? { y: yImg } : undefined}
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 lg:inset-x-0 lg:inset-y-0 lg:my-auto lg:h-[min(92%,46vw)]"
       >
         <Image
           src="/assets/hero/shape.svg"
@@ -125,26 +132,28 @@ export default function HeroVisual() {
           aria-hidden
           width={680}
           height={550}
-          className="object-contain h-full w-auto object-bottom-left rtl:-scale-x-100"
+          className="h-full w-full object-contain object-bottom-left rtl:-scale-x-100"
         />
       </motion.div>
 
       <motion.div
         style={enabled ? { y: yImg } : undefined}
-        className="block lg:absolute  w-full lg:h-full relative"
+        className="relative w-full lg:absolute lg:inset-x-0 lg:inset-y-0 lg:my-auto lg:h-[min(92%,46vw)]"
       >
         <Image
-          src="/assets/hero/arc.svg"
-          alt="Infoline customer operations team reviewing live performance dashboards"
-          width={680}
-          height={550}
+          src="/assets/hero/arc.png"
+          alt={t("heroImageAlt")}
+          width={1360}
+          height={1108}
           priority
-          className="object-contain h-full w-auto object-bottom-left"
+          className="h-auto w-full object-contain object-bottom-left lg:h-full"
         />
       </motion.div>
 
-      {/* Desktop: absolute + parallax + idle bob. Hidden below lg. */}
-      <div className="pointer-events-none absolute inset-0 block">
+      {/* Desktop: absolute + parallax + idle bob. Hidden below lg.
+          Uses the same geometry as the art box so the tuned % offsets stay
+          locked to the artwork at every viewport size. */}
+      <div className="pointer-events-none absolute inset-0 lg:inset-x-0 lg:inset-y-0 lg:my-auto lg:h-[min(92%,46vw)]">
         {CARDS.map((card, i) => (
           <FloatingCard
             key={`${card.src}-${i}`}

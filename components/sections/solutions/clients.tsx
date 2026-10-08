@@ -1,14 +1,27 @@
+"use client";
+
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 import LogoMarquee, { LogoItem } from "@/components/ui/logo-marquee";
+import { useClients } from "@/lib/wp";
 
 /**
  * Clients strip. Centered masked heading over a hairline divider, then an
- * animated marquee of client logos (reusing the shared /assets/clients set).
+ * animated marquee of client logos — from the CMS (`clients`) with the
+ * designed locale set as the graceful fallback.
  */
 export default function Clients() {
   const t = useTranslations("SolutionsPage");
-  const logos = t.raw("clients.logos") as LogoItem[];
+  const fallback = t.raw("clients.logos") as LogoItem[];
+
+  const { data: clients } = useClients();
+  const logos: LogoItem[] = useMemo(() => {
+    const fromCms = (clients ?? [])
+      .filter((c) => c.logo?.src)
+      .map((c) => ({ src: c.logo!.src, alt: c.logo!.alt || c.name }));
+    return fromCms.length > 0 ? fromCms : fallback;
+  }, [clients, fallback]);
 
   return (
     <section className="bg-white py-25">

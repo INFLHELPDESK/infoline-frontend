@@ -22,22 +22,24 @@ export default function Proof() {
             amount={0.3}
           >
             {stats.map((stat) => (
-              <StaggerItem key={stat.label} className="max-w-[570px]">
-                <dt className="sr-only">{stat.label}</dt>
+              <StaggerItem
+                key={stat.label}
+                className="flex max-w-[570px] flex-col-reverse"
+              >
+                <dt className="mt-2 text-[13px] leading-snug text-slate-300">
+                  {stat.label}
+                </dt>
                 <dd className="text-3xl font-bold sm:text-4xl">
                   <CountUp
                     value={stat.value}
                     duration={stat.value.toString().length > 2 ? 0.8 : 2}
                   />
                   {stat.unit && (
-                    <span className="ml-1 text-base font-medium text-slate-400">
+                    <span className="ms-1 text-base font-medium text-slate-400">
                       {stat.unit}
                     </span>
                   )}
                 </dd>
-                <p className="mt-2 text-[13px] leading-snug text-slate-300">
-                  {stat.label}
-                </p>
               </StaggerItem>
             ))}
           </Stagger>
@@ -46,7 +48,7 @@ export default function Proof() {
             direction="end"
             delay={0.25}
             distance={40}
-            className="flex items-center gap-4.5 border-white/10 lg:border-l lg:pl-2"
+            className="flex items-center gap-4.5 border-white/10 lg:border-s lg:ps-2"
           >
             {badges.map((badge) => (
               <Image

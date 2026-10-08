@@ -1,12 +1,7 @@
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getLocale } from "next-intl/server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/providers/query-client/get-query-client";
-import {
-  prefetchClients,
-  prefetchIndustries,
-  prefetchSolutions,
-  type WpLocale,
-} from "@/lib/wp";
+import { prefetchClients, prefetchPosts, type WpLocale } from "@/lib/wp";
 import Industries from "@/components/sections/home/industries";
 import Insights from "@/components/sections/home/insights";
 import Main from "@/components/sections/home/main";
@@ -18,16 +13,11 @@ import WhatChanges from "@/components/sections/home/what-changes";
 import WhyInfoline from "@/components/sections/home/why-infoline";
 
 export default async function HomePage() {
-  // CMS content is locale-aware (handover §7); Arabic maps to the WPML `ar` tree.
   const locale: WpLocale = (await getLocale()) === "ar" ? "ar" : "en";
   const queryClient = getQueryClient();
-
-  // Prefetch the three CMS-backed sections in parallel. If the CMS is down the
-  // page still renders — the sections fall back to the designed locale content.
   await Promise.allSettled([
     prefetchClients(queryClient, locale),
-    prefetchSolutions(queryClient, locale),
-    prefetchIndustries(queryClient, locale),
+    prefetchPosts(queryClient, locale),
   ]);
 
   return (

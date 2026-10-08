@@ -14,11 +14,11 @@ export default function Capability() {
   const stats = t.raw("capability.stats") as Stat[];
 
   return (
-    <section className="bg-[#f2f5f7] py-24 text-ink lg:py-32">
+    <section className="py-24 text-ink lg:py-32">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="div"
-          className="rounded-3xl bg-white ring-1 ring-slate-900/5"
+          className="rounded-3xl ring-1 ring-slate-900/5"
           amount={0.25}
           duration={1}
         >
@@ -48,14 +48,14 @@ export default function Capability() {
               {stats.map((stat) => (
                 <StaggerItem
                   key={stat.label}
-                  className="border-l-2 border-brandblue-500 pl-4"
+                  className="flex flex-col-reverse border-s-2 border-brandblue-500 ps-4"
                 >
-                  <dd className="text-3xl font-bold tracking-tight text-brandblue-500 sm:text-4xl">
-                    <CountUp value={stat.value} duration={1.4} />
-                  </dd>
                   <dt className="mt-2 body-sm-regular text-slate-500">
                     {stat.label}
                   </dt>
+                  <dd className="text-3xl font-bold tracking-tight text-brandblue-500 sm:text-4xl">
+                    <CountUp value={stat.value} duration={1.4} />
+                  </dd>
                 </StaggerItem>
               ))}
             </Stagger>

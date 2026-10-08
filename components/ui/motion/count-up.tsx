@@ -4,25 +4,6 @@ import { animate, useInView, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { EASE } from "./shared";
 
-/**
- * Counts a numeric string up from zero when it scrolls into view.
- *
- * Handles the real stat formats used on the site — "22", "1,400+", "6M", "68" —
- * by splitting the string into an optional prefix, the numeric core, and a
- * trailing suffix, animating only the number and re-attaching prefix/suffix.
- * Thousands separators are preserved during the count.
- *
- * Locale/RTL-safe: both `en` and `ar` stat values use Latin digits, so no digit
- * localisation is applied and the count reads correctly in either direction.
- *
- * Degrades gracefully:
- * - Unparseable value → renders the raw string (still fades via its parent).
- * - `prefers-reduced-motion` / SSR / no-JS → shows the final value immediately.
- *
- * Like the other motion primitives, the count plays once by default and does
- * not replay when the element scrolls out and back in (pass `once={false}` to
- * restore the replay behaviour).
- */
 type Parsed = {
   prefix: string;
   suffix: string;
@@ -68,7 +49,8 @@ export function CountUp({
   const format = (n: number) => {
     if (!parsed) return value;
     const { prefix, suffix, decimals, thousands } = parsed;
-    const rounded = decimals > 0 ? n.toFixed(decimals) : Math.round(n).toString();
+    const rounded =
+      decimals > 0 ? n.toFixed(decimals) : Math.round(n).toString();
     const body = thousands
       ? Number(rounded).toLocaleString("en-US", {
           minimumFractionDigits: decimals,

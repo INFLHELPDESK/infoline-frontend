@@ -9,6 +9,10 @@ import {
   getIndustries,
   getClients,
   getHubs,
+  getCareers,
+  getPosts,
+  getPost,
+  getCompanyProfile,
   type WpLocale,
 } from "./api";
 import { wpKeys } from "./keys";
@@ -113,5 +117,40 @@ export async function prefetchHubs(qc: QueryClient, locale: WpLocale = "en") {
   return qc.fetchQuery({
     queryKey: wpKeys.hubs(locale),
     queryFn: () => getHubs(),
+  });
+}
+
+export async function prefetchCareers(qc: QueryClient, locale: WpLocale = "en") {
+  return qc.fetchQuery({
+    queryKey: wpKeys.careers(locale),
+    queryFn: () => getCareers(locale),
+  });
+}
+
+export async function prefetchPosts(qc: QueryClient, locale: WpLocale = "en") {
+  return qc.fetchQuery({
+    queryKey: wpKeys.posts(locale),
+    queryFn: () => getPosts(locale),
+  });
+}
+
+export async function prefetchPost(
+  qc: QueryClient,
+  slug: string,
+  locale: WpLocale = "en",
+) {
+  return qc.fetchQuery({
+    queryKey: wpKeys.post(slug, locale),
+    queryFn: () => getPost(slug),
+  });
+}
+
+export async function prefetchCompanyProfile(
+  qc: QueryClient,
+  locale: WpLocale = "en",
+) {
+  return qc.fetchQuery({
+    queryKey: wpKeys.companyProfile(locale),
+    queryFn: () => getCompanyProfile(),
   });
 }

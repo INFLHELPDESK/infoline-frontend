@@ -1,22 +1,45 @@
+"use client";
+
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { MaskText, Stagger, StaggerItem, Reveal } from "@/components/ui/motion";
+import { useCareers } from "@/lib/wp";
 
 type Role = { title: string; discipline: string; location: string };
+type Vacancy = Role & { jobType?: string | null };
 
 /**
- * Vacancies — the hiring table. On desktop it reads as a table with a header
- * row; below `sm` it collapses into stacked cards (role / meta / apply). The
- * grid-template-columns come from CSS variables so RTL flips column order
- * automatically with the document direction.
+ * Vacancies — the hiring table. Roles come from the CMS (`careers` CPT,
+ * locale-aware); the designed `CareersPage.vacancies.roles` are the graceful
+ * fallback while the query loads or when the CMS has none.
+ *
+ * On desktop it reads as a table with a header row; below `sm` it collapses
+ * into stacked cards (role / meta / apply). The grid-template-columns come
+ * from CSS variables so RTL flips column order automatically with the
+ * document direction.
  */
 export default function Vacancies() {
   const t = useTranslations("CareersPage");
-  const roles = t.raw("vacancies.roles") as Role[];
   const col = (k: string) => t(`vacancies.columns.${k}`);
+  const fallback = t.raw("vacancies.roles") as Role[];
+
+  const { data: careers } = useCareers();
+  const roles: Vacancy[] = useMemo(() => {
+    const fromCms = (careers ?? []).map((c) => ({
+      title: c.title,
+      discipline: c.discipline ?? "",
+      location: c.location ?? "",
+      jobType: c.jobType,
+    }));
+    return fromCms.length > 0 ? fromCms : fallback;
+  }, [careers, fallback]);
 
   return (
-    <section id="vacancies" className="scroll-mt-24 bg-brandblue-900/[0.04] py-24 lg:py-32">
+    <section
+      id="vacancies"
+      className="scroll-mt-24 bg-brandblue-900/[0.04] py-10 lg:py-15"
+    >
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Stagger
           as="div"
@@ -69,10 +92,7 @@ export default function Vacancies() {
 
         <ul>
           {roles.map((role) => (
-            <li
-              key={role.title}
-              className="group border-b border-grey-300"
-            >
+            <li key={role.title} className="group border-b border-grey-300">
               <Reveal
                 as="div"
                 className="py-7"
@@ -80,48 +100,48 @@ export default function Vacancies() {
                 distance={28}
                 duration={0.8}
               >
-              <div
-                className="grid gap-4 sm:gap-6 sm:[grid-template-columns:var(--vac-cols)] sm:items-center"
-                style={{ ["--vac-cols" as string]: "1.9fr 1fr 1fr 0.45fr" }}
-              >
-                {/* Role */}
-                <h3 className="text-[17px] font-bold tracking-[-.01em] text-ink transition-colors duration-300 group-hover:text-brandblue-600 lg:text-[19px]">
-                  {role.title}
-                </h3>
+                <div
+                  className="grid gap-4 sm:gap-6 sm:[grid-template-columns:var(--vac-cols)] sm:items-center"
+                  style={{ ["--vac-cols" as string]: "1.9fr 1fr 1fr 0.45fr" }}
+                >
+                  {/* Role */}
+                  <h3 className="text-[17px] font-bold tracking-[-.01em] text-ink transition-colors duration-300 group-hover:text-brandblue-600 lg:text-[19px]">
+                    {role.title}
+                  </h3>
 
-                {/* Discipline */}
-                <div className="body-md-regular text-slate-700">
-                  {/* Mobile label */}
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500 sm:hidden">
-                    {col("discipline")} ·{" "}
-                  </span>
-                  {role.discipline}
-                </div>
-
-                {/* Location */}
-                <div className="body-md-regular text-slate-700">
-                  <span className="block font-medium text-ink">
+                  {/* Discipline */}
+                  <div className="body-md-regular text-slate-700">
+                    {/* Mobile label */}
                     <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500 sm:hidden">
-                      {col("location")} ·{" "}
+                      {col("discipline")} ·{" "}
                     </span>
-                    {role.location}
-                  </span>
-                  <span className="text-[13px] text-slate-500">
-                    {t("vacancies.fullTime")}
-                  </span>
-                </div>
+                    {role.discipline}
+                  </div>
 
-                {/* Apply */}
-                <div className="sm:text-end">
-                  <a
-                    href={`mailto:careers@infoline.om?subject=${encodeURIComponent(role.title)}`}
-                    className="inline-flex items-center gap-2 text-[14px] font-semibold text-brandblue-600 transition-colors duration-300 hover:text-brandblue-500"
-                  >
-                    {col("apply")}
-                    <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-                  </a>
+                  {/* Location */}
+                  <div className="body-md-regular text-slate-700">
+                    <span className="block font-medium text-ink">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500 sm:hidden">
+                        {col("location")} ·{" "}
+                      </span>
+                      {role.location}
+                    </span>
+                    <span className="text-[13px] text-slate-500">
+                      {role.jobType || t("vacancies.fullTime")}
+                    </span>
+                  </div>
+
+                  {/* Apply — deep-links to the on-page application card. */}
+                  <div className="sm:text-end">
+                    <a
+                      href="#apply"
+                      className="inline-flex items-center gap-2 text-[14px] font-semibold text-brandblue-500 transition-colors duration-300 hover:text-brandblue-500"
+                    >
+                      {col("apply")}
+                      <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+                    </a>
+                  </div>
                 </div>
-              </div>
               </Reveal>
             </li>
           ))}

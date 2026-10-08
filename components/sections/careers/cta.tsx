@@ -44,7 +44,7 @@ export default function Cta() {
                 {t("cta.description")}
               </p>
             </div>
-            <Button href={t("cta.button.href")} size="large" variant="primary">
+            <Button href={t("cta.button.href")} size="small" variant="primary">
               {t("cta.button.label")}
               <ArrowRight className="size-4 rtl:rotate-180" />
             </Button>

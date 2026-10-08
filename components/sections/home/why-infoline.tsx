@@ -16,7 +16,7 @@ export default function WhyInfoline() {
           <StaggerItem
             as="p"
             direction="start"
-            className="text-[12px] font-medium uppercase tracking-[0.28em] text-slate-400"
+            className="text-[12px] font-medium uppercase tracking-[0.28em] text-slate-600"
           >
             {t("eyebrow")}
           </StaggerItem>
@@ -30,7 +30,7 @@ export default function WhyInfoline() {
           <StaggerItem
             as="p"
             direction="start"
-            className="mt-5 text-[15px] leading-relaxed text-slate-500"
+            className="mt-5 text-[15px] leading-relaxed text-slate-600"
           >
             {t("description")}
           </StaggerItem>
@@ -49,7 +49,7 @@ export default function WhyInfoline() {
           {points.map((point) => (
             <StaggerItem as="li" key={point.number}>
               <span className="block h-[3px] w-10 bg-brandblue-500" />
-              <span className="mt-4 block text-[13px] font-medium tabular-nums text-slate-400">
+              <span className="mt-4 block text-[13px] font-medium tabular-nums text-slate-600">
                 {point.number}
               </span>
               <p className="mt-3 text-[17px] font-semibold leading-snug">

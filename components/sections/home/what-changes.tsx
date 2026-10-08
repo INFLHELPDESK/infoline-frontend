@@ -19,7 +19,7 @@ export default function WhatChanges() {
           stagger={0.15}
         >
           <StaggerItem direction="start">
-            <p className="text-[12px] overline-sm-medium uppercase tracking-[0.28em] text-slate-400">
+            <p className="text-[12px] overline-sm-medium uppercase tracking-[0.28em] text-slate-600">
               {t("eyebrow")}
             </p>
             <MaskText

@@ -283,3 +283,117 @@ export const HUBS = /* GraphQL */ `
     }
   }
 `;
+
+/* --------------------------------- Careers -------------------------------- */
+
+/**
+ * Careers CPT. ACF group is `careersCoreContent` (verified live) with only
+ * `location`, `discipline` and `jobType` — which maps 1:1 to the designed
+ * vacancies `Role` ({ title, discipline, location }).
+ */
+export const CAREERS = /* GraphQL */ `
+  query Careers($first: Int = 100, $language: LanguageCodeFilterEnum) {
+    careers(first: $first, where: { language: $language }) {
+      nodes {
+        databaseId
+        title
+        uri
+        slug
+        careersCoreContent {
+          location
+          discipline
+          jobType
+        }
+      }
+    }
+  }
+`;
+
+/* ----------------------------- Blog / insights ---------------------------- */
+
+export const POSTS = /* GraphQL */ `
+  query Posts($first: Int = 100, $language: LanguageCodeFilterEnum) {
+    posts(first: $first, where: { language: $language }) {
+      nodes {
+        databaseId
+        title
+        slug
+        uri
+        date
+        excerpt
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        categories {
+          nodes {
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const POST_BY_SLUG = /* GraphQL */ `
+  query PostBySlug($id: ID!) {
+    post(id: $id, idType: SLUG) {
+      databaseId
+      title
+      slug
+      uri
+      date
+      excerpt
+      content
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+      categories {
+        nodes {
+          name
+          slug
+        }
+      }
+    }
+  }
+`;
+
+/* --------------------- Company profile (About downloads) ------------------ */
+
+/**
+ * `aboutSettings.companyProfile` (options page). Both EN and AR profile files
+ * come back as media nodes with `mediaItemUrl` + `fileSize` + `mimeType`; the
+ * section heading/intro and per-file labels can be null (fall back to locale).
+ */
+export const COMPANY_PROFILE = /* GraphQL */ `
+  query CompanyProfile {
+    aboutSettings {
+      companyProfile {
+        sectionHeading
+        sectionIntro
+        profileEnLabel
+        profileEnFile {
+          node {
+            mediaItemUrl
+            fileSize
+            mimeType
+          }
+        }
+        profileArLabel
+        profileArFile {
+          node {
+            mediaItemUrl
+            fileSize
+            mimeType
+          }
+        }
+      }
+    }
+  }
+`;

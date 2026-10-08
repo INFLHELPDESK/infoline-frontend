@@ -7,6 +7,10 @@ import {
   INDUSTRY_BY_URI,
   CLIENTS,
   HUBS,
+  CAREERS,
+  POSTS,
+  POST_BY_SLUG,
+  COMPANY_PROFILE,
 } from "./queries";
 import {
   normalizeService,
@@ -14,6 +18,10 @@ import {
   normalizeSolution,
   normalizeIndustry,
   normalizeClient,
+  normalizeCareer,
+  normalizePostListItem,
+  normalizePost,
+  normalizeCompanyProfile,
 } from "./normalize";
 import type {
   Service,
@@ -23,6 +31,10 @@ import type {
   Industry,
   Client,
   Hubs,
+  Career,
+  Post,
+  PostListItem,
+  CompanyProfile,
 } from "./types";
 
 /**
@@ -434,4 +446,42 @@ export async function getHubs(): Promise<Hubs> {
       intro: sol?.solutionsIntro ?? "",
     },
   };
+}
+
+/* --------------------------------- Careers -------------------------------- */
+
+export async function getCareers(locale: WpLocale = "en"): Promise<Career[]> {
+  const data = await wpFetch<{
+    careers: { nodes: Parameters<typeof normalizeCareer>[0][] };
+  }>(CAREERS, { language: languageFilter(locale) });
+  return data.careers.nodes.flatMap((n) => normalizeCareer(n) ?? []);
+}
+
+/* ----------------------------- Blog / insights ---------------------------- */
+
+export async function getPosts(
+  locale: WpLocale = "en",
+  first = 100,
+): Promise<PostListItem[]> {
+  const data = await wpFetch<{
+    posts: { nodes: Parameters<typeof normalizePostListItem>[0][] };
+  }>(POSTS, { first, language: languageFilter(locale) });
+  return data.posts.nodes.flatMap((n) => normalizePostListItem(n) ?? []);
+}
+
+export async function getPost(slug: string): Promise<Post | null> {
+  const data = await wpFetch<{ post: Parameters<typeof normalizePost>[0] }>(
+    POST_BY_SLUG,
+    { id: slug },
+  );
+  return normalizePost(data.post);
+}
+
+/* --------------------- Company profile (About downloads) ------------------ */
+
+export async function getCompanyProfile(): Promise<CompanyProfile> {
+  const data = await wpFetch<Parameters<typeof normalizeCompanyProfile>[0]>(
+    COMPANY_PROFILE,
+  );
+  return normalizeCompanyProfile(data);
 }
