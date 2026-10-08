@@ -232,14 +232,10 @@ export const CLIENTS = /* GraphQL */ `
         databaseId
         slug
         title
-        clientContent {
-          clientName
-          clientLogo {
-            node {
-              id
-              sourceUrl
-              altText
-            }
+        featuredImage {
+          node {
+            sourceUrl
+            altText
           }
         }
       }

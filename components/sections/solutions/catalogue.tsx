@@ -33,22 +33,44 @@ export default function Catalogue() {
   const coversLabel = t("catalogue.coversLabel");
   const reduce = useReducedMotion();
 
-  // Pillars from the CMS (WPGraphQL `solutions`). CMS drives title/icon/problem
-  // statement; the designed slot (matched positionally) supplies the detail
-  // copy, photo, tags and CTA the listing API doesn't expose. Ids stay from the
-  // designed slot so the hero deep-links (#cat-<id>) keep working.
+  // Pillars from the CMS (WPGraphQL `solutions`), matched by slug onto each
+  // designed card (slug == card id) so CMS copy stays paired with the right
+  // pillar and the hero deep-links (#cat-<id>) keep working. Everything the CMS
+  // exposes is used: title, headline (pillarLabel), summary (problemStatement),
+  // icon, photo (featured image), the channel/capability tags (services) and
+  // the CTA label. The CMS has no family / number / body prose / facts / metric
+  // fields, so those stay from the designed locale content; the CTA href stays
+  // designed too (the CMS ctaUrl points at the WordPress admin URL).
   const { data: solutionsPage } = useSolutions();
   const services: Service[] = useMemo(() => {
-    const fromCms = (solutionsPage?.items ?? []).map((s, idx) => {
-      const base = fallback[idx % fallback.length];
+    const bySlug = new Map(
+      (solutionsPage?.items ?? []).flatMap((s) => {
+        const slug = s.uri?.split("/").filter(Boolean).pop();
+        return slug ? ([[slug, s]] as const) : [];
+      }),
+    );
+    if (bySlug.size === 0) return fallback;
+    return fallback.map((base) => {
+      const cms = bySlug.get(base.id);
+      if (!cms) return base;
       return {
         ...base,
-        title: s.title || base.title,
-        icon: s.icon?.src || base.icon,
-        summary: s.problemStatement || base.summary,
+        title: cms.title || base.title,
+        icon: cms.icon?.src || base.icon,
+        // Picture comes strictly from the backend (post featured image); no
+        // hard-coded fallback — if a solution has no image in the CMS, no photo
+        // is shown rather than a bundled asset.
+        image: cms.image?.src ?? "",
+        headline: cms.pillarLabel || base.headline,
+        summary: cms.problemStatement || base.summary,
+        tags: cms.services.length > 0 ? cms.services : base.tags,
+        cta: { label: cms.cta.label || base.cta.label, href: base.cta.href },
+        // The CMS has no family label or body prose for a pillar — blank them so
+        // the card shows only backend content (never the hard-coded locale copy).
+        family: "",
+        body: [],
       };
     });
-    return fromCms.length > 0 ? fromCms : fallback;
   }, [solutionsPage, fallback]);
 
   const [activeId, setActiveId] = useState(fallback[0].id);
@@ -163,13 +185,15 @@ export default function Catalogue() {
                       <span className="body-sm-medium text-slate-900 leading-tight">
                         {s.title}
                       </span>
-                      <span
-                        className={`body-xs-regular mt-2 ${
-                          isActive ? "text-brandblue-400" : "text-slate-400"
-                        }`}
-                      >
-                        {s.family}
-                      </span>
+                      {s.family ? (
+                        <span
+                          className={`body-xs-regular mt-2 ${
+                            isActive ? "text-brandblue-400" : "text-slate-400"
+                          }`}
+                        >
+                          {s.family}
+                        </span>
+                      ) : null}
                     </span>
                   </button>
                 );
@@ -199,15 +223,17 @@ export default function Catalogue() {
                 <p className="overline-xs-medium mt-8 text-slate-400">
                   {coversLabel}
                 </p>
-                <div className="mt-3 space-y-3">
-                  {active.body.map((para, i) => (
-                    <p key={i} className="body-md-regular text-slate-700">
-                      {para}
-                    </p>
-                  ))}
-                </div>
+                {active.body.length > 0 ? (
+                  <div className="mt-3 space-y-3">
+                    {active.body.map((para, i) => (
+                      <p key={i} className="body-md-regular text-slate-700">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
 
-                {/* Channel / capability tags */}
+                {/* Channel / capability tags (CMS `services`) */}
                 <div className="mt-6 flex flex-wrap gap-2">
                   {active.tags.map((tag) => (
                     <span
@@ -232,7 +258,7 @@ export default function Catalogue() {
                 </div>
               </motion.div>
             </AnimatePresence>
-            <ServicePhoto src={active.image} />
+            {active.image ? <ServicePhoto src={active.image} /> : null}
           </div>
         </div>
       </div>

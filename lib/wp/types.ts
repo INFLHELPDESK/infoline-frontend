@@ -117,6 +117,8 @@ export type Solution = {
   title: string;
   uri: string;
   icon: ImageField | null;
+  /** Post featured image (ACF group has no image field). */
+  image: ImageField | null;
   pillarLabel: string | null;
   problemStatement: string | null;
   /** Plain text repeater, NOT a relationship — entries have no page links yet. */

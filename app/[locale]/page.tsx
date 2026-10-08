@@ -1,7 +1,13 @@
 import { getLocale } from "next-intl/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/providers/query-client/get-query-client";
-import { prefetchClients, prefetchPosts, type WpLocale } from "@/lib/wp";
+import {
+  prefetchClients,
+  prefetchPosts,
+  prefetchSolutions,
+  prefetchIndustries,
+  type WpLocale,
+} from "@/lib/wp";
 import Industries from "@/components/sections/home/industries";
 import Insights from "@/components/sections/home/insights";
 import Main from "@/components/sections/home/main";
@@ -18,6 +24,8 @@ export default async function HomePage() {
   await Promise.allSettled([
     prefetchClients(queryClient, locale),
     prefetchPosts(queryClient, locale),
+    prefetchSolutions(queryClient, locale),
+    prefetchIndustries(queryClient, locale),
   ]);
 
   return (

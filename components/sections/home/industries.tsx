@@ -1,7 +1,11 @@
+"use client";
+
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
+import { useIndustries } from "@/lib/wp";
 
 type Sector = {
   id: string;
@@ -15,11 +19,31 @@ type Sector = {
  * (title/image/headline) as the /industries page itself, and each links
  * straight to that sector's slide there (`/industries#sec-<id>`), so the two
  * pages never drift out of sync.
+ *
+ * Data comes from the CMS (`industries`), matched positionally onto the
+ * designed sectors so the `#sec-<id>` anchors keep pointing at a real slide;
+ * the designed locale sectors are the graceful fallback.
  */
 export default function Industries() {
   const t = useTranslations("Industries");
   const tIndustries = useTranslations("IndustriesPage");
-  const items = tIndustries.raw("sectors.items") as Sector[];
+  const fallback = tIndustries.raw("sectors.items") as Sector[];
+
+  const { data: industriesPage } = useIndustries();
+  const items: Sector[] = useMemo(() => {
+    const fromCms = (industriesPage?.items ?? [])
+      .filter((i) => i.image?.src)
+      .map((i, idx) => {
+        const base = fallback[idx % fallback.length];
+        return {
+          ...base,
+          title: i.title || base.title,
+          image: i.image!.src,
+          headline: i.intro || base.headline,
+        };
+      });
+    return fromCms.length > 0 ? fromCms : fallback;
+  }, [industriesPage, fallback]);
 
   return (
     <section className="bg-white py-20 text-[#0a1014] sm:py-24 lg:py-28">

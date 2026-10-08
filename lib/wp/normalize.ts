@@ -181,6 +181,7 @@ import type { Solution } from "./types";
 type RawSolution = {
   title: string | null;
   uri: string | null;
+  featuredImage: Parameters<typeof normalizeImage>[0];
   solutionContent: {
     icon: Parameters<typeof normalizeImage>[0];
     pillarLabel: string | null;
@@ -199,6 +200,7 @@ export function normalizeSolution(raw: RawSolution | null): Solution | null {
     title: raw.title ?? "",
     uri: raw.uri,
     icon: normalizeImage(content?.icon),
+    image: normalizeImage(raw.featuredImage),
     pillarLabel: content?.pillarLabel ?? null,
     problemStatement: content?.problemStatement ?? null,
     // Handover §3: plain text repeater (not a relationship) — no page links.
@@ -276,10 +278,8 @@ type RawClient = {
   databaseId: number | null;
   slug: string | null;
   title: string | null;
-  clientContent: {
-    clientName: string | null;
-    clientLogo: Parameters<typeof normalizeImage>[0];
-  } | null;
+  // The logo is the post featured image; the client name is the post title.
+  featuredImage: Parameters<typeof normalizeImage>[0];
 };
 
 export function normalizeClient(raw: RawClient | null): Client | null {
@@ -288,8 +288,8 @@ export function normalizeClient(raw: RawClient | null): Client | null {
     id: raw.id ?? "",
     databaseId: raw.databaseId ?? 0,
     slug: raw.slug ?? "",
-    name: raw.clientContent?.clientName ?? raw.title ?? "",
-    logo: normalizeImage(raw.clientContent?.clientLogo),
+    name: raw.title ?? "",
+    logo: normalizeImage(raw.featuredImage),
   };
 }
 

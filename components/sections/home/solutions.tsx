@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Icon from "@/components/ui/icon";
@@ -7,6 +10,7 @@ import {
   Stagger,
   StaggerItem,
 } from "@/components/ui/motion";
+import { useSolutions } from "@/lib/wp";
 
 type SolutionItem = {
   icon: string | null;
@@ -17,7 +21,36 @@ type SolutionItem = {
 
 export default function Solutions() {
   const t = useTranslations("Solutions");
-  const items = t.raw("items") as SolutionItem[];
+  // Designed items from the locale files — graceful fallback while the CMS
+  // query loads or when it returns nothing.
+  const fallback = t.raw("items") as SolutionItem[];
+
+  // Pillars from the CMS (WPGraphQL `solutions`). Each designed card keeps its
+  // link and icon fallback; its title, icon and description come from the CMS
+  // pillar whose slug matches the card's `#cat-<slug>` href. Matching by slug
+  // (not position) keeps the CMS copy on the right card even though the CMS
+  // returns pillars in a different order.
+  const { data: solutionsPage } = useSolutions();
+  const items: SolutionItem[] = useMemo(() => {
+    const bySlug = new Map(
+      (solutionsPage?.items ?? []).flatMap((s) => {
+        const slug = s.uri?.split("/").filter(Boolean).pop();
+        return slug ? ([[slug, s]] as const) : [];
+      }),
+    );
+    if (bySlug.size === 0) return fallback;
+    return fallback.map((base) => {
+      const slug = base.href.split("#cat-")[1];
+      const cms = slug ? bySlug.get(slug) : undefined;
+      if (!cms) return base;
+      return {
+        ...base,
+        title: cms.title || base.title,
+        icon: cms.icon?.src || base.icon,
+        description: cms.problemStatement || cms.services[0] || base.description,
+      };
+    });
+  }, [solutionsPage, fallback]);
 
   return (
     <section className="bg-[#0a1014] py-10 text-white sm:py-12 lg:py-28">

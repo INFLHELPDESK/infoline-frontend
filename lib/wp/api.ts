@@ -275,6 +275,12 @@ export async function getSolutions(
           nodes {
             title
             uri
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+              }
+            }
             solutionContent {
               icon {
                 node {
