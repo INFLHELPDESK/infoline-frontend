@@ -5,7 +5,7 @@ import { graphqlRequest } from '@/lib/api-client';
 
 export function useGraphQLData<T>(
   query: string,
-  variables?: Record<string, any>
+  variables?: Record<string, unknown>
 ) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);

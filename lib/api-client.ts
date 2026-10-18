@@ -3,7 +3,7 @@ const REST_ENDPOINT = 'https://green-tarsier-764009.hostingersite.com/wp-json/in
 
 export async function graphqlRequest(
   query: string,
-  variables?: Record<string, any>
+  variables?: Record<string, unknown>
 ) {
   try {
     const response = await fetch(GRAPHQL_ENDPOINT, {
