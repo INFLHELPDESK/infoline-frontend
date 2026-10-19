@@ -11,6 +11,12 @@ import { join } from "node:path";
 
 export const PRODUCTION_CMS_HOST = "green-tarsier-764009.hostingersite.com";
 
+/** Production host, its subdomains, and absolute (trailing-dot) spellings. */
+export function isProductionCmsHost(host: string): boolean {
+  const name = host.toLowerCase().replace(/\.+$/, "");
+  return name === PRODUCTION_CMS_HOST || name.endsWith(`.${PRODUCTION_CMS_HOST}`);
+}
+
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]"]);
 
 export function assertIsolatedCmsEnv(env: Record<string, string | undefined> = process.env): void {
@@ -22,8 +28,10 @@ export function assertIsolatedCmsEnv(env: Record<string, string | undefined> = p
     problems.push("NEXT_PUBLIC_WPGRAPHQL_ENDPOINT must point at a local CMS stub");
   } else {
     try {
-      const { hostname, port } = new URL(endpoint);
-      if (!LOOPBACK_HOSTS.has(hostname)) {
+      const { hostname, port, protocol } = new URL(endpoint);
+      if (protocol !== "http:" && protocol !== "https:") {
+        problems.push("NEXT_PUBLIC_WPGRAPHQL_ENDPOINT must be an http(s) URL");
+      } else if (!LOOPBACK_HOSTS.has(hostname)) {
         problems.push("NEXT_PUBLIC_WPGRAPHQL_ENDPOINT must be a loopback address");
       } else if (!port) {
         problems.push("NEXT_PUBLIC_WPGRAPHQL_ENDPOINT must include an explicit port");
@@ -76,4 +84,50 @@ export function assertBuildIsIsolated(buildDir = ".next"): void {
         "Rebuild with CMS_ISOLATED=1 and NEXT_PUBLIC_WPGRAPHQL_ENDPOINT set.",
     );
   }
+}
+
+/**
+ * The scan above only proves the production host is absent. A build made with
+ * a *different* endpoint (an old `.next`, another port, a staging CMS) would
+ * pass it yet not talk to the stub. `lib/forms` inlines the configured
+ * endpoint into the client bundle, so a build made with this run's env must
+ * contain it. Returns false when no built file embeds it.
+ */
+export function buildEmbedsEndpoint(endpoint: string, buildDir = ".next"): boolean {
+  return [join(buildDir, "static"), join(buildDir, "server")]
+    .flatMap(jsFiles)
+    .some((file) => readFileSync(file, "utf8").includes(endpoint));
+}
+
+export function assertBuildMatchesEndpoint(
+  endpoint = process.env.NEXT_PUBLIC_WPGRAPHQL_ENDPOINT,
+  buildDir = ".next",
+): void {
+  if (!endpoint || !buildEmbedsEndpoint(endpoint, buildDir)) {
+    throw new Error(
+      `Refusing to run tests: the build does not embed the configured CMS endpoint (${endpoint}). ` +
+        "It was built with different env (or is stale); rebuild with `npm run build:isolated`.",
+    );
+  }
+}
+
+/**
+ * Browser requests the network guard had to abort that look like CMS or form
+ * traffic. The guard already stops them reaching anything; a test that sees
+ * one has an unmocked submission (or a page that started fetching the CMS) and
+ * must fail rather than pass on the abort.
+ */
+export function findForbiddenCmsTraffic(blockedUrls: string[]): string[] {
+  return blockedUrls.filter((raw) => {
+    try {
+      const { hostname, pathname } = new URL(raw);
+      return (
+        isProductionCmsHost(hostname) ||
+        pathname.endsWith("/graphql") ||
+        pathname.includes("/wp-json/")
+      );
+    } catch {
+      return false;
+    }
+  });
 }

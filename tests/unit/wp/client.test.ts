@@ -58,6 +58,78 @@ describe("getWpEndpoint", () => {
   });
 });
 
+describe("getWpEndpoint isolation (regressions)", () => {
+  const PROD_HOST = "green-tarsier-764009.hostingersite.com";
+
+  it.each([
+    ["trailing dot", `https://${PROD_HOST}./graphql`],
+    ["repeated trailing dots", `https://${PROD_HOST}../graphql`],
+    ["upper case", `https://${PROD_HOST.toUpperCase()}/graphql`],
+    ["explicit port", `https://${PROD_HOST}:443/graphql`],
+    ["userinfo", `https://user@${PROD_HOST}/graphql`],
+    ["a subdomain", `https://www.${PROD_HOST}/graphql`],
+    ["percent-encoded host", "https://%67reen-tarsier-764009.hostingersite.com/graphql"],
+  ])("refuses the production host as %s when isolated", async (_name, endpoint) => {
+    const { getWpEndpoint } = await load({
+      NEXT_PUBLIC_WPGRAPHQL_ENDPOINT: endpoint,
+      CMS_ISOLATED: "1",
+    });
+    expect(() => getWpEndpoint()).toThrow(/production CMS/);
+  });
+
+  it.each([
+    "https://cms.example.com/graphql",
+    "http://10.0.0.5:3199/graphql",
+    "http://127.0.0.1.example.com:3199/graphql",
+    "http://localhost./graphql",
+  ])("refuses any non-loopback endpoint (%s) when isolated", async (endpoint) => {
+    const { getWpEndpoint } = await load({
+      NEXT_PUBLIC_WPGRAPHQL_ENDPOINT: endpoint,
+      CMS_ISOLATED: "1",
+    });
+    expect(() => getWpEndpoint()).toThrow(/loopback/);
+  });
+
+  it.each(["http://127.0.0.1:3199/graphql", "http://localhost:3199/graphql", "http://[::1]:3199/graphql"])(
+    "accepts the loopback stub %s when isolated",
+    async (endpoint) => {
+      const { getWpEndpoint } = await load({
+        NEXT_PUBLIC_WPGRAPHQL_ENDPOINT: endpoint,
+        CMS_ISOLATED: "1",
+      });
+      expect(getWpEndpoint()).toBe(endpoint);
+    },
+  );
+
+  it("never fetches under a trailing-dot production endpoint when isolated", async () => {
+    const fetchMock = stubFetch(async () => new Response("{}"));
+    const { wpFetch } = await load({
+      NEXT_PUBLIC_WPGRAPHQL_ENDPOINT: `https://${PROD_HOST}./graphql`,
+      CMS_ISOLATED: "1",
+    });
+    await expect(wpFetch("query { a }")).rejects.toThrow(/production CMS/);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("does not change non-isolated behavior: any configured endpoint is returned", async () => {
+    const { getWpEndpoint } = await load({
+      NEXT_PUBLIC_WPGRAPHQL_ENDPOINT: "https://cms.example.com/graphql",
+      CMS_ISOLATED: undefined,
+    });
+    expect(getWpEndpoint()).toBe("https://cms.example.com/graphql");
+  });
+
+  it("isProductionCmsHost matches only the production host family", async () => {
+    const { isProductionCmsHost } = await load({});
+    expect(isProductionCmsHost(PROD_HOST)).toBe(true);
+    expect(isProductionCmsHost(`${PROD_HOST}.`)).toBe(true);
+    expect(isProductionCmsHost(`x.${PROD_HOST}`)).toBe(true);
+    expect(isProductionCmsHost(`not${PROD_HOST}`)).toBe(false);
+    expect(isProductionCmsHost("127.0.0.1")).toBe(false);
+    expect(isProductionCmsHost("")).toBe(false);
+  });
+});
+
 describe("wpFetch", () => {
   it("never issues a request when the endpoint is unconfigured", async () => {
     const fetchMock = stubFetch(async () => new Response("{}"));

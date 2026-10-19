@@ -1,4 +1,5 @@
 import { test as base, expect, type Page } from "@playwright/test";
+import { findForbiddenCmsTraffic } from "../../support/cms-guard";
 import { isolateNetwork } from "./network";
 
 type Diagnostics = {
@@ -25,6 +26,10 @@ export const test = base.extend<Diagnostics & Options>({
     async ({ context, baseURL }, use) => {
       const { blocked } = await isolateNetwork(context, new URL(baseURL!).origin);
       await use(blocked);
+      // Defense in depth: the guard has already aborted these, but an aborted
+      // CMS/form request means an unmocked submission (or a newly wired page),
+      // which must never pass silently. Tests mock the inquiry explicitly.
+      expect(findForbiddenCmsTraffic(blocked), "unmocked CMS/form requests").toEqual([]);
     },
     { auto: true },
   ],

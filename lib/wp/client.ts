@@ -18,6 +18,19 @@
 /** Production CMS host. Isolated runs (tests, CI) must never talk to it. */
 const PRODUCTION_CMS_HOST = "green-tarsier-764009.hostingersite.com";
 
+/**
+ * True for the production host, its subdomains, and their absolute (trailing
+ * dot) spellings: `new URL("https://host./").hostname` keeps the dot, so a
+ * plain `===` comparison would miss `host.`.
+ */
+export function isProductionCmsHost(host: string): boolean {
+  const name = host.toLowerCase().replace(/\.+$/, "");
+  return name === PRODUCTION_CMS_HOST || name.endsWith(`.${PRODUCTION_CMS_HOST}`);
+}
+
+/** Loopback spellings accepted for isolated runs (exact match, fail closed). */
+const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]"]);
+
 export class WpConfigError extends Error {
   constructor(message: string) {
     super(message);
@@ -46,10 +59,19 @@ export function getWpEndpoint(): string {
   }
 
   // Server-side guard; set CMS_ISOLATED=1 for tests, CI and local validation.
-  if (process.env.CMS_ISOLATED === "1" && host === PRODUCTION_CMS_HOST) {
-    throw new WpConfigError(
-      "CMS_ISOLATED=1 but the endpoint targets the production CMS.",
-    );
+  // Isolated runs may only talk to a loopback endpoint (the local CMS stub), so
+  // a renamed or aliased production host cannot slip past the host check.
+  if (process.env.CMS_ISOLATED === "1") {
+    if (isProductionCmsHost(host)) {
+      throw new WpConfigError(
+        "CMS_ISOLATED=1 but the endpoint targets the production CMS.",
+      );
+    }
+    if (!LOOPBACK_HOSTS.has(host)) {
+      throw new WpConfigError(
+        "CMS_ISOLATED=1 requires a loopback endpoint (the local CMS stub).",
+      );
+    }
   }
 
   return endpoint;
