@@ -9,7 +9,7 @@
 ```bash
 npm test                 # unit + component (Vitest)
 npm run test:watch       # Vitest watch mode
-npm run build            # required before E2E
+npm run build:isolated   # required before E2E (CMS-isolated build)
 npm run test:e2e:install # once per machine: Playwright Chromium
 npm run test:e2e         # Playwright; starts `next start` on 127.0.0.1:3100
 npx playwright show-report
@@ -133,8 +133,11 @@ Motion is the most fragile thing to test, so the suite follows these rules
 
 `lib/wp` has no default endpoint, and the suite refuses to run unless the CMS
 configuration is isolated. Copy `.env.example` to `.env.local` (or export the
-same variables) **before `npm run build`**, because `NEXT_PUBLIC_*` is inlined
-at build time:
+same variables) **before building**, because `NEXT_PUBLIC_*` is inlined at build time. The
+safest way to build for tests is `npm run build:isolated`: it forces
+`CMS_ISOLATED=1`, defaults the endpoint to the stub, and refuses anything that
+is not a loopback URL with a port (shell and `.env.local` values cannot
+override it, because Next never overwrites variables that are already set).
 
 ```
 CMS_ISOLATED=1
@@ -149,10 +152,11 @@ Layers, all fail-closed:
    source maps) for the production CMS host. `lib/forms` still falls back to
    the production endpoint when the env var is unset, so a build made without
    the isolation env would otherwise ship it unnoticed.
-3. `tests/support/cms-tripwire.mjs` listens on the configured loopback port,
-   answers 503 and logs every request. `global-teardown.ts` fails the run if
-   the log is not empty, so any server-side CMS fetch is caught (browser-side
-   ones are already aborted by `fixtures.ts`).
+3. `tests/support/cms-stub/main.mjs` (the CMS stub, see below) listens on the
+   configured loopback port and logs every non-control request.
+   `global-teardown.ts` fails the run if the log is not empty, so any
+   server-side CMS fetch is caught (browser-side ones are already aborted by
+   `fixtures.ts`).
 4. `tests/unit/setup.ts` makes an unstubbed `fetch` throw in unit tests.
 5. `tests/unit/wp/runtime-preservation.test.ts` walks the import graph (static,
    dynamic, re-export, relative and transitive) from `app`, `components`,
@@ -160,12 +164,66 @@ Layers, all fail-closed:
    path reaches `lib/wp`, `providers` or `lib/content-adapters`. It is a
    source-level guard only: it does not catch computed dynamic imports.
 
-Remove or relax 3 and 5 in the slice that deliberately wires the first page;
-the tripwire is then replaced by the real CMS stub.
+6. `assertBuildMatchesEndpoint()` requires the build to embed this run's
+   endpoint, so a stale `.next`, or a build made with another endpoint (even a
+   non-production one), is refused.
+7. `fixtures.ts` fails any test whose browser made a request the guard had to
+   abort that looks like CMS/form traffic (production host, `/graphql`,
+   `/wp-json/`). Contact and Careers flows must mock `submitInquiry`; an
+   unmocked submission can no longer pass silently on the abort. The
+   `lib/forms` production fallback itself is untouched (production behavior).
 
-## Waiting for hydration
+Relax 5 (and the "no CMS request" assertions in `cms/cms-stub.spec.ts` plus the
+teardown tripwire) in the slice that deliberately wires the first page; the
+stub then serves that page's fixtures.
 
-`page.goto` resolves on `load`, not on hydration. Specs that click
-JS-driven controls right after navigation (for example the language
-switcher) must call `waitForHydration` first; an early click is a silent
-no-op. `locale-switch.spec.ts` does this through its `open()` helper.
+## CMS stub and contract tests
+
+`tests/support/cms-stub/` is a zero-dependency, loopback-only WPGraphQL stand-in:
+
+| File | Role |
+|---|---|
+| `fixtures.mjs` | Deterministic EN/AR data per operation, in four variants: `full`, `empty`, `null-acf`, `partial` |
+| `server.mjs` | `createCmsStub()`; routes by operation name and `$language`/`$uri`/`$id`; scenarios; request log; mutations always rejected |
+| `main.mjs` | Playwright `webServer` entry (port from the endpoint env, tripwire log) |
+| `harness.ts` | Vitest helper: stub on an ephemeral port, endpoint env set, fetch restricted to the stub's origin |
+
+Scenarios: `ok`, `empty`, `null-acf`, `partial`, `graphql-error`, `partial-errors`,
+`no-data`, `http-error`, `malformed-json`, `malformed-shape`, `network-error`
+(global `POST /__scenario`, or per request via `x-cms-stub-scenario`).
+Fixtures are synthetic; nothing is copied from the live CMS.
+
+Contract tests (`tests/unit/wp`):
+
+- `stub-fixtures.test.ts` parses the query text actually sent and asserts every
+  fixture has exactly the selected fields, so fixtures cannot drift from
+  `lib/wp/queries.ts` / `api.ts` or invent schema fields.
+- `cms-contract.test.ts`: request envelope, locale mapping, normalized output,
+  empty/null/partial ACF, error handling (current behavior pinned, gaps marked).
+- `normalize.test.ts`, `content-adapters.test.ts`: pure edge cases.
+- `hydration.test.tsx`: server prefetch, dehydrate, server markup and client
+  hydration with the real query client, EN and AR, no refetch, error fallback.
+- `stub-server.test.ts`: the stub itself.
+
+**Verified** means derived from this repository (queries, normalizers, fetchers).
+**Assumed** (not provable offline, to be confirmed against a non-production
+WordPress when the first page is wired): the live schema still exposes these
+fields (notably `hubHeadin`), WPML honours `where: { language }` and `/ar/`
+URIs, option pages stay language-neutral, `fileSize` keeps its two encodings,
+and case studies still cannot be filtered by sector server-side.
+
+## Git hook and CI policy
+
+`.husky/pre-commit` runs `npm run validate` (lint, typecheck, unit tests; about
+20 s, stops at the first failure). It deliberately does **not** build: a build
+compiles whatever endpoint the shell or `.env.local` provides and overwrites
+`.next`, which could point a hook run at a real CMS once a page fetches at build
+time. The production build lives in CI only, as `npm run build:isolated`, which
+forces `CMS_ISOLATED=1`, accepts only a loopback endpoint, and is followed by
+the E2E suite that re-verifies the build (no production host, embeds this run's
+endpoint). `git commit --no-verify` skips the hook; CI is the gate.
+
+Isolation also covers `lib/wp`: with `CMS_ISOLATED=1`, `getWpEndpoint()` refuses the
+production host family (trailing dots, subdomains, case) and any non-loopback
+endpoint. That flag is server-only, so the browser bundle relies on the E2E
+network guard instead.
