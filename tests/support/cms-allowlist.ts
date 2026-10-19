@@ -3,7 +3,10 @@
  * the operation it needs; anything else (another page starting to fetch, a
  * mutation, an unknown query) still fails the run.
  */
-export const ALLOWED_CMS_OPERATIONS: readonly string[] = ["Posts"]; // /[locale]/insights
+export const ALLOWED_CMS_OPERATIONS: readonly string[] = [
+  "Posts", // /[locale]/insights (cards)
+  "PostBySlug", // /[locale]/blog/[slug] (CMS posts) and the Insights link check
+];
 
 /**
  * Stub log lines (tests/support/cms-stub/server.mjs):

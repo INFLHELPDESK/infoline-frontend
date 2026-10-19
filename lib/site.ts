@@ -52,3 +52,21 @@ export async function localeAlternates(locale: string, path: string = "") {
     languages: { ...languages, "x-default": languages[routing.defaultLocale] },
   };
 }
+
+/**
+ * Canonical for a page that exists in one locale only (CMS content has no
+ * translation map): self-canonical, hreflang for that locale, and x-default
+ * only when that locale is the default.
+ */
+export async function singleLocaleAlternates(locale: string, path: string) {
+  const siteUrl = await getSiteUrl();
+  const clean = path.startsWith("/") ? path : `/${path}`;
+  const url = `${siteUrl}/${locale}${clean}`;
+  return {
+    canonical: url,
+    languages: {
+      [locale]: url,
+      ...(locale === routing.defaultLocale ? { "x-default": url } : {}),
+    },
+  };
+}

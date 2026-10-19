@@ -9,7 +9,8 @@ const EXTENSIONS = ["", ".ts", ".tsx", ".mts", ".js", ".jsx", ".mjs", ".json"];
 const WP_ENTRY = /^(lib\/wp\/|providers\/|lib\/content-adapters\.)/;
 
 /**
- * The one route wired to WordPress so far (/[locale]/insights) and the modules
+ * The routes wired to WordPress so far (/[locale]/insights and its blog detail
+ * destination /[locale]/blog/[slug]) and the modules
  * built only for it. These may reach the WP layer; nothing else may reach them
  * (a second page importing one is a second wired route). Adding an entry here
  * is the deliberate act of wiring another route.
@@ -18,6 +19,8 @@ const WIRED_ROUTE_FILES = [
   "app/[locale]/insights/page.tsx",
   "components/sections/insights/formats-live.tsx",
   "lib/insights-feed.ts",
+  "lib/blog-post.ts",
+  "app/[locale]/blog/[slug]/page.tsx",
 ];
 
 /** Everything the running app can start from. */
@@ -115,8 +118,8 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
       for (const file of WIRED_ROUTE_FILES) expect(existsSync(join(root, file)), file).toBe(true);
     });
 
-    it("is confined to the Insights route and its dedicated modules", () => {
-      for (const file of WIRED_ROUTE_FILES) expect(file, file).toMatch(/insights/);
+    it("is confined to the Insights and blog detail routes and their dedicated modules", () => {
+      for (const file of WIRED_ROUTE_FILES) expect(file, file).toMatch(/insights|blog/);
     });
 
     it("really reaches the WP layer (the allowance is not stale)", () => {
@@ -136,7 +139,9 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
             return !!target && WP_ENTRY.test(target);
           }),
         );
-      expect(direct.sort()).toEqual([...WIRED_ROUTE_FILES].sort());
+      // The blog detail page reaches the WP layer only through lib/blog-post.
+      const viaBlogPost = ["app/[locale]/blog/[slug]/page.tsx"];
+      expect(direct.sort()).toEqual(WIRED_ROUTE_FILES.filter((f) => !viaBlogPost.includes(f)).sort());
     });
   });
 
