@@ -100,4 +100,3 @@ describe("EN/AR fixture consistency", () => {
     }
   });
 });
-
