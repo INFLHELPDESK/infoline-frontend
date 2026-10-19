@@ -15,19 +15,6 @@
  * back to the production CMS (see `.env.example`).
  */
 
-/** Production CMS host. Isolated runs (tests, CI) must never talk to it. */
-const PRODUCTION_CMS_HOST = "green-tarsier-764009.hostingersite.com";
-
-/**
- * True for the production host, its subdomains, and their absolute (trailing
- * dot) spellings: `new URL("https://host./").hostname` keeps the dot, so a
- * plain `===` comparison would miss `host.`.
- */
-export function isProductionCmsHost(host: string): boolean {
-  const name = host.toLowerCase().replace(/\.+$/, "");
-  return name === PRODUCTION_CMS_HOST || name.endsWith(`.${PRODUCTION_CMS_HOST}`);
-}
-
 /** Loopback spellings accepted for isolated runs (exact match, fail closed). */
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]"]);
 
@@ -60,16 +47,13 @@ export function getWpEndpoint(): string {
 
   // Server-side guard; set CMS_ISOLATED=1 for tests, CI and local validation.
   // Isolated runs may only talk to a loopback endpoint (the local CMS stub), so
-  // a renamed or aliased production host cannot slip past the host check.
+  // the production host, its subdomains and any alias are all refused by that
+  // one rule. The production host is deliberately not named here: this module
+  // ships in the bundles, and tests/support/cms-guard scans them for that host.
   if (process.env.CMS_ISOLATED === "1") {
-    if (isProductionCmsHost(host)) {
-      throw new WpConfigError(
-        "CMS_ISOLATED=1 but the endpoint targets the production CMS.",
-      );
-    }
     if (!LOOPBACK_HOSTS.has(host)) {
       throw new WpConfigError(
-        "CMS_ISOLATED=1 requires a loopback endpoint (the local CMS stub).",
+        "CMS_ISOLATED=1 requires a loopback endpoint (the local CMS stub); the production CMS is never allowed.",
       );
     }
   }
@@ -143,11 +127,57 @@ function describeError(error: unknown) {
   return error instanceof Error ? error.message : String(error);
 }
 
+/**
+ * Failures decided from the body of a 200 response. Next's data cache stores any
+ * 2xx response (WPGraphQL reports GraphQL errors with HTTP 200), so these are
+ * the outcomes that may already sit in the cache as if they were content.
+ * http, network and timeout failures are never cached by Next.
+ */
+const CACHED_BODY_FAILURES: ReadonlySet<WpFailureKind> = new Set([
+  "graphql",
+  "malformed",
+  "missing-root",
+]);
+
+/**
+ * Server requests go through the Next data cache. A response that turns out
+ * unusable (see CACHED_BODY_FAILURES) is therefore asked for once more
+ * straight from the CMS (`no-store`), inside the same overall timeout. That
+ * recovers as soon as the CMS does, instead of serving a cached error for
+ * `revalidate` seconds, and the bad entry is never returned as content.
+ * Successful responses keep the normal caching; the browser has no data cache
+ * and never retries.
+ */
 export async function wpFetch<TData>(
   query: string,
   variables: Record<string, unknown> = {},
   revalidate: number = WP_REVALIDATE,
-  { roots = [], timeoutMs = WP_TIMEOUT_MS, signal }: WpFetchOptions = {},
+  options: WpFetchOptions = {},
+): Promise<TData> {
+  const started = Date.now();
+  try {
+    return await wpRequest<TData>(query, variables, revalidate, options, false);
+  } catch (error) {
+    if (
+      typeof window !== "undefined" ||
+      !isWpRequestError(error) ||
+      !CACHED_BODY_FAILURES.has(error.kind) ||
+      options.signal?.aborted
+    ) {
+      throw error;
+    }
+    const remaining = (options.timeoutMs ?? WP_TIMEOUT_MS) - (Date.now() - started);
+    if (remaining <= 0) throw error;
+    return wpRequest<TData>(query, variables, revalidate, { ...options, timeoutMs: remaining }, true);
+  }
+}
+
+async function wpRequest<TData>(
+  query: string,
+  variables: Record<string, unknown>,
+  revalidate: number,
+  { roots = [], timeoutMs = WP_TIMEOUT_MS, signal }: WpFetchOptions,
+  fresh: boolean,
 ): Promise<TData> {
   const isServer = typeof window === "undefined";
   const endpoint = getWpEndpoint();
@@ -176,7 +206,11 @@ export async function wpFetch<TData>(
       signal: combined,
       // Server fetches go through the Next.js data cache; browser fetches are
       // handled by React Query's cache instead.
-      ...(isServer ? { cache: "force-cache", next: { revalidate } } : {}),
+      ...(isServer
+        ? fresh
+          ? { cache: "no-store" }
+          : { cache: "force-cache", next: { revalidate } }
+        : {}),
     });
   } catch (cause) {
     throw (

@@ -118,16 +118,6 @@ describe("getWpEndpoint isolation (regressions)", () => {
     });
     expect(getWpEndpoint()).toBe("https://cms.example.com/graphql");
   });
-
-  it("isProductionCmsHost matches only the production host family", async () => {
-    const { isProductionCmsHost } = await load({});
-    expect(isProductionCmsHost(PROD_HOST)).toBe(true);
-    expect(isProductionCmsHost(`${PROD_HOST}.`)).toBe(true);
-    expect(isProductionCmsHost(`x.${PROD_HOST}`)).toBe(true);
-    expect(isProductionCmsHost(`not${PROD_HOST}`)).toBe(false);
-    expect(isProductionCmsHost("127.0.0.1")).toBe(false);
-    expect(isProductionCmsHost("")).toBe(false);
-  });
 });
 
 describe("wpFetch", () => {
