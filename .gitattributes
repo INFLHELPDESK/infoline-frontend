@@ -1,0 +1,2 @@
+# Husky hooks run under sh; CRLF would break them on Windows checkouts.
+.husky/pre-commit text eol=lf

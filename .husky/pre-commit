@@ -1,1 +1,4 @@
-npm run build
+# Fast, CMS-independent checks only. The production build is deliberately not
+# run here: it would compile with whatever endpoint the shell or .env.local
+# provides and overwrite .next. CI runs the isolated build (npm run build:isolated).
+npm run validate

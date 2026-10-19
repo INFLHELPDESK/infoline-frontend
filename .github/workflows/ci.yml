@@ -24,8 +24,9 @@ jobs:
     timeout-minutes: 30
     env:
       NEXT_TELEMETRY_DISABLED: 1
-      # CMS isolation: no production default exists; the stub endpoint is a
-      # placeholder until the local CMS stub lands. Nothing fetches it yet.
+      # CMS isolation: no production default exists. The endpoint is served by
+      # the local CMS stub (tests/support/cms-stub), started by Playwright; unit
+      # tests start their own on an ephemeral loopback port.
       CMS_ISOLATED: 1
       NEXT_PUBLIC_WPGRAPHQL_ENDPOINT: http://127.0.0.1:3199/graphql
     steps:
@@ -48,8 +49,10 @@ jobs:
       - name: Unit tests
         run: npm test
 
-      - name: Production build
-        run: npm run build
+      # Isolated build: forces CMS_ISOLATED=1 and refuses a non-loopback
+      # endpoint, so the artifact E2E runs against can never carry production.
+      - name: Production build (CMS-isolated)
+        run: npm run build:isolated
 
       - name: Resolve Playwright version
         id: playwright
