@@ -14,6 +14,7 @@ export default defineConfig({
   },
   test: {
     include: ["tests/unit/**/*.test.{ts,tsx}"],
+    setupFiles: ["tests/unit/setup.ts"],
     // Pure helpers run in Node; component tests opt into jsdom per file
     // with a `// @vitest-environment jsdom` docblock.
     environment: "node",

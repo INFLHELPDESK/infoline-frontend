@@ -24,6 +24,10 @@ jobs:
     timeout-minutes: 30
     env:
       NEXT_TELEMETRY_DISABLED: 1
+      # CMS isolation: no production default exists; the stub endpoint is a
+      # placeholder until the local CMS stub lands. Nothing fetches it yet.
+      CMS_ISOLATED: 1
+      NEXT_PUBLIC_WPGRAPHQL_ENDPOINT: http://127.0.0.1:3199/graphql
     steps:
       - uses: actions/checkout@v7
 

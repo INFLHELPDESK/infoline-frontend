@@ -1,21 +1,40 @@
 import { defineConfig, devices } from "@playwright/test";
+import { assertBuildIsIsolated, assertIsolatedCmsEnv } from "./tests/support/cms-guard";
+import { TRIPWIRE_LOG } from "./tests/support/tripwire-log";
+
+// Developer convenience: pick up .env.local (Next reads it for build/start too).
+try {
+  process.loadEnvFile(".env.local");
+} catch {
+  // no .env.local; rely on the process environment (CI sets it explicitly)
+}
+// Fail closed: never run the suite without an isolated, non-production CMS config.
+assertIsolatedCmsEnv();
+assertBuildIsIsolated();
 
 const CI = !!process.env.CI;
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const baseURL = `http://127.0.0.1:${PORT}`;
+
+const cmsUrl = new URL(process.env.NEXT_PUBLIC_WPGRAPHQL_ENDPOINT!);
 
 /**
  * E2E runs against a production build (`next build` must run first — CI does
  * this as its own step; locally use `npm run test:e2e:build`). All off-origin
  * traffic is blocked by the shared fixture in tests/e2e/support/fixtures.ts.
  */
+
 export default defineConfig({
+  globalTeardown: "./tests/support/global-teardown.ts",
   testDir: "tests/e2e",
   outputDir: "test-results/e2e",
   fullyParallel: true,
   forbidOnly: CI,
   retries: CI ? 1 : 0,
-  workers: CI ? 2 : undefined,
+  // Same as CI everywhere: more workers saturate one `next start` plus Chromium
+  // on a typical dev machine and turn load into timeouts. Override explicitly
+  // with `--workers=N` (or PW_WORKERS) when you know the machine can take it.
+  workers: Number(process.env.PW_WORKERS) || 2,
   reporter: CI
     ? [["github"], ["list"], ["html", { open: "never", outputFolder: "playwright-report" }]]
     : [["list"], ["html", { open: "never", outputFolder: "playwright-report" }]],
@@ -36,12 +55,23 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
     },
   ],
-  webServer: {
-    command: `npm run start -- -p ${PORT} -H 127.0.0.1`,
-    url: `${baseURL}/en`,
-    reuseExistingServer: !CI,
-    timeout: 120_000,
-    stdout: "ignore",
-    stderr: "pipe",
-  },
+  webServer: [
+    {
+      // Stand-in CMS: records (and rejects) any request, so a server-side or
+      // browser-side CMS fetch fails the run in global teardown.
+      command: "node tests/support/cms-tripwire.mjs",
+      url: `${cmsUrl.origin}/__health`,
+      reuseExistingServer: false,
+      timeout: 15_000,
+      env: { CMS_TRIPWIRE_LOG: TRIPWIRE_LOG },
+    },
+    {
+      command: `npm run start -- -p ${PORT} -H 127.0.0.1`,
+      url: `${baseURL}/en`,
+      reuseExistingServer: !CI,
+      timeout: 120_000,
+      stdout: "ignore",
+      stderr: "pipe",
+    },
+  ],
 });

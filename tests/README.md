@@ -15,6 +15,9 @@ npm run test:e2e         # Playwright; starts `next start` on 127.0.0.1:3100
 npx playwright show-report
 ```
 
+Playwright runs 2 workers by default, locally and in CI; override with
+`--workers=N` or `PW_WORKERS=N`.
+
 Locally, Playwright reuses a server already listening on port 3100 (`E2E_PORT`
 overrides the port). Rebuild after changing app code: the server serves the
 last build.
@@ -125,3 +128,44 @@ Motion is the most fragile thing to test, so the suite follows these rules
 - Turnstile with a configured site key in a real browser (the key is inlined at
   build time; covered at component level in `tests/unit/components`).
 - Cross-browser (Firefox/WebKit) and mobile-device projects.
+
+## CMS isolation (WordPress)
+
+`lib/wp` has no default endpoint, and the suite refuses to run unless the CMS
+configuration is isolated. Copy `.env.example` to `.env.local` (or export the
+same variables) **before `npm run build`**, because `NEXT_PUBLIC_*` is inlined
+at build time:
+
+```
+CMS_ISOLATED=1
+NEXT_PUBLIC_WPGRAPHQL_ENDPOINT=http://127.0.0.1:3199/graphql
+```
+
+Layers, all fail-closed:
+
+1. `playwright.config.ts` calls `assertIsolatedCmsEnv()`: the flag must be set
+   and the endpoint must be an explicit loopback host and port.
+2. `assertBuildIsIsolated()` scans `.next/static` and `.next/server` (not
+   source maps) for the production CMS host. `lib/forms` still falls back to
+   the production endpoint when the env var is unset, so a build made without
+   the isolation env would otherwise ship it unnoticed.
+3. `tests/support/cms-tripwire.mjs` listens on the configured loopback port,
+   answers 503 and logs every request. `global-teardown.ts` fails the run if
+   the log is not empty, so any server-side CMS fetch is caught (browser-side
+   ones are already aborted by `fixtures.ts`).
+4. `tests/unit/setup.ts` makes an unstubbed `fetch` throw in unit tests.
+5. `tests/unit/wp/runtime-preservation.test.ts` walks the import graph (static,
+   dynamic, re-export, relative and transitive) from `app`, `components`,
+   `hooks`, `i18n`, `lib`, `proxy.ts` and `next.config.ts` and fails if any
+   path reaches `lib/wp`, `providers` or `lib/content-adapters`. It is a
+   source-level guard only: it does not catch computed dynamic imports.
+
+Remove or relax 3 and 5 in the slice that deliberately wires the first page;
+the tripwire is then replaced by the real CMS stub.
+
+## Waiting for hydration
+
+`page.goto` resolves on `load`, not on hydration. Specs that click
+JS-driven controls right after navigation (for example the language
+switcher) must call `waitForHydration` first; an early click is a silent
+no-op. `locale-switch.spec.ts` does this through its `open()` helper.
