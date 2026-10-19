@@ -1,4 +1,4 @@
-import type { Post, PostListItem } from "@/lib/wp";
+import type { Post, PostCard, PostListItem } from "@/lib/wp";
 import type { BlogPost } from "@/lib/blog";
 import type { Insight } from "@/lib/insights";
 
@@ -61,11 +61,29 @@ export function toBlogPost(p: Post | PostListItem, locale: string): BlogPost {
   };
 }
 
-export function toInsight(p: PostListItem): Insight {
+/**
+ * `linkable` lists the slugs the blog detail route can render (it resolves
+ * slugs from static locale copy only, not from the CMS). A post outside it gets
+ * an empty `href`, which the card renders as plain, non-clickable content
+ * instead of a link to a soft 404. Omit it to link every post.
+ */
+export function toInsight(p: PostCard, linkable?: ReadonlySet<string>): Insight {
   return {
     category: p.categories[0]?.name || "Insights",
     title: p.title,
     image: p.image?.src || DEFAULT_IMAGE,
-    href: `/blog/${p.slug}`,
+    href: !linkable || linkable.has(p.slug) ? `/blog/${p.slug}` : "",
   };
+}
+
+/** Cards shown in the Insights "Formats" section. */
+export const INSIGHTS_LIMIT = 3;
+
+/** The latest posts (WP returns newest first) as Insights cards. */
+export function toInsights(
+  posts: PostCard[],
+  limit = INSIGHTS_LIMIT,
+  linkable?: ReadonlySet<string>,
+): Insight[] {
+  return posts.slice(0, limit).map((p) => toInsight(p, linkable));
 }

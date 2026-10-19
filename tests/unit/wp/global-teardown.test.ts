@@ -25,9 +25,25 @@ describe("global teardown (CMS tripwire verdict)", () => {
     expect(() => globalTeardown()).not.toThrow();
   });
 
-  it("fails and lists the requests when the CMS was called", () => {
-    writeFileSync(state.log, "POST /graphql\n");
-    expect(() => globalTeardown()).toThrow(/POST \/graphql/);
+  it("fails and lists a request that is not allow-listed", () => {
+    writeFileSync(state.log, "POST /graphql op=Services\n");
+    expect(() => globalTeardown()).toThrow(/POST \/graphql op=Services/);
+  });
+
+  it("passes when only the wired route's operation (and its media) was requested", () => {
+    writeFileSync(state.log, "POST /graphql op=Posts\nGET /stub-media/post.gif\n");
+    expect(() => globalTeardown()).not.toThrow();
+  });
+
+  it.each([
+    ["an unknown operation", "POST /graphql op=unknown"],
+    ["an allowed name with extra text", "POST /graphql op=Posts extra"],
+    ["a request with no operation", "POST /graphql"],
+    ["another endpoint", "GET /wp-json/wp/v2/posts"],
+    ["a non-media GET", "GET /graphql op=Posts"],
+  ])("fails for %s, even next to allowed traffic", (_name, line) => {
+    writeFileSync(state.log, `POST /graphql op=Posts\n${line}\n`);
+    expect(() => globalTeardown()).toThrow(line);
   });
 
   it("fails when the log is missing (isolation unverified)", () => {

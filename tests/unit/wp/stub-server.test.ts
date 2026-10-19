@@ -209,7 +209,7 @@ describe("cms-stub: scenarios", () => {
         method: "POST",
         body: JSON.stringify({ query: SERVICES }),
       });
-      expect(readFileSync(logFile, "utf8")).toBe("POST /graphql\n");
+      expect(readFileSync(logFile, "utf8")).toBe("POST /graphql op=Services\n");
     } finally {
       await local.close();
       rmSync(dir, { recursive: true, force: true });

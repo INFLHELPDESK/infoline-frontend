@@ -125,7 +125,15 @@ export async function createCmsStub({ host = "127.0.0.1", port = 0, logFile } = 
     state.requests.push(entry);
     // The file log is the cross-process tripwire (global-teardown reads it):
     // control endpoints are not CMS traffic and are never written to it.
-    if (logFile) appendFileSync(logFile, `${entry.method} ${entry.url}\n`);
+    if (logFile) {
+      // GraphQL lines carry the operation so teardown can allow only the
+      // operations a wired route is expected to make.
+      const op =
+        entry.kind === "graphql" || entry.kind === "mutation-rejected"
+          ? ` op=${entry.operation ?? "unknown"}`
+          : "";
+      appendFileSync(logFile, `${entry.method} ${entry.url}${op}\n`);
+    }
   }
 
   const server = createServer(async (req, res) => {

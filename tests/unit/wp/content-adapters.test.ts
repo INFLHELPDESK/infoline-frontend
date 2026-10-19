@@ -73,6 +73,14 @@ describe("toInsight", () => {
   });
 });
 
+describe("toInsight link safety", () => {
+  it("links only slugs the blog detail route can render", () => {
+    expect(toInsight(base, new Set(["title"])).href).toBe("/blog/title");
+    expect(toInsight(base, new Set(["other"])).href).toBe("");
+    expect(toInsight(base, new Set()).href).toBe("");
+  });
+});
+
 describe("adapters on stub data (EN / AR)", () => {
   it("adapts English and Arabic posts end to end", async () => {
     const [en] = await getPosts("en");

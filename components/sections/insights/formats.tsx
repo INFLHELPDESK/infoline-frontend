@@ -2,18 +2,24 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Stagger, StaggerItem } from "@/components/ui/motion";
-import type { Insight } from "@/lib/insights";
+import type { Insight, InsightsSource } from "@/lib/insights";
 
 /**
  * Formats — "Executive articles, service explainers, benchmark notes…"
  * headline followed by the three article cards, reusing the exact home
  * Insights items (image, category, title, href) so the two stay in sync.
  */
-export default function Formats({ insights }: { insights: Insight[] }) {
+export default function Formats({
+  insights,
+  contentSource,
+}: {
+  insights: Insight[];
+  contentSource?: InsightsSource;
+}) {
   const t = useTranslations("InsightsPage");
 
   return (
-    <section className="pb-20 lg:pb-26">
+    <section className="pb-20 lg:pb-26" data-content-source={contentSource}>
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Stagger as="div" stagger={0.12} amount={0.2}>
           <StaggerItem direction="start" className="mb-11">
@@ -30,9 +36,9 @@ export default function Formats({ insights }: { insights: Insight[] }) {
             className="grid grid-cols-1 gap-2xl md:grid-cols-3"
             stagger={0.13}
           >
-            {insights.map((insight) => (
-              <StaggerItem as="div" key={insight.title}>
-                <Link href={insight.href} className="group flex flex-col">
+            {insights.map((insight) => {
+              const card = (
+                <>
                   <div className="relative aspect-[16/11] w-full overflow-hidden rounded-lg bg-slate-100">
                     <Image
                       src={insight.image}
@@ -48,9 +54,22 @@ export default function Formats({ insights }: { insights: Insight[] }) {
                   <h3 className="body-lg-semibold leading-snug text-slate-900">
                     {insight.title}
                   </h3>
-                </Link>
-              </StaggerItem>
-            ))}
+                </>
+              );
+              return (
+                <StaggerItem as="div" key={insight.title}>
+                  {insight.href ? (
+                    <Link href={insight.href} className="group flex flex-col">
+                      {card}
+                    </Link>
+                  ) : (
+                    <div className="group flex flex-col" data-unlinked="">
+                      {card}
+                    </div>
+                  )}
+                </StaggerItem>
+              );
+            })}
           </Stagger>
         </Stagger>
       </div>

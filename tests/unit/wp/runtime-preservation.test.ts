@@ -8,6 +8,18 @@ const EXTENSIONS = ["", ".ts", ".tsx", ".mts", ".js", ".jsx", ".mjs", ".json"];
 /** WordPress infrastructure that no running code may reach yet. */
 const WP_ENTRY = /^(lib\/wp\/|providers\/|lib\/content-adapters\.)/;
 
+/**
+ * The one route wired to WordPress so far (/[locale]/insights) and the modules
+ * built only for it. These may reach the WP layer; nothing else may reach them
+ * (a second page importing one is a second wired route). Adding an entry here
+ * is the deliberate act of wiring another route.
+ */
+const WIRED_ROUTE_FILES = [
+  "app/[locale]/insights/page.tsx",
+  "components/sections/insights/formats-live.tsx",
+  "lib/insights-feed.ts",
+];
+
 /** Everything the running app can start from. */
 const ROOT_DIRS = ["app", "components", "hooks", "i18n", "lib"];
 const ROOT_FILES = ["proxy.ts", "next.config.ts"];
@@ -53,7 +65,7 @@ function resolveModule(from: string, spec: string): string | null {
 }
 
 /** WP module -> the import chain from an entry that reaches it. */
-function findWpReach(entries: string[]): Map<string, string> {
+function findWpReach(entries: string[], wired: readonly string[] = []): Map<string, string> {
   const parent = new Map<string, string>();
   const queue = [...entries];
   const seen = new Set(entries);
@@ -66,7 +78,7 @@ function findWpReach(entries: string[]): Map<string, string> {
       if (!target || seen.has(target)) continue;
       seen.add(target);
       parent.set(target, file);
-      if (WP_ENTRY.test(target)) {
+      if (WP_ENTRY.test(target) || wired.includes(target)) {
         const chain = [target];
         for (let p = parent.get(target); p; p = parent.get(p)) chain.unshift(p);
         hits.set(target, chain.join(" -> "));
@@ -79,15 +91,14 @@ function findWpReach(entries: string[]): Map<string, string> {
 }
 
 /**
- * This slice only lands WordPress infrastructure. Nothing the app can run
- * (routes, components, hooks, i18n, proxy, config, other lib code) may import
- * it, directly or transitively, so no existing page can start fetching CMS
- * data. Remove or relax this guard in the slice that deliberately wires a
- * page.
+ * Only the selected route (WIRED_ROUTE_FILES) may use WordPress. Nothing else
+ * the app can run (other routes, components, hooks, i18n, proxy, config, other
+ * lib code) may import the WP layer or a wired-route module, directly or
+ * transitively, so no other page can start fetching CMS data.
  */
-describe("WordPress infrastructure is not reachable from the running app", () => {
+describe("WordPress infrastructure is reachable only from the wired route", () => {
   const entries = [
-    ...ROOT_DIRS.flatMap(walk).filter((f) => !WP_ENTRY.test(f)),
+    ...ROOT_DIRS.flatMap(walk).filter((f) => !WP_ENTRY.test(f) && !WIRED_ROUTE_FILES.includes(f)),
     ...ROOT_FILES.filter((f) => existsSync(join(root, f))),
   ];
 
@@ -95,8 +106,38 @@ describe("WordPress infrastructure is not reachable from the running app", () =>
     expect(entries.length).toBeGreaterThan(100);
   });
 
-  it("has no import path (static, dynamic, re-export, relative or transitive) into the WP layer", () => {
-    expect([...findWpReach(entries).values()]).toEqual([]);
+  it("has no import path (static, dynamic, re-export, relative or transitive) into the WP layer or a wired-route module", () => {
+    expect([...findWpReach(entries, WIRED_ROUTE_FILES).values()]).toEqual([]);
+  });
+
+  describe("the wired route", () => {
+    it("lists only files that exist", () => {
+      for (const file of WIRED_ROUTE_FILES) expect(existsSync(join(root, file)), file).toBe(true);
+    });
+
+    it("is confined to the Insights route and its dedicated modules", () => {
+      for (const file of WIRED_ROUTE_FILES) expect(file, file).toMatch(/insights/);
+    });
+
+    it("really reaches the WP layer (the allowance is not stale)", () => {
+      const hits = findWpReach(WIRED_ROUTE_FILES);
+      expect(hits.has("lib/wp/server.ts")).toBe(true);
+      expect(hits.has("lib/wp/hooks.ts")).toBe(true);
+      expect(hits.has("providers/index.ts")).toBe(true);
+      expect(hits.has("lib/content-adapters.ts")).toBe(true);
+    });
+
+    it("is the only code (outside tests) with a direct import of the WP layer", () => {
+      const direct = [...ROOT_DIRS.flatMap(walk)]
+        .filter((f) => !WP_ENTRY.test(f))
+        .filter((f) =>
+          specifiers(readFileSync(join(root, f), "utf8")).some((spec) => {
+            const target = resolveModule(f, spec);
+            return !!target && WP_ENTRY.test(target);
+          }),
+        );
+      expect(direct.sort()).toEqual([...WIRED_ROUTE_FILES].sort());
+    });
   });
 
   describe("the detector itself", () => {
@@ -118,6 +159,11 @@ describe("WordPress infrastructure is not reachable from the running app", () =>
       expect(specifiers(src).sort()).toEqual(
         ["@/lib/wp", "../../lib/wp/api", "@/providers", "@/lib/content-adapters", "@/lib/wp/hooks"].sort(),
       );
+    });
+
+    it("reports a non-route module that reaches a wired-route module", () => {
+      const hits = findWpReach(["app/[locale]/blog/page.tsx"], ["lib/site.ts"]);
+      expect(hits.get("lib/site.ts")).toBe("app/[locale]/blog/page.tsx -> lib/site.ts");
     });
 
     it("reports a chain when a module outside the WP layer reaches it", () => {
