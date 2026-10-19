@@ -1,5 +1,7 @@
 import { test, expect, waitForHydration } from "../support/fixtures";
 import { dehydratedQueries, formatsSection, NON_CARD_FIELDS, payloadHasKey } from "../support/insights";
+import { isCmsRequest, trackRequests } from "../support/cms";
+import { rendersElementText } from "../support/html";
 import { dirFor, locales, messages, type Locale } from "../support/messages";
 
 /**
@@ -30,13 +32,13 @@ for (const locale of locales) {
       expect(html).toContain('data-content-source="cms"');
       const cards = formatsSection(html);
       expect(cards).toContain(SEASONAL[locale]);
-      // Blog detail renders static posts only: the CMS card must not link to a soft 404.
-      expect(cards).not.toMatch(new RegExp(`href="[^"]*/blog/${SLUG[locale]}`));
-      expect(cards).toContain("data-unlinked");
+      // The blog detail route renders this CMS post, so the card links to it.
+      expect(cards).toContain(`href="/${locale}/blog/${SLUG[locale]}"`);
+      expect(cards).not.toContain("data-unlinked");
       // The static cards are replaced, not appended to.
       for (const item of messages[locale].Insights.items) expect(cards).not.toContain(item.title);
       // Everything else on the page is still the locale copy.
-      expect(html).toContain(sectionOf(locale));
+      expect(rendersElementText(html, sectionOf(locale))).toBe(true);
 
       // Hydration payload carries the teaser fields only, not whole CMS list items.
       const payload = dehydratedQueries(html);
@@ -62,22 +64,28 @@ for (const locale of locales) {
       consoleErrors,
       baseURL,
     }) => {
+      const cmsRequests = trackRequests(page, isCmsRequest);
+      const assets = trackRequests(page, (url) => url.includes("/_next/static/")); // listener control
       await page.goto(`/${locale}/insights`);
       await waitForHydration(page);
 
       const section = page.locator("section[data-content-source]");
       await expect(section).toHaveAttribute("data-content-source", "cms");
       await expect(section.getByRole("heading", { name: SEASONAL[locale] })).toBeVisible();
-      await expect(section.getByRole("link", { name: new RegExp(SEASONAL[locale]) })).toHaveCount(0);
-      await expect(section.locator("[data-unlinked]")).toHaveCount(1);
+      await expect(section.getByRole("link", { name: new RegExp(SEASONAL[locale]) })).toHaveAttribute(
+        "href",
+        `/${locale}/blog/${SLUG[locale]}`,
+      );
+      await expect(section.locator("[data-unlinked]")).toHaveCount(0);
 
       // Hydration kept the server markup (no swap back to static or to loading).
-      await page.waitForTimeout(500);
+      await page.waitForLoadState("networkidle");
       await expect(section).toHaveAttribute("data-content-source", "cms");
       expect(consoleErrors).toEqual([]);
 
-      // `blockedRequests` (auto fixture) already fails on any browser request
-      // to /graphql or the CMS host; assert the page URL stayed first-party.
+      // No browser request to the CMS (the `blockedRequests` fixture also fails on one).
+      expect(assets.length, "request listener is wired").toBeGreaterThan(0);
+      expect(cmsRequests).toEqual([]);
       expect(page.url()).toBe(`${baseURL}/${locale}/insights`);
 
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
@@ -87,12 +95,19 @@ for (const locale of locales) {
   });
 }
 
-test.describe("blog detail cannot render CMS slugs (dependency for linking CMS posts)", () => {
+test.describe("Insights -> Blog detail navigation", () => {
   for (const locale of locales) {
-    test(`/${locale}/blog/${SLUG[locale]} is the noindex soft 404`, async ({ request }) => {
-      const html = await (await request.get(`/${locale}/blog/${SLUG[locale]}`)).text();
-      expect(html).toContain(messages[locale].Blog.page.single.notFoundTitle);
-      expect(html).toMatch(/<meta name="robots" content="noindex/);
+    test(`/${locale}: the CMS card opens its CMS-backed article`, async ({ page }) => {
+      await page.goto(`/${locale}/insights`);
+      await waitForHydration(page);
+      const card = page
+        .locator("section[data-content-source]")
+        .getByRole("link", { name: new RegExp(SEASONAL[locale]) });
+      await card.click();
+      await expect(page).toHaveURL(new RegExp(`/${locale}/blog/${SLUG[locale]}$`));
+      await expect(page.locator("main h1")).toHaveText(SEASONAL[locale]);
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(page.locator("html")).toHaveAttribute("dir", dirFor(locale));
     });
   }
 });
@@ -106,7 +121,7 @@ test.describe("only /insights is CMS-backed", () => {
         expect(html).not.toContain("data-content-source");
         expect(html).not.toContain(SEASONAL[locale]);
       }
-      expect(blog).toContain(messages[locale].Blog.posts[0].title);
+      expect(rendersElementText(blog, messages[locale].Blog.posts[0].title)).toBe(true);
     });
   }
 });

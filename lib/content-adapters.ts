@@ -62,10 +62,10 @@ export function toBlogPost(p: Post | PostListItem, locale: string): BlogPost {
 }
 
 /**
- * `linkable` lists the slugs the blog detail route can render (it resolves
- * slugs from static locale copy only, not from the CMS). A post outside it gets
- * an empty `href`, which the card renders as plain, non-clickable content
- * instead of a link to a soft 404. Omit it to link every post.
+ * `linkable` lists the slugs whose blog detail page renders (static locale
+ * posts plus CMS posts the route confirmed, see lib/blog-post). A post outside
+ * it gets an empty `href`, which the card renders as plain, non-clickable
+ * content instead of a link to a soft 404. Omit it to link every post.
  */
 export function toInsight(p: PostCard, linkable?: ReadonlySet<string>): Insight {
   return {

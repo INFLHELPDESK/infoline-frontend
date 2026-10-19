@@ -23,7 +23,7 @@ export default function FormatsLive({
 }: {
   fallback: Insight[];
   source: InsightsSource;
-  /** Slugs the blog detail route can render; other CMS posts are not linked. */
+  /** Slugs whose blog detail page renders; other CMS posts are not linked. */
   linkableSlugs: string[];
 }) {
   const linkable = useMemo(() => new Set(linkableSlugs), [linkableSlugs]);
