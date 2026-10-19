@@ -189,7 +189,8 @@ stub then serves that page's fixtures.
 | `harness.ts` | Vitest helper: stub on an ephemeral port, endpoint env set, fetch restricted to the stub's origin |
 
 Scenarios: `ok`, `empty`, `null-acf`, `partial`, `graphql-error`, `partial-errors`,
-`no-data`, `http-error`, `malformed-json`, `malformed-shape`, `network-error`
+`no-data`, `http-error`, `malformed-json`, `malformed-shape`, `network-error`,
+`hang` (never answers), `stalled-body` (headers, then a body that never ends)
 (global `POST /__scenario`, or per request via `x-cms-stub-scenario`).
 Fixtures are synthetic; nothing is copied from the live CMS.
 
@@ -199,11 +200,40 @@ Contract tests (`tests/unit/wp`):
   fixture has exactly the selected fields, so fixtures cannot drift from
   `lib/wp/queries.ts` / `api.ts` or invent schema fields.
 - `cms-contract.test.ts`: request envelope, locale mapping, normalized output,
-  empty/null/partial ACF, error handling (current behavior pinned, gaps marked).
+  empty/null/partial ACF, error handling.
+- `client-reliability.test.ts`: typed failures for every fetcher, valid empty vs
+  malformed responses, root-field validation, timeout and cancellation.
+- `prefetch-contract.test.ts`: the error contract of every `prefetch*` helper.
 - `normalize.test.ts`, `content-adapters.test.ts`: pure edge cases.
 - `hydration.test.tsx`: server prefetch, dehydrate, server markup and client
   hydration with the real query client, EN and AR, no refetch, error fallback.
 - `stub-server.test.ts`: the stub itself.
+
+### Client reliability contract (`lib/wp/client.ts`)
+
+- **Timeout.** Every request has a 10 s budget (`WP_TIMEOUT_MS`), covering the
+  response body as well as the headers. It is not read from env; override per
+  call with `wpFetch(query, vars, revalidate, { timeoutMs })`. The `get*`
+  fetchers use the default. Nothing retries inside `wpFetch`; React Query's
+  client-side retry policy still applies in the browser, so a hung CMS can take
+  several timeouts there before `useQuery` reports an error.
+- **Cancellation.** `{ signal }` aborts the request; the rejection is the
+  caller's own abort reason, never a `WpRequestError`. No `get*` fetcher
+  forwards a signal yet.
+- **Typed errors.** Failures reject with `WpRequestError` and a `kind`: `http`
+  (with `status`), `graphql`, `network`, `timeout`, `malformed`, `missing-root`.
+  Bad endpoint configuration still rejects with `WpConfigError`.
+- **Root fields.** Each fetcher declares the root fields its query selects. An
+  absent root is `missing-root`; an explicit `null` root is valid (single
+  lookup not found, unset options page). A list root that is `null` or has no
+  `nodes` array is `malformed`; `nodes: []` is a valid empty list.
+- **Prefetch.** `prefetch*` helpers resolve with valid content (including
+  `null` and empty lists) and reject with the typed error otherwise. They do not
+  swallow errors, do not retry, and a failed query is not dehydrated. The page
+  decides the fallback; no page or UI fallback exists yet.
+
+All of this is verified against the local stub only, not against live
+WordPress.
 
 **Verified** means derived from this repository (queries, normalizers, fetchers).
 **Assumed** (not provable offline, to be confirmed against a non-production
@@ -211,6 +241,12 @@ WordPress when the first page is wired): the live schema still exposes these
 fields (notably `hubHeadin`), WPML honours `where: { language }` and `/ar/`
 URIs, option pages stay language-neutral, `fileSize` keeps its two encodings,
 and case studies still cannot be filtered by sector server-side.
+
+Deferred: the 10 s default is untuned against the real CMS; `get*` fetchers do
+not yet accept an `AbortSignal` (so React Query cancellation is not forwarded);
+`AbortSignal.any` is only used when a signal is passed, and requires a modern
+browser; interaction between the abort signal and Next's server data cache is
+not exercised until a page is wired and gets its own E2E.
 
 ## Git hook and CI policy
 
