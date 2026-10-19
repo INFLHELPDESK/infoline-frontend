@@ -34,6 +34,7 @@ import type {
   Career,
   Post,
   PostListItem,
+  PostCard,
   CompanyProfile,
 } from "./types";
 
@@ -493,6 +494,24 @@ export async function getPosts(
     posts: { nodes: Parameters<typeof normalizePostListItem>[0][] };
   }>(POSTS, { first, language: languageFilter(locale) }, undefined, { roots: ["posts"] });
   return wpNodes(data.posts, "posts").flatMap((n) => normalizePostListItem(n) ?? []);
+}
+
+/**
+ * The newest `first` posts reduced to teaser cards: the CMS is asked for only
+ * that many, and only the card fields (first category) are kept, so the result
+ * is small enough to dehydrate into a page.
+ */
+export async function getLatestPostCards(
+  locale: WpLocale = "en",
+  first = 3,
+): Promise<PostCard[]> {
+  const posts = await getPosts(locale, first);
+  return posts.slice(0, first).map(({ title, slug, image, categories }) => ({
+    title,
+    slug,
+    image,
+    categories: categories.slice(0, 1),
+  }));
 }
 
 export async function getPost(slug: string): Promise<Post | null> {

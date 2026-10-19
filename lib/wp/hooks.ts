@@ -15,6 +15,7 @@ import {
   getHubs,
   getCareers,
   getPosts,
+  getLatestPostCards,
   getPost,
   getCompanyProfile,
   type WpLocale,
@@ -30,6 +31,7 @@ import type {
   Career,
   Post,
   PostListItem,
+  PostCard,
   CompanyProfile,
 } from "./types";
 
@@ -187,6 +189,15 @@ export function usePosts(options?: WpQueryOptions<PostListItem[]>) {
     ...options,
     queryKey: wpKeys.posts(locale),
     queryFn: () => getPosts(locale),
+  });
+}
+
+export function useLatestPosts(first: number, options?: WpQueryOptions<PostCard[]>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.latestPosts(locale, first),
+    queryFn: () => getLatestPostCards(locale, first),
   });
 }
 

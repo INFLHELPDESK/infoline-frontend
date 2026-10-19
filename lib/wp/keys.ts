@@ -31,6 +31,9 @@ export const wpKeys = {
   careers: (locale: WpLocale) => [...wpKeys.all, "careers", locale] as const,
 
   posts: (locale: WpLocale) => [...wpKeys.all, "posts", locale] as const,
+  /** Bounded teaser list (`PostCard[]`); a different shape from `posts`. */
+  latestPosts: (locale: WpLocale, first: number) =>
+    [...wpKeys.all, "posts", locale, "latest", first] as const,
   post: (slug: string, locale: WpLocale) =>
     [...wpKeys.all, "post", locale, slug] as const,
 

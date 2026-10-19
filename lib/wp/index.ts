@@ -24,6 +24,7 @@ export {
   getHubs,
   getCareers,
   getPosts,
+  getLatestPostCards,
   getPost,
   getCompanyProfile,
   type WpLocale,
@@ -42,6 +43,7 @@ export {
   useHubs,
   useCareers,
   usePosts,
+  useLatestPosts,
   usePost,
   useCompanyProfile,
 } from "./hooks";
@@ -58,6 +60,7 @@ export {
   prefetchHubs,
   prefetchCareers,
   prefetchPosts,
+  prefetchLatestPosts,
   prefetchPost,
   prefetchCompanyProfile,
 } from "./server";

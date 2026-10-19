@@ -11,6 +11,7 @@ import {
   getHubs,
   getCareers,
   getPosts,
+  getLatestPostCards,
   getPost,
   getCompanyProfile,
   type WpLocale,
@@ -142,6 +143,17 @@ export async function prefetchPosts(qc: QueryClient, locale: WpLocale = "en") {
   return qc.fetchQuery({
     queryKey: wpKeys.posts(locale),
     queryFn: () => getPosts(locale),
+  });
+}
+
+export async function prefetchLatestPosts(
+  qc: QueryClient,
+  locale: WpLocale = "en",
+  first = 3,
+) {
+  return qc.fetchQuery({
+    queryKey: wpKeys.latestPosts(locale, first),
+    queryFn: () => getLatestPostCards(locale, first),
   });
 }
 

@@ -210,6 +210,13 @@ export type PostListItem = {
   categories: Term[];
 };
 
+/**
+ * The few post fields a teaser card renders (title, link, first category,
+ * image). What the Insights route caches and sends to the browser, instead of
+ * whole list items.
+ */
+export type PostCard = Pick<PostListItem, "title" | "slug" | "image" | "categories">;
+
 export type Post = PostListItem & {
   /** Raw HTML post body. */
   content: string | null;
