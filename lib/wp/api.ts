@@ -1,4 +1,4 @@
-import { wpFetch } from "./client";
+import { wpFetch, wpNodes } from "./client";
 import {
   SERVICE_BY_URI,
   SERVICES_LIST,
@@ -71,6 +71,8 @@ export async function getService(
   const data = await wpFetch<{ service: Parameters<typeof normalizeService>[0] }>(
     SERVICE_BY_URI,
     { uri: uriForLocale(uri, locale) },
+    undefined,
+    { roots: ["service"] },
   );
   return normalizeService(data.service);
 }
@@ -95,10 +97,12 @@ export async function getServices(
         serviceCoreContent: { problemStatement: string | null } | null;
       }[];
     };
-  }>(SERVICES_LIST, { first, after, language: languageFilter(locale) });
+  }>(SERVICES_LIST, { first, after, language: languageFilter(locale) }, undefined, {
+    roots: ["services"],
+  });
 
   return {
-    items: data.services.nodes.flatMap((n) =>
+    items: wpNodes(data.services, "services").flatMap((n) =>
       n.uri
         ? [
             {
@@ -113,9 +117,9 @@ export async function getServices(
           ]
         : [],
     ),
-    nextPage: data.services.pageInfo.hasNextPage ? 1 : null,
+    nextPage: data.services.pageInfo?.hasNextPage ? 1 : null,
     // endCursor carried through for infinite cursors if needed:
-    ...(data.services.pageInfo.hasNextPage
+    ...(data.services.pageInfo?.hasNextPage
       ? { endCursor: data.services.pageInfo.endCursor }
       : {}),
   } as Paginated<ServiceListItem> & { endCursor?: string | null };
@@ -129,7 +133,9 @@ export async function getCaseStudy(
 ): Promise<CaseStudy | null> {
   const data = await wpFetch<{
     caseStudy: Parameters<typeof normalizeCaseStudy>[0];
-  }>(CASE_STUDY_BY_URI, { uri: uriForLocale(uri, locale) });
+  }>(CASE_STUDY_BY_URI, { uri: uriForLocale(uri, locale) }, undefined, {
+    roots: ["caseStudy"],
+  });
   return normalizeCaseStudy(data.caseStudy);
 }
 
@@ -213,9 +219,11 @@ export async function getCaseStudies(
       }
     `,
     { first, language: languageFilter(locale) },
+    undefined,
+    { roots: ["caseStudies"] },
   );
 
-  const items = data.caseStudies.nodes.flatMap((n) => {
+  const items = wpNodes(data.caseStudies, "caseStudies").flatMap((n) => {
     if (!n.uri) return [];
     const core = n.caseStudyCoreContent;
     return [
@@ -256,7 +264,9 @@ export async function getSolution(
 ): Promise<Solution | null> {
   const data = await wpFetch<{
     solution: Parameters<typeof normalizeSolution>[0];
-  }>(SOLUTION_BY_URI, { uri: uriForLocale(uri, locale) });
+  }>(SOLUTION_BY_URI, { uri: uriForLocale(uri, locale) }, undefined, {
+    roots: ["solution"],
+  });
   return normalizeSolution(data.solution);
 }
 
@@ -301,8 +311,10 @@ export async function getSolutions(
       }
     `,
     { first, language: languageFilter(locale) },
+    undefined,
+    { roots: ["solutions"] },
   );
-  return { items: data.solutions.nodes.flatMap((n) => normalizeSolution(n) ?? []), nextPage: null };
+  return { items: wpNodes(data.solutions, "solutions").flatMap((n) => normalizeSolution(n) ?? []), nextPage: null };
 }
 
 /* -------------------------------- Industry -------------------------------- */
@@ -313,7 +325,9 @@ export async function getIndustry(
 ): Promise<Industry | null> {
   const data = await wpFetch<{
     industry: Parameters<typeof normalizeIndustry>[0];
-  }>(INDUSTRY_BY_URI, { uri: uriForLocale(uri, locale) });
+  }>(INDUSTRY_BY_URI, { uri: uriForLocale(uri, locale) }, undefined, {
+    roots: ["industry"],
+  });
   return normalizeIndustry(data.industry);
 }
 
@@ -355,9 +369,11 @@ export async function getIndustries(
       }
     `,
     { first, language: languageFilter(locale) },
+    undefined,
+    { roots: ["industries"] },
   );
   return {
-    items: data.industries.nodes.flatMap((n) =>
+    items: wpNodes(data.industries, "industries").flatMap((n) =>
       n.uri
         ? [
             {
@@ -384,8 +400,10 @@ export async function getClients(locale: WpLocale = "en"): Promise<Client[]> {
   const data = await wpFetch<{ clients: { nodes: Parameters<typeof normalizeClient>[0][] } }>(
     CLIENTS,
     { language: languageFilter(locale) },
+    undefined,
+    { roots: ["clients"] },
   );
-  return data.clients.nodes.flatMap((n) => normalizeClient(n) ?? []);
+  return wpNodes(data.clients, "clients").flatMap((n) => normalizeClient(n) ?? []);
 }
 
 /* ---------------------------- Hubs / options ------------------------------ */
@@ -424,7 +442,9 @@ export async function getHubs(): Promise<Hubs> {
         solutionsIntro: string | null;
       } | null;
     } | null;
-  }>(HUBS);
+  }>(HUBS, {}, undefined, {
+    roots: ["caseStudiesSettings", "industriesHubSettings", "solutionsSettings"],
+  });
 
   const cs = data.caseStudiesSettings?.caseStudiesHub;
   const ind = data.industriesHubSettings?.industriesHub;
@@ -459,8 +479,8 @@ export async function getHubs(): Promise<Hubs> {
 export async function getCareers(locale: WpLocale = "en"): Promise<Career[]> {
   const data = await wpFetch<{
     careers: { nodes: Parameters<typeof normalizeCareer>[0][] };
-  }>(CAREERS, { language: languageFilter(locale) });
-  return data.careers.nodes.flatMap((n) => normalizeCareer(n) ?? []);
+  }>(CAREERS, { language: languageFilter(locale) }, undefined, { roots: ["careers"] });
+  return wpNodes(data.careers, "careers").flatMap((n) => normalizeCareer(n) ?? []);
 }
 
 /* ----------------------------- Blog / insights ---------------------------- */
@@ -471,14 +491,16 @@ export async function getPosts(
 ): Promise<PostListItem[]> {
   const data = await wpFetch<{
     posts: { nodes: Parameters<typeof normalizePostListItem>[0][] };
-  }>(POSTS, { first, language: languageFilter(locale) });
-  return data.posts.nodes.flatMap((n) => normalizePostListItem(n) ?? []);
+  }>(POSTS, { first, language: languageFilter(locale) }, undefined, { roots: ["posts"] });
+  return wpNodes(data.posts, "posts").flatMap((n) => normalizePostListItem(n) ?? []);
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
   const data = await wpFetch<{ post: Parameters<typeof normalizePost>[0] }>(
     POST_BY_SLUG,
     { id: slug },
+    undefined,
+    { roots: ["post"] },
   );
   return normalizePost(data.post);
 }
@@ -488,6 +510,9 @@ export async function getPost(slug: string): Promise<Post | null> {
 export async function getCompanyProfile(): Promise<CompanyProfile> {
   const data = await wpFetch<Parameters<typeof normalizeCompanyProfile>[0]>(
     COMPANY_PROFILE,
+    {},
+    undefined,
+    { roots: ["aboutSettings"] },
   );
   return normalizeCompanyProfile(data);
 }

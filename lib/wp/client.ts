@@ -80,6 +80,49 @@ export function getWpEndpoint(): string {
 /** Seconds a CMS response stays fresh in the Next.js data cache (server-side). */
 export const WP_REVALIDATE = 300;
 
+/** Per-request budget. A hung CMS must fail the render, not hold it open. */
+export const WP_TIMEOUT_MS = 10_000;
+
+/**
+ * Why a CMS request failed. Every kind is an infrastructure/contract failure:
+ * none of them means "the CMS has no such content" (that is a resolved `null`
+ * or an empty list, never an error).
+ *
+ * - `http`          non-2xx response (`status` is set)
+ * - `graphql`       the `errors` array was non-empty (data is discarded)
+ * - `network`       the request never produced a response (DNS, reset, ...)
+ * - `timeout`       no complete response within the timeout
+ * - `malformed`     body is not JSON, not an envelope, or a list root has no `nodes` array
+ * - `missing-root`  valid envelope but a root field the query asked for is absent
+ *                   (an explicit `null` root is valid: "not found" / unset options)
+ */
+export type WpFailureKind =
+  | "http"
+  | "graphql"
+  | "network"
+  | "timeout"
+  | "malformed"
+  | "missing-root";
+
+export class WpRequestError extends Error {
+  readonly kind: WpFailureKind;
+  readonly status?: number;
+  constructor(
+    kind: WpFailureKind,
+    message: string,
+    options?: { status?: number; cause?: unknown },
+  ) {
+    super(message, options?.cause === undefined ? undefined : { cause: options.cause });
+    this.name = "WpRequestError";
+    this.kind = kind;
+    this.status = options?.status;
+  }
+}
+
+export function isWpRequestError(error: unknown): error is WpRequestError {
+  return error instanceof WpRequestError;
+}
+
 type WpError = { message: string };
 
 type WpResponse<T> = {
@@ -87,36 +130,119 @@ type WpResponse<T> = {
   errors?: WpError[];
 };
 
+export type WpFetchOptions = {
+  /** Root fields the query selects; each must be present (`null` is allowed). */
+  roots?: readonly string[];
+  /** Override `WP_TIMEOUT_MS`. */
+  timeoutMs?: number;
+  /** Caller cancellation. An abort rejects with the caller's own reason, not a WpRequestError. */
+  signal?: AbortSignal;
+};
+
+function describeError(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export async function wpFetch<TData>(
   query: string,
   variables: Record<string, unknown> = {},
   revalidate: number = WP_REVALIDATE,
+  { roots = [], timeoutMs = WP_TIMEOUT_MS, signal }: WpFetchOptions = {},
 ): Promise<TData> {
   const isServer = typeof window === "undefined";
+  const endpoint = getWpEndpoint();
 
-  const res = await fetch(getWpEndpoint(), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, variables }),
-    // Server fetches go through the Next.js data cache; browser fetches are
-    // handled by React Query's cache instead.
-    ...(isServer ? { cache: "force-cache", next: { revalidate } } : {}),
-  });
+  const timeout = AbortSignal.timeout(timeoutMs);
+  const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
 
-  if (!res.ok) {
-    throw new Error(`WPGraphQL request failed: HTTP ${res.status}`);
+  // Maps an interrupted request to its cause. The timeout covers the body read
+  // too: a server that sends headers and then stalls must not hang the render.
+  const interrupted = (cause: unknown) => {
+    if (signal?.aborted) return signal.reason ?? cause; // cancellation, not a CMS failure
+    if (timeout.aborted) {
+      return new WpRequestError("timeout", `WPGraphQL request timed out after ${timeoutMs}ms`, {
+        cause,
+      });
+    }
+    return undefined;
+  };
+
+  let res: Response;
+  try {
+    res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables }),
+      signal: combined,
+      // Server fetches go through the Next.js data cache; browser fetches are
+      // handled by React Query's cache instead.
+      ...(isServer ? { cache: "force-cache", next: { revalidate } } : {}),
+    });
+  } catch (cause) {
+    throw (
+      interrupted(cause) ??
+      new WpRequestError("network", `WPGraphQL network failure: ${describeError(cause)}`, {
+        cause,
+      })
+    );
   }
 
-  const json = (await res.json()) as WpResponse<TData>;
+  if (!res.ok) {
+    throw new WpRequestError("http", `WPGraphQL request failed: HTTP ${res.status}`, {
+      status: res.status,
+    });
+  }
 
-  if (json.errors?.length) {
-    throw new Error(
-      `WPGraphQL error: ${json.errors.map((e) => e.message).join(" · ")}`,
+  let json: WpResponse<TData> | null;
+  try {
+    json = (await res.json()) as WpResponse<TData> | null;
+  } catch (cause) {
+    throw (
+      interrupted(cause) ??
+      new WpRequestError("malformed", "WPGraphQL returned a malformed response body", { cause })
+    );
+  }
+
+  if (typeof json !== "object" || json === null || Array.isArray(json)) {
+    throw new WpRequestError("malformed", "WPGraphQL returned a non-object response");
+  }
+
+  if (Array.isArray(json.errors) && json.errors.length) {
+    throw new WpRequestError(
+      "graphql",
+      `WPGraphQL error: ${json.errors.map((e) => e?.message).join(" · ")}`,
     );
   }
   if (json.data === undefined || json.data === null) {
-    throw new Error("WPGraphQL returned no data");
+    throw new WpRequestError("malformed", "WPGraphQL returned no data");
+  }
+  if (typeof json.data !== "object" || Array.isArray(json.data)) {
+    throw new WpRequestError("malformed", "WPGraphQL data is not an object");
+  }
+
+  const data = json.data as Record<string, unknown>;
+  for (const root of roots) {
+    if (data[root] === undefined) {
+      throw new WpRequestError(
+        "missing-root",
+        `WPGraphQL response is missing root field "${root}"`,
+      );
+    }
   }
 
   return json.data;
+}
+
+/**
+ * Nodes of a connection root. `[]` is valid empty content; a root that is
+ * `null` or has no `nodes` array is a broken response, not an empty list.
+ */
+export function wpNodes<T>(
+  connection: { nodes?: T[] | null } | null | undefined,
+  root: string,
+): T[] {
+  if (!connection || !Array.isArray(connection.nodes)) {
+    throw new WpRequestError("malformed", `WPGraphQL root "${root}" has no nodes array`);
+  }
+  return connection.nodes;
 }

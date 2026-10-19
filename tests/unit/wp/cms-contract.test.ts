@@ -315,28 +315,25 @@ describe("error handling (verified; current behaviour pinned)", () => {
     await expect(api.getClients("en")).rejects.toThrow("WPGraphQL returned no data");
   });
 
-  it("a truncated JSON body rejects with the parser error", async () => {
+  it("a truncated JSON body rejects as malformed", async () => {
     stub.setScenario("malformed-json");
-    await expect(api.getServices("en")).rejects.toThrow(SyntaxError);
+    await expect(api.getServices("en")).rejects.toMatchObject({ kind: "malformed" });
   });
 
-  it("a dropped connection rejects", async () => {
+  it("a dropped connection rejects as a network failure", async () => {
     stub.setScenario("network-error");
-    await expect(api.getServices("en")).rejects.toThrow();
+    await expect(api.getServices("en")).rejects.toMatchObject({ kind: "network" });
   });
 
-  it("[gap] a valid envelope without the root field: lists throw a TypeError, lookups resolve null", async () => {
+  it("a valid envelope without the root field rejects (all fetchers: see client-reliability)", async () => {
     stub.setScenario("malformed-shape");
-    // Pinned as-is: list fetchers dereference `data.<root>.nodes` unguarded.
-    await expect(api.getServices("en")).rejects.toThrow(TypeError);
-    await expect(api.getCareers("en")).rejects.toThrow(TypeError);
-    await expect(api.getService(uris("en").service, "en")).resolves.toBeNull();
-    // getHubs / getCompanyProfile coalesce a missing root to empty values.
-    await expect(api.getHubs()).resolves.toMatchObject({ caseStudies: { heading: "" } });
-    await expect(api.getCompanyProfile()).resolves.toMatchObject({ heading: null });
+    await expect(api.getServices("en")).rejects.toMatchObject({ kind: "missing-root" });
+    await expect(api.getService(uris("en").service, "en")).rejects.toMatchObject({
+      kind: "missing-root",
+    });
   });
 
-  it("[gap] there is no request timeout: wpFetch passes no AbortSignal", async () => {
+  it("wpFetch sends a live timeout signal on every request", async () => {
     let init: RequestInit | undefined;
     const original = globalThis.fetch;
     globalThis.fetch = ((input: RequestInfo | URL, i?: RequestInit) => {
@@ -344,7 +341,8 @@ describe("error handling (verified; current behaviour pinned)", () => {
       return original(input, i);
     }) as typeof fetch;
     await wpFetch("query Clients { clients { nodes { id } } }");
-    expect(init?.signal).toBeUndefined();
+    expect(init?.signal).toBeInstanceOf(AbortSignal);
+    expect(init?.signal?.aborted).toBe(false);
   });
 
   it("a misconfigured endpoint never reaches the stub", async () => {

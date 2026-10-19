@@ -27,6 +27,17 @@ import { wpKeys } from "./keys";
  * const qc = getQueryClient();
  * const service = await prefetchService(qc, uri, locale);
  * ```
+ *
+ * Error contract (every `prefetch*` helper):
+ * - Resolves with the normalized value. A single lookup the CMS does not have
+ *   resolves `null`; an empty list resolves empty. Both are valid content.
+ * - Rejects with a `WpRequestError` (check `error.kind`) for any failure:
+ *   http, graphql, network, timeout, malformed, missing-root. Config problems
+ *   reject with `WpConfigError`. Nothing is swallowed or turned into empty
+ *   content, and a failed query is never dehydrated.
+ * - The caller decides the fallback: let it throw (error boundary) or catch it
+ *   and render its own. Consumers must not treat a rejection as "no content".
+ * - No retries: `fetchQuery` does not retry, so the timeout is the worst case.
  */
 import type { QueryClient } from "@tanstack/react-query";
 

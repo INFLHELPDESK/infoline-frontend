@@ -12,6 +12,7 @@
 //   data:       ok | empty | null-acf | partial
 //   GraphQL:    graphql-error | partial-errors | no-data
 //   transport:  http-error | malformed-json | malformed-shape | network-error
+//   timing:     hang (never answers) | stalled-body (headers, then a body that never ends)
 //
 // Control endpoints (all loopback-only like everything else):
 //   GET /__health   GET /__requests   POST /__reset   POST /__scenario {scenario}
@@ -32,6 +33,8 @@ export const SCENARIOS = [
   "malformed-json",
   "malformed-shape",
   "network-error",
+  "hang",
+  "stalled-body",
 ];
 
 export const SCENARIO_HEADER = "x-cms-stub-scenario";
@@ -201,6 +204,17 @@ export async function createCmsStub({ host = "127.0.0.1", port = 0, logFile } = 
     if (scenario === "network-error") {
       record(entry);
       req.socket.destroy();
+      return;
+    }
+    if (scenario === "hang") {
+      // Never answers; the client's timeout or abort ends it (close() drops the socket).
+      record(entry);
+      return;
+    }
+    if (scenario === "stalled-body") {
+      record(entry);
+      res.writeHead(200, { ...CORS, "content-type": "application/json" });
+      res.write('{"data": {"services": ');
       return;
     }
     if (scenario === "http-error") {

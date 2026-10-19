@@ -1,5 +1,15 @@
 export * from "./types";
-export { wpFetch, getWpEndpoint, WpConfigError } from "./client";
+export {
+  wpFetch,
+  wpNodes,
+  getWpEndpoint,
+  WpConfigError,
+  WpRequestError,
+  isWpRequestError,
+  WP_TIMEOUT_MS,
+  type WpFailureKind,
+  type WpFetchOptions,
+} from "./client";
 export * from "./queries";
 export {
   getService,
