@@ -153,15 +153,20 @@ Layers, all fail-closed:
    the production endpoint when the env var is unset, so a build made without
    the isolation env would otherwise ship it unnoticed.
 3. `tests/support/cms-stub/main.mjs` (the CMS stub, see below) listens on the
-   configured loopback port and logs every non-control request.
-   `global-teardown.ts` fails the run if the log is not empty, so any
-   server-side CMS fetch is caught (browser-side ones are already aborted by
+   configured loopback port and logs every non-control request
+   (`POST /graphql op=<Operation>`, `GET /stub-media/<file>`).
+   `global-teardown.ts` fails the run on any line not allow-listed in
+   `tests/support/cms-allowlist.ts` (only `Posts`, for `/[locale]/insights`,
+   plus stub media), so any other server-side CMS fetch is caught (browser-side ones are already aborted by
    `fixtures.ts`).
 4. `tests/unit/setup.ts` makes an unstubbed `fetch` throw in unit tests.
 5. `tests/unit/wp/runtime-preservation.test.ts` walks the import graph (static,
    dynamic, re-export, relative and transitive) from `app`, `components`,
    `hooks`, `i18n`, `lib`, `proxy.ts` and `next.config.ts` and fails if any
-   path reaches `lib/wp`, `providers` or `lib/content-adapters`. It is a
+   path reaches `lib/wp`, `providers` or `lib/content-adapters`, except from
+   the `WIRED_ROUTE_FILES` of the one wired route (`/[locale]/insights`);
+   nothing else may import those files and they must be the only direct
+   importers of the WP layer. It is a
    source-level guard only: it does not catch computed dynamic imports.
 
 6. `assertBuildMatchesEndpoint()` requires the build to embed this run's
@@ -173,9 +178,27 @@ Layers, all fail-closed:
    unmocked submission can no longer pass silently on the abort. The
    `lib/forms` production fallback itself is untouched (production behavior).
 
-Relax 5 (and the "no CMS request" assertions in `cms/cms-stub.spec.ts` plus the
-teardown tripwire) in the slice that deliberately wires the first page; the
-stub then serves that page's fixtures.
+Wiring another route means adding its files to `WIRED_ROUTE_FILES` and its
+operation to `cms-allowlist.ts`; no guard is relaxed globally. `cms/cms-stub.spec.ts`
+still asserts every other page makes no CMS request.
+
+### Wired route: `/[locale]/insights`
+
+Only the "Formats" cards are CMS-backed. `lib/insights-feed.ts` prefetches `Posts`
+into a per-request `QueryClient`, the page hydrates it, and `formats-live.tsx`
+reads it with `usePosts` (no browser request). Outcomes, shown in
+`data-content-source`: `cms` (first 3 posts); `fallback-empty` (valid empty list);
+`fallback-error` (http, graphql, network, timeout, malformed, missing-root, config;
+logged once, never treated as empty). Cancellations and adapter bugs are rethrown.
+CMS posts link to `/blog/<slug>` only when the static blog detail route has that
+slug; otherwise the card is plain content (`data-unlinked`).
+
+Server fetches use the Next data cache, so `e2e/cms/cms-scenarios.spec.ts` (project
+`cms-scenarios`, runs after the rest) starts a fresh `next start` per stub scenario
+with `.next/cache/fetch-cache` deleted and asserts each first request reached the
+stub. Do not run it with `--repeat-each` (copies would share the port and stub).
+`lib/cms-images.ts` enables `dangerouslyAllowLocalIP` only for `CMS_ISOLATED=1`
+with a loopback endpoint.
 
 ## CMS stub and contract tests
 

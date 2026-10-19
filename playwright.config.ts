@@ -57,6 +57,17 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
+      testIgnore: /cms-scenarios.spec.ts/,
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+    },
+    {
+      // Spawns its own `next start` per CMS scenario (empty Next data cache each
+      // time) and changes the shared stub's global scenario, so it runs only
+      // after every other spec has finished.
+      name: "cms-scenarios",
+      testMatch: /cms-scenarios.spec.ts/,
+      dependencies: ["chromium"],
+      fullyParallel: false,
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
     },
   ],
