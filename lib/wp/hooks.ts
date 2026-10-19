@@ -77,7 +77,7 @@ export function useService(uri: string, options?: WpQueryOptions<Service | null>
 }
 
 export function useServices(
-  options?: WpQueryOptions<ReturnType<typeof getServices>>,
+  options?: WpQueryOptions<Awaited<ReturnType<typeof getServices>>>,
 ) {
   const locale = useWpLocale();
   return useQuery({

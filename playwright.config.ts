@@ -1,5 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
-import { assertBuildIsIsolated, assertIsolatedCmsEnv } from "./tests/support/cms-guard";
+import {
+  assertBuildIsIsolated,
+  assertBuildMatchesEndpoint,
+  assertIsolatedCmsEnv,
+} from "./tests/support/cms-guard";
 import { TRIPWIRE_LOG } from "./tests/support/tripwire-log";
 
 // Developer convenience: pick up .env.local (Next reads it for build/start too).
@@ -11,6 +15,7 @@ try {
 // Fail closed: never run the suite without an isolated, non-production CMS config.
 assertIsolatedCmsEnv();
 assertBuildIsIsolated();
+assertBuildMatchesEndpoint();
 
 const CI = !!process.env.CI;
 const PORT = Number(process.env.E2E_PORT ?? 3100);
@@ -20,7 +25,7 @@ const cmsUrl = new URL(process.env.NEXT_PUBLIC_WPGRAPHQL_ENDPOINT!);
 
 /**
  * E2E runs against a production build (`next build` must run first — CI does
- * this as its own step; locally use `npm run test:e2e:build`). All off-origin
+ * this as its own step; locally use `npm run build:isolated`). All off-origin
  * traffic is blocked by the shared fixture in tests/e2e/support/fixtures.ts.
  */
 
@@ -57,9 +62,10 @@ export default defineConfig({
   ],
   webServer: [
     {
-      // Stand-in CMS: records (and rejects) any request, so a server-side or
-      // browser-side CMS fetch fails the run in global teardown.
-      command: "node tests/support/cms-tripwire.mjs",
+      // Local CMS stub (tests/support/cms-stub): serves fixtures, and logs every
+      // request so any server-side or browser-side CMS fetch fails the run in
+      // global teardown while no page is wired to WordPress.
+      command: "node tests/support/cms-stub/main.mjs",
       url: `${cmsUrl.origin}/__health`,
       reuseExistingServer: false,
       timeout: 15_000,

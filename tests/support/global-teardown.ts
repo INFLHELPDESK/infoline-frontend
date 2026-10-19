@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { TRIPWIRE_LOG } from "./tripwire-log";
 
-/** Fails the run if anything called the CMS endpoint (see cms-tripwire.mjs). */
+/** Fails the run if anything called the CMS endpoint (see cms-stub/main.mjs). */
 export default function globalTeardown() {
   let log = "";
   try {
