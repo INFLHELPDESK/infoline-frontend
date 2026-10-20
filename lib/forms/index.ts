@@ -13,9 +13,11 @@
  * - Choice fields take fixed keys, not UI labels (see CHOICE maps below).
  */
 
-const WP_GRAPHQL_ENDPOINT =
-  process.env.NEXT_PUBLIC_WPGRAPHQL_ENDPOINT ??
-  "https://green-tarsier-764009.hostingersite.com/graphql";
+import { requireCmsEndpoint } from "@/lib/cms-endpoint";
+
+// No default endpoint: requireCmsEndpoint() throws when
+// NEXT_PUBLIC_WPGRAPHQL_ENDPOINT is unset, so a missing config can never post to
+// the production CMS. It is resolved per call, not at import time.
 
 type InquiryAction = "service_inquiry" | "project_inquiry" | "media_inquiry";
 
@@ -78,7 +80,7 @@ export async function submitInquiry(
   },
   { signal }: { signal?: AbortSignal } = {},
 ): Promise<SubmitInquiryResult> {
-  const res = await fetch(WP_GRAPHQL_ENDPOINT, {
+  const res = await fetch(requireCmsEndpoint(), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: SUBMIT_INQUIRY_MUTATION, variables: { input } }),

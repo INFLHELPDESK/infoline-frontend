@@ -1543,7 +1543,11 @@
     },
     "formats": {
       "eyebrow": "Formats",
-      "title": "Executive articles, service explainers, benchmark notes and data-led perspectives"
+      "title": "Executive articles, service explainers, benchmark notes and data-led perspectives",
+      "allCta": {
+        "label": "Browse all articles",
+        "href": "/blog"
+      }
     },
     "featured": {
       "eyebrow": "Featured proof",

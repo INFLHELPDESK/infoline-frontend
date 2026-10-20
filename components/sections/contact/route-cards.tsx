@@ -108,21 +108,8 @@ export default function RouteCards() {
           })}
         </Stagger>
 
-        <div className="mt-8 text-center">
-          <a
-            href="/assets/infoline-company-profile.pdf"
-            onClick={(e) => e.preventDefault()}
-            className="group inline-flex items-center gap-2 text-[14px] leading-5 text-slate-500 transition-colors hover:text-brandblue-600"
-          >
-            {t("profileLink")}
-            <span
-              aria-hidden
-              className="inline-block transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"
-            >
-              →
-            </span>
-          </a>
-        </div>
+        {/* The "company profile" text link was removed: its PDF is not supplied
+            yet, so it was a dead control. Restore it with the file. */}
       </div>
     </section>
   );

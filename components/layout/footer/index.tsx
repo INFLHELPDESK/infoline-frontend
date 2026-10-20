@@ -35,6 +35,20 @@ export const Footer = () => {
               {socials.map((social) => {
                 const Icon = socialIcons[social.network];
                 if (!Icon) return null;
+                // Unconfirmed profile URLs are "#": render the icon inert, not a dead link.
+                if (social.href === "#") {
+                  return (
+                    <li key={social.network}>
+                      <span
+                        role="img"
+                        aria-label={social.label}
+                        className="inline-flex size-6 items-center justify-center text-slate-100/50"
+                      >
+                        <Icon className="size-6" />
+                      </span>
+                    </li>
+                  );
+                }
                 return (
                   <li key={social.network}>
                     <Link
@@ -84,15 +98,25 @@ export const Footer = () => {
             {t("copyright")}
           </p>
           <div className="flex gap-6">
-            {legal.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-base font-medium leading-6 text-[#4e5258] transition-colors hover:text-white focus-visible:text-white"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {legal.map((link) =>
+              link.href === "#" ? (
+                // Policy pages are not published yet: show the label, no dead link.
+                <span
+                  key={link.label}
+                  className="text-base font-medium leading-6 text-[#4e5258]"
+                >
+                  {link.label}
+                </span>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-base font-medium leading-6 text-[#4e5258] transition-colors hover:text-white focus-visible:text-white"
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </div>

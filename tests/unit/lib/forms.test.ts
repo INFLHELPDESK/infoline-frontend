@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 type FormsModule = typeof import("@/lib/forms");
 type Result = Parameters<FormsModule["classifyInquiryResult"]>[0];
 
-const DEFAULT_ENDPOINT = "https://green-tarsier-764009.hostingersite.com/graphql";
+const ENDPOINT = "http://127.0.0.1:3199/graphql";
 
 const result = (overrides: Partial<Result> = {}): Result => ({
   success: true,
@@ -15,7 +15,7 @@ const result = (overrides: Partial<Result> = {}): Result => ({
 });
 
 /** Fresh module per test: the endpoint is read from env at import time. */
-async function loadForms(endpoint?: string): Promise<FormsModule> {
+async function loadForms(endpoint: string | undefined = ENDPOINT): Promise<FormsModule> {
   vi.resetModules();
   vi.stubEnv("NEXT_PUBLIC_WPGRAPHQL_ENDPOINT", endpoint);
   return import("@/lib/forms");
@@ -75,7 +75,15 @@ describe("classifyInquiryResult", () => {
 });
 
 describe("submitInquiry", () => {
-  it("POSTs the SubmitInquiry mutation with the input as variables to the default endpoint", async () => {
+  it("fails closed without calling fetch when the endpoint env var is missing", async () => {
+    const forms = await loadForms("");
+    const fetchMock = stubFetch({ body: { data: { submitInquiry: result() } } });
+
+    await expect(forms.submitInquiry(input)).rejects.toThrow(/NEXT_PUBLIC_WPGRAPHQL_ENDPOINT is not set/);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("POSTs the SubmitInquiry mutation with the input as variables to the configured endpoint", async () => {
     const forms = await loadForms();
     const fetchMock = stubFetch({ body: { data: { submitInquiry: result() } } });
 
@@ -83,7 +91,7 @@ describe("submitInquiry", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
-    expect(url).toBe(DEFAULT_ENDPOINT);
+    expect(url).toBe(ENDPOINT);
     expect(init.method).toBe("POST");
     expect(init.headers).toEqual({ "Content-Type": "application/json" });
     const body = JSON.parse(init.body as string);

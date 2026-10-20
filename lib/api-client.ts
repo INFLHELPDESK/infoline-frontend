@@ -1,12 +1,16 @@
-const GRAPHQL_ENDPOINT = 'https://green-tarsier-764009.hostingersite.com/graphql';
-const REST_ENDPOINT = 'https://green-tarsier-764009.hostingersite.com/wp-json/infoline/v1';
+import { requireCmsEndpoint } from '@/lib/cms-endpoint';
+
+// No default endpoint: a missing NEXT_PUBLIC_WPGRAPHQL_ENDPOINT fails closed
+// (an Error) instead of calling the production CMS.
+const restEndpoint = () =>
+  `${new URL(requireCmsEndpoint()).origin}/wp-json/infoline/v1`;
 
 export async function graphqlRequest(
   query: string,
   variables?: Record<string, unknown>
 ) {
   try {
-    const response = await fetch(GRAPHQL_ENDPOINT, {
+    const response = await fetch(requireCmsEndpoint(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +41,7 @@ export async function graphqlRequest(
 
 export async function submitJobApplication(formData: FormData) {
   try {
-    const response = await fetch(`${REST_ENDPOINT}/apply`, {
+    const response = await fetch(`${restEndpoint()}/apply`, {
       method: 'POST',
       body: formData,
     });

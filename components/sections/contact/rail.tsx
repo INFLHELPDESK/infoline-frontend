@@ -95,6 +95,20 @@ export default function Rail() {
           {socials.map((social) => {
             const Icon = socialIcons[social.network];
             if (!Icon) return null;
+            // Unconfirmed profile URLs are "#": render the icon inert, not a dead link.
+            if (social.href === "#") {
+              return (
+                <li key={social.network}>
+                  <span
+                    role="img"
+                    aria-label={social.label}
+                    className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+                  >
+                    <Icon className="size-4.5" />
+                  </span>
+                </li>
+              );
+            }
             return (
               <li key={social.network}>
                 <a

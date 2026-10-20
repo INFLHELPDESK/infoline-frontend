@@ -9,7 +9,8 @@ type Doc = { title: string; meta: string; cta: string; href: string };
 
 /**
  * Company documents — download rows for the company profile. The PDFs are not yet
- * wired up, so links point at "#" (placeholder) but are styled per the design.
+ * wired up: rows whose href is "#" render as inert cards (no dead link, no download
+ * prompt) until the files are supplied.
  */
 export default function Documents() {
   const t = useTranslations("AboutPage");
@@ -40,12 +41,12 @@ export default function Documents() {
           stagger={0.12}
           amount={0.3}
         >
-          {items.map((doc) => (
-            <StaggerItem key={doc.title}>
-              <Link
-                href={doc.href}
-                className="group flex items-center gap-3 rounded-2xl border border-[#e0e0e0] bg-white p-6 shadow-[0_6px_6px_rgba(52,55,70,0.06)] transition-colors hover:border-brandblue-500/50"
-              >
+          {items.map((doc) => {
+            const available = doc.href !== "#";
+            const rowClass =
+              "group flex items-center gap-3 rounded-2xl border border-[#e0e0e0] bg-white p-6 shadow-[0_6px_6px_rgba(52,55,70,0.06)]";
+            const row = (
+              <>
                 <Image
                   src="/assets/about/pdf-icon.svg"
                   alt=""
@@ -62,16 +63,32 @@ export default function Documents() {
                     {doc.meta}
                   </span>
                 </span>
-                <span className="inline-flex flex-none items-center gap-1.5 text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-brandblue-500">
-                  {doc.cta}
-                  <ArrowRight
-                    className="size-4 rtl:rotate-180 transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
-                    strokeWidth={1.75}
-                  />
-                </span>
-              </Link>
-            </StaggerItem>
-          ))}
+                {available && (
+                  <span className="inline-flex flex-none items-center gap-1.5 text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-brandblue-500">
+                    {doc.cta}
+                    <ArrowRight
+                      className="size-4 rtl:rotate-180 transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
+                      strokeWidth={1.75}
+                    />
+                  </span>
+                )}
+              </>
+            );
+            return (
+              <StaggerItem key={doc.title}>
+                {available ? (
+                  <Link
+                    href={doc.href}
+                    className={`${rowClass} transition-colors hover:border-brandblue-500/50`}
+                  >
+                    {row}
+                  </Link>
+                ) : (
+                  <div className={rowClass}>{row}</div>
+                )}
+              </StaggerItem>
+            );
+          })}
         </Stagger>
       </div>
     </section>
