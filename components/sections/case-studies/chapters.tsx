@@ -36,14 +36,14 @@ export default function Chapters() {
   const label = (k: string) => t(`labels.${k}`);
 
   return (
-    <section className="bg-white py-24 lg:py-36">
+    <section className="bg-white pt-20 pb-24">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <div className="flex flex-col gap-28 lg:gap-44">
           {chapters.map((c) => (
             <article
               key={c.number}
               id={`case-${c.number}`}
-              className="grid gap-12 lg:grid-cols-[300px_1fr] lg:gap-20"
+              className="grid gap-12 lg:grid-cols-[306px_1fr] lg:gap-[74px]"
             >
               {/* Meta rail */}
               <Stagger
@@ -55,43 +55,43 @@ export default function Chapters() {
               >
                 <StaggerItem
                   as="span"
-                  className="text-[64px] font-bold leading-none tracking-tight text-lightblue-300 lg:text-[72px]"
+                  className="text-[72px] font-bold leading-[1.2] text-lightblue-300 [direction:ltr] lg:text-[100px]"
                   blur={false}
                 >
                   {c.number}.
                 </StaggerItem>
 
-                <StaggerItem className="mt-7 pt-4">
-                  <span className="overline-sm-medium  text-brandblue-600">
+                <StaggerItem className="mt-2">
+                  <span className="text-[13px] leading-4 uppercase tracking-[1.5px] font-medium text-brandblue-600">
                     {label("caseStudy")} · {c.tag}
                   </span>
                 </StaggerItem>
 
-                <StaggerItem className="mt-6 w-full border-t border-grey-300 pt-4">
-                  <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                <StaggerItem className="mt-5 flex w-full flex-col gap-2 border-t border-grey-300 pt-5">
+                  <div className="text-[13px] leading-4 uppercase tracking-[1.5px] font-medium text-slate-500">
                     {label("client")}
                   </div>
-                  <p className="body-sm-regular mt-2 max-w-[34ch] text-ink">
+                  <p className="max-w-[34ch] text-[13px] leading-5 text-ink">
                     {c.client}
                   </p>
                 </StaggerItem>
 
                 {c.scale ? (
-                  <StaggerItem className="mt-6 w-full border-t border-grey-300 pt-4">
-                    <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                  <StaggerItem className="mt-5 flex w-full flex-col gap-2 border-t border-grey-300 pt-5">
+                    <div className="text-[13px] leading-4 uppercase tracking-[1.5px] font-medium text-slate-500">
                       {label("scale")}
                     </div>
-                    <p className="body-sm-regular mt-2 max-w-[34ch] text-ink">
+                    <p className="max-w-[34ch] text-[13px] leading-5 text-ink">
                       {c.scale}
                     </p>
                   </StaggerItem>
                 ) : null}
 
-                <StaggerItem className="mt-6 w-full border-t border-grey-300 pt-4">
-                  <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                <StaggerItem className="mt-5 flex w-full flex-col gap-2 border-t border-grey-300 pt-5">
+                  <div className="text-[13px] leading-4 uppercase tracking-[1.5px] font-medium text-slate-500">
                     {label("serviceLine")}
                   </div>
-                  <p className="body-sm-regular mt-2 max-w-[34ch] font-medium text-ink">
+                  <p className="max-w-[34ch] text-[13px] leading-5 font-medium text-ink">
                     {c.serviceLine}
                   </p>
                 </StaggerItem>
@@ -101,7 +101,7 @@ export default function Chapters() {
               <div>
                 <MaskText
                   as="h2"
-                  className="max-w-[30ch] text-[28px] font-bold leading-[1.15] tracking-[-.02em] text-ink lg:text-[36px]"
+                  className="max-w-[895px] text-[28px] font-bold leading-9 text-ink lg:text-[36px] lg:leading-11"
                   segments={[{ text: c.title }]}
                   amount={0.3}
                   stagger={0.05}
@@ -110,20 +110,20 @@ export default function Chapters() {
                 {/* Challenge */}
                 <Stagger
                   as="div"
-                  className="mt-10 pt-6"
+                  className="mt-8"
                   stagger={0.08}
                   amount={0.2}
                 >
                   <StaggerItem
                     as="h3"
-                    className="font-mono text-[12px] uppercase tracking-[0.18em] text-slate-900"
+                    className="text-[14px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-900"
                     distance={20}
                   >
                     01 — {label("challenge")}
                   </StaggerItem>
                   <StaggerItem
                     as="p"
-                    className="body-base-regular mt-4 max-w-[72ch] text-slate-900"
+                    className="mt-4 text-[14px] leading-5 text-slate-900"
                     distance={28}
                   >
                     {c.challenge}
@@ -133,30 +133,30 @@ export default function Chapters() {
                 {/* Approach */}
                 <Stagger
                   as="div"
-                  className="mt-10 border-t border-grey-300 pt-6"
+                  className="mt-8 border-t border-grey-300 pt-8"
                   stagger={0.08}
                   amount={0.2}
                 >
                   <StaggerItem
                     as="h3"
-                    className="font-mono text-[12px] uppercase tracking-[0.18em] text-slate-900"
+                    className="text-[14px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-900"
                     distance={20}
                   >
                     02 — {label("approach")}
                   </StaggerItem>
 
                   {c.approachRows ? (
-                    <dl className="mt-5 flex flex-col gap-3.5">
+                    <dl className="mt-3 flex flex-col gap-1.5">
                       {c.approachRows.map((row) => (
                         <StaggerItem
                           key={row.label}
-                          className="grid grid-cols-[110px_1fr] items-baseline gap-4"
+                          className="grid grid-cols-[109px_1fr] items-center gap-2.5 py-3"
                           distance={24}
                         >
-                          <dt className="overline-sm-medium text-brandblue-500">
+                          <dt className="text-[13px] leading-4 uppercase tracking-[1.5px] font-medium text-brandblue-500">
                             {row.label}
                           </dt>
-                          <dd className="body-base-regular max-w-[64ch] text-slate-700">
+                          <dd className="text-[14px] leading-5 text-slate-700">
                             {row.text}
                           </dd>
                         </StaggerItem>
@@ -165,7 +165,7 @@ export default function Chapters() {
                   ) : (
                     <StaggerItem
                       as="p"
-                      className="body-base-regular mt-4 max-w-[72ch] text-slate-700"
+                      className="mt-4 text-[14px] leading-5 text-slate-700"
                       distance={28}
                     >
                       {c.approachText}
@@ -176,13 +176,13 @@ export default function Chapters() {
                 {/* Results */}
                 <Stagger
                   as="div"
-                  className="mt-10 border-t border-grey-300 pt-6"
+                  className="mt-8 border-t border-grey-300 pt-8"
                   stagger={0.08}
                   amount={0.2}
                 >
                   <StaggerItem
                     as="h3"
-                    className="font-mono text-[12px] uppercase tracking-[0.18em] text-slate-900"
+                    className="text-[14px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-900"
                     distance={20}
                   >
                     03 — {label("results")}
@@ -190,7 +190,7 @@ export default function Chapters() {
 
                   <Stagger
                     as="ul"
-                    className={`mt-5 grid gap-3.5 rounded-2xl bg-[#f4f6f8] p-6 lg:p-8 ${
+                    className={`mt-4 grid gap-3 rounded-2xl bg-[#fafafa] p-4 ${
                       c.results.length >= 4
                         ? "grid-cols-2 lg:grid-cols-4"
                         : "grid-cols-1 sm:grid-cols-3"
@@ -206,12 +206,12 @@ export default function Chapters() {
                         distance={28}
                         blur={false}
                       >
-                        <div className="flex h-full flex-col">
+                        <div className="flex h-full flex-col px-6 py-3">
                           <CountUp
                             value={r.value}
-                            className="text-[36px] font-mono font-bold  text-brandblue-500 lg:text-[44px]"
+                            className="w-fit text-[40px] font-bold leading-[1.17] text-brandblue-500 [direction:ltr] lg:text-[48px] lg:leading-14"
                           />
-                          <p className="body-md-regular pt-3 max-w-[24ch] text-slate-500">
+                          <p className="pt-3 text-[14px] leading-5 text-slate-500">
                             <span className="font-medium text-brandblue-500">
                               {r.unit}
                             </span>{" "}
@@ -227,17 +227,17 @@ export default function Chapters() {
                 {c.quote ? (
                   <Stagger
                     as="div"
-                    className="mt-8 py-4 pe-8 border-s-4 border-brandblue-500 ps-7"
+                    className="mt-8 rounded-e-[99px] border-s-4 border-brandblue-500 bg-[#f6f9fb] px-6 py-4"
                     amount={0.25}
                   >
                     <StaggerItem distance={28}>
                       <figure>
                         <blockquote className="">
-                          <p className="heading-lg-semibold text-brandblue-600 lg:text-[24px]">
+                          <p className="text-[20px] leading-7 font-bold text-brandblue-600 lg:text-[24px]">
                             {c.quote.text}
                           </p>
                         </blockquote>
-                        <figcaption className="overline-md-medium pt-5 text-slate-700">
+                        <figcaption className="pt-5 text-[14px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-700">
                           {c.quote.attribution}
                         </figcaption>
                       </figure>

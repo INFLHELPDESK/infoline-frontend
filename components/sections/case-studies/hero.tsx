@@ -19,15 +19,15 @@ export default function Hero() {
   const movement = t.raw("hero.movement") as Movement[];
 
   return (
-    <section className="relative overflow-hidden bg-ink">
+    <section className="relative flex items-center overflow-hidden bg-ink lg:min-h-[486px]">
       {/* Radial glow, top start corner — the hero's only art (per Figma). */}
       <div
         aria-hidden
         className="pointer-events-none absolute -top-1/5 start-[-14%] aspect-square w-[43%] rounded-full bg-[radial-gradient(circle,#1C97D4_0%,transparent_68%)] opacity-30 blur-3xl"
       />
 
-      <div className="relative mx-auto w-full max-w-360 px-6 pb-24 pt-28 lg:px-10 lg:pb-33 lg:pt-36">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_.85fr] lg:gap-20">
+      <div className="relative mx-auto w-full max-w-360 px-6 pb-20 pt-32 lg:px-10 lg:py-20">
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_473px] lg:gap-20">
           {/* Left: eyebrow + headline */}
           <Stagger
             as="div"
@@ -36,15 +36,15 @@ export default function Hero() {
             delayChildren={0.05}
             amount={0.3}
           >
-            <StaggerItem className="mb-8.5" distance={40}>
-              <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-lightblue-300">
+            <StaggerItem className="mb-5" distance={40}>
+              <span className="text-[13px] leading-4 uppercase tracking-[1.5px] text-lightblue-300">
                 {t("hero.eyebrow")}
               </span>
             </StaggerItem>
 
             <MaskText
               as="h1"
-              className="max-w-[16ch] text-[44px] font-bold leading-[1.05] tracking-[-.033em] text-white lg:text-[52px]"
+              className="max-w-[665px] text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
               segments={[
                 { text: t("hero.titleLead") },
                 { text: t("hero.titleAccent") },
@@ -56,7 +56,7 @@ export default function Hero() {
 
             <StaggerItem
               as="p"
-              className="mt-7.5 max-w-[60ch] text-[16px] leading-[24px] text-slate-200"
+              className="mt-6 max-w-[60ch] text-[16px] leading-7 text-slate-200 lg:text-[18px]"
             >
               {t("hero.description")}
             </StaggerItem>
@@ -65,24 +65,24 @@ export default function Hero() {
           {/* Right: headline movement panel */}
           <div>
             <Stagger as="div" stagger={0.09} delayChildren={0.25} amount={0.2}>
-              <StaggerItem className="mb-2" distance={24}>
-                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-300">
+              <StaggerItem className="mb-4" distance={24}>
+                <span className="text-[13px] leading-4 uppercase tracking-[1.5px] text-slate-400">
                   {t("hero.movementLabel")}
                 </span>
               </StaggerItem>
               <ul>
                 {movement.map((m) => (
                   <StaggerItem as="li" key={m.title} distance={28}>
-                    <div className="flex items-center justify-between gap-8 border-b border-white/10 py-4">
+                    <div className="flex items-center justify-between gap-8 border-b border-[rgba(224,224,224,0.12)] py-3">
                       <CountUp
                         value={m.value}
-                        className="text-[32px] font-bold tabular-nums tracking-tight text-lightblue-300 lg:text-[34px]"
+                        className="text-[32px] leading-10 font-bold tabular-nums text-lightblue-300 [direction:ltr]"
                       />
                       <div className="text-end">
-                        <div className="body-lg-medium text-white">
+                        <div className="text-[14px] leading-5 font-medium text-slate-200">
                           {m.title}
                         </div>
-                        <div className="font-mono text-[11px] mt-2 uppercase tracking-[0.14em] text-slate-300">
+                        <div className="mt-1.5 text-[13px] leading-5 text-slate-400">
                           {m.subtitle}
                         </div>
                       </div>
