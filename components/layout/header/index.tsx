@@ -102,7 +102,7 @@ export const Header = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: EASE }}
       >
-        <div className="mx-auto flex h-21 max-w-360 items-center justify-between gap-7 px-6 md:px-12">
+        <div className="mx-auto flex h-21 max-w-360 items-center justify-between gap-7 px-6 md:px-12 xl:px-20">
           <Link
             href="/"
             className="relative flex flex-none items-baseline gap-3"
@@ -143,7 +143,7 @@ export const Header = () => {
                     onPointerEnter={() => setHovered(item.href)}
                     onFocus={() => setHovered(item.href)}
                     onBlur={() => setHovered(null)}
-                    className={`relative whitespace-nowrap py-1.5 text-[13.5px] font-medium tracking-[0.01em] transition-colors duration-250 ${
+                    className={`relative whitespace-nowrap py-1.5 text-base font-medium transition-colors duration-250 ${
                       active
                         ? light
                           ? "text-brandblue-600"
@@ -180,7 +180,7 @@ export const Header = () => {
             <Button
               href={t("cta.href")}
               icon={ArrowRight}
-              size="small"
+              size="md"
               iconPosition="right"
             >
               {t("cta.label")}

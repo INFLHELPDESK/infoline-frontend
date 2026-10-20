@@ -1307,46 +1307,36 @@
       {
         "label": "Careers",
         "href": "/careers"
-      },
-      {
-        "label": "Contact",
-        "href": "/contact"
       }
     ],
     "cta": {
       "label": "Talk to an Expert",
-      "href": "/"
+      "href": "/contact"
     },
     "menuToggle": "Toggle menu",
     "logoAlt": "Infoline — home",
     "languageLabel": "Language"
   },
   "Footer": {
-    "office": "Registered office, Muscat, Sultanate of Oman",
-    "contact": "+968 [phone] · hello@infoline.om",
-    "cta": {
-      "label": "Talk to an Expert",
-      "href": "/"
-    },
     "columns": [
       {
         "title": "Solutions",
         "links": [
           {
             "label": "CX & BPO",
-            "href": "#"
+            "href": "/solutions"
           },
           {
             "label": "Technology & Enterprise",
-            "href": "#"
+            "href": "/solutions"
           },
           {
             "label": "People & Finance",
-            "href": "#"
+            "href": "/solutions"
           },
           {
             "label": "All services",
-            "href": "#"
+            "href": "/solutions"
           }
         ]
       },
@@ -1355,19 +1345,19 @@
         "links": [
           {
             "label": "Government",
-            "href": "#"
+            "href": "/industries"
           },
           {
             "label": "Telecom",
-            "href": "#"
+            "href": "/industries"
           },
           {
             "label": "Energy & Utilities",
-            "href": "#"
+            "href": "/industries"
           },
           {
             "label": "All sectors",
-            "href": "#"
+            "href": "/industries"
           }
         ]
       },
@@ -1376,11 +1366,11 @@
         "links": [
           {
             "label": "About",
-            "href": "#"
+            "href": "/about"
           },
           {
             "label": "Leadership",
-            "href": "#"
+            "href": "/about"
           },
           {
             "label": "Case studies",
@@ -1393,47 +1383,42 @@
         ]
       },
       {
-        "title": "Get in touch",
+        "title": "Get in Touch",
         "links": [
           {
             "label": "Partnership inquiry",
-            "href": "#"
+            "href": "/contact"
           },
           {
             "label": "Vendor registration",
-            "href": "#"
+            "href": "/contact?route=vendor"
           },
           {
             "label": "Careers & media",
-            "href": "#"
+            "href": "/careers"
           },
           {
             "label": "Contact us",
-            "href": "#"
+            "href": "/contact"
           }
         ]
       }
     ],
     "socials": [
       {
-        "label": "Facebook",
-        "href": "#",
-        "network": "facebook"
-      },
-      {
         "label": "X",
         "href": "#",
         "network": "x"
       },
       {
-        "label": "Instagram",
-        "href": "#",
-        "network": "instagram"
-      },
-      {
         "label": "LinkedIn",
         "href": "#",
         "network": "linkedin"
+      },
+      {
+        "label": "Facebook",
+        "href": "#",
+        "network": "facebook"
       }
     ],
     "legal": [
@@ -1442,12 +1427,17 @@
         "href": "#"
       },
       {
-        "label": "Company profile",
+        "label": "Terms & Conditions",
         "href": "#"
       }
     ],
-    "copyright": "© 2026 Infoline LLC · an Omantel Group company",
-    "logoAlt": "Infoline"
+    "copyright": "© 2026 Infoline LLC",
+    "tagline": [
+      "Operations built in Oman.",
+      "Technology that drives results.",
+      "A partner, not just a provider."
+    ],
+    "connect": "Connect with us"
   },
   "InsightsPage": {
     "hero": {

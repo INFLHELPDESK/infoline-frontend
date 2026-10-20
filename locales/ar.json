@@ -1307,46 +1307,36 @@
       {
         "label": "الوظائف",
         "href": "/careers"
-      },
-      {
-        "label": "اتصل بنا",
-        "href": "/contact"
       }
     ],
     "cta": {
       "label": "تحدث إلى خبير",
-      "href": "/"
+      "href": "/contact"
     },
     "menuToggle": "تبديل القائمة",
     "logoAlt": "إنفولاين — الصفحة الرئيسية",
     "languageLabel": "اللغة"
   },
   "Footer": {
-    "office": "المكتب المسجّل، مسقط، سلطنة عُمان",
-    "contact": "+968 [phone] · hello@infoline.om",
-    "cta": {
-      "label": "تحدث إلى خبير",
-      "href": "/"
-    },
     "columns": [
       {
         "title": "الحلول",
         "links": [
           {
             "label": "تجربة العملاء والتعاون الخارجي",
-            "href": "#"
+            "href": "/solutions"
           },
           {
             "label": "التقنية والمؤسسات",
-            "href": "#"
+            "href": "/solutions"
           },
           {
             "label": "الأفراد والمالية",
-            "href": "#"
+            "href": "/solutions"
           },
           {
             "label": "جميع الخدمات",
-            "href": "#"
+            "href": "/solutions"
           }
         ]
       },
@@ -1355,19 +1345,19 @@
         "links": [
           {
             "label": "الحكومة",
-            "href": "#"
+            "href": "/industries"
           },
           {
             "label": "الاتصالات",
-            "href": "#"
+            "href": "/industries"
           },
           {
             "label": "الطاقة والمرافق",
-            "href": "#"
+            "href": "/industries"
           },
           {
             "label": "جميع القطاعات",
-            "href": "#"
+            "href": "/industries"
           }
         ]
       },
@@ -1376,11 +1366,11 @@
         "links": [
           {
             "label": "من نحن",
-            "href": "#"
+            "href": "/about"
           },
           {
             "label": "القيادة",
-            "href": "#"
+            "href": "/about"
           },
           {
             "label": "دراسات الحالة",
@@ -1397,43 +1387,38 @@
         "links": [
           {
             "label": "استفسار شراكة",
-            "href": "#"
+            "href": "/contact"
           },
           {
             "label": "تسجيل مورّد",
-            "href": "#"
+            "href": "/contact?route=vendor"
           },
           {
             "label": "الوظائف والإعلام",
-            "href": "#"
+            "href": "/careers"
           },
           {
             "label": "اتصل بنا",
-            "href": "#"
+            "href": "/contact"
           }
         ]
       }
     ],
     "socials": [
       {
-        "label": "فيسبوك",
-        "href": "#",
-        "network": "facebook"
-      },
-      {
         "label": "إكس",
         "href": "#",
         "network": "x"
       },
       {
-        "label": "إنستغرام",
-        "href": "#",
-        "network": "instagram"
-      },
-      {
         "label": "لينكدإن",
         "href": "#",
         "network": "linkedin"
+      },
+      {
+        "label": "فيسبوك",
+        "href": "#",
+        "network": "facebook"
       }
     ],
     "legal": [
@@ -1442,12 +1427,17 @@
         "href": "#"
       },
       {
-        "label": "ملف الشركة",
+        "label": "الشروط والأحكام",
         "href": "#"
       }
     ],
-    "copyright": "© 2026 إنفولاين ش.م.م · إحدى شركات مجموعة عمانتل",
-    "logoAlt": "إنفولاين"
+    "copyright": "© 2026 إنفولاين ش.م.م",
+    "tagline": [
+      "عمليات صُنعت في عُمان.",
+      "تقنية تصنع النتائج.",
+      "شريك، لا مجرد مزوّد."
+    ],
+    "connect": "تابعنا على"
   },
   "InsightsPage": {
     "hero": {

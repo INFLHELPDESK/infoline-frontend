@@ -1,8 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import Button from "@/components/ui/button";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ArrowRight } from "lucide-react";
 import { Stagger, StaggerItem } from "@/components/ui/motion";
 import { socialIcons } from "./social-icons";
 
@@ -15,33 +12,26 @@ export const Footer = () => {
   const columns = t.raw("columns") as FooterColumn[];
   const socials = t.raw("socials") as SocialLink[];
   const legal = t.raw("legal") as FooterLink[];
+  const tagline = t.raw("tagline") as string[];
 
   return (
-    <footer id="careers" className="bg-ink pb-10 pt-[76px] text-slate-300">
-      <div className="mx-auto max-w-340 px-6 md:px-12">
-        <Stagger
-          as="div"
-          className="grid grid-cols-1 gap-11 sm:grid-cols-2 lg:grid-cols-[1.75fr_1fr_1fr_1fr_1fr]"
-          stagger={0.08}
-          amount={0.25}
-        >
-          <StaggerItem as="div" distance={32} blur={false}>
-            <Link href="/" className="flex items-baseline gap-3">
-              <Image
-                src="/assets/logo.svg"
-                alt={t("logoAlt")}
-                width={100}
-                height={24}
-              />
-            </Link>
-            <p className="mt-5 body-sm-regular text-slate-400">
-              {t("office")}
-              <br />
-              {t("contact")}
+    <footer id="careers" className="bg-black text-slate-100">
+      <div className="mx-auto max-w-340 px-6 md:px-12 xl:px-20">
+        {/* Tagline + social links */}
+        <div className="flex flex-col gap-8 border-t border-white/10 py-12 sm:flex-row sm:items-start sm:justify-between lg:px-[50px]">
+          <p className="text-lg-plus text-[18px] leading-7 text-slate-100/60">
+            {tagline.map((line, i) => (
+              <span key={line}>
+                {i > 0 && <br />}
+                {line}
+              </span>
+            ))}
+          </p>
+          <div className="flex flex-col gap-3 sm:items-end">
+            <p className="text-[18px] leading-7 text-slate-100/60">
+              {t("connect")}
             </p>
-
-            {/* Social links */}
-            <ul className="mt-6 flex items-center gap-3">
+            <ul className="flex items-center gap-6">
               {socials.map((social) => {
                 const Icon = socialIcons[social.network];
                 if (!Icon) return null;
@@ -50,29 +40,27 @@ export const Footer = () => {
                     <Link
                       href={social.href}
                       aria-label={social.label}
-                      className="inline-flex size-10 items-center justify-center rounded-full bg-white/[.06] text-slate-200 transition-colors duration-300 hover:bg-brandblue-500 hover:text-white"
+                      className="inline-flex size-6 items-center justify-center text-slate-100/50 transition-colors duration-300 hover:text-white focus-visible:text-white"
                     >
-                      <Icon className="size-[18px]" />
+                      <Icon className="size-6" />
                     </Link>
                   </li>
                 );
               })}
             </ul>
+          </div>
+        </div>
 
-            <Button
-              href={t("cta.href")}
-              icon={ArrowRight}
-              size="small"
-              iconPosition="right"
-              className="mt-7 justify-center"
-            >
-              {t("cta.label")}
-            </Button>
-          </StaggerItem>
-
+        {/* Link columns */}
+        <Stagger
+          as="div"
+          className="grid grid-cols-1 gap-10 border-t border-white/10 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:[&>*]:px-10"
+          stagger={0.08}
+          amount={0.25}
+        >
           {columns.map((column) => (
             <StaggerItem as="div" key={column.title} distance={32} blur={false}>
-              <p className="mb-[18px] font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-slate-600">
+              <p className="mb-6 text-base font-medium leading-6 text-slate-300">
                 {column.title}
               </p>
               <div className="flex flex-col gap-3">
@@ -80,7 +68,7 @@ export const Footer = () => {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-[13.5px] leading-[1.4] text-slate-200 transition-colors hover:text-white"
+                    className="text-[13px] leading-5 text-slate-100 transition-colors hover:text-white focus-visible:text-white"
                   >
                     {link.label}
                   </Link>
@@ -90,8 +78,9 @@ export const Footer = () => {
           ))}
         </Stagger>
 
-        <div className="mt-16 flex flex-col items-start gap-6 border-t border-white/[.08] pt-[26px] sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[12px] text-slate-600">
+        {/* Copyright + legal */}
+        <div className="flex flex-col items-start gap-4 border-t border-white/10 py-10 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs font-medium uppercase leading-4 tracking-[1.5px] text-slate-600">
             {t("copyright")}
           </p>
           <div className="flex gap-6">
@@ -99,7 +88,7 @@ export const Footer = () => {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-[12px] text-slate-500 transition-colors hover:text-white"
+                className="text-base font-medium leading-6 text-[#4e5258] transition-colors hover:text-white focus-visible:text-white"
               >
                 {link.label}
               </Link>
