@@ -159,7 +159,7 @@ export default function Catalogue() {
               width={339}
               height={339}
               aria-hidden
-              className="pointer-events-none absolute -top-37 -end-66 max-w-none"
+              className="pointer-events-none absolute -top-37 -end-66 max-w-[339px]"
             />
             <Image
               src="/assets/solutions/ellipse-16.svg"
@@ -167,7 +167,7 @@ export default function Catalogue() {
               width={227}
               height={227}
               aria-hidden
-              className="pointer-events-none absolute -top-22 -end-52 max-w-none"
+              className="pointer-events-none absolute -top-22 -end-52 max-w-[227px]"
             />
             <AnimatePresence mode="wait">
               <motion.div
