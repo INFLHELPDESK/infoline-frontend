@@ -11,11 +11,11 @@ export default function Callout() {
   const t = useTranslations("InsightsPage");
 
   return (
-    <section className="pt-20 lg:pt-26">
+    <section className="pt-16 pb-12">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="div"
-          className="flex items-center flex-col lg:flex-row lg:gap-15 gap-10 overflow-hidden rounded-2xl bg-brandblue-50 px-7 py-10 lg:px-12 lg:py-14"
+          className="relative flex flex-col items-center gap-8 overflow-hidden rounded-2xl bg-[#eef5fa] px-7 py-10 lg:min-h-[252px] lg:flex-row lg:gap-0 lg:px-0 lg:py-0"
           amount={0.3}
           duration={1.1}
         >
@@ -25,13 +25,14 @@ export default function Callout() {
             width={380}
             height={380}
             alt={t("calloutImageAlt")}
+            className="h-auto w-[300px] lg:absolute lg:start-8 lg:top-1/2 lg:w-[345px] lg:-translate-y-1/2"
           />
 
-          <div className="relative">
-            <h2 className="heading-xl-bold mb-4 max-w-[24ch] text-slate-900">
+          <div className="relative lg:ps-[420px] lg:pe-10">
+            <h2 className="mb-4 max-w-[617px] text-[28px] leading-9 font-bold text-slate-900 lg:text-[36px] lg:leading-11">
               {t("callout.title")}
             </h2>
-            <p className="body-md-regular max-w-[85ch] text-slate-900">
+            <p className="max-w-[799px] text-[16px] leading-6 text-slate-700">
               {t("callout.description")}
             </p>
           </div>

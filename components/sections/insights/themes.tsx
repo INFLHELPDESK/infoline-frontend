@@ -1,5 +1,10 @@
 import { useTranslations } from "next-intl";
-import { CountUp, Stagger, StaggerItem } from "@/components/ui/motion";
+import { Cpu, Rocket, Users, Zap, type LucideIcon } from "lucide-react";
+import { Eyebrow } from "@/components/sections/home-1/shared";
+import { Stagger, StaggerItem } from "@/components/ui/motion";
+
+// One glyph per theme slot, in locale order (Figma: culture, speed, AI, growth).
+const themeIcons: LucideIcon[] = [Users, Zap, Cpu, Rocket];
 
 type Theme = { value: string; title: string; description: string };
 
@@ -13,41 +18,43 @@ export default function Themes() {
   const items = t.raw("themes.items") as Theme[];
 
   return (
-    <section className="py-20 lg:py-26">
+    <section className="pt-6 pb-12">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Stagger as="div" stagger={0.12} amount={0.2}>
-          <StaggerItem direction="start" className="mb-11 text-center">
-            <p className="overline-sm-medium mb-sm text-slate-400">
+          <StaggerItem direction="start" className="mb-10 flex flex-col items-center text-center">
+            <Eyebrow className="mb-4 border border-slate-100">
               {t("themes.eyebrow")}
-            </p>
-            <h2 className="heading-xl-bold text-slate-900">
+            </Eyebrow>
+            <h2 className="text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
               {t("themes.title")}
             </h2>
           </StaggerItem>
 
           <Stagger
             as="div"
-            className="grid grid-cols-1 gap-lg sm:grid-cols-2 lg:grid-cols-4"
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
             stagger={0.1}
           >
-            {items.map((theme) => (
+            {items.map((theme, i) => {
+              const Icon = themeIcons[i % themeIcons.length];
+              return (
               <StaggerItem
                 key={theme.title}
                 as="div"
-                className="rounded-2xl bg-brandblue-50 p-7 lg:p-8"
+                className="rounded-2xl bg-slate-25 p-6"
               >
-                <CountUp
-                  value={theme.value}
-                  className="mb-6 block text-[38px] font-semibold leading-none tracking-[-.02em] text-brandblue-500"
-                />
-                <h3 className="body-lg-semibold mb-2 text-slate-900">
+                <span className="mb-5 flex size-[50px] items-center justify-center rounded-full border border-[#d7eaf4] bg-white text-brandblue-500">
+                  <Icon className="size-7" strokeWidth={1.5} />
+                </span>
+                <h3 className="mb-2 text-[16px] leading-6 font-bold text-slate-900">
                   {theme.title}
                 </h3>
-                <p className="body-md-regular text-slate-600">
+                <p className="text-[14px] leading-5 text-slate-600">
                   {theme.description}
                 </p>
               </StaggerItem>
-            ))}
+              );
+            })}
           </Stagger>
         </Stagger>
       </div>

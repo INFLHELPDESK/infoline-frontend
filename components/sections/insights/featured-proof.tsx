@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import { CountUp, Stagger, StaggerItem } from "@/components/ui/motion";
 
 type FeaturedRow = {
@@ -19,14 +20,13 @@ export default function FeaturedProof() {
   const rows = t.raw("featured.rows") as FeaturedRow[];
 
   return (
-    <section className="bg-slate-50 py-20 lg:py-26">
-      <div className="mx-auto w-full flex justify-between gap-10 flex-col lg:flex-row items-center max-w-360 px-6 lg:px-10">
-        <Stagger as="div" stagger={0.12} amount={0.2}>
-          <StaggerItem direction="start" className="mb-11">
-            <p className="overline-sm-medium mb-sm text-brandblue-400">
-              {t("featured.eyebrow")}
-            </p>
-            <h2 className="heading-lg-bold text-slate-900">
+    <section className="pb-16">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+       <div className="relative flex flex-col gap-8 overflow-hidden rounded-2xl bg-[#eef5fa] px-6 py-10 lg:min-h-[473px] lg:px-10 lg:py-14">
+        <Stagger as="div" className="lg:max-w-[716px]" stagger={0.12} amount={0.2}>
+          <StaggerItem direction="start" className="mb-10">
+            <Eyebrow className="mb-4">{t("featured.eyebrow")}</Eyebrow>
+            <h2 className="text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
               {t("featured.title")}
             </h2>
           </StaggerItem>
@@ -36,35 +36,38 @@ export default function FeaturedProof() {
               <StaggerItem
                 key={row.to}
                 as="li"
-                className="flex flex-col justify-between gap-4 border-b border-slate-200 py-7 last:border-b-0 md:flex-row md:items-center md:gap-2xl"
+                className="flex flex-col justify-between gap-4 border-t border-[#cfd8dc] py-5 md:flex-row md:items-center md:gap-2xl"
               >
-                <p className="body-md-regular max-w-[62ch] text-slate-700">
+                <p className="max-w-[501px] text-[14px] leading-5 text-slate-700">
                   {row.description}
                 </p>
                 <p className="flex shrink-0 items-center gap-3">
-                  <span className="font-mono text-[13px] text-slate-400">
+                  <span className="text-[14px] leading-4 text-slate-500 [direction:ltr]">
                     {row.from}
                   </span>
                   <ArrowRight
                     aria-hidden
-                    className="size-4 text-brandblue-500 rtl:rotate-180"
+                    className="size-[18px] text-slate-500 rtl:rotate-180"
                   />
                   <CountUp
                     value={row.to}
-                    className="text-[34px] font-bold leading-none tracking-[-.02em] text-brandblue-500"
+                    className="text-[32px] leading-11 font-bold text-brandblue-500 [direction:ltr] lg:text-[36px]"
                   />
                 </p>
               </StaggerItem>
             ))}
           </ul>
         </Stagger>
-        <Image
-          src="/assets/insights/insights.svg"
-          alt={t("featuredImageAlt")}
-          height={600}
-          width={500}
-          className="object-cover"
-        />
+        <div className="relative mx-auto aspect-[604/473] w-full max-w-[420px] lg:absolute lg:bottom-0 lg:end-0 lg:mx-0 lg:h-[473px] lg:w-[604px] lg:max-w-[604px]">
+          <Image
+            src="/assets/insights/insights.svg"
+            alt={t("featuredImageAlt")}
+            fill
+            sizes="(min-width: 1024px) 604px, 420px"
+            className="object-cover"
+          />
+        </div>
+       </div>
       </div>
     </section>
   );
