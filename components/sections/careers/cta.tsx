@@ -12,11 +12,11 @@ export default function Cta() {
   const t = useTranslations("CareersPage");
 
   return (
-    <section className="bg-brandblue-900/[0.04] pb-24 lg:pb-28">
+    <section className="bg-brandblue-900/[0.04] pt-16 pb-24 lg:pt-12 lg:pb-24">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="div"
-          className="relative overflow-hidden rounded-2xl bg-ink p-10 lg:px-11 lg:py-15"
+          className="relative overflow-hidden rounded-2xl bg-ink p-10 lg:px-11 lg:py-[69px]"
           amount={0.25}
           duration={1.15}
         >
@@ -36,17 +36,22 @@ export default function Cta() {
           </Parallax>
 
           <div className="relative z-10 flex flex-col justify-between gap-xl md:items-center lg:flex-row">
-            <div>
-              <h3 className="heading-xl-bold mb-4 max-w-[26ch] text-white lg:text-[36px]">
+            <div className="flex max-w-[688px] flex-col gap-3">
+              <h3 className="text-[28px] leading-9 font-semibold text-white lg:text-[36px] lg:leading-11">
                 {t("cta.title")}
               </h3>
-              <p className="body-lg-regular max-w-[54ch] text-brandblue-100">
+              <p className="text-[16px] leading-6 text-slate-100">
                 {t("cta.description")}
               </p>
             </div>
-            <Button href={t("cta.button.href")} size="small" variant="primary">
+            <Button
+              href={t("cta.button.href")}
+              size="md"
+              variant="primary"
+              icon={ArrowRight}
+              iconPosition="right"
+            >
               {t("cta.button.label")}
-              <ArrowRight className="size-4 rtl:rotate-180" />
             </Button>
           </div>
         </Reveal>

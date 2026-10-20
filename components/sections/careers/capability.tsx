@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import {
   Stagger,
   StaggerItem,
@@ -15,7 +16,7 @@ export default function Capability() {
   const stats = t.raw("capability.stats") as { value: string; label: string }[];
 
   return (
-    <section className="bg-brandblue-900/[0.04] py-24 lg:py-32">
+    <section className="bg-brandblue-900/[0.04] py-16 lg:py-14">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Stagger
           as="div"
@@ -25,14 +26,12 @@ export default function Capability() {
           amount={0.3}
         >
           <StaggerItem className="mb-6" distance={28}>
-            <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-brandblue-600">
-              {t("capability.eyebrow")}
-            </span>
+            <Eyebrow>{t("capability.eyebrow")}</Eyebrow>
           </StaggerItem>
 
           <MaskText
             as="h2"
-            className="max-w-[30ch] text-[30px] font-bold leading-[1.15] tracking-[-.025em] text-ink lg:text-[40px]"
+            className="max-w-[660px] text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-ink"
             segments={[{ text: t("capability.title") }]}
             stagger={0.05}
             duration={0.85}
@@ -40,14 +39,14 @@ export default function Capability() {
 
           <StaggerItem
             as="p"
-            className="mt-6 max-w-[78ch] text-[15px] leading-[25px] text-slate-600 lg:text-base"
+            className="mt-5 max-w-[890px] text-[16px] leading-6 text-slate-600"
           >
             {t("capability.description")}
           </StaggerItem>
 
           <Stagger
             as="ul"
-            className="mt-14 grid w-full grid-cols-1 gap-10 sm:grid-cols-[0.7fr_1.6fr_0.7fr] sm:gap-6 lg:w-[760]"
+            className="mt-12 grid w-full grid-cols-1 gap-10 sm:grid-cols-[1fr_1.45fr_1fr] sm:gap-6 lg:w-[765px] lg:grid-cols-[207px_303px_207px]"
             stagger={0.12}
             delayChildren={0.15}
             amount={0.25}
@@ -62,13 +61,15 @@ export default function Capability() {
               >
                 {/* Top rule per stat, matching the design's ticked columns */}
                 <div className="mx-auto h-[2px] w-full bg-brandblue-500" />
+                <div className="px-6 py-3">
                 <CountUp
                   value={s.value}
-                  className="block font-mono mt-3 text-[44px] font-bold tracking-tight text-brandblue-500 lg:text-[56px]"
+                  className="block font-mono text-[44px] leading-[1.2] font-semibold text-brandblue-500 lg:text-[48px] lg:leading-14"
                 />
-                <p className="body-md-regular mx-auto mt-3 max-w-[30ch] text-slate-600">
+                <p className="mx-auto mt-3 text-[14px] leading-5 text-slate-500">
                   {s.label}
                 </p>
+                </div>
               </StaggerItem>
             ))}
           </Stagger>
