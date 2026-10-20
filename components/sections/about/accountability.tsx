@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import { Reveal, MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 
 export default function Accountability() {
@@ -17,20 +18,14 @@ export default function Accountability() {
         className="pointer-events-none absolute w-full h-full top-0 inset-0"
         fill
       />
-      <div className="py-24 text-ink lg:py-32">
+      <div className="pt-12 pb-24 text-ink lg:pt-16 lg:pb-32">
         <div className="relative mx-auto w-full px-6 text-center lg:px-10">
-          <Reveal
-            as="p"
-            direction="up"
-            distance={24}
-            duration={0.7}
-            className="overline-sm-medium text-brandblue-500"
-          >
-            {t("accountability.eyebrow")}
+          <Reveal direction="up" distance={24} duration={0.7}>
+            <Eyebrow>{t("accountability.eyebrow")}</Eyebrow>
           </Reveal>
           <MaskText
             as="h2"
-            className="mx-auto mt-5 heading-2xl-semibold max-w-[22ch] text-slate-900"
+            className="mx-auto mt-5 max-w-[619px] text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-slate-900"
             segments={[{ text: t("accountability.title") }]}
             amount={0.5}
             duration={0.85}
@@ -43,7 +38,7 @@ export default function Accountability() {
               direction="up"
               distance={28}
               delay={0.1}
-              className="mx-auto mt-6 max-w-[62ch] body-lg-regular text-slate-600"
+              className="mx-auto mt-6 max-w-[655px] text-[16px] leading-6 text-slate-600"
             >
               {description}
             </Reveal>
@@ -61,7 +56,7 @@ export default function Accountability() {
                 key={point}
                 className="inline-flex about_chips_border items-center gap-2.5 rounded-full bg-white px-5 py-3"
               >
-                <span className="body-sm-medium text-slate-700">{point}</span>
+                <span className="text-[13px] leading-5 text-slate-700">{point}</span>
               </StaggerItem>
             ))}
           </Stagger>

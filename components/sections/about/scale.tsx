@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import {
   MaskText,
   Reveal,
@@ -18,18 +19,12 @@ export default function Scale() {
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div>
-            <Reveal
-              as="p"
-              direction="start"
-              distance={24}
-              duration={0.7}
-              className="overline-sm-medium text-slate-300"
-            >
-              {t("scale.eyebrow")}
+            <Reveal direction="start" distance={24} duration={0.7}>
+              <Eyebrow tone="dark">{t("scale.eyebrow")}</Eyebrow>
             </Reveal>
             <MaskText
               as="h2"
-              className="mt-4 heading-2xl-semibold text-white"
+              className="mt-5 text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-white"
               segments={[{ text: t("scale.title") }]}
               amount={0.5}
               duration={0.85}
@@ -40,7 +35,7 @@ export default function Scale() {
             direction="start"
             distance={28}
             delay={0.1}
-            className="mt-5 body-lg-regular text-slate-400"
+            className="mt-5 max-w-[569px] text-[16px] leading-6 text-slate-400 lg:mt-0 lg:self-end"
           >
             {t("scale.description")}
           </Reveal>
@@ -48,7 +43,7 @@ export default function Scale() {
 
         <Stagger
           as="dl"
-          className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-3xl scale_border md:grid-cols-3"
+          className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl scale_border md:grid-cols-3"
           stagger={0.11}
           amount={0.25}
         >
@@ -57,7 +52,7 @@ export default function Scale() {
               key={stat.label}
               className="flex flex-col-reverse px-8 py-9 lg:px-10 lg:py-11"
             >
-              <dt className="mt-3 max-w-[26ch] body-sm-regular text-slate-400">
+              <dt className="mt-3 max-w-[26ch] text-[13px] leading-5 text-slate-300">
                 {stat.label}
               </dt>
               <dd className="text-4xl font-bold tracking-tight text-brandblue-400 sm:text-5xl">

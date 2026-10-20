@@ -1,35 +1,30 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 
 type Person = { name: string; title: string; image: string };
 
 function PersonCard({
   person,
-  featured,
 }: {
   person: Person;
   featured?: boolean;
 }) {
   return (
     <StaggerItem className="flex flex-col items-center text-center">
-      <div
-        className={`relative size-28 overflow-hidden rounded-full lg:size-32 ${
-          featured
-            ? " ring-offset-2 ring-offset-white"
-            : "ring-1 ring-slate-900/10"
-        }`}
-      >
-        <Image
-          src={person.image}
-          alt={person.name}
-          fill
-          sizes="128px"
-          className="object-cover"
-        />
-      </div>
-      <p className="mt-4 body-lg-semibold text-slate-900">{person.name}</p>
-      <p className="mt-1 max-w-[20ch] body-sm-regular text-brandblue-500">
+      {/* The portrait SVGs already carry the blue disc and ring. */}
+      <Image
+        src={person.image}
+        alt={person.name}
+        width={157}
+        height={172}
+        className="h-auto w-[157px]"
+      />
+      <p className="mt-3 text-[14px] leading-5 font-bold text-slate-900">
+        {person.name}
+      </p>
+      <p className="mt-1.5 max-w-[24ch] text-[13px] leading-5 text-brandblue-600">
         {person.title}
       </p>
     </StaggerItem>
@@ -46,7 +41,7 @@ function DashedSection({
 }) {
   return (
     <div className="relative mt-16 rounded-3xl border border-dashed border-[#ABD7ED] px-6 pb-10 pt-8 lg:px-10">
-      <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-white px-4 overline-sm-medium text-slate-400">
+      <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-white px-2 py-2.5 text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-400">
         {label}
       </span>
       {children}
@@ -68,17 +63,17 @@ export default function Leadership() {
     <section className="bg-white py-24 text-ink lg:py-32">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <div className="flex items-center flex-col text-center">
-          <p className="overline-sm-medium text-slate-400">
+          <Eyebrow className="border border-slate-100">
             {t("leadership.eyebrow")}
-          </p>
+          </Eyebrow>
           <MaskText
             as="h2"
-            className="mt-4 heading-2xl-semibold text-slate-900"
+            className="mt-5 text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-slate-900"
             segments={[{ text: t("leadership.title") }]}
             amount={0.5}
             duration={0.85}
           />
-          <p className="mt-5 max-w-[46ch] body-lg-regular text-slate-600">
+          <p className="mt-4 max-w-[551px] text-[16px] leading-6 text-slate-600">
             {t("leadership.description")}
           </p>
         </div>

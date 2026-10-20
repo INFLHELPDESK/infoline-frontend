@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import {
   Parallax,
   Stagger,
@@ -19,23 +20,22 @@ export default function WhoWeAre() {
   const p = paragraphs[0];
 
   return (
-    <section className="relative py-24 lg:py-32">
-      <div className="relative mx-auto grid w-full max-w-360 grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2 lg:gap-20 lg:px-10">
+    <section className="relative bg-slate-25 pt-20 lg:pt-[90px]">
+      <div className="relative mx-auto grid w-full max-w-360 grid-cols-1 items-start gap-14 px-6 lg:grid-cols-[minmax(0,1fr)_519px] lg:gap-20 lg:px-10">
         {/* Copy */}
         <Stagger as="div" stagger={0.12}>
-          <StaggerItem
-            as="p"
-            direction="start"
-            className="overline-sm-medium text-slate-400"
-          >
-            {t("whoWeAre.eyebrow")}
+          <StaggerItem direction="start">
+            <Eyebrow>{t("whoWeAre.eyebrow")}</Eyebrow>
           </StaggerItem>
           <MaskText
             as="h2"
-            className="mt-4 heading-2xl-semibold max-w-[30ch] text-slate-900"
+            className="mt-5 max-w-[622px] text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-slate-900"
             segments={[
               { text: t("whoWeAre.titleLead") },
-              { text: t("whoWeAre.titleAccent") },
+              {
+                text: t("whoWeAre.titleAccent"),
+                className: "text-brandblue-500",
+              },
             ]}
             amount={0.5}
             duration={0.85}
@@ -44,7 +44,7 @@ export default function WhoWeAre() {
           <StaggerItem
             as="p"
             direction="start"
-            className="mt-6 max-w-[56ch] body-lg-regular text-slate-700"
+            className="mt-6 max-w-[557px] text-[16px] leading-6 text-slate-600"
           >
             {p}
           </StaggerItem>

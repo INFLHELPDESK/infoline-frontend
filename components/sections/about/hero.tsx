@@ -11,7 +11,7 @@ export default function Hero() {
   const t = useTranslations("AboutPage");
 
   return (
-    <section className="relative isolate flex min-h-screen overflow-hidden bg-ink">
+    <section className="relative isolate flex min-h-[640px] overflow-hidden bg-ink lg:min-h-[755px]">
       {/* Layer 1 — flying-birds video fills the sky. Muted/looped/playsInline
           so it autoplays everywhere; aria-hidden because it is decorative. */}
       <video
@@ -63,7 +63,7 @@ export default function Hero() {
       </div>
 
       {/* Foreground copy */}
-      <div className="relative mx-auto w-full max-w-360 px-6 py-28 lg:px-10 lg:py-50 2xl:flex 2xl:h-screen 2xl:justify-center 2xl:items-center">
+      <div className="relative mx-auto w-full max-w-360 px-6 py-28 lg:px-10 lg:pt-[139px] lg:pb-24">
         <Stagger
           as="div"
           className="flex flex-col items-center"
@@ -72,17 +72,17 @@ export default function Hero() {
           amount={0.3}
         >
           <StaggerItem
-            className="mb-4.5 flex items-start gap-3.5"
+            className="mb-5 flex items-start gap-3.5"
             distance={40}
           >
-            <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-lightblue-300">
+            <span className="text-[13px] uppercase leading-4 tracking-[1.5px] text-lightblue-300">
               {t("hero.eyebrow")}
             </span>
           </StaggerItem>
 
           <MaskText
             as="h1"
-            className="text-[44px] max-w-[20ch] text-center font-bold leading-[1.05] tracking-[-.033em] text-white lg:text-[48px]"
+            className="max-w-[808px] text-center text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
             segments={[
               { text: t("hero.titleLead") },
               { text: t("hero.titleAccent") },
@@ -94,7 +94,7 @@ export default function Hero() {
 
           <StaggerItem
             as="p"
-            className="mt-7.5 max-w-[52ch] text-[16px] leading-[26px] text-slate-200"
+            className="mt-5 max-w-[641px] text-center text-[16px] leading-6 text-slate-200"
           >
             {t("hero.description")}
           </StaggerItem>
