@@ -7,6 +7,7 @@ import Article from "@/components/sections/blog/article";
 import { nextBlogPosts, type BlogPost } from "@/lib/blog";
 import { decodeSlug, loadBlogPost } from "@/lib/blog-post";
 import { localeAlternates, singleLocaleAlternates } from "@/lib/site";
+import ErrorPage, { errorButtonClass } from "@/components/sections/error/error-page";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -79,38 +80,23 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   );
 }
 
-function SoftNotFound() {
-  return (
-    <main className="overflow-x-clip">
-      <section className="flex min-h-[70vh] items-center bg-slate-25">
-        <div className="mx-auto w-full max-w-360 px-6 py-28 lg:px-10">
-          <NotFoundBody />
-        </div>
-      </section>
-    </main>
-  );
-}
-
-async function NotFoundBody() {
-  const t = await getTranslations("Blog.page");
+async function SoftNotFound() {
+  const [t, e] = await Promise.all([
+    getTranslations("Blog.page"),
+    getTranslations("ErrorPages.404"),
+  ]);
 
   return (
-    <div className="flex flex-col items-start">
-      <p className="text-[13px] leading-4 uppercase tracking-[1.5px] text-brandblue-500">
-        404
-      </p>
-      <h1 className="mt-5 max-w-[20ch] text-[40px] font-bold leading-[1.1] text-slate-900 lg:text-[48px]">
-        {t("single.notFoundTitle")}
-      </h1>
-      <p className="mt-6 max-w-[52ch] text-[16px] leading-6 text-slate-600">
-        {t("single.notFoundDescription")}
-      </p>
-      <Link
-        href="/blog"
-        className="mt-10 inline-flex items-center gap-2.5 rounded-lg border border-slate-300 px-6 py-3.5 text-[13px] font-semibold uppercase tracking-[0.11em] text-slate-700 transition-colors hover:border-brandblue-500 hover:text-brandblue-600"
-      >
-        {t("single.notFoundCta")}
-      </Link>
-    </div>
+    <ErrorPage
+      status="404"
+      eyebrow={e("eyebrow")}
+      title={t("single.notFoundTitle")}
+      description={t("single.notFoundDescription")}
+      actions={
+        <Link href="/blog" className={errorButtonClass.primary}>
+          {t("single.notFoundCta")}
+        </Link>
+      }
+    />
   );
 }

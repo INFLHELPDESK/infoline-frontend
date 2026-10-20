@@ -17,6 +17,8 @@ import Button from "@/components/ui/button";
 import { Link, usePathname } from "@/i18n/navigation";
 import { EASE } from "@/components/ui/motion/shared";
 import LanguageSwitcher from "./language-switcher";
+import { KNOWN_ROUTES } from "@/lib/routes";
+import { useHeaderForceLight } from "./theme";
 
 type NavItem = { label: string; href: string };
 
@@ -72,10 +74,18 @@ export const Header = () => {
   // logo, dark nav, light language pill. The open mobile drawer is always ink,
   // so the bar switches to the dark theme while it is open.
   // Blog article pages (/blog/<slug>, not the /blog listing) open on a light band.
+  const forceLight = useHeaderForceLight();
+  // Any path that is not a real route renders the 404 page, which is light.
+  const isKnownRoute =
+    pathname === "/" ||
+    KNOWN_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`));
   const lightPage =
     LIGHT_HERO_ROUTES.some(
       (r) => pathname === r || pathname.startsWith(`${r}/`),
-    ) || pathname.startsWith("/blog/");
+    ) ||
+    pathname.startsWith("/blog/") ||
+    forceLight ||
+    !isKnownRoute;
   const light = lightPage && !open;
 
   // The underline follows the hovered link and rests on the active one.

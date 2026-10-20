@@ -6,6 +6,7 @@ import "./globals.css";
 import CustomCursor from "@/components/ui/cursor";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { HeaderThemeProvider } from "@/components/layout/header/theme";
 import { SITE_NAME, getSiteUrl, localeAlternates } from "@/lib/site";
 const inter = Inter({
   variable: "--font-inter",
@@ -65,9 +66,11 @@ export default async function RootLayout({
     >
       <body className={locale === "ar" ? "font-arabic" : "font-latin"}>
         <NextIntlClientProvider>
-          <Header />
-          {children}
-          <Footer />
+          <HeaderThemeProvider>
+            <Header />
+            {children}
+            <Footer />
+          </HeaderThemeProvider>
           <CustomCursor />
         </NextIntlClientProvider>
       </body>

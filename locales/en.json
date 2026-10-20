@@ -2191,5 +2191,86 @@
       },
       "image": "/assets/home-1/cta.webp"
     }
+  },
+  "ErrorPages": {
+    "403": {
+      "meta": "403 — Access restricted",
+      "eyebrow": "403 · Access restricted",
+      "title": "This area is reserved for authorised teams",
+      "description": "You do not have permission to view this page. If you believe this is a mistake, please contact our team.",
+      "primary": {
+        "label": "Back to home",
+        "href": "/"
+      },
+      "secondary": {
+        "label": "Contact us",
+        "href": "/contact"
+      },
+      "help": {
+        "title": "Need help now?",
+        "text": "Get in touch with our team through the Contact page.",
+        "link": {
+          "label": "Contact page",
+          "href": "/contact"
+        }
+      }
+    },
+    "404": {
+      "meta": "404 — Page not found",
+      "eyebrow": "404 · Page not found",
+      "title": "This page has taken a different route",
+      "description": "The page you are looking for has moved or no longer exists. Check the address, or continue from one of the pages below.",
+      "primary": {
+        "label": "Back to home",
+        "href": "/"
+      },
+      "secondary": {
+        "label": "Contact us",
+        "href": "/contact"
+      }
+    },
+    "500": {
+      "meta": "500 — Server error",
+      "eyebrow": "500 · Server error",
+      "title": "Something on our side needs attention",
+      "description": "An error on our side stopped this page from loading. Please try again, or contact us if it continues.",
+      "primary": {
+        "label": "Try again"
+      },
+      "secondary": {
+        "label": "Back to home",
+        "href": "/"
+      },
+      "referenceLabel": "Reference",
+      "help": {
+        "title": "Need help now?",
+        "text": "Get in touch with our team through the Contact page.",
+        "link": {
+          "label": "Contact page",
+          "href": "/contact"
+        }
+      }
+    },
+    "503": {
+      "meta": "503 — Service unavailable",
+      "eyebrow": "503 · Service unavailable",
+      "title": "This service is temporarily unavailable",
+      "description": "We cannot serve this page right now. Please try again in a few minutes, or contact our team if it is urgent.",
+      "primary": {
+        "label": "Try again"
+      },
+      "secondary": {
+        "label": "Contact us",
+        "href": "/contact"
+      },
+      "help": {
+        "title": "Need help now?",
+        "text": "Get in touch with our team through the Contact page.",
+        "link": {
+          "label": "Contact page",
+          "href": "/contact"
+        }
+      }
+    }
   }
 }

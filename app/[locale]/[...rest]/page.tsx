@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import ThemedNotFound from "@/components/sections/not-found";
 
 /**
- * Catch-all for unmatched URLs inside a locale. Renders the themed
- * "coming soon" page as a real, server-rendered page — full layout
+ * Catch-all for unmatched URLs inside a locale. Renders the 404 design
+ * as a real, server-rendered page — full layout
  * (header/footer, fonts, RTL) and CSS in the initial HTML.
  *
  * Deliberately NOT calling notFound() here: not-found boundaries inside
@@ -13,8 +14,9 @@ import ThemedNotFound from "@/components/sections/not-found";
  * is marked noindex so search engines don't index soft-404s.
  */
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("ErrorPages.404");
   return {
-    title: "Coming soon — Infoline",
+    title: `${t("meta")} — Infoline`,
     robots: { index: false, follow: true },
   };
 }
