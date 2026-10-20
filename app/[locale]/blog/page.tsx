@@ -3,7 +3,6 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Hero from "@/components/sections/blog/hero";
 import Featured from "@/components/sections/blog/featured";
 import Updates from "@/components/sections/blog/updates";
-import Cta from "@/components/sections/blog/cta";
 import type { BlogPost } from "@/lib/blog";
 import { localeAlternates } from "@/lib/site";
 
@@ -28,7 +27,6 @@ export default async function BlogPage() {
     return (
       <main className="overflow-x-clip">
         <Hero />
-        <Cta />
       </main>
     );
   }
@@ -40,7 +38,6 @@ export default async function BlogPage() {
       <Hero />
       <Featured post={featured} />
       <Updates posts={posts} />
-      <Cta />
     </main>
   );
 }

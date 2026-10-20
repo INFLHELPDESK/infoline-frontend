@@ -9,55 +9,57 @@ import type { BlogPost } from "@/lib/blog";
 
 /**
  * Featured story — wide white card, image left / content right, with the
- * [ARTICLE] pill, date and category meta line from the design.
+ * category pill and date meta line from the design.
  */
 export default function Featured({ post }: { post: BlogPost }) {
   const t = useTranslations("Blog.page");
 
   return (
-    <section className="bg-white py-16 lg:py-20">
+    <section className="bg-white pt-14 lg:pt-[60px]">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="p"
-          className="overline-sm-medium mb-6 text-slate-500"
+          className="mb-6 text-[28px] leading-9 font-semibold text-slate-900 lg:text-[32px] lg:leading-10"
           amount={0.4}
         >
           {t("featuredLabel")}
         </Reveal>
 
         <Reveal amount={0.2} duration={1.1}>
-          <article className="group overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-[0_1px_2px_rgba(13,22,27,0.05)] transition-shadow duration-500 hover:shadow-[0_22px_48px_-20px_rgba(13,22,27,0.18)]">
+          <article className="group rounded-3xl border border-[#e0e0e0] bg-white p-2 shadow-[0_6px_13px_rgba(0,0,0,0.03),0_24px_24px_rgba(0,0,0,0.02)] transition-shadow duration-500 hover:shadow-[0_22px_48px_-20px_rgba(13,22,27,0.18)]">
             <Link
               href={`/blog/${post.slug}`}
-              className="grid focus-visible:outline-2 focus-visible:outline-brandblue-500 md:grid-cols-[minmax(0,42%)_1fr]"
+              className="grid rounded-2xl focus-visible:outline-2 focus-visible:outline-brandblue-500 md:grid-cols-[minmax(0,470px)_1fr]"
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 md:aspect-auto md:min-h-[300px]">
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-100 md:aspect-auto md:min-h-[266px] md:rounded-e-none">
                 <Image
                   src={post.image}
                   alt=""
                   fill
-                  sizes="(min-width: 768px) 42vw, 100vw"
+                  sizes="(min-width: 768px) 470px, 100vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <div className="flex flex-col justify-center p-7 lg:p-11">
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <span className="rounded-full bg-brandblue-50 px-3.5 py-1.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.18em] text-brandblue-700">
-                    {post.category}
-                  </span>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400">
-                    {post.dateLabel}
-                  </span>
+              <div className="flex flex-col justify-between gap-6 px-4 py-6 md:px-6 md:py-5">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="inline-flex h-7 items-center rounded-full bg-[#ecf4f9] px-3 text-[12px] leading-4 text-brandblue-600">
+                      {post.category}
+                    </span>
+                    <span className="text-[13px] leading-5 text-slate-500">
+                      {post.dateLabel}
+                    </span>
+                  </div>
+                  <h2 className="max-w-[712px] text-[26px] leading-9 font-bold text-slate-900 lg:text-[32px] lg:leading-10">
+                    {post.title}
+                  </h2>
+                  <p className="max-w-[712px] text-[13px] leading-5 text-slate-600">
+                    {post.excerpt}
+                  </p>
                 </div>
-                <h2 className="mt-4 max-w-[26ch] text-[26px] font-bold leading-[1.15] tracking-[-.02em] text-ink lg:text-[30px]">
-                  {post.title}
-                </h2>
-                <p className="body-md-regular mt-3.5 max-w-[64ch] text-slate-600">
-                  {post.excerpt}
-                </p>
-                <span className="mt-7 inline-flex w-fit items-center gap-2.5 rounded-md border border-slate-300 px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-ink transition-colors duration-300 group-hover:border-brandblue-500 group-hover:text-brandblue-700">
+                <span className="inline-flex w-fit items-center gap-2 text-[14px] leading-5 font-medium text-brandblue-500 transition-colors duration-300 group-hover:text-brandblue-600">
                   {t("readMore")}
-                  <ArrowRight className="size-3.5 rtl:rotate-180" />
+                  <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
                 </span>
               </div>
             </Link>

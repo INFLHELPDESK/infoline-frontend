@@ -10,8 +10,13 @@ export default function Hero() {
   const t = useTranslations("Blog.page");
 
   return (
-    <section className="bg-ink">
-      <div className="mx-auto w-full max-w-360 px-6 pb-16 pt-28 lg:px-10 lg:pb-24 lg:pt-44">
+    <section className="relative flex items-center overflow-hidden bg-ink lg:min-h-[486px]">
+      {/* Centre glow (per Figma) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-[73px] left-1/2 size-[618px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(28,151,212,0.3)_0%,transparent_68%)] blur-[12px]"
+      />
+      <div className="relative mx-auto w-full max-w-360 px-6 pb-16 pt-32 lg:px-10 lg:py-24">
         <Stagger
           as="div"
           className="flex flex-col items-center text-center"
@@ -20,17 +25,17 @@ export default function Hero() {
           amount={0.3}
         >
           <StaggerItem
-            className="mb-8.5 flex items-center gap-3.5"
+            className="mb-5 flex items-center gap-3.5"
             distance={40}
           >
-            <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-lightblue-300">
+            <span className="text-[13px] leading-4 uppercase tracking-[1.5px] text-lightblue-300">
               {t("eyebrow")}
             </span>
           </StaggerItem>
 
           <MaskText
             as="h1"
-            className="max-w-[18ch] text-[44px] font-bold leading-[1.05] tracking-[-.033em] text-white lg:text-[48px]"
+            className="max-w-[665px] text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
             segments={[
               { text: t("titleLead") },
               { text: t("titleAccent"), className: "text-lightblue-300" },
@@ -42,7 +47,7 @@ export default function Hero() {
 
           <StaggerItem
             as="p"
-            className="mt-7.5 max-w-[60ch] text-[16px] leading-[24px] text-slate-200"
+            className="mt-6 max-w-[551px] text-[16px] leading-6 text-slate-200"
           >
             {t("description")}
           </StaggerItem>
