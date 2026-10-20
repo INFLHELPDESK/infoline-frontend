@@ -3,7 +3,7 @@ import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 
 type ButtonVariant = "primary" | "secondary" | "icon";
-type ButtonSize = "small" | "large";
+type ButtonSize = "small" | "large" | "md";
 
 interface CommonProps {
   variant?: ButtonVariant;
@@ -34,8 +34,19 @@ const sizeClasses: Record<
     padding: string;
     iconPadding: string;
     gap: string;
+    /** Replaces the default "font-semibold uppercase" label styling. */
+    label?: string;
   }
 > = {
+  // Figma handoff button (action/md/medium): 40px, 14px sentence-case, 8px radius.
+  md: {
+    text: "text-[14px]",
+    tracking: "tracking-normal",
+    padding: "h-10 px-4",
+    iconPadding: "p-2.5",
+    gap: "gap-2",
+    label: "normal-case font-medium",
+  },
   small: {
     text: "text-[12px]",
     tracking: "tracking-[0.1em]",
@@ -75,11 +86,14 @@ export default function Button({
   const s = sizeClasses[size];
 
   const baseClasses = [
-    "group inline-flex flex-none flex-wrap items-center justify-center whitespace-nowrap font-semibold uppercase",
-    isIconOnly ? "rounded-full" : "rounded-md",
+    "group inline-flex flex-none flex-wrap items-center justify-center whitespace-nowrap",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brandblue-300",
+    isIconOnly ? "rounded-full" : size === "md" ? "rounded-lg" : "rounded-md",
     isIconOnly ? s.iconPadding : `${s.padding} ${s.gap}`,
     s.text,
     s.tracking,
+    // Default label is uppercase semibold; sizes may override it wholesale.
+    s.label ?? "font-semibold uppercase",
     variantClasses[variant],
     className,
   ]
@@ -92,14 +106,14 @@ export default function Button({
 
   // Arrow glides toward the reading direction on hover.
   const nudge =
-    "transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] will-change-transform";
+    "motion-reduce:transition-none motion-reduce:transform-none transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] will-change-transform";
   const nudgeRight = `${nudge} group-hover:translate-x-1 rtl:group-hover:-translate-x-1`;
   const nudgeLeft = `${nudge} group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5`;
 
   const content = isIconOnly ? (
     Icon && (
       <Icon
-        className={`${iconSize} transition-transform duration-300 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5`}
+        className={`${iconSize} transition-transform duration-300 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none motion-reduce:transform-none`}
         strokeWidth={2}
       />
     )

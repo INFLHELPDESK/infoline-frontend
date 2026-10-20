@@ -6,8 +6,10 @@ body {
 }
 
 :root {
-  --font-latin: var(--font-inter), sans-serif;
-  --font-arabic: var(--font-ibm-plex-sans-arabic), sans-serif;
+  /* Figma: Avenir (Latin) / Tajawal (Arabic). --font-avenir is intentionally
+     undefined until licensed files are added, so Inter is the fallback. */
+  --font-latin: var(--font-avenir, var(--font-inter)), sans-serif;
+  --font-arabic: var(--font-tajawal), sans-serif;
   /* The site is a light design with dark sections that set their own bg —
      keep the canvas white so unstyled sections never fall back to a dark
      UA default in dark-mode browsers. */

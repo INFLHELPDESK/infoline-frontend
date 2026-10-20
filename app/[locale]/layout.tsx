@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Inter, Tajawal } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/ui/cursor";
 import { Header } from "@/components/layout/header";
@@ -13,10 +13,13 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
-const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
-  variable: "--font-ibm-plex-sans-arabic",
+// Approved Arabic face (Figma handoff). Avenir (Latin) is commercially
+// licensed and not bundled yet: `--font-avenir` stays unset, so Latin text
+// falls back to Inter (see --font-latin in globals.css).
+const tajawal = Tajawal({
+  variable: "--font-tajawal",
   subsets: ["arabic"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "700", "800"],
   display: "swap",
 });
 
@@ -57,7 +60,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${ibmPlexSansArabic.variable} h-full antialiased`}
+      className={`${inter.variable} ${tajawal.variable} h-full antialiased`}
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <body className={locale === "ar" ? "font-arabic" : "font-latin"}>
