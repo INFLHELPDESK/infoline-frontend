@@ -2,12 +2,10 @@ import type { Page } from "@playwright/test";
 import { test, expect, waitForHydration } from "../support/fixtures";
 import { messages } from "../support/messages";
 import {
-  expectPinnedAt,
   measureLayoutShift,
   scrollElementTo,
   scrollToY,
   waitForAnimationsSettled,
-  viewportTop,
   waitForStableStyle,
 } from "../support/motion";
 
@@ -120,28 +118,35 @@ test.describe("auto-advancing industry rail (/home-1)", () => {
   });
 });
 
-test.describe("sticky / pinned layout", () => {
-  // With reduced motion the page wrapper keeps a 14px transform (D-7), which
-  // offsets every sticky element; characterize sticky itself with motion on.
-  test.use({ reducedMotion: "no-preference" });
-
-  test("blog article 'about' rail pins 128px (top-32) below the viewport top", async ({ page }) => {
-    await page.goto(`/en/blog/${messages.en.Blog.posts[0].slug}`);
+test.describe("blog article layout (no sticky rail)", () => {
+  // The legacy sticky "About Infoline" rail was removed with the Figma article
+  // redesign (the approved design has no sidebar). The article is now a single
+  // centred story card followed by the related-articles row.
+  test("has no sticky rail; the story card is centred and related articles stay reachable", async ({
+    page,
+  }) => {
+    const [first, second, third] = messages.en.Blog.posts;
+    await page.goto(`/en/blog/${first.slug}`);
     await waitForStableStyle(page.locator("main").locator("xpath=.."));
-    const aside = page.locator("main aside").first();
-    const { start, end } = await aside.evaluate((el) => {
-      const top = el.getBoundingClientRect().top + window.scrollY;
-      const parentBottom = el.parentElement!.getBoundingClientRect().bottom + window.scrollY;
-      // Sticky range: from reaching top-32 until the grid row runs out.
-      return { start: top - 128, end: parentBottom - (el as HTMLElement).offsetHeight - 128 };
-    });
-    expect(end - start, "rail has room to pin").toBeGreaterThan(40);
 
-    await expectPinnedAt(page, aside, 128, [start + 20, Math.round((start + end) / 2), end - 20]);
+    // The legacy sticky rail is gone.
+    await expect(page.locator("main aside")).toHaveCount(0);
 
-    // Before the range it scrolls with the page.
-    await scrollToY(page, start - 100);
-    expect(Math.round(await viewportTop(aside))).toBe(228);
+    // The story card carries the lead paragraph and sits centred, within the 1062px design width.
+    const lead = page.getByText(first.body[0], { exact: true });
+    await expect(lead).toBeVisible();
+    const card = lead.locator("xpath=ancestor::div[contains(@class, 'rounded-[20px]')][1]");
+    const box = (await card.boundingBox())!;
+    const viewportWidth = page.viewportSize()!.width;
+    expect(box.width).toBeLessThanOrEqual(1062);
+    expect(Math.abs(box.x + box.width / 2 - viewportWidth / 2)).toBeLessThan(24);
+
+    // Related articles (the next two posts) remain reachable below the story card.
+    for (const post of [second, third]) {
+      const link = page.locator(`main a[href="/en/blog/${post.slug}"]`).first();
+      await link.scrollIntoViewIfNeeded();
+      await expect(link).toBeVisible();
+    }
   });
 });
 

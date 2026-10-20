@@ -71,9 +71,11 @@ export const Header = () => {
   // Light-hero pages (Contact) use the light header from the design: dark
   // logo, dark nav, light language pill. The open mobile drawer is always ink,
   // so the bar switches to the dark theme while it is open.
-  const lightPage = LIGHT_HERO_ROUTES.some(
-    (r) => pathname === r || pathname.startsWith(`${r}/`),
-  );
+  // Blog article pages (/blog/<slug>, not the /blog listing) open on a light band.
+  const lightPage =
+    LIGHT_HERO_ROUTES.some(
+      (r) => pathname === r || pathname.startsWith(`${r}/`),
+    ) || pathname.startsWith("/blog/");
   const light = lightPage && !open;
 
   // The underline follows the hovered link and rests on the active one.

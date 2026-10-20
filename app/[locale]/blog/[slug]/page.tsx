@@ -82,7 +82,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
 function SoftNotFound() {
   return (
     <main className="overflow-x-clip">
-      <section className="flex min-h-[70vh] items-center bg-ink">
+      <section className="flex min-h-[70vh] items-center bg-slate-25">
         <div className="mx-auto w-full max-w-360 px-6 py-28 lg:px-10">
           <NotFoundBody />
         </div>
@@ -96,18 +96,18 @@ async function NotFoundBody() {
 
   return (
     <div className="flex flex-col items-start">
-      <p className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-lightblue-300">
+      <p className="text-[13px] leading-4 uppercase tracking-[1.5px] text-brandblue-500">
         404
       </p>
-      <h1 className="mt-5 max-w-[20ch] text-[40px] font-bold leading-[1.05] tracking-[-.03em] text-white lg:text-[48px]">
+      <h1 className="mt-5 max-w-[20ch] text-[40px] font-bold leading-[1.1] text-slate-900 lg:text-[48px]">
         {t("single.notFoundTitle")}
       </h1>
-      <p className="mt-6 max-w-[52ch] text-[16px] leading-[26px] text-slate-200">
+      <p className="mt-6 max-w-[52ch] text-[16px] leading-6 text-slate-600">
         {t("single.notFoundDescription")}
       </p>
       <Link
         href="/blog"
-        className="mt-10 inline-flex items-center gap-2.5 rounded-md border border-white/18 px-6 py-3.5 text-[13px] font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:border-white/40 hover:bg-white/[.04]"
+        className="mt-10 inline-flex items-center gap-2.5 rounded-lg border border-slate-300 px-6 py-3.5 text-[13px] font-semibold uppercase tracking-[0.11em] text-slate-700 transition-colors hover:border-brandblue-500 hover:text-brandblue-600"
       >
         {t("single.notFoundCta")}
       </Link>
