@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useHydratedReducedMotion } from "@/lib/hooks/useHydratedReducedMotion";
 import { EASE } from "@/components/ui/motion/shared";
 
 export type ClientLogo = { src: string; name: string };
@@ -22,7 +23,7 @@ export default function LogoConstellation({
   logos: ClientLogo[];
   centerAlt: string;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useHydratedReducedMotion();
 
   // Split into four columns around the centre: outer-start, inner-start,
   // inner-end, outer-end (round-robin keeps both sides balanced).

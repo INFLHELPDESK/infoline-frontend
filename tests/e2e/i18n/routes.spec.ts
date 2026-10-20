@@ -74,6 +74,15 @@ test.describe("home page content", () => {
   }
 });
 
+test.describe("legacy /home-1 alias", () => {
+  test("renders the homepage but is noindex and canonicalises to /en", async ({ page, baseURL }) => {
+    const response = await page.goto("/en/home-1");
+    expect(response?.status()).toBe(200);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `${baseURL}/en`);
+  });
+});
+
 test.describe("locale resolution", () => {
   test("bare / redirects to the default locale for an English browser", async ({ page }) => {
     await page.goto("/");

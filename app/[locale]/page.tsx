@@ -1,25 +1,23 @@
-import Industries from "@/components/sections/home/industries";
-import Insights from "@/components/sections/home/insights";
-import Main from "@/components/sections/home/main";
-import Options from "@/components/sections/home/options";
-import Partners from "@/components/sections/home/partners";
-import PartnersLogos from "@/components/sections/home/partners-logos";
-import Solutions from "@/components/sections/home/solutions";
-import WhatChanges from "@/components/sections/home/what-changes";
-import WhyInfoline from "@/components/sections/home/why-infoline";
+import Hero from "@/components/sections/home-1/hero";
+import WhyTrust from "@/components/sections/home-1/why-trust";
+import WhatWeDo from "@/components/sections/home-1/what-we-do";
+import Industries from "@/components/sections/home-1/industries";
+import WhatChanges from "@/components/sections/home-1/what-changes";
+import Proof from "@/components/sections/home-1/proof";
+import ThreeWays from "@/components/sections/home-1/three-ways";
+import Cta from "@/components/sections/home-1/cta";
 
 export default function HomePage() {
   return (
     <main className="overflow-x-clip">
-      <Main />
-      <PartnersLogos />
-      <WhyInfoline />
-      <Solutions />
+      <Hero />
+      <WhyTrust />
+      <WhatWeDo />
       <Industries />
       <WhatChanges />
-      <Partners />
-      <Options />
-      <Insights />
+      <Proof />
+      <ThreeWays />
+      <Cta />
     </main>
   );
 }

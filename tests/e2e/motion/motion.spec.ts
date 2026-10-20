@@ -16,8 +16,6 @@ import {
  */
 
 const industries = messages.en.HomeV1.industries;
-/** D-9: React's minified hydration-mismatch error. */
-const HYDRATION_MISMATCH = /Minified React error #418;/;
 /** Mirrors AUTO_MS in components/sections/home-1/industry-cards.tsx. */
 const AUTO_MS = 5_000;
 
@@ -30,41 +28,26 @@ const card = (page: Page, index: number) => rail(page).locator(":scope > li").nt
 const isOpen = (page: Page, index: number) =>
   card(page, index).getByText(industries.items[index].description, { exact: true });
 
-test.describe("/home-1 hydration", () => {
-  test("[D-9] hydrates without errors under prefers-reduced-motion", async ({ page, pageErrors }) => {
-    test.info().annotations.push({
-      type: "known-defect",
-      description:
-        "D-9: why-trust / hero-badge / logo-constellation branch JSX on useReducedMotion() during render (React #418)",
-    });
-    await page.goto("/en/home-1");
+test.describe("homepage hydration", () => {
+  test("hydrates without errors under prefers-reduced-motion", async ({ page, pageErrors }) => {
+    await page.goto("/en");
     await waitForHydration(page);
-
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    expect(pageErrors.length).toBeGreaterThan(0);
-    expect(pageErrors.filter((e) => !HYDRATION_MISMATCH.test(e.message))).toEqual([]);
-
-    test.fail(); // from here on: the defect itself
     expect(pageErrors.map((e) => e.message)).toEqual([]);
   });
 
   test("hydrates without errors with motion enabled", async ({ page, pageErrors }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.goto("/en/home-1");
+    await page.goto("/en");
     await waitForHydration(page);
     expect(pageErrors.map((e) => e.message)).toEqual([]);
   });
 });
 
-test.describe("auto-advancing industry rail (/home-1)", () => {
-  // D-9 (asserted above) raises a hydration mismatch under reduced motion on
-  // this route; only that error is tolerated here, anything else still fails.
-  test.use({ knownPageErrors: [HYDRATION_MISMATCH] });
-
+test.describe("auto-advancing industry rail (homepage)", () => {
   test("advances to the next card after AUTO_MS while in view", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.clock.install();
-    await page.goto("/en/home-1");
+    await page.goto("/en");
     await scrollElementTo(page, rail(page), 200);
     await expect(isOpen(page, 0)).toBeVisible();
 
@@ -79,7 +62,7 @@ test.describe("auto-advancing industry rail (/home-1)", () => {
 
   test("never auto-advances under prefers-reduced-motion", async ({ page }) => {
     await page.clock.install();
-    await page.goto("/en/home-1");
+    await page.goto("/en");
     await waitForHydration(page, "main ul li a");
     await scrollElementTo(page, rail(page), 200);
     await expect(isOpen(page, 0)).toBeVisible();
@@ -94,7 +77,7 @@ test.describe("auto-advancing industry rail (/home-1)", () => {
   test("keyboard focus opens a card; activating the open card follows its link", async ({
     page,
   }) => {
-    await page.goto("/en/home-1");
+    await page.goto("/en");
     await scrollElementTo(page, rail(page), 200);
 
     const first = card(page, 0).getByRole("link");
@@ -110,11 +93,11 @@ test.describe("auto-advancing industry rail (/home-1)", () => {
   });
 
   test("first tap on a closed card opens it instead of navigating", async ({ page }) => {
-    await page.goto("/en/home-1");
+    await page.goto("/en");
     await scrollElementTo(page, rail(page), 200);
     await card(page, 2).getByRole("link").dispatchEvent("click");
     await expect(isOpen(page, 2)).toBeVisible();
-    await expect(page).toHaveURL(/\/en\/home-1$/);
+    await expect(page).toHaveURL(/[/]en$/);
   });
 });
 

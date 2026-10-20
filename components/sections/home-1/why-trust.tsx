@@ -3,10 +3,10 @@
 import { useRef, useState } from "react";
 import type { MotionValue } from "framer-motion";
 import Image from "next/image";
+import { useHydratedReducedMotion } from "@/lib/hooks/useHydratedReducedMotion";
 import {
   motion,
   useMotionValueEvent,
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
@@ -49,7 +49,7 @@ export default function WhyTrust() {
   const t = useTranslations("HomeV1.whyTrust");
   const points = t.raw("points") as Point[];
   const titleLines = t.raw("titleLines") as string[];
-  const reduce = useReducedMotion();
+  const reduce = useHydratedReducedMotion();
 
   return (
     <section className="relative bg-[#f6f8f9] text-[#1a1a1c]">

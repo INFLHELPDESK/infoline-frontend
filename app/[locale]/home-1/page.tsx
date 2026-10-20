@@ -1,23 +1,18 @@
-import Hero from "@/components/sections/home-1/hero";
-import WhyTrust from "@/components/sections/home-1/why-trust";
-import WhatWeDo from "@/components/sections/home-1/what-we-do";
-import Industries from "@/components/sections/home-1/industries";
-import WhatChanges from "@/components/sections/home-1/what-changes";
-import Proof from "@/components/sections/home-1/proof";
-import ThreeWays from "@/components/sections/home-1/three-ways";
-import Cta from "@/components/sections/home-1/cta";
+import type { Metadata } from "next";
+import { getLocale } from "next-intl/server";
+import { localeAlternates } from "@/lib/site";
+import HomePage from "../page";
 
-export default function HomePage() {
-  return (
-    <main className="overflow-x-clip">
-      <Hero />
-      <WhyTrust />
-      <WhatWeDo />
-      <Industries />
-      <WhatChanges />
-      <Proof />
-      <ThreeWays />
-      <Cta />
-    </main>
-  );
+/**
+ * Temporary alias of the homepage, kept for regression comparison. It renders
+ * the same page as `/` but is not indexable and canonicalises to the homepage.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return {
+    alternates: await localeAlternates(locale),
+    robots: { index: false, follow: true },
+  };
 }
+
+export default HomePage;

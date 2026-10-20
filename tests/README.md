@@ -120,8 +120,7 @@ Motion is the most fragile thing to test, so the suite follows these rules
 
 ### Not yet covered (gaps)
 
-- `/home-1` "why trust" pinned story (`why-trust.tsx`, sticky + `useScroll`):
-  the route currently raises a hydration error under reduced motion (D-9), and
+- homepage "why trust" pinned story (`why-trust.tsx`, sticky + `useScroll`):
   the section is expected to be redesigned.
 - Industries `sectors.tsx` stacked sticky cards with `animation-timeline: view()`.
 - `ClipReveal` image reveals, `Parallax`, `CountUp`, logo marquee.

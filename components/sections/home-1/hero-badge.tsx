@@ -1,13 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useHydratedReducedMotion } from "@/lib/hooks/useHydratedReducedMotion";
 
 /**
  * "Part of Omantel group" chip from the hero ("bouncing-card" in Figma):
  * a frosted pill that bobs gently, with a pulsing brand dot.
  */
 export default function HeroBadge({ label }: { label: string }) {
-  const reduce = useReducedMotion();
+  const reduce = useHydratedReducedMotion();
 
   return (
     <motion.span
