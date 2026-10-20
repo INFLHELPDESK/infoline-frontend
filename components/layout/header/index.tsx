@@ -21,7 +21,7 @@ import LanguageSwitcher from "./language-switcher";
 type NavItem = { label: string; href: string };
 
 /** Routes whose hero is light, so the header uses its light theme (per Figma). */
-const LIGHT_HERO_ROUTES = ["/contact"];
+const LIGHT_HERO_ROUTES = ["/contact", "/solutions/managed-branch-retail"];
 
 export const Header = () => {
   const t = useTranslations("Header");

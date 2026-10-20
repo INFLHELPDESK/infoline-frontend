@@ -550,6 +550,32 @@
           "alt": "Oman Post"
         }
       ]
+    },
+    "managedBranch": {
+      "meta": {
+        "title": "Managed Branch & Retail Services — Infoline",
+        "description": "Infoline offers managed services for branch and retail operations across people, training, quality, and technology."
+      },
+      "number": "09",
+      "family": "Comprehensive Retail Solutions",
+      "title": "Managed Branch & Retail Services",
+      "headline": "Technology & Governance support the operation throughout.",
+      "summary": "Infoline offers managed services for branch and retail operations across people, training, quality, and technology.",
+      "overviewLabel": "Overview",
+      "overview": "Infoline provides an integrated managed service covering the full scope of branch and retail operations — People, Operations, Training, Quality, Workforce Management, Performance, Governance and Technology.",
+      "tags": [
+        "Recruit & Onboard",
+        "Train",
+        "Plan & Schedule",
+        "Operate",
+        "Monitor Quality",
+        "Measure Performance",
+        "Improve"
+      ],
+      "cta": {
+        "label": "Talk to Our Team",
+        "href": "/contact"
+      }
     }
   },
   "Solutions": {
