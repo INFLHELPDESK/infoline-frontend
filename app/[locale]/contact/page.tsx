@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import Hero from "@/components/sections/contact/hero";
 import RouteCards from "@/components/sections/contact/route-cards";
-import TrustStrip from "@/components/sections/contact/trust-strip";
 import Form from "@/components/sections/contact/form";
 import { RouteProvider, type RouteId } from "@/components/sections/contact/route-context";
 import { localeAlternates } from "@/lib/site";
@@ -42,7 +41,6 @@ export default async function ContactPage({
       <RouteProvider initialRoute={initialRoute}>
         <Hero />
         <RouteCards />
-        <TrustStrip />
         <Form services={services} />
       </RouteProvider>
     </main>

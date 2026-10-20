@@ -9,7 +9,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { EASE } from "@/components/ui/motion/shared";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import { SpotlightCard, Stagger, StaggerItem } from "@/components/ui/motion";
 import { useRouteSelection, type RouteId } from "./route-context";
 
@@ -38,16 +38,14 @@ export default function RouteCards() {
   ];
 
   return (
-    <section className="bg-slate-25 pb-16 pt-14 lg:pb-20">
+    <section className="bg-slate-25 pb-10 pt-12">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Stagger as="div" className="flex flex-col items-center" stagger={0.1}>
           <StaggerItem>
-            <p className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-slate-400">
-              {t("label")}
-            </p>
+            <Eyebrow>{t("label")}</Eyebrow>
           </StaggerItem>
           <StaggerItem>
-            <h2 className="heading-2xl-semibold mt-3 text-center text-slate-900">
+            <h2 className="mt-3 text-center text-[24px] leading-9 font-semibold text-slate-900 lg:text-[28px]">
               {t("title")}
             </h2>
           </StaggerItem>
@@ -55,7 +53,7 @@ export default function RouteCards() {
 
         <Stagger
           as="div"
-          className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4"
+          className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-4"
           stagger={0.09}
           amount={0.2}
         >
@@ -70,48 +68,38 @@ export default function RouteCards() {
                   onClick={() => setRoute(r.id)}
                   aria-pressed={active}
                   whileTap={reduceTap}
-                  className={`relative flex h-full w-full flex-col rounded-2xl border p-6 text-start transition-[border-color,background-color,box-shadow] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] ${
+                  className={`relative flex h-full min-h-[249px] w-full flex-col justify-between gap-6 rounded-2xl border bg-white p-6 text-start transition-[border-color,background-color] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] ${
                     active
-                      ? "border-brandblue-500 bg-white shadow-[0_0_0_4px_rgba(28,151,212,.08),0_18px_40px_-24px_rgba(28,151,212,.35)]"
-                      : "border-slate-200 bg-white hover:border-brandblue-300 hover:shadow-[0_14px_30px_-22px_rgba(15,40,60,.25)]"
+                      ? "border-brandblue-500"
+                      : "border-[#e0e0e0] hover:border-brandblue-300"
                   }`}
                 >
-                  {/* Radio indicator — animated dot, as in the Figma cards */}
-                  <span
-                    aria-hidden
-                    className={`absolute end-5 top-5 flex size-4.5 items-center justify-center rounded-full border transition-colors duration-300 ${
-                      active ? "border-brandblue-500" : "border-slate-300"
-                    }`}
-                  >
-                    <motion.span
-                      className="size-2.5 rounded-full bg-brandblue-500"
-                      animate={{ scale: active ? 1 : 0, opacity: active ? 1 : 0 }}
-                      transition={{ duration: 0.25, ease: EASE }}
-                    />
+                  <span className="flex w-full items-center gap-4">
+                    <span
+                      className={`flex size-10 flex-none items-center justify-center rounded-full transition-colors duration-300 ${
+                        active
+                          ? "bg-brandblue-500 text-white"
+                          : "bg-[#eceff1] text-slate-500"
+                      }`}
+                    >
+                      <Icon className="size-5" />
+                    </span>
+                    <span
+                      className={`text-[14px] leading-5 font-medium transition-colors duration-300 ${
+                        active ? "text-brandblue-500" : "text-slate-500"
+                      }`}
+                    >
+                      {r.tag}
+                    </span>
                   </span>
 
-                  <span
-                    className={`mb-4 flex size-10 items-center justify-center rounded-lg transition-colors duration-300 ${
-                      active
-                        ? "bg-brandblue-500 text-white"
-                        : "bg-slate-100 text-slate-500"
-                    }`}
-                  >
-                    <Icon className="size-5" />
-                  </span>
-
-                  <span
-                    className={`font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] transition-colors duration-300 ${
-                      active ? "text-brandblue-600" : "text-slate-400"
-                    }`}
-                  >
-                    {r.tag}
-                  </span>
-                  <span className="mt-1.5 text-[15.5px] font-bold text-slate-900">
-                    {r.title}
-                  </span>
-                  <span className="body-md-regular mt-2 text-slate-600">
-                    {r.description}
+                  <span className="flex flex-col gap-1.5">
+                    <span className="text-[16px] leading-6 font-bold text-slate-900">
+                      {r.title}
+                    </span>
+                    <span className="text-[13px] leading-5 text-slate-600">
+                      {r.description}
+                    </span>
                   </span>
                 </motion.button>
                 </SpotlightCard>
@@ -120,11 +108,11 @@ export default function RouteCards() {
           })}
         </Stagger>
 
-        <div className="mt-10 text-center">
+        <div className="mt-8 text-center">
           <a
             href="/assets/infoline-company-profile.pdf"
             onClick={(e) => e.preventDefault()}
-            className="group inline-flex items-center gap-2 font-mono text-[12px] font-semibold uppercase tracking-[0.16em] text-slate-500 transition-colors hover:text-brandblue-600"
+            className="group inline-flex items-center gap-2 text-[14px] leading-5 text-slate-500 transition-colors hover:text-brandblue-600"
           >
             {t("profileLink")}
             <span

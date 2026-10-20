@@ -3,7 +3,7 @@
 import { useId, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, CalendarClock, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { EASE } from "@/components/ui/motion/shared";
 import Turnstile from "@/components/ui/forms/turnstile";
 import Honeypot from "@/components/ui/forms/honeypot";
@@ -42,7 +42,7 @@ function Field({
     <div>
       <label
         htmlFor={htmlFor}
-        className="mb-1.5 block text-[13.5px] font-medium text-slate-700"
+        className="mb-2 block text-[13px] leading-5 text-slate-600"
       >
         {label}
       </label>
@@ -66,11 +66,11 @@ function Field({
 }
 
 const inputBase =
-  "w-full rounded-lg border bg-white px-4 py-3 text-[14.5px] text-slate-800 placeholder:text-slate-400 outline-none transition-[border-color,box-shadow] duration-200 focus:border-brandblue-400 focus:shadow-[0_0_0_3px_rgba(28,151,212,.14)]";
+  "w-full rounded-md border bg-white px-4 py-3 text-[14px] leading-5 text-slate-800 placeholder:text-[#90a4ae] outline-none transition-[border-color,box-shadow] duration-200 focus:border-brandblue-400 focus:shadow-[0_0_0_3px_rgba(28,151,212,.14)]";
 
 function inputClass(invalid?: boolean) {
   return `${inputBase} ${
-    invalid ? "border-red-400" : "border-slate-200 hover:border-slate-300"
+    invalid ? "border-red-400" : "border-[#e0e0e0] hover:border-slate-300"
   }`;
 }
 
@@ -322,17 +322,15 @@ export default function Form({
   const err = (k: string) => errorFor(k) !== undefined;
 
   return (
-    <section className="bg-slate-25 py-6xl" id="enquiry">
+    <section className="bg-slate-25 pt-10 pb-24" id="enquiry">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
-        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-14">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-11">
           <div>
             {/* Section label mirrors the mono eyebrow from the Figma */}
             <div aria-hidden className="sr-only">
               {sectionLabel}
             </div>
-            <p className="mb-6 font-mono text-[11.5px] font-semibold uppercase tracking-[0.2em] text-brandblue-600">
-              {sectionLabel}
-            </p>
+            <p className="sr-only">{sectionLabel}</p>
 
             <div ref={formRef} className="relative">
               <AnimatePresence mode="wait" initial={false}>
@@ -400,16 +398,16 @@ export default function Form({
                     <form
                       onSubmit={handleSubmit}
                       noValidate
-                      className="rounded-2xl bg-white p-8 shadow-[0_1px_2px_rgba(15,40,60,.04),0_18px_44px_-24px_rgba(15,40,60,.18)] lg:p-10"
+                      className="rounded-2xl border border-[#eee] bg-white p-6 lg:pt-9"
                     >
                       {/* Honeypot — every form ships it (Phase 3 handover). */}
                       <Honeypot />
 
                       {/* ---- Shared: your details ---- */}
-                      <p className="mb-6 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+                      <p className="mb-4 text-[12px] leading-4 text-slate-400">
                         {t("form.yourDetails")}
                       </p>
-                      <div className="grid gap-5 md:grid-cols-2">
+                      <div className="grid gap-4 md:grid-cols-2">
                         <Field
                           label={t("form.name")}
                           error={errorFor("name")}
@@ -489,10 +487,10 @@ export default function Form({
                       {/* ---- Route-specific block ---- */}
                       <AnimatePresence initial={false} mode="wait">
                         <motion.div key={route} {...fieldMotion(reduce)}>
-                          <div className="mt-9 border-t border-slate-100 pt-9">
+                          <div className="mt-6 border-t border-[#eee] pt-6">
                             {route === "service" && (
                               <div className="space-y-5">
-                                <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+                                <p className="text-[12px] leading-4 text-slate-400">
                                   {t("form.aboutEngagement")}
                                 </p>
                                 <Field
@@ -544,7 +542,7 @@ export default function Form({
 
                             {route === "project" && (
                               <div className="space-y-5">
-                                <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+                                <p className="text-[12px] leading-4 text-slate-400">
                                   {t("form.yourProject")}
                                 </p>
                                 <Field
@@ -637,7 +635,7 @@ export default function Form({
 
                             {route === "vendor" && (
                               <div className="space-y-5">
-                                <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+                                <p className="text-[12px] leading-4 text-slate-400">
                                   {t("form.aboutEngagement")}
                                 </p>
                                 <Field
@@ -674,7 +672,7 @@ export default function Form({
                                   <textarea
                                     id={`${uid}-msg`}
                                     rows={4}
-                                    className={`${inputBase} border-slate-200 hover:border-slate-300 resize-none`}
+                                    className={`${inputBase} border-[#e0e0e0] hover:border-slate-300 resize-none`}
                                     placeholder={t(
                                       "form.messageOptionalPlaceholder",
                                     )}
@@ -689,7 +687,7 @@ export default function Form({
 
                             {route === "careers" && (
                               <div className="space-y-5">
-                                <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+                                <p className="text-[12px] leading-4 text-slate-400">
                                   {t("form.aboutEngagement")}
                                 </p>
                                 <Field
@@ -715,7 +713,7 @@ export default function Form({
                                   <textarea
                                     id={`${uid}-msg`}
                                     rows={4}
-                                    className={`${inputBase} border-slate-200 hover:border-slate-300 resize-none`}
+                                    className={`${inputBase} border-[#e0e0e0] hover:border-slate-300 resize-none`}
                                     placeholder={t(
                                       "form.messageOptionalPlaceholder",
                                     )}
@@ -749,24 +747,23 @@ export default function Form({
                       />
 
                       {/* ---- Actions ---- */}
-                      <div className="mt-9 flex flex-wrap items-center gap-3.5">
+                      <div className="mt-6 flex flex-wrap items-center gap-3.5">
                         <button
                           type="submit"
                           disabled={submitting}
-                          className="group inline-flex items-center gap-2.5 rounded-md bg-brandblue-500 px-7 py-4 text-[12.5px] font-semibold uppercase tracking-[0.11em] text-white shadow-[0_8px_24px_-12px_rgba(28,151,212,.9)] transition-[background,box-shadow,transform] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-brandblue-600 hover:shadow-[0_16px_34px_-14px_rgba(28,151,212,1)] disabled:cursor-not-allowed disabled:opacity-60"
+                          className="group inline-flex h-11 items-center gap-2 rounded-lg bg-brandblue-500 px-4 text-[14px] font-medium text-white shadow-[0_8px_24px_-12px_rgba(28,151,212,.9)] transition-[background,box-shadow,transform] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-brandblue-600 hover:shadow-[0_16px_34px_-14px_rgba(28,151,212,1)] disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {submitting ? t("form.submitting") : submitLabel}
                           <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
                         </button>
                         <a
                           href="mailto:connect@infoline.om"
-                          className="inline-flex items-center rounded-md border border-slate-200 px-7 py-4 text-[12.5px] font-semibold uppercase tracking-[0.11em] text-slate-700 transition-[border-color,background] duration-300 hover:border-slate-400 hover:bg-slate-50"
+                          className="inline-flex h-11 items-center rounded-lg border border-[#cfd8dc] px-4 text-[14px] font-medium text-slate-600 transition-[border-color,background] duration-300 hover:border-slate-400 hover:bg-slate-50"
                         >
-                          <CalendarClock className="me-2.5 size-4 text-brandblue-600" />
                           {t("form.bookCall")}
                         </a>
                       </div>
-                      <p className="mt-5 inline-flex items-center gap-2 rounded-full bg-brandblue-50 px-3.5 py-1.5 text-[12.5px] font-medium text-brandblue-700">
+                      <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-brandblue-50 px-3.5 py-2 text-[12px] leading-4 font-medium text-brandblue-700">
                         <span className="relative flex size-2">
                           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brandblue-400 opacity-60" />
                           <span className="relative inline-flex size-2 rounded-full bg-brandblue-500" />
