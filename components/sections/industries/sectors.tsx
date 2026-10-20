@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
-import Icon from "@/components/ui/icon";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import Button from "@/components/ui/button";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 
@@ -77,21 +77,21 @@ export default function Sectors() {
   }, []);
 
   return (
-    <section className="bg-white py-6xl">
+    <section className="bg-white pb-12">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         {/* Header */}
         <Stagger
           as="div"
-          className="mb-4xl flex flex-col justify-between gap-lg lg:flex-row lg:items-end"
+          className="mb-8 flex flex-col justify-between gap-lg lg:flex-row lg:items-end"
           stagger={0.15}
         >
           <StaggerItem direction="start">
-            <p className="overline-sm-medium mb-sm text-slate-400">
+            <Eyebrow className="mb-4 border border-slate-100">
               {t("sectors.eyebrow")}
-            </p>
+            </Eyebrow>
             <MaskText
               as="h2"
-              className="heading-2xl-semibold font-bold max-w-[22ch] text-slate-900"
+              className="max-w-[16ch] text-[32px] leading-[1.1] font-semibold text-slate-900 lg:text-[40px] lg:leading-11"
               segments={[{ text: t("sectors.title") }]}
               amount={0.5}
               duration={0.8}
@@ -100,7 +100,7 @@ export default function Sectors() {
           <StaggerItem
             as="p"
             direction="end"
-            className="body-lg-regular max-w-[52ch] text-slate-700"
+            className="max-w-[557px] text-[16px] leading-6 text-slate-600"
           >
             {t("sectors.description")}
           </StaggerItem>
@@ -114,63 +114,60 @@ export default function Sectors() {
               <article
                 key={s.id}
                 id={`sec-${s.id}`}
-                className="scroll-mt-[6.5rem] overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_24px_60px_-45px_rgba(38,50,56,0.55)] lg:sticky lg:top-[6.5rem] lg:origin-top lg:will-change-transform lg:animate-stack-recede lg:[animation-timeline:view()] lg:[animation-range:exit-crossing] motion-reduce:[animation:none]"
+                className="scroll-mt-[6.5rem] overflow-hidden rounded-2xl border border-[#cfd8dc] bg-white shadow-[0_12px_32px_rgba(90,103,126,0.08)] lg:sticky lg:top-[6.5rem] lg:origin-top lg:will-change-transform lg:animate-stack-recede lg:[animation-timeline:view()] lg:[animation-range:exit-crossing] motion-reduce:[animation:none]"
               >
                 <div
-                  className={`grid grid-cols-1 items-center lg:grid-cols-2 ${!imageFirst ? "lg:grid-cols-[.7fr_1.3fr]" : "lg:grid-cols-[1.3fr_.7fr]"}`}
+                  className={`grid grid-cols-1 items-center ${imageFirst ? "lg:grid-cols-[1fr_416px]" : "lg:grid-cols-[416px_1fr]"}`}
                 >
                   {/* Visual */}
                   <div
-                    className={`min-h-[240px]  p-5  lg:min-h-[420px] items-center justify-center ${
+                    className={`p-5 lg:p-[19px] ${
                       !imageFirst ? "lg:order-1" : "lg:order-2"
                     }`}
                   >
                     <Image
                       src={s.image}
                       alt={s.title}
-                      width={380}
-                      height={460}
-                      className="object-cover rounded-lg"
-                    />
-
-                    {/* Ghosted service-icon watermark. */}
-                    <Icon
-                      src={s.icon}
-                      aria-hidden
-                      className="absolute -end-6 -top-6 size-40 text-white/10"
+                      width={378}
+                      height={458}
+                      className="h-[280px] w-full rounded-xl object-cover lg:h-[458px]"
                     />
                   </div>
 
                   {/* Content */}
                   <div
-                    className={`flex flex-col justify-center p-7 lg:p-11 ${
+                    className={`flex flex-col gap-6 p-7 lg:px-9 lg:py-10 ${
                       !imageFirst ? "lg:order-2" : "lg:order-1"
                     }`}
                   >
-                    <div className="mb-5 flex flex-col items-start gap-2">
-                      <span className="font-mono text-[13px] tabular-nums text-slate-400">
-                        {s.number}
-                      </span>
-                      <span className="block h-0.5 w-8 bg-brandblue-400" />
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[16px] leading-6 tabular-nums text-slate-400">
+                          {s.number}
+                        </span>
+                        <span className="block h-0.5 w-[49px] bg-brandblue-500" />
+                      </div>
+                      <h3 className="text-[28px] leading-9 font-bold text-slate-900">
+                        {s.title}
+                      </h3>
                     </div>
-
-                    <h3 className="heading-lg-semibold text-slate-900">
-                      {s.title}
-                    </h3>
-                    <p className="body-lg-medium mt-2 text-slate-900">
+                    <p className="text-[16px] leading-6 font-medium text-slate-900">
                       {s.headline}
                     </p>
-                    <p className="overline-xs-medium mt-6 uppercase text-slate-400">
-                      {s.summaryTitle}
-                    </p>
-                    <p className="body-md-regular mt-4 max-w-[54ch] text-slate-700">
-                      {s.summary}
-                    </p>
+                    <hr className="border-[#cfd8dc]" />
+                    <div className="flex flex-col gap-4">
+                      <p className="text-[12px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-400">
+                        {s.summaryTitle}
+                      </p>
+                      <p className="max-w-[721px] text-[14px] leading-5 text-slate-600">
+                        {s.summary}
+                      </p>
+                    </div>
 
                     {/* Tags */}
                     <Stagger
                       as="div"
-                      className="mt-6 flex flex-wrap gap-2"
+                      className="flex flex-wrap gap-x-2 gap-y-3"
                       stagger={0.06}
                       delayChildren={0.15}
                       amount={0.6}
@@ -182,19 +179,19 @@ export default function Sectors() {
                           distance={14}
                           duration={0.55}
                           blur={false}
-                          className="inline-block rounded-full border border-slate-200 bg-slate-25 px-3 py-1 text-[12px] font-medium text-slate-600 transition-colors duration-300 hover:border-brandblue-300 hover:bg-brandblue-50 hover:text-brandblue-700"
+                          className="inline-block rounded-full border border-[#cfd8dc] bg-white px-4 py-2.5 text-[12px] leading-4 font-medium text-slate-400 transition-colors duration-300 hover:border-brandblue-300 hover:bg-brandblue-50 hover:text-brandblue-700"
                         >
                           {tag}
                         </StaggerItem>
                       ))}
                     </Stagger>
 
-                    <div className="mt-8">
+                    <div>
                       <Button
                         href={s.cta.href}
                         icon={ArrowRight}
                         iconPosition="right"
-                        size="small"
+                        size="md"
                         variant="primary"
                       >
                         {s.cta.label}

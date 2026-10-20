@@ -1,18 +1,17 @@
 import { useTranslations } from "next-intl";
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Button from "@/components/ui/button";
+import { PillButton } from "@/components/sections/home-1/shared";
 import { Reveal, Parallax } from "@/components/ui/motion";
 
 export default function Cta() {
   const t = useTranslations("IndustriesPage");
 
   return (
-    <section className="bg-white pb-6xl">
+    <section className="bg-white pb-16">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="div"
-          className="relative overflow-hidden rounded-2xl bg-brandblue-900 p-10 lg:px-11 lg:py-15"
+          className="relative overflow-hidden rounded-2xl bg-ink p-10 lg:px-11 lg:py-14"
           amount={0.25}
           duration={1.15}
         >
@@ -30,19 +29,18 @@ export default function Cta() {
             />
           </Parallax>
 
-          <div className="relative z-10 flex flex-col justify-between gap-xl md:items-center lg:flex-row">
-            <div>
-              <h3 className="heading-xl-bold mb-4 max-w-[20ch] text-white lg:text-[36px]">
+          <div className="relative z-10 flex flex-col justify-between gap-6 md:items-center lg:flex-row">
+            <div className="flex max-w-[874px] flex-col gap-4">
+              <h3 className="text-[28px] leading-9 font-semibold text-white lg:text-[36px] lg:leading-11">
                 {t("cta.title")}
               </h3>
-              <p className="body-lg-regular max-w-[54ch] text-brandblue-100">
+              <p className="text-[16px] leading-6 text-slate-100">
                 {t("cta.description")}
               </p>
             </div>
-            <Button href={t("cta.button.href")} size="large" variant="primary">
+            <PillButton href={t("cta.button.href")} variant="outline">
               {t("cta.button.label")}
-              <ArrowRight className="size-4 rtl:rotate-180" />
-            </Button>
+            </PillButton>
           </div>
         </Reveal>
       </div>

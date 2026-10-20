@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
-import { ArrowRight } from "lucide-react";
-import Button from "@/components/ui/button";
+import { PillButton } from "@/components/sections/home-1/shared";
 import { MainBackground } from "@/components/ui/background";
 import { Reveal, Stagger, StaggerItem, MaskText } from "@/components/ui/motion";
 import { Link } from "@/i18n/navigation";
@@ -16,7 +15,7 @@ export default function Hero() {
   const sectors = t.raw("sectors.items") as Sector[];
 
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden">
+    <section className="relative flex min-h-160 items-center overflow-hidden lg:min-h-[640px]">
       {/* Layer 1 — background video. Muted/looped/playsInline so it autoplays
           everywhere; aria-hidden because it is decorative. */}
       <video
@@ -38,8 +37,8 @@ export default function Hero() {
         className="absolute inset-0 -z-2 bg-gradient-to-b from-ink via-ink/55 to-ink"
       />
 
-      <div className="mx-auto w-full max-w-360 px-6 py-24 lg:px-10 lg:py-28">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.3fr_.7fr] lg:gap-20">
+      <div className="mx-auto w-full max-w-360 px-6 pt-32 pb-16 lg:px-10 lg:py-24">
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_442px] lg:gap-20">
           {/* Left column */}
           <Stagger
             as="div"
@@ -49,17 +48,17 @@ export default function Hero() {
             amount={0.3}
           >
             <StaggerItem
-              className="mb-8.5 flex items-center gap-3.5"
+              className="mb-5 flex items-center gap-3.5"
               distance={40}
             >
-              <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-lightblue-300">
+              <span className="text-[13px] uppercase leading-4 tracking-[1.5px] text-lightblue-300">
                 {t("hero.eyebrow")}
               </span>
             </StaggerItem>
 
             <MaskText
               as="h1"
-              className="max-w-[18ch] text-[44px] font-bold leading-[1.05] tracking-[-.033em] text-white lg:text-[48px]"
+              className="max-w-[665px] text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
               segments={[
                 { text: t("hero.titleLead") },
                 {
@@ -73,20 +72,15 @@ export default function Hero() {
 
             <StaggerItem
               as="p"
-              className="mt-7.5 max-w-[60ch] text-[16px] leading-[24px] text-slate-200"
+              className="mt-6 max-w-[641px] text-[16px] leading-7 text-slate-200 lg:text-[18px]"
             >
               {t("hero.description")}
             </StaggerItem>
 
-            <StaggerItem className="mt-11 flex flex-wrap items-center gap-3.5">
-              <Button
-                href={t("hero.primaryCta.href")}
-                icon={ArrowRight}
-                size="large"
-                iconPosition="right"
-              >
+            <StaggerItem className="mt-10 flex flex-wrap items-center gap-4">
+              <PillButton href={t("hero.primaryCta.href")} size="lg">
                 {t("hero.primaryCta.label")}
-              </Button>
+              </PillButton>
             </StaggerItem>
           </Stagger>
 
@@ -94,7 +88,7 @@ export default function Hero() {
           <div className="w-full">
             <Reveal
               as="p"
-              className="mb-4 font-mono text-[11px] uppercase tracking-[0.24em] text-slate-500"
+              className="mb-5 text-[13px] leading-4 uppercase tracking-[1.5px] text-slate-400"
               direction="up"
               distance={24}
               duration={0.7}
@@ -114,12 +108,12 @@ export default function Hero() {
                       no locale prefixing). */}
                   <Link
                     href={`#sec-${s.id}`}
-                    className="group flex items-center gap-5 border-b border-white/5 py-3 transition-[background-color,transform] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-white/[.02] hover:translate-x-3 rtl:hover:-translate-x-3"
+                    className="group flex items-center gap-2.5 border-b border-[rgba(224,224,224,0.12)] py-3 text-[13px] transition-[background-color,transform] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-white/[.02] hover:translate-x-3 rtl:hover:-translate-x-3"
                   >
-                    <span className="font-mono text-[13px] tabular-nums text-slate-400 group-hover:text-brandblue-400">
+                    <span className="text-[13px] leading-4 uppercase tracking-[1.5px] tabular-nums text-slate-400 group-hover:text-brandblue-400">
                       {s.number}
                     </span>
-                    <span className="flex-1 body-sm-regular text-slate-200 transition-colors group-hover:text-white">
+                    <span className="flex-1 text-[13px] leading-5 text-slate-200 transition-colors group-hover:text-white">
                       {s.title}
                     </span>
                   </Link>

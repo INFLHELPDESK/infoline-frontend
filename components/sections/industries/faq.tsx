@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 import { EASE } from "@/components/ui/motion/shared";
 
@@ -21,20 +22,18 @@ export default function Faq() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="bg-slate-25 py-6xl">
+    <section className="bg-slate-25 pt-14 pb-24">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Stagger
           as="div"
-          className="mb-4xl flex flex-col gap-lg"
+          className="mb-6 flex flex-col gap-lg"
           stagger={0.15}
         >
           <StaggerItem>
-            <p className="overline-sm-medium mb-sm text-slate-500">
-              {t("faq.eyebrow")}
-            </p>
+            <Eyebrow className="mb-6">{t("faq.eyebrow")}</Eyebrow>
             <MaskText
               as="h2"
-              className="heading-2xl-semibold max-w-[22ch] text-slate-900"
+              className="text-[32px] leading-[1.1] font-semibold text-slate-900 lg:text-[40px] lg:leading-11"
               segments={[{ text: t("faq.title") }]}
               amount={0.5}
               duration={0.8}
@@ -49,27 +48,28 @@ export default function Faq() {
               <StaggerItem
                 as="div"
                 key={item.q}
-                className="border-b border-slate-100"
+                className="relative border-b border-[#cfd8dc]"
               >
                 <button
                   type="button"
                   onClick={() => setOpen(isOpen ? -1 : i)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-6 py-6 text-start"
+                  className={`flex w-full items-center py-[18px] pe-14 text-start ${isOpen ? "pb-2" : ""}`}
                 >
-                  <span className="body-xl-semibold text-slate-900">
+                  <span className="text-[16px] leading-6 font-semibold text-slate-900">
                     {item.q}
                   </span>
-                  <motion.span
-                    animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={
-                      reduce ? { duration: 0 } : { duration: 0.3, ease: EASE }
-                    }
-                    className="shrink-0 text-brandblue-500"
-                  >
-                    <Plus className="size-5" />
-                  </motion.span>
                 </button>
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute end-0 top-[30px] flex size-9 -translate-y-1/2 items-center justify-center text-brandblue-500"
+                >
+                  {isOpen ? (
+                    <Minus className="size-6" strokeWidth={1.5} />
+                  ) : (
+                    <Plus className="size-6" strokeWidth={1.5} />
+                  )}
+                </span>
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
@@ -84,7 +84,7 @@ export default function Faq() {
                       transition={{ duration: 0.4, ease: EASE }}
                       className="overflow-hidden"
                     >
-                      <p className="body-lg-regular max-w-[70ch] pb-6 text-slate-600">
+                      <p className="pe-14 pb-4 text-[14px] leading-6 text-slate-600">
                         {item.a}
                       </p>
                     </motion.div>
