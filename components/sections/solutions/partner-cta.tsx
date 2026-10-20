@@ -17,7 +17,7 @@ export default function PartnerCta() {
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="div"
-          className="relative overflow-hidden rounded-2xl bg-brandblue-900 p-10 lg:px-11 lg:py-15"
+          className="relative overflow-hidden rounded-2xl bg-ink p-10 lg:px-11 lg:py-9"
           amount={0.25}
           duration={1.15}
         >
@@ -37,27 +37,24 @@ export default function PartnerCta() {
             />
           </Parallax>
 
-          <div className="relative z-10 flex flex-col justify-between lg:gap-45 gap-4 md:items-center lg:flex-row">
-            <div>
-              <p className="overline-xs-medium mb-4 text-slate-100">
-                {t("partner.eyebrow")}
-              </p>
-              <h3 className="heading-xl-bold mb-4 max-w-[30ch] text-white lg:text-[36px]">
+          <div className="relative z-10 flex flex-col items-start gap-6">
+            <div className="flex max-w-[688px] flex-col gap-3">
+              <h3 className="text-[28px] leading-9 font-semibold text-white lg:text-[36px] lg:leading-11">
                 {t("partner.title")}
               </h3>
-            </div>
-            <div className="flex flex-col lg:items-start gap-sm">
-              <p className="body-lg-regular max-w-[60ch] text-white">
+              <p className="text-[16px] leading-6 text-slate-100">
                 {t("partner.description")}
               </p>
+            </div>
+            <div className="flex flex-wrap gap-4">
               <Button
                 href={t("partner.cta.href")}
-                size="small"
+                size="md"
                 variant="primary"
-                className="mt-6"
+                icon={ArrowRight}
+                iconPosition="right"
               >
                 {t("partner.cta.label")}
-                <ArrowRight className="size-4 rtl:rotate-180" />
               </Button>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import Icon from "@/components/ui/icon";
 import Button from "@/components/ui/button";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
@@ -61,21 +62,21 @@ export default function Catalogue() {
       };
 
   return (
-    <section id="catalogue" className="mt-20 bg-white py-6xl">
+    <section id="catalogue" className="bg-white pt-20 pb-12">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         {/* Header */}
         <Stagger
           as="div"
-          className="mb-4xl flex flex-col justify-between gap-lg lg:flex-row lg:items-end"
+          className="mb-8 flex flex-col justify-between gap-lg lg:flex-row lg:items-end"
           stagger={0.15}
         >
           <StaggerItem direction="start">
-            <p className="overline-sm-medium mb-sm text-slate-500">
+            <Eyebrow className="mb-4 border border-slate-100">
               {t("catalogue.eyebrow")}
-            </p>
+            </Eyebrow>
             <MaskText
               as="h2"
-              className="heading-2xl-semibold max-w-[22ch] text-slate-900"
+              className="max-w-[16ch] text-[32px] leading-[1.1] font-semibold text-slate-900 lg:text-[40px] lg:leading-11"
               segments={[{ text: t("catalogue.title") }]}
               amount={0.5}
               duration={0.8}
@@ -84,7 +85,7 @@ export default function Catalogue() {
           <StaggerItem
             as="p"
             direction="end"
-            className="body-lg-regular max-w-[52ch] text-slate-600"
+            className="max-w-[557px] text-[16px] leading-6 text-slate-600"
           >
             {t("catalogue.description")}
           </StaggerItem>
@@ -102,10 +103,10 @@ export default function Catalogue() {
         </div>
 
         {/* Interactive card */}
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_24px_60px_-45px_rgba(38,50,56,0.55)] lg:grid-cols-[minmax(0,240px)_1fr]">
+        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-[#cfd8dc] bg-white lg:grid-cols-[260px_1fr]">
           {/* LEFT RAIL */}
-          <div className="border-b border-slate-100 lg:border-e lg:border-b-0">
-            <div className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
+          <div className="border-b border-[#cfd8dc] lg:border-e lg:border-b-0">
+            <div className="flex overflow-x-auto lg:flex-col lg:overflow-visible">
               {services.map((s) => {
                 const isActive = s.id === activeId;
                 return (
@@ -114,43 +115,35 @@ export default function Catalogue() {
                     type="button"
                     onClick={() => setActiveId(s.id)}
                     aria-pressed={isActive}
-                    className={`group relative flex shrink-0 items-center gap-3.5  p-4 text-start transition-colors lg:w-full lg:shrink ${
+                    className={`group relative flex shrink-0 flex-col items-start border-s-2 p-4 text-start transition-colors lg:w-full lg:shrink lg:border-b lg:border-b-[#cfd8dc] lg:last:border-b-0 ${
                       isActive
-                        ? "text-brandblue-700 border-l border-brandblue-500"
-                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                        ? "border-brandblue-500"
+                        : "border-transparent hover:bg-slate-50"
                     }`}
                   >
                     {isActive && (
-                      <>
-                        <motion.span
-                          layoutId="cat-rail-active"
-                          className="absolute inset-0 rounded-xl bg-brandblue-50"
-                          transition={
-                            reduce
-                              ? { duration: 0 }
-                              : { type: "spring", stiffness: 420, damping: 38 }
-                          }
-                        />
-                      </>
+                      <motion.span
+                        layoutId="cat-rail-active"
+                        className="absolute inset-0 bg-slate-25"
+                        transition={
+                          reduce
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 420, damping: 38 }
+                        }
+                      />
                     )}
-                    <span
-                      className={`relative z-10 font-mono text-[12px] tabular-nums ${
-                        isActive ? "text-brandblue-500" : "text-slate-400"
-                      }`}
-                    >
-                      {s.number}
-                    </span>
-                    <span className="relative z-10 flex flex-col">
-                      <span className="body-sm-medium text-slate-900 leading-tight">
-                        {s.title}
-                      </span>
+                    <span className="relative z-10 flex items-center gap-2 text-[13px] leading-5 font-medium">
                       <span
-                        className={`body-xs-regular mt-2 ${
-                          isActive ? "text-brandblue-400" : "text-slate-400"
+                        className={`tabular-nums ${
+                          isActive ? "text-brandblue-500" : "text-slate-400"
                         }`}
                       >
-                        {s.family}
+                        {s.number}
                       </span>
+                      <span className="text-slate-900">{s.title}</span>
+                    </span>
+                    <span className="relative z-10 ps-6 text-[13px] leading-5 text-slate-400">
+                      {s.family}
                     </span>
                   </button>
                 );
@@ -159,53 +152,74 @@ export default function Catalogue() {
           </div>
 
           {/* MIDDLE — detail copy, changes per service */}
-          <div className="relative min-h-110 p-7 lg:p-10 flex flex-col lg:flex-row gap-15">
+          <div className="relative flex min-h-110 flex-col gap-10 overflow-hidden p-6 lg:flex-row lg:justify-between lg:gap-12 lg:p-8">
+            <Image
+              src="/assets/solutions/ellipse-17.svg"
+              alt=""
+              width={339}
+              height={339}
+              aria-hidden
+              className="pointer-events-none absolute -top-37 -end-66 max-w-none"
+            />
+            <Image
+              src="/assets/solutions/ellipse-16.svg"
+              alt=""
+              width={227}
+              height={227}
+              aria-hidden
+              className="pointer-events-none absolute -top-22 -end-52 max-w-none"
+            />
             <AnimatePresence mode="wait">
-              <motion.div key={active.id} {...detailMotion}>
+              <motion.div
+                key={active.id}
+                {...detailMotion}
+                className="relative max-w-[622px] flex-1"
+              >
                 <Icon
                   src={active.icon}
-                  className="size-10 text-brandblue-500"
+                  className="size-6 text-brandblue-500"
                   aria-hidden
                 />
-                <h2 className="heading-lg-semibold mt-4 text-slate-900 leading-tight">
+                <h2 className="mt-4 text-[24px] leading-7 font-semibold text-slate-900">
                   {active.title}
                 </h2>
-                <h3 className="text-[16px] font-medium mt-6 text-slate-900">
+                <h3 className="mt-6 text-[16px] leading-6 font-medium text-slate-900">
                   {active.headline}
                 </h3>
-                <p className="body-md-regular mt-3 text-slate-600">
+                <p className="mt-1.5 text-[14px] leading-5 text-slate-500">
                   {active.summary}
                 </p>
+                <hr className="mt-6 border-[#cfd8dc]" />
 
-                <p className="overline-xs-medium mt-8 text-slate-400">
+                <p className="mt-6 text-[12px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-400">
                   {coversLabel}
                 </p>
-                <div className="mt-3 space-y-3">
+                <div className="mt-4 space-y-5">
                   {active.body.map((para, i) => (
-                    <p key={i} className="body-md-regular text-slate-700">
+                    <p key={i} className="text-[14px] leading-5 text-slate-600">
                       {para}
                     </p>
                   ))}
                 </div>
 
                 {/* Channel / capability tags */}
-                <div className="mt-6 flex flex-wrap gap-2">
+                <div className="mt-6 flex flex-wrap gap-x-2 gap-y-3">
                   {active.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-slate-200 bg-slate-25 px-3 py-1 text-[12px] font-medium text-slate-600"
+                      className="rounded-full border border-[#cfd8dc] bg-white px-4 py-2.5 text-[12px] leading-4 font-medium text-slate-400"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-6 py-3">
                   <Button
                     href={active.cta.href}
                     icon={ArrowRight}
                     iconPosition="right"
-                    size="small"
+                    size="md"
                     variant="primary"
                   >
                     {active.cta.label}
@@ -223,18 +237,18 @@ export default function Catalogue() {
 
 function ServicePhoto({ src }: { src: string }) {
   return (
-    <div className="relative lg:h-[520px] lg:max-w-[290px] w-full border rounded-xl border-brandblue-500">
+    <div className="relative h-[420px] w-full overflow-hidden rounded-2xl lg:h-[528px] lg:w-[290px] lg:shrink-0 lg:self-start">
       <Image
         src={src}
         alt=""
-        height={520}
+        height={528}
         width={290}
         aria-hidden
-        className="object-cover lg:h-[520px] lg:max-w-[290px] w-full rounded-xl"
+        className="size-full object-cover"
       />
 
       {/* Gradient overlay */}
-      <div className="absolute rounded-xl inset-0 bg-[linear-gradient(180deg,rgba(28,151,212,0.22)_0%,rgba(37,165,226,0)_100%)]" />
+      <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(180deg,rgba(28,151,212,0.22)_0%,rgba(37,165,226,0)_100%)]" />
     </div>
   );
 }
