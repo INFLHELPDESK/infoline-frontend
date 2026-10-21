@@ -1223,9 +1223,20 @@
       "chips": [
         "Real operational responsibility",
         "Learning tied to the job",
-        "Paths into quality, training, workforce, operations and technology",
-        "A workplace focused on building Omani capability"
-      ]
+        "Paths into quality, training, workforce",
+        "A workplace building Omani capability"
+      ],
+      "cta": {
+        "title": "Ready for your next role?",
+        "description": "Explore current opportunities and find where you can contribute.",
+        "primary": {
+          "label": "View Careers",
+          "href": "#vacancies"
+        },
+        "secondary": {
+          "label": "Join Our Talent Network"
+        }
+      }
     },
     "traits": {
       "eyebrow": "What we look for",

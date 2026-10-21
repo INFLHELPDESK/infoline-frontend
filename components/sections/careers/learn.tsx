@@ -1,11 +1,18 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Eyebrow } from "@/components/sections/home-1/shared";
-import { Reveal, MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
+import { ArrowRight } from "lucide-react";
+import Button from "@/components/ui/button";
+import { Reveal, MaskText } from "@/components/ui/motion";
 
 /**
  * "Why join" — dark panel with a centred header and the four proof points as a
  * column of alternating light / brand cards (Figma Careers › section#partners).
+ *
+ * The cards follow the Scroll Stack pattern: each one pins (`sticky`) as it
+ * reaches the top offset and the next card slides over it, so scrolling back
+ * reverses the stack for free. Reduced motion falls back to a plain column.
+ * Below the stack sits the "Ready for your next role?" glass CTA.
  */
 export default function Learn() {
   const t = useTranslations("CareersPage");
@@ -15,7 +22,7 @@ export default function Learn() {
     <section className="bg-white pt-20 pb-28">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
-          className="relative overflow-hidden rounded-2xl bg-[#0D161B]"
+          className="relative overflow-clip rounded-2xl bg-[#0D161B]"
           amount={0.25}
           duration={1.1}
         >
@@ -48,21 +55,13 @@ export default function Learn() {
               {t("learn.body")}
             </p>
 
-            <Stagger
-              as="ul"
-              className="mt-9 flex w-full max-w-[265px] flex-col gap-9"
-              stagger={0.12}
-              delayChildren={0.1}
-              amount={0.15}
-            >
+            <ul className="mt-9 flex w-full max-w-[265px] flex-col gap-9">
               {chips.map((chip, i) => {
                 const brand = i % 2 === 1;
                 return (
-                  <StaggerItem
-                    as="li"
+                  <li
                     key={chip}
-                    distance={28}
-                    className={`flex min-h-[210px] flex-col gap-6 rounded-[20px] px-6 pt-5 pb-8 text-start ${
+                    className={`sticky top-28 flex min-h-[210px] flex-col gap-6 rounded-[20px] px-6 pt-5 pb-8 text-start motion-reduce:static ${
                       brand
                         ? "bg-brandblue-500 text-white"
                         : "bg-[#d7eaf4] text-brandblue-600"
@@ -77,10 +76,43 @@ export default function Learn() {
                       className="size-9 flex-none"
                     />
                     <p className="text-[28px] leading-8 font-medium">{chip}</p>
-                  </StaggerItem>
+                  </li>
                 );
               })}
-            </Stagger>
+            </ul>
+
+            <div className="mt-14 flex w-full max-w-[1162px] flex-col gap-6 rounded-[20px] border border-brandblue-500/60 bg-[rgba(29,38,43,0.6)] p-6 text-start shadow-[0_24px_40px_0_rgba(62,193,240,0.12)] backdrop-blur-[6px] lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:p-8">
+              <div className="flex max-w-[687px] flex-col gap-3">
+                <h3 className="text-[24px] leading-7 font-semibold text-white">
+                  {t("learn.cta.title")}
+                </h3>
+                <p className="text-[16px] leading-6 text-[#CFD8DC]">
+                  {t("learn.cta.description")}
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
+                <Button
+                  href={t("learn.cta.primary.href")}
+                  size="md"
+                  variant="primary"
+                  icon={ArrowRight}
+                  iconPosition="right"
+                  className="h-11! text-[16px]!"
+                >
+                  {t("learn.cta.primary.label")}
+                </Button>
+                {/* Destination not confirmed yet — kept disabled, no link. */}
+                <Button
+                  type="button"
+                  disabled
+                  size="md"
+                  variant="secondary"
+                  className="h-11! cursor-not-allowed border-[#cfd8dc]! bg-white! text-[16px]! text-slate-600! opacity-60 hover:bg-white!"
+                >
+                  {t("learn.cta.secondary.label")}
+                </Button>
+              </div>
+            </div>
           </div>
         </Reveal>
       </div>
