@@ -62,30 +62,31 @@ export function Reveal({
   const isRtl = useLocale() === "ar";
   const MotionTag = motion[as] as typeof motion.div;
 
-  if (reduce) {
-    return (
-      <MotionTag
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once, amount }}
-        transition={{ duration: 0.4, ease: "easeOut", delay }}
-        className={className}
-      >
-        {children}
-      </MotionTag>
-    );
-  }
-
   const { x, y } = directionOffset(direction, distance, isRtl);
 
+  // `initial` must not depend on `reduce`: the server always renders it with
+  // reduce=false, and a client-only difference would leave the server's
+  // blur/offset in the DOM forever. Reduced motion instead snaps x/y/filter to
+  // their final values on reveal (no travel, no blur) and only fades.
   return (
     <MotionTag
       initial={{ opacity: 0, x, y, filter: blur ? "blur(14px)" : "blur(0px)" }}
       whileInView={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
       viewport={{ once, amount }}
-      transition={{ duration, ease: EASE, delay }}
+      transition={
+        reduce
+          ? {
+              duration: 0.4,
+              ease: "easeOut",
+              delay,
+              x: { duration: 0, delay },
+              y: { duration: 0, delay },
+              filter: { duration: 0, delay },
+            }
+          : { duration, ease: EASE, delay }
+      }
       className={className}
-      style={{ willChange: "transform, opacity, filter" }}
+      style={reduce ? undefined : { willChange: "transform, opacity, filter" }}
     >
       {children}
     </MotionTag>
