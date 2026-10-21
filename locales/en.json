@@ -2042,7 +2042,7 @@
       ]
     },
     "industries": {
-      "eyebrow": "Industries",
+      "eyebrow": "CX / Industries",
       "title": "If you think in sectors, start here instead.",
       "description": "Each sector page names the operations we already run there, the regulatory constraints we work inside, and the client results we can put in front of an evaluation committee.",
       "exploreLabel": "Explore sector",
