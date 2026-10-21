@@ -16,7 +16,7 @@ const WP_ENTRY = /^(lib\/wp\/|providers\/|lib\/content-adapters\.)/;
  * is the deliberate act of wiring another route.
  */
 const WIRED_ROUTE_FILES = [
-  "app/[locale]/insights/page.tsx",
+  "app/[locale]/(site)/insights/page.tsx",
   "components/sections/insights/formats-live.tsx",
   "lib/insights-feed.ts",
   "lib/blog-post.ts",
@@ -147,7 +147,7 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
 
   describe("the detector itself", () => {
     it("resolves aliases and relative paths to real modules", () => {
-      expect(resolveModule("app/[locale]/page.tsx", "@/lib/site")).toBe("lib/site.ts");
+      expect(resolveModule("app/[locale]/(site)/page.tsx", "@/lib/site")).toBe("lib/site.ts");
       expect(resolveModule("lib/forms/index.ts", "../site")).toBe("lib/site.ts");
       expect(resolveModule("lib/wp/api.ts", "./client")).toBe("lib/wp/client.ts");
       expect(resolveModule("x.ts", "react")).toBeNull();
@@ -167,8 +167,8 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
     });
 
     it("reports a non-route module that reaches a wired-route module", () => {
-      const hits = findWpReach(["app/[locale]/blog/page.tsx"], ["lib/site.ts"]);
-      expect(hits.get("lib/site.ts")).toBe("app/[locale]/blog/page.tsx -> lib/site.ts");
+      const hits = findWpReach(["app/[locale]/(site)/blog/page.tsx"], ["lib/site.ts"]);
+      expect(hits.get("lib/site.ts")).toBe("app/[locale]/(site)/blog/page.tsx -> lib/site.ts");
     });
 
     it("reports a chain when a module outside the WP layer reaches it", () => {

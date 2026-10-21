@@ -5,7 +5,6 @@ import Industries from "@/components/sections/home-1/industries";
 import WhatChanges from "@/components/sections/home-1/what-changes";
 import Proof from "@/components/sections/home-1/proof";
 import ThreeWays from "@/components/sections/home-1/three-ways";
-import Cta from "@/components/sections/home-1/cta";
 
 export default function HomePage() {
   return (
@@ -17,7 +16,6 @@ export default function HomePage() {
       <WhatChanges />
       <Proof />
       <ThreeWays />
-      <Cta />
     </main>
   );
 }

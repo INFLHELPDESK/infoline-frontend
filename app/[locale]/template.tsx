@@ -18,10 +18,18 @@ export default function Template({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
 
   return (
+    // `initial` must not depend on `reduce`: the server always renders it with
+    // reduce=false, and a client-only difference would leave the server's
+    // translateY(14px) in the DOM forever. Reduced motion instead snaps `y` to
+    // 0 on mount (no travel) and only fades.
     <motion.div
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
-      animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      transition={{ duration: reduce ? 0.25 : 0.6, ease: EASE }}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={
+        reduce
+          ? { duration: 0.25, ease: EASE, y: { duration: 0 } }
+          : { duration: 0.6, ease: EASE }
+      }
     >
       {children}
     </motion.div>

@@ -113,7 +113,7 @@ Motion is the most fragile thing to test, so the suite follows these rules
 |---|---|
 | Industry rail auto-advance (fake clock), reduced-motion opt-out, keyboard focus, tap-to-open | `motion/motion.spec.ts` |
 | Blog article sticky rail (`top-32`) pins within its range and scrolls outside it | `motion/motion.spec.ts` |
-| Template page entrance settles with no lasting transform (motion on); D-7 under reduced motion | `motion/motion.spec.ts` |
+| Template page entrance settles with no lasting transform (motion on and reduced; D-7 fixed), see also `motion/page-template.spec.ts` | `motion/motion.spec.ts` |
 | Home hero heading visible and settled under reduced motion | `motion/motion.spec.ts` |
 | Home page CLS while loading and scrolling | `motion/motion.spec.ts` |
 | Header theme on scroll and on the light-hero Contact page | `navigation/header.spec.ts` |

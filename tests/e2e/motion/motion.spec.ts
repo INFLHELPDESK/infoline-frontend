@@ -143,23 +143,15 @@ test.describe("reduced motion", () => {
     await expect(heading).toBeInViewport();
   });
 
-  test("[D-7] template entrance leaves no lasting transform on the page wrapper", async ({
+  test("template entrance leaves no lasting transform on the page wrapper (was D-7)", async ({
     page,
   }) => {
-    test.info().annotations.push({
-      type: "known-defect",
-      description:
-        "D-7: app/[locale]/template.tsx hydrates with y:14 then animates opacity only, so translateY(14px) persists",
-    });
     await page.goto("/en/about");
+    await waitForHydration(page);
     const wrapper = page.locator("main").locator("xpath=..");
     await waitForStableStyle(wrapper);
     await expect(wrapper).toHaveCSS("opacity", "1");
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    await expect(wrapper).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 14)");
-
-    test.fail(); // from here on: the defect itself
-    await expect(wrapper).toHaveCSS("transform", "none", { timeout: 1_000 });
+    await expect(wrapper).toHaveCSS("transform", "none");
   });
 });
 

@@ -421,6 +421,8 @@ function blogScenario(name: string, outcome: "error" | "not-found") {
       expect(asks).toHaveLength(outcome === "error" ? asksPerRender : 1);
       for (const ask of asks) expect(ask.scenario).toBe(name);
       expect(html).not.toContain("Second paragraph.");
+      // Neither the 500 page nor the soft 404 carries the shared closing CTA.
+      expect(html).not.toMatch(new RegExp(String.raw`<h2[^>]*>\s*${messages.en.HomeV1.cta.title}`));
       expect(await stubOps("Posts")).toHaveLength(0); // never got as far as a locale check
       if (outcome === "error") {
         expect(res.status()).toBe(500);

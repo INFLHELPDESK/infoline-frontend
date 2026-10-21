@@ -7,6 +7,7 @@ import Article from "@/components/sections/blog/article";
 import { nextBlogPosts, type BlogPost } from "@/lib/blog";
 import { decodeSlug, loadBlogPost } from "@/lib/blog-post";
 import { localeAlternates, singleLocaleAlternates } from "@/lib/site";
+import Cta from "@/components/sections/home-1/cta";
 import ErrorPage, { errorButtonClass } from "@/components/sections/error/error-page";
 
 type Params = Promise<{ locale: string; slug: string }>;
@@ -72,11 +73,16 @@ export default async function BlogPostPage({ params }: { params: Params }) {
     (p) => p.slug !== post.slug,
   );
 
+  // The soft 404 above is a normal page of this route, so the group layout
+  // cannot tell it apart: the shared CTA is rendered here, for found posts only.
   return (
-    <main className="overflow-x-clip">
-      <SingleHero post={post} />
-      <Article post={post} morePosts={morePosts} />
-    </main>
+    <>
+      <main className="overflow-x-clip">
+        <SingleHero post={post} />
+        <Article post={post} morePosts={morePosts} />
+      </main>
+      <Cta />
+    </>
   );
 }
 

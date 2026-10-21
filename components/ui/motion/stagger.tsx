@@ -89,25 +89,29 @@ export function StaggerItem({
   const isRtl = useLocale() === "ar";
   const MotionTag = motion[as] as typeof motion.div;
 
-  let variants: Variants;
-  if (reduce) {
-    variants = {
-      hidden: { opacity: 0 },
-      show: { opacity: 1, transition: { duration: 0.4, ease: "easeOut" } },
-    };
-  } else {
-    const { x, y } = directionOffset(direction, distance, isRtl);
-    variants = {
-      hidden: { opacity: 0, x, y, filter: blur ? "blur(10px)" : "blur(0px)" },
-      show: {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        filter: "blur(0px)",
-        transition: { duration, ease: EASE },
-      },
-    };
-  }
+  // `hidden` must not depend on `reduce`: the server always renders it with
+  // reduce=false, and a client-only difference would leave the server's
+  // blur/translate in the DOM forever. Reduced motion instead snaps x/y/filter
+  // to their final values on reveal (no travel, no blur) and only fades.
+  const { x, y } = directionOffset(direction, distance, isRtl);
+  const variants: Variants = {
+    hidden: { opacity: 0, x, y, filter: blur ? "blur(10px)" : "blur(0px)" },
+    show: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      filter: "blur(0px)",
+      transition: reduce
+        ? {
+            duration: 0.4,
+            ease: "easeOut",
+            x: { duration: 0 },
+            y: { duration: 0 },
+            filter: { duration: 0 },
+          }
+        : { duration, ease: EASE },
+    },
+  };
 
   return (
     <MotionTag
