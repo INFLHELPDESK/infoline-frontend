@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { Eyebrow } from "@/components/sections/home-1/shared";
 import Icon from "@/components/ui/icon";
 import Button from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 import { EASE } from "@/components/ui/motion/shared";
 
@@ -31,6 +32,7 @@ export default function Catalogue() {
   const t = useTranslations("SolutionsPage");
   const services = t.raw("catalogue.services") as Service[];
   const coversLabel = t("catalogue.coversLabel");
+  const managed = useTranslations("SolutionsPage.managedBranch");
   const reduce = useReducedMotion();
 
   const [activeId, setActiveId] = useState(services[0].id);
@@ -148,6 +150,21 @@ export default function Catalogue() {
                   </button>
                 );
               })}
+              {/* 09 — its own detail route rather than an in-card view. */}
+              <Link
+                href="/solutions/managed-branch-retail"
+                className="group relative flex shrink-0 flex-col items-start border-s-2 border-transparent p-4 text-start transition-colors hover:bg-slate-50 lg:w-full lg:shrink"
+              >
+                <span className="relative z-10 flex items-center gap-2 text-[13px] leading-5 font-medium">
+                  <span className="tabular-nums text-slate-400">
+                    {managed("number")}
+                  </span>
+                  <span className="text-slate-900">{managed("title")}</span>
+                </span>
+                <span className="relative z-10 ps-6 text-[13px] leading-5 text-slate-400">
+                  {managed("family")}
+                </span>
+              </Link>
             </div>
           </div>
 

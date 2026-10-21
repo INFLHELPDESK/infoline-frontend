@@ -216,23 +216,23 @@
   "SolutionsPage": {
     "hero": {
       "eyebrow": "Solutions",
-      "titleLead": "Trusted operations. Eight ways to improve",
+      "titleLead": "Trusted operations. Nine ways to improve",
       "titleAccent": "performance",
       "description": "Choose the full operating model or the capability you need most. Every service is built around clear ownership, trusted delivery and a measurable outcome.",
       "primaryCta": {
-        "label": "Talk to an expert",
+        "label": "Talk to Our Team",
         "href": "/contact"
       },
       "secondaryCta": {
-        "label": "See how they combine",
+        "label": "Book a CX Workshop",
         "href": "#catalogue"
       },
       "indexLabel": "The catalogue"
     },
     "catalogue": {
       "eyebrow": "The catalogue",
-      "title": "Eight services, one operating model",
-      "description": "Infoline's service catalogue is built around eight modular services. Each can be delivered independently or combined into one operating model, with agreed measures, governance and accountability.",
+      "title": "Nine services, one operating model",
+      "description": "Infoline's service catalogue is built around nine modular services. Each can be delivered independently or combined into one operating model, with agreed measures, governance and accountability.",
       "coversLabel": "What this covers",
       "services": [
         {
@@ -489,10 +489,14 @@
     "partner": {
       "eyebrow": "For technology and solution partners",
       "title": "Build trusted solutions with Infoline",
-      "description": "Have a platform, capability or solution that strengthens customer operations in Oman? We are open to strategic and technology partnerships where the fit is clear.",
+      "description": "Explore a technology or strategic partnership with our team.",
       "cta": {
-        "label": "Explore a partnership",
+        "label": "Explore a Partnership",
         "href": "/contact"
+      },
+      "secondaryCta": {
+        "show": true,
+        "label": "Partner with Infoline"
       }
     },
     "faq": {
@@ -501,7 +505,7 @@
       "items": [
         {
           "q": "Can Infoline run only part of our operation?",
-          "a": "Yes. Each of the eight services can be delivered on its own or combined into one operating model. Delivery can sit fully at Infoline, inside your premises, or be applied to your existing team through Infoline's management model."
+          "a": "Yes. Each of the nine services can be delivered on its own or combined into one operating model. Delivery can sit fully at Infoline, inside your premises, or be applied to your existing team through Infoline's management model."
         },
         {
           "q": "How is performance measured?",

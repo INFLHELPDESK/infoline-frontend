@@ -1,16 +1,16 @@
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Button from "@/components/ui/button";
-import { Reveal, Parallax } from "@/components/ui/motion";
+import { Reveal } from "@/components/ui/motion";
+import PartnerCtaVideo from "./partner-cta-video";
 
 /**
- * Partner call-to-action banner. Reuses the home "Options" banner pattern:
- * a <Reveal>-wrapped brandblue panel with a parallax background image and a
- * white CTA button.
+ * Partner call-to-action banner: a <Reveal>-wrapped panel with a looping
+ * background video (static image fallback, see PartnerCtaVideo) and a CTA button.
  */
 export default function PartnerCta() {
   const t = useTranslations("SolutionsPage");
+  const showSecondary = t.raw("partner.secondaryCta.show") === true;
 
   return (
     <section className="bg-white pb-6xl">
@@ -21,21 +21,7 @@ export default function PartnerCta() {
           amount={0.25}
           duration={1.15}
         >
-          {/* Background image — drifts on scroll (desktop only), oversized so the
-              parallax translation never exposes an edge. */}
-          <Parallax
-            className="pointer-events-none absolute inset-x-0 -inset-y-[20%]"
-            speed={0.12}
-          >
-            <Image
-              src="/assets/options/bg.jpg"
-              alt=""
-              fill
-              aria-hidden
-              className="object-cover object-top-right"
-              priority={false}
-            />
-          </Parallax>
+          <PartnerCtaVideo />
 
           <div className="relative z-10 flex flex-col items-start gap-6">
             <div className="flex max-w-[688px] flex-col gap-3">
@@ -56,6 +42,20 @@ export default function PartnerCta() {
               >
                 {t("partner.cta.label")}
               </Button>
+              {/* Pending integration: no confirmed destination yet, so it renders
+                  as a disabled button rather than a placeholder link. The Arabic
+                  label is awaiting client approval: the ar `show` flag stays
+                  false (its label is an English placeholder, never rendered). */}
+              {showSecondary && (
+                <Button
+                  size="md"
+                  variant="secondary"
+                  disabled
+                  className="cursor-not-allowed opacity-60 hover:border-white/18 hover:bg-transparent"
+                >
+                  {t("partner.secondaryCta.label")}
+                </Button>
+              )}
             </div>
           </div>
         </Reveal>

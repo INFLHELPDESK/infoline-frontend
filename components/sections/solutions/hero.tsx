@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { PillButton } from "@/components/sections/home-1/shared";
+import { Link } from "@/i18n/navigation";
 import { MainBackground } from "@/components/ui/background";
 import { Stagger, StaggerItem, MaskText } from "@/components/ui/motion";
 
@@ -15,6 +16,7 @@ type IndexService = {
 export default function Hero() {
   const t = useTranslations("SolutionsPage");
   const services = t.raw("catalogue.services") as IndexService[];
+  const managed = useTranslations("SolutionsPage.managedBranch");
 
   const handleServiceClick = (id: string) => {
     const hash = `cat-${id}`;
@@ -134,6 +136,19 @@ export default function Hero() {
                   </button>
                 </StaggerItem>
               ))}
+              <StaggerItem as="li" distance={28}>
+                <Link
+                  href="/solutions/managed-branch-retail"
+                  className="group flex w-full items-center gap-2.5 border-b border-[rgba(224,224,224,0.12)] py-3 text-start text-[13px] transition-[background-color,transform] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-white/[.02] hover:translate-x-3 rtl:hover:-translate-x-3"
+                >
+                  <span className="text-[13px] leading-4 uppercase tracking-[1.5px] tabular-nums text-slate-400 group-hover:text-brandblue-400">
+                    {managed("number")}
+                  </span>
+                  <span className="flex-1 text-[13px] leading-5 text-slate-200 transition-colors group-hover:text-white">
+                    {managed("title")}
+                  </span>
+                </Link>
+              </StaggerItem>
             </Stagger>
           </div>
         </div>

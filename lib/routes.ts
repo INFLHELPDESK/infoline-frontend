@@ -10,6 +10,7 @@ export const SITEMAP_PATHS = [
   "/about",
   "/industries",
   "/solutions",
+  "/solutions/managed-branch-retail",
   "/case-studies",
   "/careers",
   "/insights",
