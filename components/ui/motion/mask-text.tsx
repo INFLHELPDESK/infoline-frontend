@@ -16,7 +16,7 @@ import { EASE } from "./shared";
  *
  * i18n / RTL: the reveal is purely vertical, so it is inherently direction-safe.
  * Words keep DOM order, so the browser handles bidi shaping and wrapping.
- * Respects `prefers-reduced-motion` (renders a plain fade, no split or travel).
+ * Respects `prefers-reduced-motion` (words fade in place: no travel, no blur).
  *
  * Standalone it self-triggers on scroll (`whileInView`). Pass `orchestrated` to
  * drop it inside a <Stagger> instead: it then declares only its `hidden`/`show`
@@ -36,7 +36,11 @@ const containerVariants = (
   show: { transition: { staggerChildren, delayChildren } },
 });
 
-const wordVariants = (duration: number, blur: boolean): Variants => ({
+const wordVariants = (
+  duration: number,
+  blur: boolean,
+  reduce: boolean,
+): Variants => ({
   hidden: {
     y: "112%",
     opacity: 0,
@@ -46,7 +50,15 @@ const wordVariants = (duration: number, blur: boolean): Variants => ({
     y: "0%",
     opacity: 1,
     ...(blur ? { filter: "blur(0px)" } : {}),
-    transition: { duration, ease: EASE },
+    // Reduced motion: fade only; travel and blur snap straight to their end values.
+    transition: reduce
+      ? {
+          duration: 0.4,
+          ease: "easeOut",
+          y: { duration: 0 },
+          filter: { duration: 0 },
+        }
+      : { duration, ease: EASE },
   },
 });
 
@@ -104,34 +116,15 @@ export function MaskText({
     ? {}
     : ({ initial: "hidden", whileInView: "show", viewport: { once, amount } } as const);
 
-  if (reduce) {
-    // Still expose hidden/show variants so an orchestrating parent can fade us in.
-    return (
-      <MotionTag
-        className={className}
-        variants={{
-          hidden: { opacity: 0 },
-          show: { opacity: 1, transition: { duration: 0.4, ease: "easeOut" } },
-        }}
-        {...(orchestrated
-          ? {}
-          : {
-              initial: "hidden",
-              whileInView: "show",
-              viewport: { once, amount },
-            })}
-      >
-        {segments.map((s) => s.text).join(" ")}
-      </MotionTag>
-    );
-  }
-
-  const wv = wordVariants(duration, blur);
+  // The split tree must not depend on `reduce`: the server always renders it with
+  // reduce=false, so a client-only branch would leave the server's hidden words
+  // in the DOM forever (same hazard as Reveal).
+  const wv = wordVariants(duration, blur, !!reduce);
 
   return (
     <MotionTag
       className={className}
-      variants={containerVariants(stagger, delayChildren)}
+      variants={containerVariants(reduce ? 0 : stagger, reduce ? 0 : delayChildren)}
       {...trigger}
     >
       {segments.map((seg, si) => {
