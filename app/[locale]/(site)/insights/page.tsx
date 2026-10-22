@@ -32,10 +32,33 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+const WORDS_PER_MINUTE = 200;
+
+/**
+ * Adds date, excerpt and reading time to a static card from the locale blog
+ * post it links to (matched by slug). Reading time is computed from that
+ * post's body; a card with no matching post stays as it was.
+ */
+function withPostDetails(item: Insight, posts: BlogPost[]): Insight {
+  const post = posts.find((p) => item.href === `/blog/${p.slug}`);
+  if (!post) return item;
+  const words = post.body.join(" ").split(/\s+/).filter(Boolean).length;
+  return {
+    ...item,
+    // Same label the Blog pages show for this post.
+    dateLabel: post.dateLabel || undefined,
+    excerpt: post.excerpt || undefined,
+    readMinutes: words ? Math.max(1, Math.ceil(words / WORDS_PER_MINUTE)) : undefined,
+  };
+}
+
 export default async function InsightsPage() {
   const [t, locale] = await Promise.all([getTranslations(), getLocale()]);
   // Static locale items: the fallback whenever the CMS has no usable posts.
-  const insights = t.raw("Insights.items") as Insight[];
+  const staticPosts = t.raw("Blog.posts") as BlogPost[];
+  const insights = (t.raw("Insights.items") as Insight[]).map((item) =>
+    withPostDetails(item, staticPosts),
+  );
 
   // One QueryClient per request (never shared between users); the prefetch
   // fills it and the boundary hands it to the client for hydration.
@@ -47,7 +70,6 @@ export default async function InsightsPage() {
   // locale posts, or a CMS post the detail route can show); otherwise it stays
   // a plain, non-clickable card. Lookups share the Next data cache with the
   // detail route and never touch this page's dehydrated QueryClient.
-  const staticPosts = t.raw("Blog.posts") as BlogPost[];
   const cards =
     feed.source === "cms"
       ? (queryClient.getQueryData(wpKeys.latestPosts(wpLocale, INSIGHTS_LIMIT)) as PostCard[] | undefined) ?? []

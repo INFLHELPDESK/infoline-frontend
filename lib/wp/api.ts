@@ -1,3 +1,4 @@
+import { stripHtml } from "@/lib/content-adapters";
 import { wpFetch, wpNodes } from "./client";
 import {
   SERVICE_BY_URI,
@@ -501,16 +502,27 @@ export async function getPosts(
  * that many, and only the card fields (first category) are kept, so the result
  * is small enough to dehydrate into a page.
  */
+/** Longest teaser excerpt carried to the browser; the card clamps it to two lines. */
+const CARD_EXCERPT_MAX = 160;
+
+function cardExcerpt(html: string | null): string | null {
+  const text = stripHtml(html);
+  if (!text) return null;
+  return text.length > CARD_EXCERPT_MAX ? `${text.slice(0, CARD_EXCERPT_MAX).trimEnd()}…` : text;
+}
+
 export async function getLatestPostCards(
   locale: WpLocale = "en",
   first = 3,
 ): Promise<PostCard[]> {
   const posts = await getPosts(locale, first);
-  return posts.slice(0, first).map(({ title, slug, image, categories }) => ({
+  return posts.slice(0, first).map(({ title, slug, image, categories, date, excerpt }) => ({
     title,
     slug,
     image,
     categories: categories.slice(0, 1),
+    date,
+    excerpt: cardExcerpt(excerpt),
   }));
 }
 

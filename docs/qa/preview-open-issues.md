@@ -134,14 +134,19 @@ Copy this block for new issues.
   - [ ] Only `InsightsPage.proof.description` and `InsightsPage.formats.allCta.label` in `locales/ar.json` change.
   - [ ] Verified in RTL at 1440, 768 and 390px.
 
-### PQA-009 — Insights / Formats article cards — Figma metadata and action missing
+### PQA-009 — Insights / Formats article cards — remaining content gaps
 
 - **Page:** Insights (`/insights`) — Formats cards, `components/sections/insights/formats.tsx`
 - **Priority:** Medium
-- **Status:** OPEN — NEEDS DESIGN/CONTENT DECISION
-- **Description:** The approved Figma cards show a metadata row (category, date, read time), a two-line excerpt and a "Read More →" action. The implemented cards show only image, category and title (and the whole card is the link). Left unchanged in Issue #07 by instruction.
-- **Dependency:** Confirmation that the Figma card is the target, and a decision on data source (`Insight` in `lib/insights.ts`, static fallback items, CMS adapter `toInsights`). Date and read time need CMS fields or a derivation rule; Arabic date format and "Read More" label need approved copy.
+- **Status:** PARTIAL — layout, date, excerpt and Read more implemented; content dependencies remain
+- **Description:** Cards now render category, localized date, two-line excerpt and a "Read more →" affordance (inside the single card link). CMS cards take date and excerpt from the existing `posts` query (no contract change; the card projection now keeps `date` and a 160-character plain-text excerpt). Remaining gaps:
+  1. **Reading time (CMS):** WordPress returns no reading-time field and the list query carries no body, so CMS cards show none. Static fallback cards compute it from the locale post body (200 wpm).
+  2. **Static fallback content vs Figma:** the Figma sample shows "26 sep / 24 sep / 22 sep 2026", different excerpts, and titles for cards 2 and 3 that do not exist in the locale content. Static cards keep their own dates (17 Sep, 2 Aug, 10 Jun 2026) and excerpts from `Blog.posts`. The COPC card's excerpt there describes a utilities contact-centre story, which looks mismatched with its title.
+  3. **Static date data:** `Blog.posts` stores ISO dates in 2025 but display labels in 2026 (e.g. `2025-09-17` vs "17 Sep 2026"). Cards show the display label, as the Blog pages do; the source data needs a correction.
+  4. **Label:** the action reuses the approved `Blog.page.readMore` ("Read more" / "اقرأ المزيد"); Figma shows "Read More".
+- **Dependency:** Backend decision on a reading-time field (or approval to fetch post content for the cards); client-approved static card copy and dates; confirmation of the "Read More" capitalisation.
 - **Acceptance criteria:**
-  - [ ] Cards show category, date, read time, excerpt and "Read More" per Figma, from CMS data with a static fallback.
-  - [ ] No new CMS contract fields without backend sign-off; payload-size E2E checks (`NON_CARD_FIELDS`) updated deliberately.
-  - [ ] Arabic and RTL verified at 1440, 768 and 390px.
+  - [ ] CMS cards show reading time from an approved source, or the design drops it for CMS content.
+  - [ ] Static card dates, excerpts and titles match the approved content (including the COPC excerpt).
+  - [ ] `Blog.posts` ISO `date` and `dateLabel` agree for every post, in English and Arabic.
+  - [ ] Action label matches Figma in English and Arabic.

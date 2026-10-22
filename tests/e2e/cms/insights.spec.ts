@@ -47,7 +47,7 @@ for (const locale of locales) {
       for (const dropped of NON_CARD_FIELDS) {
         expect(payloadHasKey(payload, dropped), `payload must not carry ${dropped}`).toBe(false);
       }
-      expect(payload.length).toBeLessThan(1_500);
+      expect(payload.length).toBeLessThan(2_200);
 
       // SEO is unchanged: metadata still comes from locale copy, never the CMS.
       expect(html).toContain(`<link rel="canonical" href="${baseURL}/${locale}/insights"`);
@@ -77,6 +77,14 @@ for (const locale of locales) {
         `/${locale}/blog/${SLUG[locale]}`,
       );
       await expect(section.locator("[data-unlinked]")).toHaveCount(0);
+
+      // The CMS card carries its own date, excerpt and Read more; reading time
+      // is not a CMS field, so none is shown.
+      const card = section.getByRole("link", { name: new RegExp(SEASONAL[locale]) });
+      await expect(card).toContainText(locale === "ar" ? "مارس" : "Mar 2026");
+      await expect(card).toContainText(messages[locale].Blog.page.readMore);
+      await expect(card).not.toContainText(/\d\s?(min|د)(\s|$)/);
+      await expect(card.locator("a")).toHaveCount(0);
 
       // Hydration kept the server markup (no swap back to static or to loading).
       await page.waitForLoadState("networkidle");

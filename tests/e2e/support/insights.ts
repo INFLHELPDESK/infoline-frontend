@@ -28,4 +28,4 @@ export function payloadHasKey(payload: string, key: string): boolean {
 }
 
 /** Fields a whole CMS list item has and a teaser card must not. */
-export const NON_CARD_FIELDS = ["databaseId", "excerpt", "uri", "date", "content"];
+export const NON_CARD_FIELDS = ["databaseId", "uri", "content"];

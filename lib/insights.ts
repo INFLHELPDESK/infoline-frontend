@@ -2,6 +2,14 @@ export type Insight = {
   category: string;
   title: string;
   image: string;
+  /** ISO publication date, shown when the source has one. */
+  date?: string;
+  /** Ready-made localized date (static posts); wins over `date`. */
+  dateLabel?: string;
+  /** Plain-text teaser, clamped by the card. */
+  excerpt?: string;
+  /** Whole minutes to read; only set when it can be computed from article text. */
+  readMinutes?: number;
   /** Empty when the card has no page to link to. */
   href: string;
 };

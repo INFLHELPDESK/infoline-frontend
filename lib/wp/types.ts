@@ -215,7 +215,10 @@ export type PostListItem = {
  * image). What the Insights route caches and sends to the browser, instead of
  * whole list items.
  */
-export type PostCard = Pick<PostListItem, "title" | "slug" | "image" | "categories">;
+export type PostCard = Pick<PostListItem, "title" | "slug" | "image" | "categories" | "date"> & {
+  /** Plain-text excerpt (HTML stripped, length-capped) or null. */
+  excerpt: string | null;
+};
 
 export type Post = PostListItem & {
   /** Raw HTML post body. */

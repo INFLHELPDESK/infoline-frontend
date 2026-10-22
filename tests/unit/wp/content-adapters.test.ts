@@ -65,7 +65,16 @@ describe("toBlogPost", () => {
 
 describe("toInsight", () => {
   it("links to /blog/<slug> and falls back for category and image", () => {
-    expect(toInsight(base)).toEqual({ category: "Cat", title: "Title", image: "/img.jpg", href: "/blog/title" });
+    expect(toInsight(base)).toEqual({
+      category: "Cat",
+      title: "Title",
+      image: "/img.jpg",
+      date: "2026-03-05T09:30:00",
+      excerpt: "Excerpt & more text",
+      href: "/blog/title",
+    });
+    // Missing optional fields stay absent instead of rendering empty values.
+    expect(toInsight({ ...base, date: "", excerpt: null })).toMatchObject({ date: undefined, excerpt: undefined });
     expect(toInsight({ ...base, categories: [], image: null })).toMatchObject({
       category: "Insights",
       image: "/assets/insights/i1.svg",

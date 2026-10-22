@@ -79,3 +79,52 @@ describe("Insights formats actions", () => {
     expect(container.querySelector('a[href="/blog"]')?.textContent).toBe("View all");
   });
 });
+
+describe("Insights article cards", () => {
+  const full = {
+    category: "Customer Experience",
+    title: "Full card",
+    image: "/x.png",
+    href: "/blog/full",
+    date: "2026-09-26",
+    excerpt: "A short plain-text teaser.",
+    readMinutes: 6,
+  };
+  const bare = { category: "Cat", title: "Bare card", image: "/y.png", href: "/blog/bare" };
+  const plain = { ...bare, title: "Plain card", href: "" };
+
+  it("renders category, localized date, reading time, excerpt and Read more (en)", () => {
+    const { container } = wrap("en", en, <Formats insights={[full]} />);
+    const card = container.querySelector('a[href="/blog/full"]')!;
+    const meta = card.querySelector("p")!.textContent!;
+    expect(meta).toContain("Customer Experience");
+    expect(meta).toContain("26 Sept 2026");
+    expect(meta).toMatch(/6\s?min/);
+    expect(card.querySelector("p.line-clamp-2")?.textContent).toBe(full.excerpt);
+    expect(card.textContent).toContain("Read more");
+    expect(card.querySelector("a")).toBeNull(); // one link per card, nothing nested
+    expect(card.querySelector('svg[class*="rtl:rotate-180"]')).not.toBeNull();
+  });
+
+  it("localizes the date and label in Arabic", () => {
+    const { container } = wrap("ar", ar as typeof en, <Formats insights={[full]} />);
+    const card = container.querySelector('a[href="/blog/full"]')!;
+    expect(card.querySelector("p")!.textContent).toContain("سبتمبر");
+    expect(card.textContent).toContain(ar.Blog.page.readMore);
+  });
+
+  it("omits missing optional fields without leaving empty chrome", () => {
+    const { container } = wrap("en", en, <Formats insights={[bare, plain]} />);
+    const cards = container.querySelectorAll("h3");
+    expect(cards).toHaveLength(2);
+    expect(container.querySelector("p.line-clamp-2")).toBeNull();
+    expect(container.querySelectorAll("span.w-px")).toHaveLength(0);
+    const metaOf = (title: string) =>
+      [...container.querySelectorAll("h3")].find((h) => h.textContent === title)!.previousElementSibling!;
+    expect(metaOf("Bare card").textContent).toBe("Cat");
+    // The unlinked card has no destination, so no Read more affordance.
+    const unlinked = container.querySelector("[data-unlinked]")!;
+    expect(unlinked.textContent).not.toContain("Read more");
+  });
+
+});

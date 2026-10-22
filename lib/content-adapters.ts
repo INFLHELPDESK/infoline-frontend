@@ -11,7 +11,7 @@ import type { Insight } from "@/lib/insights";
 /** Fallback card art for posts with no featured image (e.g. the WP default). */
 const DEFAULT_IMAGE = "/assets/insights/i1.svg";
 
-function stripHtml(html: string | null): string {
+export function stripHtml(html: string | null): string {
   return (html ?? "")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
@@ -72,6 +72,8 @@ export function toInsight(p: PostCard, linkable?: ReadonlySet<string>): Insight 
     category: p.categories[0]?.name || "Insights",
     title: p.title,
     image: p.image?.src || DEFAULT_IMAGE,
+    date: p.date || undefined,
+    excerpt: stripHtml(p.excerpt) || undefined,
     href: !linkable || linkable.has(p.slug) ? `/blog/${p.slug}` : "",
   };
 }

@@ -126,24 +126,24 @@ describe("loadInsightsFeed: not a CMS outcome -> rethrown", () => {
 });
 
 describe("bounded fetch and minimal hydration payload", () => {
-  const FIELDS = ["categories", "image", "slug", "title"];
+  const FIELDS = ["categories", "date", "excerpt", "image", "slug", "title"];
 
   it("asks the CMS for exactly the cards the page shows", async () => {
     await load();
     expect(stub.graphqlRequests()[0].variables).toMatchObject({ first: INSIGHTS_LIMIT, language: "EN" });
   });
 
-  it("dehydrates only teaser fields: no excerpt, date, id, uri or body", async () => {
+  it("dehydrates only teaser fields (incl. date and a short excerpt): no id, uri or body", async () => {
     const { qc } = await load();
     const dehydrated = dehydrate(qc);
     const cards = dehydrated.queries[0].state.data as PostCard[];
     expect(cards.length).toBeGreaterThan(0);
     for (const card of cards) expect(Object.keys(card).sort()).toEqual(FIELDS);
     const json = JSON.stringify(dehydrated);
-    for (const dropped of ["excerpt", "databaseId", "uri", "date", "content"]) {
+    for (const dropped of ["databaseId", "uri", "content"]) {
       expect(json, dropped).not.toContain(`"${dropped}"`);
     }
-    expect(json.length).toBeLessThan(1_500);
+    expect(json.length).toBeLessThan(2_200);
   });
 
   it("does not touch the shared full-list cache entry", async () => {
@@ -169,10 +169,13 @@ describe("bounded fetch and minimal hydration payload", () => {
     const cards = await getLatestPostCards("en", INSIGHTS_LIMIT);
     expect(cards).toHaveLength(INSIGHTS_LIMIT);
     expect(cards.every((c) => c.categories.length === 1)).toBe(true);
+    // A 20 000-character excerpt is carried as a short plain-text teaser.
+    expect(cards.every((c) => c.excerpt !== null && c.excerpt.length <= 161)).toBe(true);
+    expect(cards.every((c) => !c.excerpt!.includes("<"))).toBe(true); // markup is stripped
 
     const qc = new QueryClient();
     await loadInsightsFeed(qc, "en");
-    expect(JSON.stringify(dehydrate(qc)).length).toBeLessThan(1_500); // not 200 KB
+    expect(JSON.stringify(dehydrate(qc)).length).toBeLessThan(2_200); // not 200 KB; measured worst case for 3 maximal cards is ~1.8 KB
   });
 });
 
