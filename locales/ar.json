@@ -1035,8 +1035,12 @@
       "title": "تريد معرفة كيف يمكننا دعم مؤسستك؟",
       "description": "نردّ خلال يوم عمل واحد.",
       "button": {
-        "label": "تحدث إلى خبير",
+        "label": "تحدّث مع فريقنا",
         "href": "/contact"
+      },
+      "secondaryButton": {
+        "label": "Explore Our Capabilities",
+        "href": "/solutions"
       }
     }
   },

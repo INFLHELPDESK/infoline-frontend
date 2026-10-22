@@ -109,3 +109,15 @@ Copy this block for new issues.
   - [ ] Arabic eyebrow matches the approved meaning of "Built on trust".
   - [ ] Only `AboutPage.accountability.eyebrow` in `locales/ar.json` changes; unrelated section text stays unchanged.
   - [ ] Verified in RTL at 1440, 768 and 390px.
+
+### PQA-007 — About / Closing CTA — Arabic copy mismatch
+
+- **Page:** About (`/about`) — Closing CTA, `components/sections/about/cta.tsx`
+- **Priority:** Medium
+- **Status:** PENDING CONTENT REVIEW
+- **Description:** English now reads "Start with your current operation and the outcome you need." (description), "Talk to Our Team" (primary) and "Explore Our Capabilities" (secondary, `/solutions`). The Arabic description in `AboutPage.cta.description` is still the previous "We respond within 1 business day" meaning. The Arabic primary label reuses the already-approved "تحدّث مع فريقنا" from `SolutionsPage`. `AboutPage.cta.secondaryButton.label` in `locales/ar.json` is an English placeholder (no approved Arabic exists; "استكشف الحلول" means "Explore solutions").
+- **Dependency:** Approved Arabic translations for the description and "Explore Our Capabilities". The English placeholder in `locales/ar.json` is a temporary stand-in for locale parity only and is NOT acceptable for final release; it must be replaced before launch.
+- **Acceptance criteria:**
+  - [ ] Arabic description and secondary label convey the approved English meaning.
+  - [ ] Only `AboutPage.cta` in `locales/ar.json` changes.
+  - [ ] Verified in RTL at 1440, 768 and 390px.

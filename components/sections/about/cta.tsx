@@ -44,15 +44,25 @@ export default function Cta() {
                 {t("cta.description")}
               </p>
             </div>
-            <Button
-              href={t("cta.button.href")}
-              size="md"
-              variant="primary"
-              icon={ArrowRight}
-              iconPosition="right"
-            >
-              {t("cta.button.label")}
-            </Button>
+            <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+              <Button
+                href={t("cta.button.href")}
+                size="md"
+                variant="primary"
+                icon={ArrowRight}
+                iconPosition="right"
+              >
+                {t("cta.button.label")}
+              </Button>
+              <Button
+                href={t("cta.secondaryButton.href")}
+                size="md"
+                variant="secondary"
+                className="border-white bg-white !text-ink hover:border-white hover:bg-white/90"
+              >
+                {t("cta.secondaryButton.label")}
+              </Button>
+            </div>
           </div>
         </Reveal>
       </div>

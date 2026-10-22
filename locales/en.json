@@ -1033,10 +1033,14 @@
     },
     "cta": {
       "title": "Want to know how we can support your organisation?",
-      "description": "We respond within 1 business day.",
+      "description": "Start with your current operation and the outcome you need.",
       "button": {
-        "label": "Talk to an expert",
+        "label": "Talk to Our Team",
         "href": "/contact"
+      },
+      "secondaryButton": {
+        "label": "Explore Our Capabilities",
+        "href": "/solutions"
       }
     }
   },
