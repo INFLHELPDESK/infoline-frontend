@@ -1511,7 +1511,9 @@
       ]
     },
     "callout": {
-      "title": "What results has Infoline delivered?",
+      "titleLead": "What",
+      "titleAccent": "results",
+      "titleTail": "has Infoline delivered?",
       "description": "The current Service Catalogue records a digital customer-experience programme that lifted Voice of Customer from 81.8% to 88.8% in six months and held above target for four, and a utilities contact-centre transformation that moved service level from 68% to 94% while cutting abandonment from 32% to 8%."
     },
     "themes": {
