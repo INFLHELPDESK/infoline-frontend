@@ -14,15 +14,19 @@ import {
 const WHO_MASK =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='519' height='412' viewBox='0 0 519 412'%3E%3Crect x='0' y='0' width='167' height='352' rx='20' fill='%23fff'/%3E%3Crect x='176' y='60' width='167' height='352' rx='20' fill='%23fff'/%3E%3Crect x='352' y='0' width='167' height='352' rx='20' fill='%23fff'/%3E%3C/svg%3E\")";
 
-// Figma shows the photo's right third in the left window and its left third in
-// the right window; the centre stays put. Each slice is one mask column (167 of
-// 519) holding the full photo, shifted so the intended region shows through.
+// Figma lays one horizontally mirrored photo across the three windows at full
+// container width, pulled up so the subjects sit in the windows (top offset
+// -166 of 412). Mirroring makes the outer people look inward. Each slice is one
+// mask column (167 of 519) holding that same photo, shifted back by the
+// slice's own left so the picture stays continuous across the windows.
 const WHO_SLICE_W = `${(167 / 519) * 100}%`;
 const WHO_FULL_W = `${(519 / 167) * 100}%`;
+const WHO_PHOTO_H = `${((519 * 1737) / 1400 / 412) * 100}%`;
+const WHO_PHOTO_TOP = `${-(166 / 412) * 100}%`;
 const WHO_SLICES = [
-  { left: "0%", shift: `${-(352 / 167) * 100}%` },
+  { left: "0%", shift: "0%" },
   { left: `${(176 / 519) * 100}%`, shift: `${-(176 / 167) * 100}%` },
-  { left: `${(352 / 519) * 100}%`, shift: "0%" },
+  { left: `${(352 / 519) * 100}%`, shift: `${-(352 / 167) * 100}%` },
 ];
 
 export default function WhoWeAre() {
@@ -88,8 +92,14 @@ export default function WhoWeAre() {
                 style={{ left: s.left, width: WHO_SLICE_W }}
               >
                 <div
-                  className="absolute inset-y-0"
-                  style={{ left: s.shift, width: WHO_FULL_W }}
+                  className="absolute"
+                  style={{
+                    left: s.shift,
+                    width: WHO_FULL_W,
+                    top: WHO_PHOTO_TOP,
+                    height: WHO_PHOTO_H,
+                    transform: "scaleX(-1)",
+                  }}
                 >
                   <Image
                     src="/assets/about/who-full.jpg"
