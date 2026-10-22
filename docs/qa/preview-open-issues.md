@@ -17,6 +17,8 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-005](#pqa-005--about--who-we-are--arabic-copy-mismatch) | About | Who We Are — Arabic copy mismatch | Medium | PENDING CONTENT REVIEW |
 | [PQA-006](#pqa-006--about--built-on-trust--arabic-eyebrow-mismatch) | About / Built on Trust | Arabic eyebrow — mismatch with English | Medium | PENDING CONTENT REVIEW |
 | [PQA-011](#pqa-011--home--what-changes--alternative-toggle-design-open-design-and-content-questions) | Home | What changes — alternative toggle design: open design/content questions | Medium | PENDING DESIGN / CONTENT REVIEW |
+| [PQA-012](#pqa-012--about--scale-and-credentials--lorem-ipsum-placeholder) | About | Scale and credentials — Lorem Ipsum placeholder (EN and AR) | High | OPEN — Production blocker, content missing |
+| [PQA-013](#pqa-013--solutions--partner-cta--arabic-secondary-label-placeholder) | Solutions | Partner CTA — Arabic secondary label is English | Low | PENDING CONTENT REVIEW |
 
 ## Issue template
 
@@ -183,3 +185,34 @@ Copy this block for new issues.
   - [ ] Decision on a CTA and a Business Impact treatment for the toggle design.
   - [ ] Decision on state-change and needle motion, and on mirroring the dial in RTL.
   - [ ] Verified at 1440, 768 and 390px, EN and AR, normal and reduced motion.
+
+### PQA-012 — About / Scale and credentials — Lorem Ipsum placeholder
+
+- **Page:** About (`/about`) — scale band, `components/sections/about/scale.tsx`
+- **Priority:** High
+- **Status:** OPEN — Production blocker; approved content missing
+- **Description:** `AboutPage.scale.title` ("Lorem Ipsum") and `AboutPage.scale.description` ("Lorem ipsum dolor sit amet consectetur…") are placeholder text in both `locales/en.json` and `locales/ar.json` (lines 876-877), so it shows in English and Arabic. The component has no hardcoded copy; it only reads these keys. The text has been there since the original About build (`c94f152`). No approved English or Arabic copy exists in the repository, `docs/backend/content/` or `docs/backend/design-references/about/`. The Figma source frame has not been checked. The eyebrow and the six stats are real copy and unaffected.
+- **Dependency:** Approved English heading and description from the client/designer, then approved Arabic. If neither arrives before release, a PM decision is needed on hiding the heading and description for that release.
+- **Acceptance criteria:**
+  - [ ] Approved English title and description replace the placeholders in `locales/en.json`.
+  - [ ] Approved Arabic title and description replace them in `locales/ar.json`.
+  - [ ] Only `AboutPage.scale.title` and `AboutPage.scale.description` change.
+  - [ ] No "Lorem" remains in either locale file.
+  - [ ] Verified in EN LTR and AR RTL at 1440, 768 and 390px.
+
+### PQA-013 — Solutions / Partner CTA — Arabic secondary label placeholder
+
+- **Page:** Solutions (`/solutions`) — partner CTA, `components/sections/solutions/partner-cta.tsx`
+- **Priority:** Low
+- **Status:** PENDING CONTENT REVIEW
+- **Description:** `SolutionsPage.partner.secondaryCta.label` in `locales/ar.json` is the English "Partner with Infoline" (no approved Arabic exists). In Arabic, `SolutionsPage.partner.secondaryCta.show` is `false` while English has it `true`, so the button does not render in Arabic today and the placeholder is not visible. It would become visible if `show` is enabled.
+- **Dependency:** Approved Arabic label, and confirmation of whether the secondary button should show in Arabic.
+- **Acceptance criteria:**
+  - [ ] Approved Arabic label replaces the English placeholder.
+  - [ ] `show` is consistent between English and Arabic, or the difference is confirmed as intended.
+  - [ ] Only `SolutionsPage.partner.secondaryCta` in `locales/ar.json` changes.
+  - [ ] Verified in RTL at 1440, 768 and 390px.
+
+### Other untranslated Arabic labels — tracked under existing issues
+
+No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` (PQA-007), `InsightsPage.proof.description` (PQA-008), `InsightsPage.cta.button.label` and `.secondaryButton.label` (PQA-010), `HomeV1.whatChangesToggle.description` (PQA-011).
