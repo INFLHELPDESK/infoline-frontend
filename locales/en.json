@@ -849,10 +849,11 @@
     },
     "whoWeAre": {
       "eyebrow": "Who we are",
-      "titleLead": "Since 2004, Infoline has built its role as a trusted operations partner in",
-      "titleAccent": "Oman",
+      "titleLead": "About",
+      "titleAccent": "Infoline,",
+      "titleTail": "Journey and Commitment",
       "paragraphs": [
-        "Established in 2004, Infoline has spent more than two decades running customer and business operations for organisations in Oman. Today, as part of Omantel Group, we bring together operational delivery, customer-experience capability and technology from our base at Knowledge Oasis Muscat.",
+        "Since 2004, Infoline has built its role as a trusted operations partner in Oman. Today, we combine local understanding, operational expertise and technology to help organisations deliver with greater confidence and measurable performance.",
         "We work with government and enterprise organisations across customer operations, CX transformation, quality, training, business intelligence, workforce management, technology services and HR outsourcing."
       ]
     },

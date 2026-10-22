@@ -4,7 +4,7 @@ Tracker for issues found during Frontend Preview QA that are not yet resolved.
 Resolved issues are removed from this file (history lives in Git).
 
 **Branch:** `feature/home-2-redesign`
-**Last updated:** 2026-10-21
+**Last updated:** 2026-10-22
 
 ## Summary
 
@@ -13,6 +13,8 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-001](#pqa-001--talent-network-cta-pending-destination) | Careers | Talent Network CTA — pending destination | Medium | BLOCKED — Awaiting decision |
 | [PQA-002](#pqa-002--careers-arabic-copy-pending-review) | Careers | Arabic copy — pending review | Medium | PENDING CONTENT REVIEW |
 | [PQA-003](#pqa-003--vacancy-apply-links-broken-navigation) | Careers | Vacancy Apply links — broken navigation | High | OPEN — Functional bug |
+| [PQA-004](#pqa-004--industries-badge--arabic-translation-pending) | Industries | Badge — Arabic translation pending | Low | PENDING CONTENT REVIEW |
+| [PQA-005](#pqa-005--about--who-we-are--arabic-copy-mismatch) | About | Who We Are — Arabic copy mismatch | Medium | PENDING CONTENT REVIEW |
 
 ## Issue template
 
@@ -81,3 +83,16 @@ Copy this block for new issues.
   - [ ] English and Arabic convey the same approved meaning.
   - [ ] Only `HomeV1.industries.eyebrow` changes; unrelated Industries labels stay unchanged.
   - [ ] Badge verified in RTL at 1440, 768 and 390px.
+
+### PQA-005 — About / Who We Are — Arabic copy mismatch
+
+- **Page:** About (`/about`) — Who we are, `components/sections/about/who-we-are.tsx`
+- **Priority:** Medium
+- **Status:** PENDING CONTENT REVIEW
+- **Description:** The English heading and description now match Figma ("About Infoline, Journey and Commitment" plus the new "Since 2004…" paragraph). The Arabic copy still reflects the previous content (`AboutPage.whoWeAre` in `locales/ar.json`). `titleTail` is a single space in Arabic, only to satisfy locale parity; the component trims it and omits the segment.
+- **Dependency:** Approved Arabic translation.
+- **Acceptance criteria:**
+  - [ ] Arabic heading and description convey the approved English meaning.
+  - [ ] Arabic `titleTail` is updated appropriately (a real value, no placeholder space).
+  - [ ] Only `AboutPage.whoWeAre` in `locales/ar.json` changes.
+  - [ ] Verified in RTL at 1440, 768 and 390px.
