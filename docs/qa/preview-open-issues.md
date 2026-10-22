@@ -121,3 +121,27 @@ Copy this block for new issues.
   - [ ] Arabic description and secondary label convey the approved English meaning.
   - [ ] Only `AboutPage.cta` in `locales/ar.json` changes.
   - [ ] Verified in RTL at 1440, 768 and 390px.
+
+### PQA-008 — Insights / Case Studies & Formats — Arabic copy mismatch
+
+- **Page:** Insights (`/insights`) — Case studies (`components/sections/insights/proof.tsx`) and Formats (`components/sections/insights/formats.tsx`)
+- **Priority:** Medium
+- **Status:** PENDING CONTENT REVIEW
+- **Description:** English now reads eyebrow "Case studies", heading "Three operations, three numbers that moved", the new "Real results from real partnerships…" description, and the Formats button "View all". Arabic eyebrow and heading reuse the already-approved `CaseStudiesPage.hero` copy ("دراسات الحالة", "ثلاث عمليات، ثلاثة أرقام تحرّكت"). `InsightsPage.proof.description` in `locales/ar.json` is an English placeholder (no approved Arabic exists). `InsightsPage.formats.allCta.label` still reads "تصفّح جميع المقالات" ("Browse all articles") rather than "View all".
+- **Dependency:** Approved Arabic for the Case Studies description and for "View all". The English placeholder is a temporary stand-in for locale parity only and is NOT acceptable for final release.
+- **Acceptance criteria:**
+  - [ ] Arabic description and "View all" label convey the approved English meaning.
+  - [ ] Only `InsightsPage.proof.description` and `InsightsPage.formats.allCta.label` in `locales/ar.json` change.
+  - [ ] Verified in RTL at 1440, 768 and 390px.
+
+### PQA-009 — Insights / Formats article cards — Figma metadata and action missing
+
+- **Page:** Insights (`/insights`) — Formats cards, `components/sections/insights/formats.tsx`
+- **Priority:** Medium
+- **Status:** OPEN — NEEDS DESIGN/CONTENT DECISION
+- **Description:** The approved Figma cards show a metadata row (category, date, read time), a two-line excerpt and a "Read More →" action. The implemented cards show only image, category and title (and the whole card is the link). Left unchanged in Issue #07 by instruction.
+- **Dependency:** Confirmation that the Figma card is the target, and a decision on data source (`Insight` in `lib/insights.ts`, static fallback items, CMS adapter `toInsights`). Date and read time need CMS fields or a derivation rule; Arabic date format and "Read More" label need approved copy.
+- **Acceptance criteria:**
+  - [ ] Cards show category, date, read time, excerpt and "Read More" per Figma, from CMS data with a static fallback.
+  - [ ] No new CMS contract fields without backend sign-off; payload-size E2E checks (`NON_CARD_FIELDS`) updated deliberately.
+  - [ ] Arabic and RTL verified at 1440, 768 and 390px.

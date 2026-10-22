@@ -7,7 +7,6 @@ import Proof from "@/components/sections/insights/proof";
 import FormatsLive from "@/components/sections/insights/formats-live";
 import FeaturedProof from "@/components/sections/insights/featured-proof";
 import Cta from "@/components/sections/insights/cta";
-import BlogLink from "@/components/sections/insights/blog-link";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import type { Insight } from "@/lib/insights";
 import { loadInsightsFeed } from "@/lib/insights-feed";
@@ -77,7 +76,6 @@ export default async function InsightsPage() {
           />
         </HydrationBoundary>
       </ProviderQueryWrapper>
-      <BlogLink />
       <FeaturedProof />
       <Cta />
     </main>

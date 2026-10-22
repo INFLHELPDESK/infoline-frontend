@@ -1543,7 +1543,9 @@
       ]
     },
     "proof": {
-      "title": "ما النتائج التي حققتها إنفولاين؟",
+      "eyebrow": "دراسات الحالة",
+      "title": "ثلاث عمليات، ثلاثة أرقام تحرّكت",
+      "description": "Real results from real partnerships. See how our collaborations have driven measurable improvements in customer experience and operational performance.",
       "items": [
         {
           "title": "التجربة الرقمية غير الصوتية",

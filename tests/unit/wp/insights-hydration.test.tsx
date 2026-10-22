@@ -247,6 +247,8 @@ describe("static fallback", () => {
     const { feed, state } = await serverSide("ar");
     const html = await renderAndHydrate(state, "ar", feed.source);
     const links = [...html.matchAll(/<a href="([^"]+)"/g)].map((m) => m[1]);
-    expect(links).toEqual(staticItems("ar").map((i) => i.href));
+    // The header "View all" button is not a card; cards are the article links.
+    const cardLinks = links.filter((href) => href !== "/blog");
+    expect(cardLinks).toEqual(staticItems("ar").map((i) => i.href));
   });
 });

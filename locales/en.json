@@ -1543,7 +1543,9 @@
       ]
     },
     "proof": {
-      "title": "What results has Infoline delivered?",
+      "eyebrow": "Case studies",
+      "title": "Three operations, three numbers that moved",
+      "description": "Real results from real partnerships. See how our collaborations have driven measurable improvements in customer experience and operational performance.",
       "items": [
         {
           "title": "Digital Non-Voice CX",
@@ -1567,7 +1569,7 @@
       "eyebrow": "Formats",
       "title": "Executive articles, service explainers, benchmark notes and data-led perspectives",
       "allCta": {
-        "label": "Browse all articles",
+        "label": "View all",
         "href": "/blog"
       }
     },

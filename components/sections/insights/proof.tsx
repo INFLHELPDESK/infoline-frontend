@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 import { Reveal } from "@/components/ui/motion";
 
 type ProofItem = { title: string; description: string; href: string };
@@ -34,9 +35,17 @@ export default function Proof() {
           />
 
           <div className="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,526px)_minmax(0,571px)] lg:justify-between">
-            <h2 className="max-w-[551px] text-[28px] leading-9 font-semibold text-white lg:text-[36px] lg:leading-11">
-              {t("proof.title")}
-            </h2>
+            <div>
+              <Eyebrow tone="dark" className="mb-6">
+                {t("proof.eyebrow")}
+              </Eyebrow>
+              <h2 className="max-w-[551px] text-[28px] leading-9 font-semibold text-white lg:text-[36px] lg:leading-11">
+                {t("proof.title")}
+              </h2>
+              <p className="mt-6 max-w-[431px] text-[16px] leading-6 text-slate-300">
+                {t("proof.description")}
+              </p>
+            </div>
 
             <ol>
               {items.map((item, i) => (

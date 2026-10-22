@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Eyebrow } from "@/components/sections/home-1/shared";
+import { ArrowRight } from "lucide-react";
 import { Stagger, StaggerItem } from "@/components/ui/motion";
 import type { Insight, InsightsSource } from "@/lib/insights";
 
@@ -26,13 +27,25 @@ export default function Formats({
     <section className="pt-4 pb-16" data-content-source={contentSource}>
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Stagger as="div" stagger={0.12} amount={0.2}>
-          <StaggerItem direction="start" className="mb-11">
-            <Eyebrow className="mb-4 border border-slate-100">
-              {t("formats.eyebrow")}
-            </Eyebrow>
-            <h2 className="max-w-[891px] text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
-              {t("formats.title")}
-            </h2>
+          <StaggerItem
+            direction="start"
+            className="mb-11 flex flex-col items-start gap-6 md:flex-row md:items-start md:justify-between"
+          >
+            <div>
+              <Eyebrow className="mb-4 border border-slate-100">
+                {t("formats.eyebrow")}
+              </Eyebrow>
+              <h2 className="max-w-[891px] text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
+                {t("formats.title")}
+              </h2>
+            </div>
+            <Link
+              href={t("formats.allCta.href")}
+              className="group inline-flex h-11 flex-none items-center gap-2 rounded-lg bg-brandblue-50 px-5 text-[16px] leading-6 font-medium text-brandblue-600 transition-colors hover:bg-brandblue-100"
+            >
+              {t("formats.allCta.label")}
+              <ArrowRight className="size-[18px] transition-transform duration-300 rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+            </Link>
           </StaggerItem>
 
           <Stagger
