@@ -11,10 +11,12 @@ const WITH_ORDER = [3, 1, 2, 0];
  * Alternative "What changes with Infoline" design (Figma Home-2, nodes
  * 448:1675 "Without" and 448:1587 "With" — two states of one toggle design).
  * Internal review only: Home selects it with `?homeVariant=new` outside
- * Production. Copy is the approved `HomeV1.whatChanges` set.
+ * Production. Eyebrow, tabs and pills use `HomeV1.whatChanges`; the heading
+ * and description use `HomeV1.whatChangesToggle` (Figma copy, user-confirmed).
  */
 export default function WhatChangesToggle() {
   const t = useTranslations("HomeV1.whatChanges");
+  const header = useTranslations("HomeV1.whatChangesToggle");
   const rows = t.raw("rows") as Row[];
 
   return (
@@ -32,13 +34,13 @@ export default function WhatChangesToggle() {
             <Eyebrow>{t("eyebrow")}</Eyebrow>
           </StaggerItem>
           <StaggerItem as="h2" className={`mt-6 ${sectionTitle}`}>
-            {t("title")}
+            {header("title")}
           </StaggerItem>
           <StaggerItem
             as="p"
             className="mt-6 max-w-[536px] text-[15px] leading-6 text-[#455a64] sm:text-[16px]"
           >
-            {t("description")}
+            {header("description")}
           </StaggerItem>
         </Stagger>
 

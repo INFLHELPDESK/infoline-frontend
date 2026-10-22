@@ -42,7 +42,9 @@ for (const locale of ["en", "ar"] as const) {
 
       const section = toggle(page);
       await section.scrollIntoViewIfNeeded();
-      await expect(section.getByRole("heading", { level: 2, name: copy.title })).toBeVisible();
+      const header = messages[locale].HomeV1.whatChangesToggle;
+      await expect(section.getByRole("heading", { level: 2, name: header.title })).toBeVisible();
+      await expect(section.getByText(header.description, { exact: true })).toBeVisible();
       await expect(page.getByRole("heading", { level: 3, name: copy.columns.impact })).toHaveCount(0);
 
       // Without state first.
@@ -98,6 +100,10 @@ test("switching variant leaves the other Home sections unchanged", async ({ page
   };
   const current = await outline("");
   const alt = await outline("?homeVariant=new");
-  // The swapped section keeps the same title, so the outlines match exactly.
-  expect(alt).toEqual(current);
+  // Only the swapped section's heading differs; every other section is identical.
+  const { whatChanges, whatChangesToggle } = messages.en.HomeV1;
+  const at = current.indexOf(whatChanges.title);
+  expect(at).toBeGreaterThan(-1);
+  expect(alt[at]).toBe(whatChangesToggle.title);
+  expect(alt.filter((_, i) => i !== at)).toEqual(current.filter((_, i) => i !== at));
 });

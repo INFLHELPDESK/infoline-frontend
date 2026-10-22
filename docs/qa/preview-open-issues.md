@@ -170,15 +170,16 @@ Copy this block for new issues.
 - **Priority:** Medium
 - **Status:** PENDING DESIGN / CONTENT REVIEW
 - **Description:** The alternative is the Figma Home-2 toggle design (nodes `448:1675` Without state and `448:1587` With state: tab toggle plus gauge, four pills per side). The brief expected three columns with a "Talk to an Expert" CTA; that matches the existing design, not these frames. Open points:
-  1. **Heading copy:** both frames show "Everything your operation needs." and "A full set of capabilities. One accountable partner…". That is the "What we do" section copy, so it looks carried over from a duplicated frame. The build keeps the approved `HomeV1.whatChanges` eyebrow, title and description (EN/AR parity); nothing was invented.
+  1. **Heading copy (English confirmed):** the Figma frames show "Everything your operation needs." and "A full set of capabilities. One accountable partner. From frontline operations to the technology behind them." The user confirmed this copy is approved for the new variant (Issue #11). The variant now reads it from dedicated keys `HomeV1.whatChangesToggle.title` / `.description`; the eyebrow, tabs and pills still use `HomeV1.whatChanges`, whose original strings (and the original Home design) are unchanged. **Arabic:** `whatChangesToggle.title` reuses the approved What we do Arabic title ("كل ما تحتاجه عملياتك."). No approved Arabic exists for the new description (the What we do Arabic says "ثماني قدرات…", i.e. "Eight capabilities"), so `ar.json` `whatChangesToggle.description` is an English placeholder for locale parity only and is NOT acceptable for final release.
   2. **Business Impact / CTA:** the frames have no Business Impact column and no CTA. The four impact strings appear as the left-hand pills in the With state; no CTA is rendered.
   3. **Pill order:** in the With state Figma orders the pills 4, 2, 3, 1 on both sides; the build reproduces that order.
   4. **Motion:** Figma specifies no transition between states and no needle animation. The build swaps states instantly (colour transition on the tabs only, disabled for reduced motion). Confirm whether a needle/arc animation is wanted.
   5. **RTL:** pills and tabs mirror, but the gauge art is not mirrored (needle still sweeps left to right). Confirm whether the dial should flip for Arabic.
   6. **Dial arc:** the With-state blue arc approximates Figma's transformed conic gradient and blurred wedge; confirm against a pixel review.
-- **Dependency:** Designer/PM confirmation of items 1, 2, 4 and 5; approval before this variant is exposed on Production.
+- **Dependency:** Designer/PM confirmation of items 2, 4 and 5; approved Arabic description for item 1; approval before this variant is exposed on Production.
 - **Acceptance criteria:**
-  - [ ] Approved heading and description copy confirmed (EN and AR).
+  - [x] English heading and description confirmed by the user.
+  - [ ] Approved Arabic description copy supplied (title reuses the approved What we do Arabic).
   - [ ] Decision on a CTA and a Business Impact treatment for the toggle design.
   - [ ] Decision on state-change and needle motion, and on mirroring the dial in RTL.
   - [ ] Verified at 1440, 768 and 390px, EN and AR, normal and reduced motion.

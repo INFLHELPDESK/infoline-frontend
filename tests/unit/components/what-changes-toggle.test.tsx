@@ -89,9 +89,12 @@ for (const locale of ["en", "ar"] as const) {
 
     it("renders the section header copy and no invented content", () => {
       renderIn(locale, <WhatChangesToggle />);
-      expect(screen.getByRole("heading", { level: 2 }).textContent).toBe(copy.title);
+      const header = locales[locale].HomeV1.whatChangesToggle;
+      expect(screen.getByRole("heading", { level: 2 }).textContent).toBe(header.title);
       expect(screen.getByText(copy.eyebrow)).toBeTruthy();
-      expect(screen.getByText(copy.description)).toBeTruthy();
+      expect(screen.getByText(header.description)).toBeTruthy();
+      expect(screen.queryByText(copy.title)).toBeNull();
+      expect(screen.queryByText(copy.description)).toBeNull();
     });
 
     it("uses logical offsets and no motion beyond a colour transition (reduced-motion safe)", () => {
