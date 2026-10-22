@@ -76,14 +76,14 @@ Copy this block for new issues.
 
 ### PQA-004 — Industries badge — Arabic translation pending
 
-- **Page:** Industries / Home V1 Industries section (`components/sections/home-1/industries.tsx`)
+- **Page:** Industries / Home V1 Industries section (`components/sections/home-1/industries.tsx`); Industries page "How does CX differ by industry?" (`components/sections/industries/differ.tsx`)
 - **Priority:** Low
 - **Status:** PENDING CONTENT REVIEW
-- **Description:** The English badge now reads "CX / Industries" (`HomeV1.industries.eyebrow` in `locales/en.json`). The Arabic badge is still `القطاعات` because no approved Arabic translation of "CX / Industries" exists.
+- **Description:** The English badge now reads "CX / Industries" (`HomeV1.industries.eyebrow` and `IndustriesPage.differ.eyebrow` in `locales/en.json`). The Arabic badges are still `القطاعات` because no approved Arabic translation of "CX / Industries" exists.
 - **Dependency:** Approved Arabic translation.
 - **Acceptance criteria:**
   - [ ] English and Arabic convey the same approved meaning.
-  - [ ] Only `HomeV1.industries.eyebrow` changes; unrelated Industries labels stay unchanged.
+  - [ ] Only `HomeV1.industries.eyebrow` and `IndustriesPage.differ.eyebrow` change; unrelated Industries labels stay unchanged.
   - [ ] Badge verified in RTL at 1440, 768 and 390px.
 
 ### PQA-005 — About / Who We Are — Arabic copy mismatch
