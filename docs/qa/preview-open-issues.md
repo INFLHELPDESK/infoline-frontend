@@ -15,6 +15,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-003](#pqa-003--vacancy-apply-links-broken-navigation) | Careers | Vacancy Apply links — broken navigation | High | OPEN — Functional bug |
 | [PQA-004](#pqa-004--industries-badge--arabic-translation-pending) | Industries | Badge — Arabic translation pending | Low | PENDING CONTENT REVIEW |
 | [PQA-005](#pqa-005--about--who-we-are--arabic-copy-mismatch) | About | Who We Are — Arabic copy mismatch | Medium | PENDING CONTENT REVIEW |
+| [PQA-006](#pqa-006--about--built-on-trust--arabic-eyebrow-mismatch) | About / Built on Trust | Arabic eyebrow — mismatch with English | Medium | PENDING CONTENT REVIEW |
 
 ## Issue template
 
@@ -95,4 +96,16 @@ Copy this block for new issues.
   - [ ] Arabic heading and description convey the approved English meaning.
   - [ ] Arabic `titleTail` is updated appropriately (a real value, no placeholder space).
   - [ ] Only `AboutPage.whoWeAre` in `locales/ar.json` changes.
+  - [ ] Verified in RTL at 1440, 768 and 390px.
+
+### PQA-006 — About / Built on Trust — Arabic eyebrow mismatch
+
+- **Page:** About (`/about`) — Built on trust, `components/sections/about/accountability.tsx`
+- **Priority:** Medium
+- **Status:** PENDING CONTENT REVIEW
+- **Description:** The English eyebrow now reads "Built on trust" (`AboutPage.accountability.eyebrow` in `locales/en.json`). The Arabic eyebrow still reads "مبنية على الثقة. مثبتة عبر العمليات" because no approved Arabic replacement exists.
+- **Dependency:** Approved Arabic copy.
+- **Acceptance criteria:**
+  - [ ] Arabic eyebrow matches the approved meaning of "Built on trust".
+  - [ ] Only `AboutPage.accountability.eyebrow` in `locales/ar.json` changes; unrelated section text stays unchanged.
   - [ ] Verified in RTL at 1440, 768 and 390px.

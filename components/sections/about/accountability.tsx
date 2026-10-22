@@ -46,7 +46,7 @@ export default function Accountability() {
 
           <Stagger
             as="ul"
-            className="mt-11 flex flex-wrap justify-center gap-3.5"
+            className="mt-11 flex flex-wrap justify-center gap-x-7 gap-y-3.5"
             stagger={0.1}
             amount={0.3}
           >
