@@ -1598,7 +1598,11 @@
       "title": "تريد التفاصيل وراء النتيجة؟",
       "description": "تحدث معنا عن دراسة الحالة الأقرب إلى عملياتك.",
       "button": {
-        "label": "تحدث إلى خبير",
+        "label": "View Case Studies",
+        "href": "/case-studies"
+      },
+      "secondaryButton": {
+        "label": "Discuss Your Operation",
         "href": "/contact"
       }
     },

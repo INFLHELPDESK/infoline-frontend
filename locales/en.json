@@ -1598,7 +1598,11 @@
       "title": "Want the detail behind the result?",
       "description": "Talk to us about the case closest to your operation.",
       "button": {
-        "label": "Talk to an expert",
+        "label": "View Case Studies",
+        "href": "/case-studies"
+      },
+      "secondaryButton": {
+        "label": "Discuss Your Operation",
         "href": "/contact"
       }
     },

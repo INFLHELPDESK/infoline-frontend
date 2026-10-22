@@ -150,3 +150,15 @@ Copy this block for new issues.
   - [ ] Static card dates, excerpts and titles match the approved content (including the COPC excerpt).
   - [ ] `Blog.posts` ISO `date` and `dateLabel` agree for every post, in English and Arabic.
   - [ ] Action label matches Figma in English and Arabic.
+
+### PQA-010 — Insights / Closing CTA — Arabic button labels missing
+
+- **Page:** Insights (`/insights`) — Closing CTA, `components/sections/insights/cta.tsx`
+- **Priority:** Medium
+- **Status:** PENDING CONTENT REVIEW
+- **Description:** English buttons now read "View Case Studies" (`/case-studies`) and "Discuss Your Operation" (`/contact`). `InsightsPage.cta.button.label` and `InsightsPage.cta.secondaryButton.label` in `locales/ar.json` are English placeholders (no approved Arabic exists); the previous Arabic primary label "تحدث إلى خبير" ("Talk to an expert") no longer matches. Heading and description are unchanged.
+- **Dependency:** Approved Arabic for both labels. The placeholders are a temporary stand-in for locale parity only and are NOT acceptable for final release.
+- **Acceptance criteria:**
+  - [ ] Both Arabic labels convey the approved English meaning.
+  - [ ] Only `InsightsPage.cta.button.label` and `InsightsPage.cta.secondaryButton.label` in `locales/ar.json` change.
+  - [ ] Verified in RTL at 1440, 768 and 390px.
