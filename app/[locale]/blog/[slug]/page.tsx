@@ -1,7 +1,10 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
+import { loadInsightDetail } from "@/lib/insights-detail";
+import { insightRoutePath } from "@/lib/insights-seo";
+import { typeLabelsFromFilters } from "@/lib/insights-cards";
 import SingleHero from "@/components/sections/blog/single-hero";
 import Article from "@/components/sections/blog/article";
 import { nextBlogPosts, type BlogPost } from "@/lib/blog";
@@ -62,6 +65,13 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   if (result.kind === "error") throw result.error;
 
   if (result.kind !== "static" && result.kind !== "cms") {
+    // Legacy URL of an article that now lives in the Insights model: only a
+    // published Insight of this language with this exact slug is a verified
+    // mapping. Anything else stays a plain soft 404. Temporary (307) on purpose
+    // until the migration is confirmed; the target never redirects back.
+    const target = await insightRedirectTarget(slug, locale);
+    if (target) redirect({ href: target, locale });
+
     // Soft 404 — themed, server-rendered, noindex (same reasoning as the
     // catch-all route: dynamic not-found boundaries stream no visible HTML
     // in Next 16).
@@ -84,6 +94,18 @@ export default async function BlogPostPage({ params }: { params: Params }) {
       <Cta />
     </>
   );
+}
+
+/** Router path of the Insight that replaces `/blog/<slug>`, or null (an outage throws). */
+async function insightRedirectTarget(slug: string, locale: string): Promise<string | null> {
+  const t = await getTranslations("Blog.page");
+  const labels = typeLabelsFromFilters(t.raw("filters") as { id: string; label: string }[]);
+  const insight = await loadInsightDetail(slug, locale === "ar" ? "ar" : "en", labels);
+  // An outage says nothing about the mapping: surface it (500), never a cacheable 404.
+  if (insight.kind === "error") throw insight.error;
+  if (insight.kind !== "cms") return null;
+  const href = insight.detail.post.href;
+  return href && insightRoutePath(href, "en") === href ? href : null;
 }
 
 async function SoftNotFound() {

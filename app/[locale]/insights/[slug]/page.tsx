@@ -8,7 +8,9 @@ import Cta from "@/components/sections/home-1/cta";
 import ErrorPage, { errorButtonClass } from "@/components/sections/error/error-page";
 import { loadInsightDetail } from "@/lib/insights-detail";
 import { typeLabelsFromFilters } from "@/lib/insights-cards";
-import { singleLocaleAlternates } from "@/lib/site";
+import { buildInsightAlternates, verifyInsightTranslations } from "@/lib/insights-seo";
+import { getSiteUrl } from "@/lib/site";
+import { LocaleTargetsRegistrar } from "@/components/layout/header/locale-targets";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -22,6 +24,14 @@ const resolveInsight = cache(async (slug: string, locale: string) => {
   return loadInsightDetail(slug, locale === "ar" ? "ar" : "en", labels);
 });
 
+/** Translations that are published and link back; shared by metadata and the switcher. */
+const resolveTranslations = cache(async (slug: string, locale: string) => {
+  const result = await resolveInsight(slug, locale);
+  return result.kind === "cms"
+    ? verifyInsightTranslations(result.detail, locale === "ar" ? "ar" : "en")
+    : [];
+});
+
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
   const locale = await getLocale();
@@ -33,9 +43,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: seo.title || `${post.title} — Infoline`,
     description: seo.description || post.excerpt || undefined,
-    // The CMS translation map is kept on the result for language switching; the
-    // hreflang migration is a separate step, so this stays a self-canonical.
-    alternates: await singleLocaleAlternates(locale, `/insights/${encodeURIComponent(post.slug)}`),
+    alternates: buildInsightAlternates(
+      await getSiteUrl(),
+      locale === "ar" ? "ar" : "en",
+      post.href ?? `/insights/${post.slug}`,
+      await resolveTranslations(slug, locale),
+    ),
   };
 }
 
@@ -53,11 +66,15 @@ export default async function InsightDetailPage({ params }: { params: Params }) 
   if (result.kind !== "cms") return <SoftNotFound />;
 
   const { post, bodyHtml, readMinutes, event, backHref, type } = result.detail;
+  const translations = await resolveTranslations(slug, locale);
 
   // The soft 404 is a normal page of this route, so the group layout cannot
   // tell it apart: the shared CTA is rendered here, for found content only.
   return (
     <>
+      <LocaleTargetsRegistrar
+        targets={Object.fromEntries(translations.map((t) => [t.locale, t.href]))}
+      />
       <main className="overflow-x-clip" data-content-source="cms" data-insight-type={type ?? undefined}>
         <SingleHero post={post} backHref={backHref} readMinutes={readMinutes} event={event} />
         <Article post={post} morePosts={[]} bodyHtml={bodyHtml} />

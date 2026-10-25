@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { useLocaleTargets } from "./locale-targets";
 
 const tones = {
   dark: {
@@ -59,13 +60,18 @@ export default function LanguageSwitcher({
   const t = useTranslations("Header");
   const pathname = usePathname();
   const router = useRouter();
+  const targets = useLocaleTargets();
   const [isPending, startTransition] = useTransition();
 
   const switchLocale = (next: string) => {
     if (next === locale) return;
+    // A page that declared its translations (CMS articles) is the only source
+    // of its other-language URL; no declared URL means no destination.
+    const destination = targets ? targets[next] : pathname;
+    if (!destination) return;
     startTransition(() => {
       // Keep the current path, swap the locale.
-      router.replace(pathname, { locale: next });
+      router.replace(destination, { locale: next });
     });
   };
 
@@ -77,12 +83,13 @@ export default function LanguageSwitcher({
     >
       {routing.locales.map((l) => {
         const isActive = l === locale;
+        const unavailable = !isActive && targets !== null && !targets[l];
         return (
           <button
             key={l}
             type="button"
             onClick={() => switchLocale(l)}
-            disabled={isPending}
+            disabled={isPending || unavailable}
             aria-pressed={isActive}
             aria-label={localeNames[l] ?? l}
             title={localeNames[l] ?? l}

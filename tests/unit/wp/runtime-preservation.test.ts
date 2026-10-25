@@ -29,6 +29,10 @@ const WIRED_ROUTE_FILES = [
   "lib/insights-listing.ts",
   "app/[locale]/insights/[slug]/page.tsx",
   "lib/insights-detail.ts",
+  // Article SEO: translation verification, hreflang and the sitemap's Insight entries.
+  "lib/insights-seo.ts",
+  "lib/insights-sitemap.ts",
+  "app/sitemap.ts",
 ];
 
 /** Everything the running app can start from. */
@@ -126,8 +130,8 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
       for (const file of WIRED_ROUTE_FILES) expect(existsSync(join(root, file)), file).toBe(true);
     });
 
-    it("is confined to the Insights and Blog routes and their dedicated modules", () => {
-      for (const file of WIRED_ROUTE_FILES) expect(file, file).toMatch(/insights|blog/);
+    it("is confined to the Insights and Blog routes, the sitemap and their dedicated modules", () => {
+      for (const file of WIRED_ROUTE_FILES) expect(file, file).toMatch(/insights|blog|sitemap/);
     });
 
     it("really reaches the WP layer (the allowance is not stale)", () => {
@@ -154,6 +158,7 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
         "app/[locale]/blog/[slug]/page.tsx",
         "components/sections/blog/updates.tsx",
         "app/[locale]/insights/[slug]/page.tsx",
+        "app/sitemap.ts",
       ];
       expect(direct.sort()).toEqual(WIRED_ROUTE_FILES.filter((f) => !viaWired.includes(f)).sort());
     });
