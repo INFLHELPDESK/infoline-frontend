@@ -148,3 +148,76 @@ export const reply = {
   http: (status: number): Reply => ({ kind: "http", status }),
   networkError: (): Reply => ({ kind: "networkError" }),
 };
+
+/** The job application REST endpoint (lib/forms `submitApplication`). */
+export const APPLY_URL = /\/wp-json\/infoline\/v1\/apply(\?.*)?$/;
+
+export type CapturedApplication = {
+  fields: Record<string, string>;
+  /** Uploaded file name per file field. */
+  files: Record<string, string>;
+  contentType: string;
+};
+
+/** Parse the text and file parts of a captured multipart body. */
+function parseMultipart(request: Request): CapturedApplication {
+  const contentType = request.headers()["content-type"] ?? "";
+  const boundary = /boundary=(.+)$/.exec(contentType)?.[1] ?? "";
+  const raw = request.postDataBuffer()?.toString("latin1") ?? "";
+  const fields: Record<string, string> = {};
+  const files: Record<string, string> = {};
+  for (const part of raw.split(`--${boundary}`)) {
+    const head = /name="([^"]+)"(?:; filename="([^"]*)")?/.exec(part);
+    if (!head) continue;
+    if (head[2] !== undefined) files[head[1]] = head[2];
+    else fields[head[1]] = part.split("\r\n\r\n")[1]?.replace(/\r\n$/, "") ?? "";
+  }
+  return { fields, files, contentType };
+}
+
+/**
+ * Mock the REST /apply endpoint. Replies are consumed in order (the last one
+ * repeats): `payload` replies with HTTP 200 when `success` and 422 otherwise,
+ * as the real endpoint does. Returns the captured submissions.
+ */
+export async function mockApply(page: Page, ...replies: Reply[]) {
+  const requests: CapturedApplication[] = [];
+  let gate: Promise<void> | null = null;
+  let open: () => void = () => {};
+
+  await page.route(APPLY_URL, async (route: Route, request: Request) => {
+    if (request.method() === "OPTIONS") {
+      return route.fulfill({ status: 204, headers: CORS });
+    }
+    requests.push(parseMultipart(request));
+    const next = replies[Math.min(requests.length - 1, replies.length - 1)];
+    if (gate) await gate;
+
+    switch (next.kind) {
+      case "networkError":
+        return route.abort("connectionrefused");
+      case "http":
+        return route.fulfill({ status: next.status, headers: CORS, body: "" });
+      case "payload":
+        return route.fulfill({
+          status: next.payload.success ? 200 : 422,
+          headers: CORS,
+          json: { ...next.payload, action: "job_application" },
+        });
+      default:
+        throw new Error(`mockApply does not support ${next.kind} replies`);
+    }
+  });
+
+  return {
+    requests,
+    last: () => requests.at(-1),
+    hold() {
+      gate = new Promise<void>((resolve) => (open = resolve));
+    },
+    release() {
+      open();
+      gate = null;
+    },
+  };
+}

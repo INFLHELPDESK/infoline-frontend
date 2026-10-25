@@ -32,7 +32,7 @@ export type StartTimeline = "ready_now" | "1_3_months" | "3_6_months" | "scoping
 
 type ValidationError = { field: string; message: string };
 
-type SubmitInquiryResult = {
+export type SubmitInquiryResult = {
   success: boolean;
   message: string;
   entryId: number;
@@ -124,4 +124,40 @@ export function classifyInquiryResult(result: SubmitInquiryResult) {
     return "field_errors" as const;
   }
   return "general_error" as const;
+}
+
+/** REST path of the job application endpoint, on the CMS origin. */
+const APPLY_PATH = "/wp-json/infoline/v1/apply";
+
+/**
+ * Submit a job application (multipart, with the CV file) to REST /apply.
+ * The caller builds the FormData (name, email, phone, position, message, cv,
+ * website, turnstileToken). Content-Type is left unset so the browser adds the
+ * multipart boundary. The endpoint answers 200 on success and 422 on
+ * rejection with the same payload shape as GraphQL, so both are parsed;
+ * anything else (network failure, other status, non-JSON) throws.
+ */
+export async function submitApplication(
+  body: FormData,
+  { signal }: { signal?: AbortSignal } = {},
+): Promise<SubmitInquiryResult> {
+  const url = new URL(APPLY_PATH, new URL(requireCmsEndpoint()).origin);
+  const res = await fetch(url, { method: "POST", body, signal });
+
+  if (!res.ok && res.status !== 422) {
+    throw new Error(`Application request failed: HTTP ${res.status}`);
+  }
+
+  const payload = (await res.json()) as Partial<SubmitInquiryResult> | null;
+  if (!payload || typeof payload.success !== "boolean") {
+    throw new Error("Application API returned no payload");
+  }
+
+  return {
+    success: payload.success,
+    message: payload.message ?? "",
+    entryId: payload.entryId ?? 0,
+    emailSent: payload.emailSent ?? false,
+    validationErrors: payload.validationErrors ?? [],
+  };
 }

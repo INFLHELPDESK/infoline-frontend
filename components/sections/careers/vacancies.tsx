@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { Eyebrow } from "@/components/sections/home-1/shared";
+import { Link } from "@/i18n/navigation";
 import { MaskText, Stagger, StaggerItem, Reveal } from "@/components/ui/motion";
 
 type Role = { title: string; discipline: string; location: string };
@@ -115,15 +116,15 @@ export default function Vacancies() {
                     </span>
                   </div>
 
-                  {/* Apply — deep-links to the on-page application card. */}
+                  {/* Apply — deep-links to the on-page application form with the role preselected. */}
                   <div className="sm:text-end">
-                    <a
-                      href="#apply"
+                    <Link
+                      href={`/careers?position=${encodeURIComponent(role.title)}#apply`}
                       className="inline-flex items-center gap-2.5 text-[16px] leading-6 font-medium text-brandblue-500 transition-colors duration-300 hover:text-brandblue-600"
                     >
                       {col("apply")}
                       <ArrowRight className="size-[18px] transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </Reveal>

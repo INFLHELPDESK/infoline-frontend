@@ -1321,10 +1321,38 @@
     },
     "apply": {
       "title": "Apply for this role",
-      "description": "Tell us which role you're interested in through our contact form — our team reviews every application personally and replies within 1 business day.",
-      "cta": {
-        "label": "Apply via contact form",
-        "href": "/contact?route=careers"
+      "description": "Tell us a little about yourself and attach your CV — our team reviews every application personally and replies within 1 business day.",
+      "form": {
+        "name": "Name",
+        "namePlaceholder": "Full name",
+        "email": "Email",
+        "emailPlaceholder": "you@example.com",
+        "phone": "Phone",
+        "phonePlaceholder": "+968 0000 0000",
+        "position": "Position",
+        "positionPlaceholder": "Choose a role",
+        "message": "Message (optional)",
+        "messagePlaceholder": "Anything else we should know?",
+        "cv": "CV",
+        "cvHint": "PDF, DOC or DOCX, up to 5 MB",
+        "submit": "Send application",
+        "submitting": "Sending…",
+        "submitError": "Something went wrong sending your application. Please wait a few minutes and try again.",
+        "errors": {
+          "name": "Please enter your full name",
+          "email": "Enter a valid email address",
+          "phone": "Enter your phone number",
+          "position": "Choose the role you're applying for",
+          "cv": "Attach your CV as a PDF, DOC or DOCX file",
+          "cvType": "Only PDF, DOC or DOCX files are accepted",
+          "cvSize": "Your CV must be 5 MB or smaller",
+          "message": "Your message is too long"
+        }
+      },
+      "success": {
+        "title": "Thanks — your application is with our HR team.",
+        "description": "We'll review it and reply to {email} within 1 business day if there's a fit.",
+        "again": "Send another application"
       }
     }
   },
