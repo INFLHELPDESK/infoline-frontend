@@ -40,11 +40,11 @@ describe("shared closing CTA", () => {
     }
   });
 
-  it("only the (site) layout and the blog article page render the CTA", () => {
+  it("only the (site) layout and the article detail pages render the CTA", () => {
     const importers = sourceFiles(localeDir)
       .filter((file) => readFileSync(file, "utf8").includes("@/components/sections/home-1/cta"))
       .map((file) => relative(localeDir, file).replaceAll("\\", "/"))
       .sort();
-    expect(importers).toEqual(["(site)/layout.tsx", "blog/[slug]/page.tsx"]);
+    expect(importers).toEqual(["(site)/layout.tsx", "blog/[slug]/page.tsx", "insights/[slug]/page.tsx"]);
   });
 });

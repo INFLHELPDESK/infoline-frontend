@@ -1,7 +1,7 @@
 import { test, expect, waitForHydration } from "../support/fixtures";
 import { formatsSection, INSIGHT_PATH, INSIGHT_TITLES } from "../support/insights";
 import { isCmsRequest, trackRequests } from "../support/cms";
-import { h1Text, rendersElementText, robotsMeta } from "../support/html";
+import { rendersElementText } from "../support/html";
 import { dirFor, locales, messages, type Locale } from "../support/messages";
 
 /**
@@ -11,9 +11,8 @@ import { dirFor, locales, messages, type Locale } from "../support/messages";
  * hydration. Other stub scenarios (empty, unpublished Arabic, failures) are
  * covered in cms-scenarios.spec.ts, which needs a cold server per scenario.
  *
- * Cards link to the authoritative CMS URI (/insights/<slug>). The detail route
- * does not exist yet (a later phase), so these tests assert the links, not
- * navigation to them.
+ * Cards link to the authoritative CMS URI (/insights/<slug>); opening them is
+ * covered in insight-detail.spec.ts.
  */
 
 const sectionOf = (locale: Locale) => messages[locale].InsightsPage.formats.title;
@@ -144,24 +143,6 @@ for (const locale of locales) {
     });
   });
 }
-
-/**
- * Phase 2 blocker, pinned: the CMS URI of an Insight is /insights/<slug>, but that
- * detail route is not built yet, so every card currently leads to the 404 page.
- * When the route lands this test must be replaced by the detail-page tests.
- */
-test.describe("[Phase 2 blocker] Insight card destinations are not implemented yet", () => {
-  for (const locale of locales) {
-    test(`/${locale}${INSIGHT_PATH.lead} (the card href) renders the themed soft-404, noindex`, async ({ request }) => {
-      // The locale catch-all answers unknown paths with the 404 design and HTTP 200 (see app/[locale]/[...rest]).
-      const res = await request.get(`/${locale}${INSIGHT_PATH.lead}`);
-      const html = await res.text();
-      expect(res.status()).toBe(200);
-      expect(h1Text(html)).toBe(messages[locale].ErrorPages["404"].title);
-      expect(robotsMeta(html)).toMatch(/^noindex/);
-    });
-  }
-});
 
 test.describe("only /insights and /blog are CMS-backed Insight views", () => {
   for (const locale of locales) {

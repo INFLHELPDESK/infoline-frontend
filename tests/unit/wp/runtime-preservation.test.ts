@@ -9,8 +9,9 @@ const EXTENSIONS = ["", ".ts", ".tsx", ".mts", ".js", ".jsx", ".mjs", ".json"];
 const WP_ENTRY = /^(lib\/wp\/|providers\/|lib\/content-adapters\.)/;
 
 /**
- * The routes wired to WordPress so far (/[locale]/insights, /[locale]/blog and
- * the blog detail destination /[locale]/blog/[slug]) and the modules
+ * The routes wired to WordPress so far (/[locale]/insights, /[locale]/blog, the
+ * blog detail destination /[locale]/blog/[slug] and the Insight detail
+ * /[locale]/insights/[slug]) and the modules
  * built only for them. These may reach the WP layer; nothing else may reach them
  * (a second page importing one is a second wired route). Adding an entry here
  * is the deliberate act of wiring another route.
@@ -26,6 +27,8 @@ const WIRED_ROUTE_FILES = [
   "lib/insights-actions.ts",
   "lib/insights-cards.ts",
   "lib/insights-listing.ts",
+  "app/[locale]/insights/[slug]/page.tsx",
+  "lib/insights-detail.ts",
 ];
 
 /** Everything the running app can start from. */
@@ -146,7 +149,12 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
         );
       // These reach the WP layer only through another wired module: the blog
       // detail page through lib/blog-post, the "Load more" grid through the server action.
-      const viaWired = ["app/[locale]/blog/[slug]/page.tsx", "components/sections/blog/updates.tsx"];
+      // The Insight detail page likewise goes through lib/insights-detail.
+      const viaWired = [
+        "app/[locale]/blog/[slug]/page.tsx",
+        "components/sections/blog/updates.tsx",
+        "app/[locale]/insights/[slug]/page.tsx",
+      ];
       expect(direct.sort()).toEqual(WIRED_ROUTE_FILES.filter((f) => !viaWired.includes(f)).sort());
     });
   });

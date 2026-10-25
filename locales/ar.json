@@ -1849,7 +1849,10 @@
         "moreLabel": "تابع القراءة",
         "notFoundTitle": "المقال غير موجود",
         "notFoundDescription": "ربما تم نقل هذا المقال أو إلغاء نشره.",
-        "notFoundCta": "العودة إلى كل المقالات"
+        "notFoundCta": "العودة إلى كل المقالات",
+        "eventWhen": "الموعد",
+        "eventWhere": "المكان",
+        "eventRegister": "سجّل في هذه الفعالية"
       },
       "meta": {
         "title": "المدونة — إنفولاين",

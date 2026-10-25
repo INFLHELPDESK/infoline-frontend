@@ -1849,7 +1849,10 @@
         "moreLabel": "Keep reading",
         "notFoundTitle": "Post not found",
         "notFoundDescription": "This story may have been moved or unpublished.",
-        "notFoundCta": "Back to all posts"
+        "notFoundCta": "Back to all posts",
+        "eventWhen": "When",
+        "eventWhere": "Where",
+        "eventRegister": "Register for this event"
       },
       "meta": {
         "title": "Blog — Infoline",

@@ -532,6 +532,9 @@ const INSIGHT_ROWS = [
     featured: true,
     image: true,
     translated: true,
+    // Exercises the detail renderer: heading, internal / external / hostile links, hostile markup.
+    extraHtml:
+      '<h2>What changed</h2>\n<p>See <a href="/services">our services</a>, <a href="https://example.test/report">the report</a> and <a href="javascript:alert(1)">bad</a>.</p>\n<script>window.__cmsXss = 1</script><p onclick="x()">Tail <img src=x onerror="y()"></p>\n',
     title: { en: "A score that had not moved in quarters", ar: "نتيجة لم تتحرك منذ أرباع" },
   },
   {
@@ -626,7 +629,7 @@ function insightNode(row, locale, variant, detail) {
     eventDetails: row.event ?? null,
   };
   if (detail) {
-    node.content = row.minimal ? null : `<p>${title}</p>\n<p>Body.</p>\n`;
+    node.content = row.minimal ? null : `<p>${title}</p>\n<p>Body.</p>\n${row.extraHtml ?? ""}`;
     node.seo = row.minimal
       ? { title: null, metaDesc: "", opengraphTitle: null, opengraphDescription: null }
       : {

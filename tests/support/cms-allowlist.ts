@@ -6,6 +6,7 @@
 export const ALLOWED_CMS_OPERATIONS: readonly string[] = [
   "Insights", // /[locale]/insights (every Insight type)
   "InsightTypeInsights", // /[locale]/blog (article term) and its "Load more" server action
+  "InsightByUri", // /[locale]/insights/[slug] (CMS detail by authoritative URI)
   "Posts", // /[locale]/blog/[slug] locale check
   "PostBySlug", // /[locale]/blog/[slug] (CMS posts)
 ];

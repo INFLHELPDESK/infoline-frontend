@@ -185,7 +185,8 @@ describe("detail lookup by URI", () => {
       uri: "/insights/lead-article/",
       slug: "lead-article",
       locale: "en",
-      content: "<p>A score that had not moved in quarters</p>\n<p>Body.</p>\n",
+      // The lead article's stub body also carries the detail renderer's HTML cases (extraHtml).
+      content: expect.stringMatching(/^<p>A score that had not moved in quarters<\/p>\n<p>Body\.<\/p>\n/),
       isFeatured: true,
       types: [{ name: "Article", slug: "article" }],
       topics: [{ name: "Clarity & Speed", slug: "clarity-speed" }],

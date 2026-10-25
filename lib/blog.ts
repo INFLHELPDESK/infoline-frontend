@@ -13,6 +13,14 @@ export type BlogPost = {
   image: string;
 };
 
+/** Event metadata the article hero can show (CMS Insights of type `event`); each field optional. */
+export type PostEvent = {
+  start: string | null;
+  end: string | null;
+  location: string | null;
+  url: string | null;
+};
+
 export function getBlogPost(posts: BlogPost[], slug: string) {
   return posts.find((p) => p.slug === slug);
 }

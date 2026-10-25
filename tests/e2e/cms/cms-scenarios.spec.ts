@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { test, expect, waitForHydration } from "../support/fixtures";
 import { isCmsRequest, trackRequests } from "../support/cms";
 import { formatsSection, INSIGHT_PATH, INSIGHT_TITLES } from "../support/insights";
-import { h1Text, robotsMeta } from "../support/html";
+import { h1Text, rendersElementText, robotsMeta } from "../support/html";
 import { dirFor, locales, messages } from "../support/messages";
 
 /**
@@ -503,6 +503,49 @@ test.describe("scenario arabic-insights-unpublished", () => {
     expect(html).not.toContain(`>${INSIGHT_TITLES.minimal.en}<`);
     for (const post of messages.ar.Blog.posts) expect(html).not.toContain(`>${post.title}<`);
     expect(html).not.toContain('href="/ar/blog/');
+  });
+
+  test("detail: /ar/insights/<slug> never falls back to the English record (locale mismatch)", async ({ request }) => {
+    // Polylang answers the unpublished /ar/ lookup with the English record; the language check rejects it.
+    const ar = await request.get(`/ar${INSIGHT_PATH.lead}`);
+    const html = await ar.text();
+    expect(ar.status()).toBe(200);
+    expect(h1Text(html)).toBe(messages.ar.Blog.page.single.notFoundTitle);
+    expect(robotsMeta(html)).toMatch(/^noindex/);
+    expect(html).not.toContain(INSIGHT_TITLES.lead.en);
+    expect(html).not.toContain('data-content-source="cms"');
+    const asked = (await stubOps("InsightByUri")).map((r) => (r.variables as { uri?: string }).uri);
+    expect(asked).toContain(`/ar${INSIGHT_PATH.lead}/`);
+
+    // English is untouched.
+    const en = await (await request.get(`/en${INSIGHT_PATH.lead}`)).text();
+    expect(h1Text(en)).toBe(INSIGHT_TITLES.lead.en);
+  });
+});
+
+test.describe("insight detail, CMS failure (http-error)", () => {
+  test.describe.configure({ mode: "serial" });
+  test.beforeAll(async () => {
+    await useScenario("http-error");
+    await startServer();
+  });
+  test.afterAll(async () => {
+    await stopServer();
+    await stubAdmin("/__reset", {});
+  });
+
+  test("an outage is a server error, never a cacheable soft 404, and recovers", async ({ request }) => {
+    for (const locale of locales) {
+      const res = await request.get(`/${locale}${INSIGHT_PATH.lead}`, { timeout: 45_000 });
+      expect(res.status(), locale).toBeGreaterThanOrEqual(500);
+      // Locale messages ride in every payload, so look at rendered elements only.
+      expect(rendersElementText(await res.text(), messages[locale].Blog.page.single.notFoundTitle), locale).toBe(false);
+    }
+    await stubAdmin("/__scenario", { scenario: "ok" });
+    for (const locale of locales) {
+      const html = await (await request.get(`/${locale}${INSIGHT_PATH.lead}`, { timeout: 45_000 })).text();
+      expect(h1Text(html)).toBe(INSIGHT_TITLES.lead[locale]);
+    }
   });
 });
 
