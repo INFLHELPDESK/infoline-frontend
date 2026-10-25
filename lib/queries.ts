@@ -112,7 +112,7 @@ export const HUBS_QUERY = `
   query Hubs {
     caseStudiesSettings {
       caseStudiesHub {
-        hubHeadin
+        hubHeading
         hubIntro
         ctaHeading
         ctaDescription

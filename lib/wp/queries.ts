@@ -246,14 +246,14 @@ export const CLIENTS = /* GraphQL */ `
 /* ---------------------------- Hubs / options ------------------------------ */
 
 /**
- * NOTE: `hubHeadin` (no `g`) is the real field name in the live schema —
- * verified against the endpoint. It is a typo in the CMS, not here.
+ * `hubHeading` is the corrected field name (CMS Revision 1, 23 Oct 2026); the
+ * earlier misspelling no longer exists in the schema.
  */
 export const HUBS = /* GraphQL */ `
   query Hubs {
     caseStudiesSettings {
       caseStudiesHub {
-        hubHeadin
+        hubHeading
         hubIntro
         ctaHeading
         ctaDescription

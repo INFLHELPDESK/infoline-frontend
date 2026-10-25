@@ -420,7 +420,7 @@ export async function getHubs(): Promise<Hubs> {
   const data = await wpFetch<{
     caseStudiesSettings: {
       caseStudiesHub: {
-        hubHeadin: string | null;
+        hubHeading: string | null;
         hubIntro: string | null;
         ctaHeading: string | null;
         ctaDescription: string | null;
@@ -454,7 +454,7 @@ export async function getHubs(): Promise<Hubs> {
 
   return {
     caseStudies: {
-      heading: cs?.hubHeadin ?? "",
+      heading: cs?.hubHeading ?? "",
       intro: cs?.hubIntro ?? "",
       ctaHeading: cs?.ctaHeading ?? null,
       description: cs?.ctaDescription ?? null,

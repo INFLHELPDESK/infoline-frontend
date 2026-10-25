@@ -378,7 +378,7 @@ function hubs(locale, variant) {
     return {
       caseStudiesSettings: {
         caseStudiesHub: {
-          hubHeadin: null,
+          hubHeading: null,
           hubIntro: null,
           ctaHeading: null,
           ctaDescription: null,
@@ -402,7 +402,7 @@ function hubs(locale, variant) {
   return {
     caseStudiesSettings: {
       caseStudiesHub: {
-        hubHeadin: t.hub,
+        hubHeading: t.hub,
         hubIntro: "Proof, not promises.",
         ctaHeading: t.cta,
         ctaDescription: "Start a conversation.",

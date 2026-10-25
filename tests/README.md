@@ -260,7 +260,7 @@ WordPress.
 **Verified** means derived from this repository (queries, normalizers, fetchers).
 **Assumed** (not provable offline, to be confirmed against a non-production
 WordPress when the first page is wired): the live schema still exposes these
-fields (notably `hubHeadin`), WPML honours `where: { language }` and `/ar/`
+fields (notably `hubHeading`), WPML honours `where: { language }` and `/ar/`
 URIs, option pages stay language-neutral, `fileSize` keeps its two encodings,
 and case studies still cannot be filtered by sector server-side.
 

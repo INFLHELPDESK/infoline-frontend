@@ -143,7 +143,7 @@ describe("content, EN and AR (verified against fixtures)", () => {
 
   it("returns hubs and the company profile, with both file size encodings", async () => {
     const hubs = await api.getHubs();
-    expect(hubs.caseStudies.heading).toBe("Case studies"); // from the CMS field `hubHeadin`
+    expect(hubs.caseStudies.heading).toBe("Case studies"); // from the CMS field `hubHeading`
     expect(hubs.solutions.intro).toBe("Four pillars.");
     const profile = await api.getCompanyProfile();
     expect(profile.en.file?.fileSize).toBe(1048576);
