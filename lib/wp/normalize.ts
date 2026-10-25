@@ -367,6 +367,165 @@ export function normalizePost(raw: RawPost | null): Post | null {
 }
 
 /* ------------------------------------------------------------------ */
+/* Insights — `insight` CPT                                            */
+/* ------------------------------------------------------------------ */
+
+import type {
+  CursorPage,
+  Insight,
+  InsightEventDetails,
+  InsightListItem,
+  InsightSeo,
+  InsightTermSummary,
+  InsightTranslation,
+} from "./types";
+
+type RawLanguage = { code?: string | null } | null | undefined;
+type RawTerms = { nodes?: { name: string | null; slug: string | null }[] | null } | null | undefined;
+
+export type RawInsight = {
+  databaseId: number | null;
+  title: string | null;
+  slug: string | null;
+  uri: string | null;
+  date: string | null;
+  excerpt: string | null;
+  content?: string | null;
+  language: RawLanguage;
+  translations?: { uri: string | null; language: RawLanguage }[] | null;
+  featuredImage: Parameters<typeof normalizeImage>[0];
+  insightTypes: RawTerms;
+  insightTopics: RawTerms;
+  insightContent: { isFeatured: boolean | null } | null;
+  eventDetails: {
+    eventStart: string | null;
+    eventEnd: string | null;
+    eventLocation: string | null;
+    eventUrl: string | null;
+  } | null;
+  seo?: {
+    title: string | null;
+    metaDesc: string | null;
+    opengraphTitle: string | null;
+    opengraphDescription: string | null;
+  } | null;
+};
+
+export type RawInsightConnection = {
+  pageInfo?: { hasNextPage?: boolean | null; endCursor?: string | null } | null;
+  nodes?: RawInsight[] | null;
+};
+
+/** Polylang code (`"EN"` / `"AR"`) → supported locale, or null when absent/unknown. */
+export function insightLocaleOf(language: RawLanguage): "en" | "ar" | null {
+  const code = language?.code?.toLowerCase();
+  return code === "en" || code === "ar" ? code : null;
+}
+
+/** Trimmed text; empty (the CMS sends `""` for unset SEO text) becomes null. */
+function text(value: string | null | undefined): string | null {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
+/** Only http(s) and root-relative links survive; `javascript:` and friends do not. */
+function safeUrl(value: string | null | undefined): string | null {
+  const url = text(value);
+  if (!url) return null;
+  return /^https?:\/\//i.test(url) || /^\/(?!\/)/.test(url) ? url : null;
+}
+
+function normalizeInsightTerms(terms: RawTerms): Term[] {
+  return (terms?.nodes ?? []).flatMap((t) =>
+    t.name && t.slug ? [{ name: t.name, slug: t.slug }] : [],
+  );
+}
+
+function normalizeEventDetails(raw: RawInsight["eventDetails"]): InsightEventDetails | null {
+  if (!raw) return null;
+  const details = {
+    start: text(raw.eventStart),
+    end: text(raw.eventEnd),
+    location: text(raw.eventLocation),
+    url: safeUrl(raw.eventUrl),
+  };
+  return Object.values(details).some((v) => v !== null) ? details : null;
+}
+
+function normalizeInsightTranslations(raw: RawInsight["translations"]): InsightTranslation[] {
+  return (raw ?? []).flatMap((t) => {
+    const locale = insightLocaleOf(t.language);
+    return locale && t.uri ? [{ locale, uri: t.uri }] : [];
+  });
+}
+
+/**
+ * A record is only usable for the locale it is in. Polylang resolves a URI
+ * lookup (`/ar/<english-slug>/`) to the English record when no Arabic one
+ * exists (observed on the Development CMS), and term-side connections cannot
+ * filter by language, so the language is verified on every record. A record
+ * with a different — or no — language is rejected (`null`), never substituted.
+ */
+export function normalizeInsightListItem(
+  raw: RawInsight | null,
+  locale: "en" | "ar",
+): InsightListItem | null {
+  if (!raw?.uri) return null;
+  if (insightLocaleOf(raw.language) !== locale) return null;
+  return {
+    databaseId: raw.databaseId ?? 0,
+    title: raw.title ?? "",
+    slug: raw.slug ?? "",
+    uri: raw.uri,
+    date: text(raw.date),
+    excerpt: raw.excerpt ?? null,
+    image: normalizeImage(raw.featuredImage),
+    locale,
+    translations: normalizeInsightTranslations(raw.translations),
+    types: normalizeInsightTerms(raw.insightTypes),
+    topics: normalizeInsightTerms(raw.insightTopics),
+    isFeatured: raw.insightContent?.isFeatured === true,
+    eventDetails: normalizeEventDetails(raw.eventDetails),
+  };
+}
+
+export function normalizeInsight(raw: RawInsight | null, locale: "en" | "ar"): Insight | null {
+  const base = normalizeInsightListItem(raw, locale);
+  if (!base || !raw) return null;
+  const seo: InsightSeo = {
+    title: text(raw.seo?.title),
+    description: text(raw.seo?.metaDesc),
+    openGraphTitle: text(raw.seo?.opengraphTitle),
+    openGraphDescription: text(raw.seo?.opengraphDescription),
+  };
+  return { ...base, content: raw.content ?? null, seo };
+}
+
+/**
+ * Records of another language (or without one) are dropped from the page; a
+ * cursor is only offered when the CMS reports a next page AND supplied one.
+ */
+export function normalizeInsightPage(
+  connection: RawInsightConnection,
+  nodes: RawInsight[],
+  locale: "en" | "ar",
+): CursorPage<InsightListItem> {
+  const endCursor = connection.pageInfo?.endCursor ?? null;
+  return {
+    items: nodes.flatMap((n) => normalizeInsightListItem(n, locale) ?? []),
+    hasNextPage: connection.pageInfo?.hasNextPage === true && endCursor !== null,
+    endCursor,
+  };
+}
+
+export function normalizeInsightTermSummary(
+  raw: { name: string | null; slug: string | null; count?: number | null } | null,
+): InsightTermSummary | null {
+  if (!raw?.slug) return null;
+  return { name: raw.name ?? "", slug: raw.slug, allLanguagesCount: raw.count ?? null };
+}
+
+/* ------------------------------------------------------------------ */
 /* Company profile (About downloads)                                   */
 /* ------------------------------------------------------------------ */
 

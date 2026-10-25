@@ -210,7 +210,9 @@ with a loopback endpoint.
 | `main.mjs` | Playwright `webServer` entry (port from the endpoint env, tripwire log) |
 | `harness.ts` | Vitest helper: stub on an ephemeral port, endpoint env set, fetch restricted to the stub's origin |
 
-Scenarios: `ok`, `empty`, `null-acf`, `partial`, `graphql-error`, `partial-errors`,
+Scenarios: `ok`, `empty`, `null-acf`, `partial`, `arabic-insights-unpublished` (`ok`, but
+no Arabic Insight exists, as on the live CMS today: Arabic lists are empty and an `/ar/…`
+lookup is answered with the English record), `graphql-error`, `partial-errors`,
 `no-data`, `http-error`, `malformed-json`, `malformed-shape`, `network-error`,
 `hang` (never answers), `stalled-body` (headers, then a body that never ends)
 (global `POST /__scenario`, or per request via `x-cms-stub-scenario`).

@@ -9,7 +9,7 @@
 //
 // Scenarios (global via `POST /__scenario`, or per request through the
 // `x-cms-stub-scenario` header):
-//   data:       ok | empty | null-acf | partial
+//   data:       ok | empty | null-acf | partial | arabic-insights-unpublished
 //   GraphQL:    graphql-error | partial-errors | no-data
 //   transport:  http-error | malformed-json | malformed-shape | network-error
 //   timing:     hang (never answers) | stalled-body (headers, then a body that never ends)
@@ -20,12 +20,13 @@
 import { createServer } from "node:http";
 import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { KNOWN_OPERATIONS, VARIANTS, resolve } from "./fixtures.mjs";
+import { KNOWN_OPERATIONS, NO_ARABIC_INSIGHTS, VARIANTS, resolve } from "./fixtures.mjs";
 
 export const LOOPBACK_HOSTS = ["127.0.0.1", "localhost", "[::1]", "::1"];
 
 export const SCENARIOS = [
   ...VARIANTS.map((v) => (v === "full" ? "ok" : v)),
+  NO_ARABIC_INSIGHTS,
   "graphql-error",
   "partial-errors",
   "no-data",

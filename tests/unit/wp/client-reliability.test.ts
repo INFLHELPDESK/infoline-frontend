@@ -44,6 +44,11 @@ const FETCHERS = [
   ["getPosts", () => api.getPosts("en")],
   ["getPost", () => api.getPost("seasonal-peak")],
   ["getCompanyProfile", () => api.getCompanyProfile()],
+  ["getInsights", () => api.getInsights("en")],
+  ["getInsight", () => api.getInsight(uris("en").insight, "en")],
+  ["getInsightTypes", () => api.getInsightTypes()],
+  ["getInsightTopics", () => api.getInsightTopics()],
+  ["getInsightsByTerm", () => api.getInsightsByTerm("type", "article", "en")],
 ] as const;
 
 describe("failure kinds, for every fetcher", () => {

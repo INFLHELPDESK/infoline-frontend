@@ -226,6 +226,90 @@ export type Post = PostListItem & {
 };
 
 /* ------------------------------------------------------------------ */
+/* Insights — `insight` custom post type (Newsroom)                    */
+/* ------------------------------------------------------------------ */
+
+/** One page of a cursor-paginated connection (`pageInfo.endCursor` / `hasNextPage`). */
+export type CursorPage<T> = {
+  items: T[];
+  /** True only when a next page exists AND `endCursor` can be used to fetch it. */
+  hasNextPage: boolean;
+  endCursor: string | null;
+};
+
+/** A translation of an Insight in another language (Polylang `translations`). */
+export type InsightTranslation = {
+  locale: "en" | "ar";
+  /** Authoritative CMS URI of the counterpart record, language segment included. */
+  uri: string;
+};
+
+/**
+ * `eventDetails` (ACF). Populated by the CMS only on items typed `event`; every
+ * field is independently optional. Dates are the CMS strings, not parsed.
+ */
+export type InsightEventDetails = {
+  start: string | null;
+  end: string | null;
+  location: string | null;
+  /** http(s) or root-relative only; anything else is dropped. */
+  url: string | null;
+};
+
+export type InsightListItem = {
+  databaseId: number;
+  title: string;
+  slug: string;
+  /** Authoritative CMS URI (already carries the `/ar` segment for Arabic). */
+  uri: string;
+  /** CMS date string (site-local, no offset) or null. */
+  date: string | null;
+  /** Raw HTML excerpt (WP wraps it in <p>…</p>). */
+  excerpt: string | null;
+  image: ImageField | null;
+  /** Language of this record; always equals the locale it was requested for. */
+  locale: "en" | "ar";
+  translations: InsightTranslation[];
+  /** `insightTypes` (article | event | news today). Not assumed to be exactly one. */
+  types: Term[];
+  topics: Term[];
+  /** `insightContent.isFeatured` as stored. No uniqueness or ordering is implied. */
+  isFeatured: boolean;
+  /** Null for items without event data (articles, news, events with no fields set). */
+  eventDetails: InsightEventDetails | null;
+};
+
+export type InsightSeo = {
+  title: string | null;
+  description: string | null;
+  openGraphTitle: string | null;
+  openGraphDescription: string | null;
+};
+
+export type Insight = InsightListItem & {
+  /** Raw HTML body. */
+  content: string | null;
+  seo: InsightSeo;
+};
+
+/** `insightType` / `insightTopic` term. */
+export type InsightTerm = Term;
+
+/**
+ * Term with the CMS `count`. Terms are language-neutral today, so the count
+ * spans every language: it is NOT the number of items in the requested locale.
+ */
+export type InsightTermSummary = Term & { allLanguagesCount: number | null };
+
+/** Result of listing the Insights attached to one term (term-side query). */
+export type InsightTermListing = {
+  term: InsightTermSummary;
+  page: CursorPage<InsightListItem>;
+};
+
+export type InsightTaxonomy = "type" | "topic";
+
+/* ------------------------------------------------------------------ */
 /* Company profile — aboutSettings.companyProfile (About downloads)    */
 /* ------------------------------------------------------------------ */
 

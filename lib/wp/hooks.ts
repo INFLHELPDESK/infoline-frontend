@@ -18,6 +18,12 @@ import {
   getLatestPostCards,
   getPost,
   getCompanyProfile,
+  getInsights,
+  getInsight,
+  getInsightTypes,
+  getInsightTopics,
+  getInsightsByTerm,
+  INSIGHTS_PAGE_SIZE,
   type WpLocale,
 } from "./api";
 import { wpKeys } from "./keys";
@@ -33,6 +39,12 @@ import type {
   PostListItem,
   PostCard,
   CompanyProfile,
+  CursorPage,
+  Insight,
+  InsightListItem,
+  InsightTaxonomy,
+  InsightTermListing,
+  InsightTermSummary,
 } from "./types";
 
 /**
@@ -217,5 +229,63 @@ export function useCompanyProfile(options?: WpQueryOptions<CompanyProfile>) {
     ...options,
     queryKey: wpKeys.companyProfile(locale),
     queryFn: () => getCompanyProfile(),
+  });
+}
+
+/** One page of Insights; pass the previous page's `endCursor` as `after` for the next. */
+export function useInsights(
+  page: { first?: number; after?: string } = {},
+  options?: WpQueryOptions<CursorPage<InsightListItem>>,
+) {
+  const locale = useWpLocale();
+  const first = page.first ?? INSIGHTS_PAGE_SIZE;
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.insights(locale, first, page.after),
+    queryFn: () => getInsights(locale, first, page.after),
+  });
+}
+
+export function useInsight(uri: string, options?: WpQueryOptions<Insight | null>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.insight(uri, locale),
+    queryFn: () => getInsight(uri, locale),
+    enabled: options?.enabled ?? Boolean(uri),
+  });
+}
+
+export function useInsightTypes(options?: WpQueryOptions<InsightTermSummary[]>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.insightTerms("type", locale),
+    queryFn: () => getInsightTypes(),
+  });
+}
+
+export function useInsightTopics(options?: WpQueryOptions<InsightTermSummary[]>) {
+  const locale = useWpLocale();
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.insightTerms("topic", locale),
+    queryFn: () => getInsightTopics(),
+  });
+}
+
+export function useInsightsByTerm(
+  taxonomy: InsightTaxonomy,
+  slug: string,
+  page: { first?: number; after?: string } = {},
+  options?: WpQueryOptions<InsightTermListing | null>,
+) {
+  const locale = useWpLocale();
+  const first = page.first ?? INSIGHTS_PAGE_SIZE;
+  return useQuery({
+    ...options,
+    queryKey: wpKeys.insightsByTerm(taxonomy, slug, locale, first, page.after),
+    queryFn: () => getInsightsByTerm(taxonomy, slug, locale, first, page.after),
+    enabled: options?.enabled ?? Boolean(slug),
   });
 }

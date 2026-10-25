@@ -21,16 +21,20 @@ function signature(value: unknown): unknown {
   return typeof value;
 }
 
-const BY_URI: Record<string, "service" | "caseStudy" | "solution" | "industry"> = {
+const BY_URI: Record<string, "service" | "caseStudy" | "solution" | "industry" | "insight"> = {
   ServiceByUri: "service",
   CaseStudyByUri: "caseStudy",
   SolutionByUri: "solution",
   IndustryByUri: "industry",
+  InsightByUri: "insight",
 };
 
 function variablesFor(operation: string, locale: "en" | "ar") {
   if (operation in BY_URI) return { uri: uris(locale)[BY_URI[operation]] };
   if (operation === "PostBySlug") return { id: uris(locale).postSlug };
+  // Term-side operations take no language: both locales ask the same question.
+  if (operation === "InsightTypeInsights") return { slug: "article" };
+  if (operation === "InsightTopicInsights") return { slug: "clarity-speed" };
   return { language: locale === "ar" ? "AR" : "EN" };
 }
 
@@ -38,7 +42,8 @@ const ARABIC = /[؀-ۿ]/;
 
 describe("EN/AR fixture consistency", () => {
   it("covers every operation the stub knows", () => {
-    expect(KNOWN_OPERATIONS).toHaveLength(14);
+    // 14 original operations + 6 Insight operations.
+    expect(KNOWN_OPERATIONS).toHaveLength(20);
   });
 
   describe.each(KNOWN_OPERATIONS)("%s", (operation) => {
@@ -65,7 +70,7 @@ describe("EN/AR fixture consistency", () => {
   it("AR titles are Arabic and EN titles are not (language isolation)", () => {
     const titles = (locale: "en" | "ar") => {
       const out: string[] = [];
-      for (const operation of ["Services", "CaseStudies", "Solutions", "Industries", "Clients", "Careers", "Posts"]) {
+      for (const operation of ["Services", "CaseStudies", "Solutions", "Industries", "Clients", "Careers", "Posts", "Insights"]) {
         const data = resolve(operation, variablesFor(operation, locale), "full") as Record<
           string,
           { nodes: { title: string }[] }

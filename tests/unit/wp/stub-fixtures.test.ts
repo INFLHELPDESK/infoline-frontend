@@ -22,6 +22,12 @@ const FETCHERS: Record<string, (locale: api.WpLocale) => Promise<unknown>> = {
   getPosts: (l) => api.getPosts(l),
   getPost: (l) => api.getPost(uris(l).postSlug),
   getCompanyProfile: () => api.getCompanyProfile(),
+  getInsights: (l) => api.getInsights(l),
+  getInsight: (l) => api.getInsight(uris("en").insight, l),
+  getInsightTypes: () => api.getInsightTypes(),
+  getInsightTopics: () => api.getInsightTopics(),
+  getInsightsByType: (l) => api.getInsightsByTerm("type", "article", l),
+  getInsightsByTopic: (l) => api.getInsightsByTerm("topic", "clarity-speed", l),
 };
 
 describe("selection parser", () => {

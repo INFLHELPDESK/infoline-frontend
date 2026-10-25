@@ -3,6 +3,7 @@
  * collides in the cache once the WPML layer lands.
  */
 import type { WpLocale } from "./api";
+import type { InsightTaxonomy } from "./types";
 
 export const wpKeys = {
   all: ["wp"] as const,
@@ -36,6 +37,25 @@ export const wpKeys = {
     [...wpKeys.all, "posts", locale, "latest", first] as const,
   post: (slug: string, locale: WpLocale) =>
     [...wpKeys.all, "post", locale, slug] as const,
+
+  /**
+   * Insights. Every list/term-listing key shares the `["wp","insights",locale]`
+   * prefix, so one locale's entries can be invalidated without touching the
+   * other; the cursor is part of the key (one entry per page).
+   */
+  insights: (locale: WpLocale, first: number, after?: string | null) =>
+    [...wpKeys.all, "insights", locale, "list", first, after ?? null] as const,
+  insightsByTerm: (
+    taxonomy: InsightTaxonomy,
+    slug: string,
+    locale: WpLocale,
+    first: number,
+    after?: string | null,
+  ) => [...wpKeys.all, "insights", locale, taxonomy, slug, first, after ?? null] as const,
+  insight: (uri: string, locale: WpLocale) =>
+    [...wpKeys.all, "insight", locale, uri] as const,
+  insightTerms: (taxonomy: InsightTaxonomy, locale: WpLocale) =>
+    [...wpKeys.all, "insightTerms", locale, taxonomy] as const,
 
   companyProfile: (locale: WpLocale) =>
     [...wpKeys.all, "companyProfile", locale] as const,

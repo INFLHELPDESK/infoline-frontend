@@ -12,6 +12,12 @@ import {
   POSTS,
   POST_BY_SLUG,
   COMPANY_PROFILE,
+  INSIGHTS_LIST,
+  INSIGHT_BY_URI,
+  INSIGHT_TYPES,
+  INSIGHT_TOPICS,
+  INSIGHT_TYPE_INSIGHTS,
+  INSIGHT_TOPIC_INSIGHTS,
 } from "./queries";
 import {
   normalizeService,
@@ -23,6 +29,11 @@ import {
   normalizePostListItem,
   normalizePost,
   normalizeCompanyProfile,
+  normalizeInsight,
+  normalizeInsightPage,
+  normalizeInsightTermSummary,
+  type RawInsight,
+  type RawInsightConnection,
 } from "./normalize";
 import type {
   Service,
@@ -37,6 +48,12 @@ import type {
   PostListItem,
   PostCard,
   CompanyProfile,
+  CursorPage,
+  Insight,
+  InsightListItem,
+  InsightTaxonomy,
+  InsightTermListing,
+  InsightTermSummary,
 } from "./types";
 
 /**
@@ -546,4 +563,121 @@ export async function getCompanyProfile(): Promise<CompanyProfile> {
     { roots: ["aboutSettings"] },
   );
   return normalizeCompanyProfile(data);
+}
+
+/* --------------------------- Insights (`insight` CPT) -------------------------- */
+
+/** Default page size of the Insights hub (matches the CMS contract examples). */
+export const INSIGHTS_PAGE_SIZE = 12;
+
+/**
+ * Locale-correct URI lookup. Arabic URIs carry the `/ar` segment; an already
+ * prefixed URI is not prefixed twice. An English lookup is sent as given, so an
+ * `/ar/…` URI with `locale: "en"` still addresses the Arabic record and is then
+ * rejected by the language check instead of being rewritten to its English twin.
+ */
+function insightLookupUri(uri: string, locale: WpLocale) {
+  const clean = uri.startsWith("/") ? uri : `/${uri}`;
+  return locale === "ar" && !/^\/ar(\/|$)/.test(clean) ? `/ar${clean}` : clean;
+}
+
+/**
+ * Newest-first Insights of ONE language (`where.language`), cursor-paginated.
+ * Pass the previous page's `endCursor` as `after`. An Arabic request never
+ * falls back to English: until Arabic records exist the page is simply empty.
+ */
+export async function getInsights(
+  locale: WpLocale = "en",
+  first = INSIGHTS_PAGE_SIZE,
+  after?: string,
+): Promise<CursorPage<InsightListItem>> {
+  const data = await wpFetch<{ insights: RawInsightConnection }>(
+    INSIGHTS_LIST,
+    { first, after, language: languageFilter(locale) },
+    undefined,
+    { roots: ["insights"] },
+  );
+  return normalizeInsightPage(data.insights, wpNodes(data.insights, "insights"), locale);
+}
+
+/**
+ * One Insight by its authoritative CMS URI. Resolves `null` when the CMS has no
+ * such record OR the record found is not in `locale` (see `normalizeInsight`).
+ */
+export async function getInsight(
+  uri: string,
+  locale: WpLocale = "en",
+): Promise<Insight | null> {
+  const data = await wpFetch<{ insight: RawInsight | null }>(
+    INSIGHT_BY_URI,
+    { uri: insightLookupUri(uri, locale) },
+    undefined,
+    { roots: ["insight"] },
+  );
+  return normalizeInsight(data.insight, locale);
+}
+
+/**
+ * Insight taxonomies. Terms are language-neutral in the CMS today (a
+ * `where: { language }` filter returns nothing and `language` on a term errors),
+ * so no language is sent and the fetchers take no locale (like `getHubs`). The
+ * query keys still carry the locale; a filter belongs here once the backend
+ * assigns term languages.
+ */
+async function getInsightTermList(
+  query: string,
+  root: "insightTypes" | "insightTopics",
+): Promise<InsightTermSummary[]> {
+  const data = await wpFetch<
+    Record<
+      typeof root,
+      { nodes: { name: string | null; slug: string | null; count: number | null }[] }
+    >
+  >(query, {}, undefined, { roots: [root] });
+  return wpNodes(data[root], root).flatMap((n) => normalizeInsightTermSummary(n) ?? []);
+}
+
+export async function getInsightTypes(): Promise<InsightTermSummary[]> {
+  return getInsightTermList(INSIGHT_TYPES, "insightTypes");
+}
+
+export async function getInsightTopics(): Promise<InsightTermSummary[]> {
+  return getInsightTermList(INSIGHT_TOPICS, "insightTopics");
+}
+
+/**
+ * Insights of one term, queried from the term side (WPGraphQL has no `taxQuery`).
+ * That connection cannot filter by language, so records of other languages are
+ * dropped from each page: a page may hold fewer than `first` items while
+ * `hasNextPage` is still true. Resolves `null` for an unknown term slug.
+ */
+export async function getInsightsByTerm(
+  taxonomy: InsightTaxonomy,
+  slug: string,
+  locale: WpLocale = "en",
+  first = INSIGHTS_PAGE_SIZE,
+  after?: string,
+): Promise<InsightTermListing | null> {
+  const root = taxonomy === "type" ? "insightType" : "insightTopic";
+  const data = await wpFetch<
+    Record<
+      typeof root,
+      | ({ name: string | null; slug: string | null; count: number | null } & {
+          insights: RawInsightConnection;
+        })
+      | null
+    >
+  >(
+    taxonomy === "type" ? INSIGHT_TYPE_INSIGHTS : INSIGHT_TOPIC_INSIGHTS,
+    { slug, first, after },
+    undefined,
+    { roots: [root] },
+  );
+  const raw = data[root];
+  const term = normalizeInsightTermSummary(raw);
+  if (!raw || !term) return null;
+  return {
+    term,
+    page: normalizeInsightPage(raw.insights, wpNodes(raw.insights, `${root}.insights`), locale),
+  };
 }

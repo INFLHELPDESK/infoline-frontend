@@ -14,6 +14,12 @@ import {
   getLatestPostCards,
   getPost,
   getCompanyProfile,
+  getInsights,
+  getInsight,
+  getInsightTypes,
+  getInsightTopics,
+  getInsightsByTerm,
+  INSIGHTS_PAGE_SIZE,
   type WpLocale,
 } from "./api";
 import { wpKeys } from "./keys";
@@ -41,6 +47,7 @@ import { wpKeys } from "./keys";
  * - No retries: `fetchQuery` does not retry, so the timeout is the worst case.
  */
 import type { QueryClient } from "@tanstack/react-query";
+import type { InsightTaxonomy } from "./types";
 
 export async function prefetchService(
   qc: QueryClient,
@@ -175,5 +182,56 @@ export async function prefetchCompanyProfile(
   return qc.fetchQuery({
     queryKey: wpKeys.companyProfile(locale),
     queryFn: () => getCompanyProfile(),
+  });
+}
+
+export async function prefetchInsights(
+  qc: QueryClient,
+  locale: WpLocale = "en",
+  first = INSIGHTS_PAGE_SIZE,
+  after?: string,
+) {
+  return qc.fetchQuery({
+    queryKey: wpKeys.insights(locale, first, after),
+    queryFn: () => getInsights(locale, first, after),
+  });
+}
+
+export async function prefetchInsight(
+  qc: QueryClient,
+  uri: string,
+  locale: WpLocale = "en",
+) {
+  return qc.fetchQuery({
+    queryKey: wpKeys.insight(uri, locale),
+    queryFn: () => getInsight(uri, locale),
+  });
+}
+
+export async function prefetchInsightTypes(qc: QueryClient, locale: WpLocale = "en") {
+  return qc.fetchQuery({
+    queryKey: wpKeys.insightTerms("type", locale),
+    queryFn: () => getInsightTypes(),
+  });
+}
+
+export async function prefetchInsightTopics(qc: QueryClient, locale: WpLocale = "en") {
+  return qc.fetchQuery({
+    queryKey: wpKeys.insightTerms("topic", locale),
+    queryFn: () => getInsightTopics(),
+  });
+}
+
+export async function prefetchInsightsByTerm(
+  qc: QueryClient,
+  taxonomy: InsightTaxonomy,
+  slug: string,
+  locale: WpLocale = "en",
+  first = INSIGHTS_PAGE_SIZE,
+  after?: string,
+) {
+  return qc.fetchQuery({
+    queryKey: wpKeys.insightsByTerm(taxonomy, slug, locale, first, after),
+    queryFn: () => getInsightsByTerm(taxonomy, slug, locale, first, after),
   });
 }

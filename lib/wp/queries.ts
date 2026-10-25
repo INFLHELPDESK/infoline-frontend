@@ -360,6 +360,158 @@ export const POST_BY_SLUG = /* GraphQL */ `
   }
 `;
 
+/* ------------------------- Insights (`insight` CPT) ------------------------ */
+
+/**
+ * Selections verified against the Development schema (read-only introspection,
+ * Revision 1 of the CMS update). Notes that shape these documents:
+ *  - `where.language` exists on `insights` (Polylang) but NOT on the term-side
+ *    `insights` connection, so every node asks for `language { code }` and the
+ *    normalizer enforces the requested locale.
+ *  - `language { code }` on `insightType` / `insightTopic` currently fails
+ *    server-side, so terms never select it.
+ *  - `taxQuery` does not exist: taxonomy filtering goes through the term.
+ */
+const INSIGHT_LIST_FIELDS = /* GraphQL */ `
+  databaseId
+  title
+  slug
+  uri
+  date
+  excerpt
+  language {
+    code
+  }
+  translations {
+    uri
+    language {
+      code
+    }
+  }
+  featuredImage {
+    node {
+      sourceUrl
+      altText
+    }
+  }
+  insightTypes {
+    nodes {
+      name
+      slug
+    }
+  }
+  insightTopics {
+    nodes {
+      name
+      slug
+    }
+  }
+  insightContent {
+    isFeatured
+  }
+  eventDetails {
+    eventStart
+    eventEnd
+    eventLocation
+    eventUrl
+  }
+`;
+
+export const INSIGHTS_LIST = /* GraphQL */ `
+  query Insights($first: Int = 12, $after: String, $language: LanguageCodeFilterEnum) {
+    insights(
+      first: $first
+      after: $after
+      where: { language: $language, orderby: { field: DATE, order: DESC } }
+    ) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        ${INSIGHT_LIST_FIELDS}
+      }
+    }
+  }
+`;
+
+export const INSIGHT_BY_URI = /* GraphQL */ `
+  query InsightByUri($uri: ID!) {
+    insight(id: $uri, idType: URI) {
+      ${INSIGHT_LIST_FIELDS}
+      content
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
+    }
+  }
+`;
+
+export const INSIGHT_TYPES = /* GraphQL */ `
+  query InsightTypes {
+    insightTypes(first: 100) {
+      nodes {
+        name
+        slug
+        count
+      }
+    }
+  }
+`;
+
+export const INSIGHT_TOPICS = /* GraphQL */ `
+  query InsightTopics {
+    insightTopics(first: 100) {
+      nodes {
+        name
+        slug
+        count
+      }
+    }
+  }
+`;
+
+export const INSIGHT_TYPE_INSIGHTS = /* GraphQL */ `
+  query InsightTypeInsights($slug: ID!, $first: Int = 12, $after: String) {
+    insightType(id: $slug, idType: SLUG) {
+      name
+      slug
+      count
+      insights(first: $first, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          ${INSIGHT_LIST_FIELDS}
+        }
+      }
+    }
+  }
+`;
+
+export const INSIGHT_TOPIC_INSIGHTS = /* GraphQL */ `
+  query InsightTopicInsights($slug: ID!, $first: Int = 12, $after: String) {
+    insightTopic(id: $slug, idType: SLUG) {
+      name
+      slug
+      count
+      insights(first: $first, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          ${INSIGHT_LIST_FIELDS}
+        }
+      }
+    }
+  }
+`;
+
 /* --------------------- Company profile (About downloads) ------------------ */
 
 /**

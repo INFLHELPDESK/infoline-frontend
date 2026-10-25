@@ -12,6 +12,11 @@
 //             options pages carry no groups
 //   null-acf  entities exist but every ACF group is null
 //   partial   ACF groups exist but every leaf is null and repeaters are null
+//
+// Plus one cross-cutting scenario, `NO_ARABIC_INSIGHTS`: everything is `full`
+// except that no Arabic Insight exists (the live CMS today). Arabic listings are
+// empty and an `/ar/…` lookup is answered with the English record, exactly as
+// Polylang does.
 
 const MEDIA = "http://127.0.0.1:3199/stub-media";
 
@@ -55,6 +60,7 @@ export const uris = (locale) => ({
   industry: `${prefix(locale)}/industries/government/`,
   career: `${prefix(locale)}/careers/quality-analyst/`,
   postSlug: locale === "ar" ? "seasonal-peak-ar" : "seasonal-peak",
+  insight: `${prefix(locale)}/insights/lead-article/`,
 });
 
 /* --------------------------------- Service -------------------------------- */
@@ -464,6 +470,251 @@ function companyProfile(variant) {
   };
 }
 
+/* ------------------------------ Insights (CPT) ----------------------------- */
+
+/** Scenario name: Arabic Insights are not published (see header). */
+export const NO_ARABIC_INSIGHTS = "arabic-insights-unpublished";
+
+/**
+ * Terms are language-neutral in the live CMS (no per-language term records), so
+ * both locales carry the same English term names — deliberately not "translated".
+ */
+const INSIGHT_TYPES = { article: "Article", event: "Event", news: "News" };
+const INSIGHT_TOPICS = {
+  "ai-digital-acceleration": "AI & Digital Acceleration",
+  "clarity-speed": "Clarity & Speed",
+  "culture-excellence": "Culture Excellence",
+  "value-growth": "Value Growth",
+};
+
+/** Newest first, as the CMS orders them (DATE DESC). EN and AR share the rows. */
+const INSIGHT_ROWS = [
+  {
+    slug: "lead-article",
+    type: "article",
+    topic: "clarity-speed",
+    date: "2026-10-12T09:00:00",
+    featured: true,
+    image: true,
+    translated: true,
+    title: { en: "A score that had not moved in quarters", ar: "نتيجة لم تتحرك منذ أرباع" },
+  },
+  {
+    slug: "event-conference",
+    type: "event",
+    topic: "clarity-speed",
+    date: "2026-10-10T09:00:00",
+    featured: false,
+    image: true,
+    translated: false,
+    event: {
+      eventStart: "2026-11-17T00:00:00+00:00",
+      eventEnd: "2026-11-18T00:00:00+00:00",
+      eventLocation: "Example Convention Centre, Muscat",
+      eventUrl: "https://example.test/register",
+    },
+    title: { en: "Example CX Forum 2026", ar: "منتدى تجربة العملاء ٢٠٢٦" },
+  },
+  {
+    slug: "news-update",
+    type: "news",
+    topic: "value-growth",
+    date: "2026-10-05T09:00:00",
+    featured: false,
+    image: false,
+    translated: false,
+    title: { en: "Infoline renews its quality certification", ar: "إنفولاين تجدد شهادة الجودة" },
+  },
+  {
+    slug: "event-open-ended",
+    type: "event",
+    topic: "ai-digital-acceleration",
+    date: "2026-09-28T09:00:00",
+    featured: false,
+    image: false,
+    translated: false,
+    event: {
+      eventStart: "2026-12-03T00:00:00+00:00",
+      eventEnd: null,
+      eventLocation: "Online",
+      eventUrl: null,
+    },
+    title: { en: "Webinar with no end date", ar: "ندوة بلا موعد انتهاء" },
+  },
+  {
+    slug: "minimal-article",
+    type: "article",
+    topic: null,
+    date: "2026-09-01T09:00:00",
+    featured: false,
+    image: false,
+    translated: false,
+    minimal: true,
+    title: { en: "A minimal article", ar: "مقال مختصر" },
+  },
+];
+
+const OTHER = { en: "ar", ar: "en" };
+const insightUri = (locale, slug) => `${prefix(locale)}/insights/${slug}/`;
+const insightId = (locale, index) => (locale === "ar" ? 9100 : 9000) + index;
+
+/** One Insight as the list selection returns it (`detail` adds body and SEO). */
+function insightNode(row, locale, variant, detail) {
+  const index = INSIGHT_ROWS.indexOf(row);
+  const title = row.title[locale];
+  const node = {
+    databaseId: insightId(locale, index),
+    title,
+    slug: row.slug,
+    uri: insightUri(locale, row.slug),
+    date: row.date,
+    excerpt: row.minimal ? null : `<p>${title}</p>\n`,
+    language: { code: locale.toUpperCase() },
+    translations: row.translated
+      ? [{ uri: insightUri(OTHER[locale], row.slug), language: { code: OTHER[locale].toUpperCase() } }]
+      : [],
+    featuredImage: row.image ? img(`insight-${row.slug}`, title) : null,
+    insightTypes: terms([INSIGHT_TYPES[row.type], row.type]),
+    insightTopics: row.topic ? terms([INSIGHT_TOPICS[row.topic], row.topic]) : { nodes: [] },
+    insightContent: { isFeatured: row.featured },
+    eventDetails: row.event ?? null,
+  };
+  if (detail) {
+    node.content = row.minimal ? null : `<p>${title}</p>\n<p>Body.</p>\n`;
+    node.seo = row.minimal
+      ? { title: null, metaDesc: "", opengraphTitle: null, opengraphDescription: null }
+      : {
+          title: `${title} - Infoline`,
+          metaDesc: "",
+          opengraphTitle: `${title} - Infoline`,
+          opengraphDescription: title,
+        };
+  }
+  if (variant === "null-acf") {
+    return {
+      ...node,
+      excerpt: null,
+      translations: null,
+      featuredImage: null,
+      insightTypes: null,
+      insightTopics: null,
+      insightContent: null,
+      eventDetails: null,
+      ...(detail ? { content: null, seo: null } : {}),
+    };
+  }
+  if (variant === "partial") {
+    return {
+      ...node,
+      excerpt: null,
+      translations: [],
+      featuredImage: { node: null },
+      insightTypes: { nodes: [] },
+      insightTopics: { nodes: [] },
+      insightContent: { isFeatured: null },
+      eventDetails: { eventStart: null, eventEnd: null, eventLocation: null, eventUrl: null },
+      ...(detail
+        ? {
+            content: null,
+            seo: { title: null, metaDesc: null, opengraphTitle: null, opengraphDescription: null },
+          }
+        : {}),
+    };
+  }
+  return node;
+}
+
+/** Languages whose Insights exist for this variant. */
+const insightLocales = (variant) => (variant === NO_ARABIC_INSIGHTS ? ["en"] : ["en", "ar"]);
+/** The shape variant the node builders use (the scenario is not a shape). */
+const shapeOf = (variant) => (variant === NO_ARABIC_INSIGHTS ? "full" : variant);
+
+const encodeCursor = (index) => Buffer.from(`arrayconnection:${index}`).toString("base64");
+const decodeCursor = (cursor) => {
+  const match = /^arrayconnection:(\d+)$/.exec(Buffer.from(String(cursor), "base64").toString());
+  return match ? Number(match[1]) : -1;
+};
+
+/** Cursor-paginated connection over already-ordered nodes (`first` defaults to 12). */
+function connection(nodes, { first = 12, after } = {}) {
+  const start = after ? decodeCursor(after) + 1 : 0;
+  const page = nodes.slice(start, start + first);
+  const end = start + page.length;
+  return {
+    pageInfo: {
+      hasNextPage: end < nodes.length,
+      endCursor: page.length ? encodeCursor(end - 1) : null,
+    },
+    nodes: page,
+  };
+}
+
+/** Every language's Insights, newest first (EN before AR on equal dates), filtered by `keep`. */
+function mixedInsightNodes(variant, keep) {
+  return INSIGHT_ROWS.filter(keep).flatMap((row) =>
+    insightLocales(variant).map((locale) => insightNode(row, locale, shapeOf(variant), false)),
+  );
+}
+
+function insightsList(v, variant) {
+  const locale = localeOfLanguage(v);
+  const nodes =
+    variant === "empty" || !insightLocales(variant).includes(locale)
+      ? []
+      : INSIGHT_ROWS.map((row) => insightNode(row, locale, shapeOf(variant), false));
+  return { insights: connection(nodes, v) };
+}
+
+/**
+ * By-URI lookup. When the Arabic record is not published, Polylang answers an
+ * `/ar/<slug>/` lookup with the ENGLISH record (observed on the live CMS); the
+ * client's language check is what keeps it off an Arabic page.
+ */
+function insightByUri(v, variant) {
+  if (variant === "empty") return { insight: null };
+  const uri = String(v?.uri ?? "");
+  const requested = localeOfUri(uri);
+  const path = requested === "ar" ? uri.slice(3) : uri;
+  const row = INSIGHT_ROWS.find((r) => insightUri("en", r.slug) === path);
+  if (!row) return { insight: null };
+  const served = insightLocales(variant).includes(requested) ? requested : "en";
+  return { insight: insightNode(row, served, shapeOf(variant), true) };
+}
+
+/** The CMS `count` spans every language. */
+const termCount = (rows, variant) =>
+  variant === "partial" ? null : rows.length * insightLocales(variant).length;
+
+const rowsOfType = (slug) => INSIGHT_ROWS.filter((r) => r.type === slug);
+const rowsOfTopic = (slug) => INSIGHT_ROWS.filter((r) => r.topic === slug);
+
+const termNodes = (names, rowsOf, variant) =>
+  variant === "empty"
+    ? []
+    : Object.entries(names).map(([slug, name]) => ({
+        name,
+        slug,
+        count: termCount(rowsOf(slug), variant),
+      }));
+
+/** Term-side listing: the connection cannot filter by language, so it mixes them. */
+function termListing(root, names, rowsOf, v, variant) {
+  const name = names[v?.slug];
+  if (variant === "empty" || !name) return { [root]: null };
+  const rows = rowsOf(v.slug);
+  return {
+    [root]: {
+      name,
+      slug: v.slug,
+      count: termCount(rows, variant),
+      insights: connection(
+        mixedInsightNodes(variant, (row) => rows.includes(row)),
+        v,
+      ),
+    },
+  };
+}
+
 /* ------------------------------- Resolution -------------------------------- */
 
 export const VARIANTS = ["full", "empty", "null-acf", "partial"];
@@ -521,11 +772,37 @@ const OPERATIONS = {
     return { post: locale ? post(locale, variant, true) : null };
   },
   CompanyProfile: (_v, variant) => companyProfile(variant),
+  Insights: insightsList,
+  InsightByUri: insightByUri,
+  InsightTypes: (_v, variant) => ({
+    insightTypes: { nodes: termNodes(INSIGHT_TYPES, rowsOfType, variant) },
+  }),
+  InsightTopics: (_v, variant) => ({
+    insightTopics: { nodes: termNodes(INSIGHT_TOPICS, rowsOfTopic, variant) },
+  }),
+  InsightTypeInsights: (v, variant) =>
+    termListing("insightType", INSIGHT_TYPES, rowsOfType, v, variant),
+  InsightTopicInsights: (v, variant) =>
+    termListing("insightTopic", INSIGHT_TOPICS, rowsOfTopic, v, variant),
 };
+
+/** Operations whose data depends on the `NO_ARABIC_INSIGHTS` scenario. */
+const INSIGHT_OPERATIONS = new Set([
+  "Insights",
+  "InsightByUri",
+  "InsightTypes",
+  "InsightTopics",
+  "InsightTypeInsights",
+  "InsightTopicInsights",
+]);
 
 export const KNOWN_OPERATIONS = Object.keys(OPERATIONS);
 
 export function resolve(operation, variables, variant = "full") {
   const build = OPERATIONS[operation];
-  return build ? build(variables ?? {}, variant) : undefined;
+  if (!build) return undefined;
+  // Every other operation sees the scenario as plain `full` data.
+  const effective =
+    variant === NO_ARABIC_INSIGHTS && !INSIGHT_OPERATIONS.has(operation) ? "full" : variant;
+  return build(variables ?? {}, effective);
 }

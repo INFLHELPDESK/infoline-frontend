@@ -29,6 +29,11 @@ const PREFETCHERS: [string, (qc: QueryClient, l: Locale) => Promise<unknown>][] 
   ["prefetchPosts", (qc, l) => server.prefetchPosts(qc, l)],
   ["prefetchPost", (qc, l) => server.prefetchPost(qc, "seasonal-peak", l)],
   ["prefetchCompanyProfile", (qc, l) => server.prefetchCompanyProfile(qc, l)],
+  ["prefetchInsights", (qc, l) => server.prefetchInsights(qc, l)],
+  ["prefetchInsight", (qc, l) => server.prefetchInsight(qc, uris("en").insight, l)],
+  ["prefetchInsightTypes", (qc, l) => server.prefetchInsightTypes(qc, l)],
+  ["prefetchInsightTopics", (qc, l) => server.prefetchInsightTopics(qc, l)],
+  ["prefetchInsightsByTerm", (qc, l) => server.prefetchInsightsByTerm(qc, "type", "article", l)],
 ];
 
 describe.each(["en", "ar"] as const)("prefetch contract (%s)", (locale) => {
