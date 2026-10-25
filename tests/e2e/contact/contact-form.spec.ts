@@ -8,15 +8,6 @@ const country = en.countries[0];
 const service = messages.en.Solutions.items[0].title;
 const serviceMessage = "We need to stabilise a 200-seat contact centre.";
 
-/**
- * Known defects are asserted against the intended contract. Each test calls
- * `test.fail()` immediately before the defect assertion, so a broken setup
- * step still fails the run instead of counting as the expected failure.
- */
-const knownDefect = (id: string, description: string) => {
-  test.info().annotations.push({ type: "known-defect", description: `${id}: ${description}` });
-};
-
 async function fillServiceInquiry(contact: ContactPage) {
   await contact.fillDetails({ ...applicant, country });
   await contact.field(en.service).selectOption(service);
@@ -74,19 +65,12 @@ async function touch(contact: ContactPage, labels: string[]) {
 
 test.describe("contact form — client validation", () => {
   test("[D-8] the first submit of an untouched, empty form is blocked", async ({ page }) => {
-    knownDefect(
-      "D-8",
-      "handleSubmit reads `invalid` from the render before touched is set, so the first submit skips validation and sends empty fields",
-    );
     const contact = new ContactPage(page);
     const api = await mockSubmitInquiry(page, reply.payload(inquiry.stored()));
     await contact.goto();
 
     await contact.submitButton("service").click();
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    expect(await api.fetchCalls()).toBe(1);
-
-    test.fail(); // from here on: the defect itself
+    await expect(contact.error(en.errors.name)).toBeVisible();
     expect(await api.fetchCalls()).toBe(0);
   });
 
@@ -114,7 +98,7 @@ test.describe("contact form — client validation", () => {
     await contact.goto("?route=project");
 
     // Timeline is a button group and cannot be "touched" without choosing a
-    // value, so the first (unvalidated, see D-8) attempt marks every field.
+    // value, so the first submit marks every field.
     await contact.submitButton("project").click();
     await expect(contact.error(en.errors.projectType)).toBeVisible();
     await expect(contact.error(en.errors.timeline)).toBeVisible();
@@ -247,10 +231,6 @@ test.describe("contact form — server responses", () => {
   });
 
   test("[D-4] the user can resubmit after correcting server field errors", async ({ page }) => {
-    knownDefect(
-      "D-4",
-      "server field errors are never cleared, so the form stays 'invalid' and later submits are swallowed",
-    );
     const contact = new ContactPage(page);
     const api = await mockSubmitInquiry(
       page,
@@ -263,12 +243,10 @@ test.describe("contact form — server responses", () => {
     await expect(contact.error(en.errors.email)).toBeVisible();
 
     await contact.email.fill("jane.smith@example.com");
+    await expect(contact.error(en.errors.email)).toHaveCount(0);
     await contact.submitButton("service").click();
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    expect(await api.fetchCalls()).toBe(1);
-
-    test.fail(); // from here on: the defect itself
-    await expect.poll(() => api.requests.length, { timeout: 3_000 }).toBe(2);
+    await expect(contact.successHeading("service")).toBeVisible();
+    expect(api.requests).toHaveLength(2);
   });
 
   const generalFailures = [
@@ -328,23 +306,12 @@ test.describe("contact form — project inquiry", () => {
   });
 
   test("[D-1] sends fixed API keys for projectType and startTimeline", async ({ page }) => {
-    knownDefect(
-      "D-1",
-      "keyForLabel() is called with label/key arrays swapped, so the UI label (e.g. 'New build') is sent instead of the key",
-    );
     const contact = new ContactPage(page);
     const api = await mockSubmitInquiry(page, reply.payload(inquiry.stored()));
     await contact.goto();
     await fillProjectInquiry(contact);
     await contact.submitButton("project").click();
     await expect(contact.successHeading("project")).toBeVisible();
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    expect(api.lastInput()).toMatchObject({
-      projectType: en.projectTypeOptions[0],
-      startTimeline: en.timelineOptions[0],
-    });
-
-    test.fail(); // from here on: the defect itself
     expect(api.lastInput()).toMatchObject({
       projectType: en.projectTypeKeys[0],
       startTimeline: en.timelineKeys[0],
@@ -376,20 +343,15 @@ test.describe("contact form — vendor route", () => {
   test("[D-8] an untouched, empty vendor form does not reach the confirmation", async ({
     page,
   }) => {
-    knownDefect("D-8", "the first submit skips validation, so an empty vendor form 'succeeds'");
     const contact = new ContactPage(page);
     await contact.goto("?route=vendor");
 
     await contact.submitButton("vendor").click();
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    await expect(contact.form).toHaveCount(0);
-
-    test.fail(); // from here on: the defect itself
-    await expect(contact.error(en.errors.vendor)).toBeVisible({ timeout: 2_000 });
+    await expect(contact.error(en.errors.vendor)).toBeVisible();
+    await expect(contact.form).toBeVisible();
   });
 
   test("[D-3] the vendor confirmation shows translated copy", async ({ page, consoleErrors }) => {
-    knownDefect("D-3", "success.title.vendor / success.description.vendor are missing from both locales");
     const contact = new ContactPage(page);
     await contact.goto("?route=vendor");
     await contact.fillDetails({ ...applicant, country });
@@ -402,10 +364,7 @@ test.describe("contact form — vendor route", () => {
       .locator("xpath=..");
     const confirmation = panel.locator("h3");
     await expect(confirmation).toBeVisible();
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    await expect(confirmation).toHaveText("ContactPage.success.title.vendor");
-
-    test.fail(); // from here on: the defect itself
+    await expect(confirmation).toHaveText(messages.en.ContactPage.success.title.vendor);
     await expect(confirmation).not.toContainText("ContactPage.");
     expect(consoleErrors.filter((e) => e.includes("MISSING_MESSAGE"))).toEqual([]);
   });
@@ -423,7 +382,6 @@ test.describe("contact form — spam protection", () => {
   });
 
   test("[D-5] forwards a bot-filled honeypot value so the API can discard it", async ({ page }) => {
-    knownDefect("D-5", "the form always sends website: '' and never reads the honeypot input");
     const contact = new ContactPage(page);
     const api = await mockSubmitInquiry(page, reply.payload(inquiry.stored({ entryId: 0 })));
     await contact.goto();
@@ -431,10 +389,6 @@ test.describe("contact form — spam protection", () => {
     await contact.honeypot.fill("https://spam.example", { force: true });
     await contact.submitButton("service").click();
     await expect(contact.successHeading("service")).toBeVisible();
-    // Pin today's defective behaviour exactly, so any other change fails red.
-    expect(api.lastInput()?.website).toBe("");
-
-    test.fail(); // from here on: the defect itself
     expect(api.lastInput()?.website).toBe("https://spam.example");
   });
 

@@ -108,6 +108,8 @@ export default function Form({
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [serverFieldErrors, setServerFieldErrors] = useState<Record<string, string>>({});
   const [turnstileToken, setTurnstileToken] = useState("");
+  // Synchronous guard: `submitting` state lags a render behind a fast double click.
+  const inFlight = useRef(false);
 
   const formRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
@@ -120,8 +122,16 @@ export default function Form({
   const timelineKeys = t.raw("form.timelineKeys") as string[];
   const projectTypeKeys = t.raw("form.projectTypeKeys") as string[];
 
-  const set = (key: string, v: string) =>
+  const set = (key: string, v: string) => {
     setValues((prev) => ({ ...prev, [key]: v }));
+    // Editing a field retires the server error attached to it.
+    setServerFieldErrors((prev) => {
+      if (!prev[key]) return prev;
+      const rest = { ...prev };
+      delete rest[key];
+      return rest;
+    });
+  };
   const blur = (key: string) => setTouched((prev) => ({ ...prev, [key]: "1" }));
 
   /** UI label -> fixed API key (handover: send the key, not the label). */
@@ -129,10 +139,8 @@ export default function Form({
     keys[labels.indexOf(label)] ?? label;
 
   /** Field-level validation — only surfaces once a field is touched. */
-  const errorFor = (key: string): string | undefined => {
-    // Server-side validation errors take precedence (mapped by field).
-    if (serverFieldErrors[key]) return serverFieldErrors[key];
-    if (!touched[key]) return undefined;
+  const clientErrorFor = (key: string, force = false): string | undefined => {
+    if (!force && !touched[key]) return undefined;
     const v = values[key].trim();
     switch (key) {
       case "name":
@@ -169,6 +177,10 @@ export default function Form({
     }
   };
 
+  const errorFor = (key: string): string | undefined =>
+    // Server-side validation errors take precedence (mapped by field).
+    serverFieldErrors[key] ?? clientErrorFor(key);
+
   const requiredKeys: Record<RouteId, string[]> = {
     service: ["name", "email", "organisation", "country", "service", "message"],
     project: [
@@ -183,11 +195,6 @@ export default function Form({
     vendor: ["name", "email", "organisation", "country", "vendorCategory"],
     careers: ["name", "email", "role"],
   };
-
-  const currentErrors = requiredKeys[route]
-    .map(errorFor)
-    .filter(Boolean) as string[];
-  const invalid = currentErrors.length > 0;
 
   const submitLabel = {
     service: t("form.sendService"),
@@ -205,8 +212,13 @@ export default function Form({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (inFlight.current) return;
     setTouched(Object.fromEntries(requiredKeys[route].map((k) => [k, "1"])));
-    if (invalid) return;
+    // Validate against current values now — `touched` state is not applied yet.
+    if (requiredKeys[route].some((k) => clientErrorFor(k, true))) return;
+    const honeypot = String(
+      new FormData(e.currentTarget as HTMLFormElement).get("website") ?? "",
+    );
 
     // Vendor route has no API form yet (handover §2 lists only the three
     // GraphQL inquiries + job application) — keep the local success state.
@@ -221,6 +233,7 @@ export default function Form({
       return;
     }
 
+    inFlight.current = true;
     setSubmitting(true);
     setGeneralError(null);
     setServerFieldErrors({});
@@ -236,7 +249,7 @@ export default function Form({
               country: values.country,
               service: values.service,
               message: values.message,
-              website: "",
+              website: honeypot,
               turnstileToken,
             }
           : {
@@ -247,16 +260,16 @@ export default function Form({
               country: values.country,
               projectType: keyForLabel(
                 values.projectType,
-                projectTypeOptions,
                 projectTypeKeys,
+                projectTypeOptions,
               ) as ProjectType,
               startTimeline: keyForLabel(
                 values.timeline,
-                timelineOptions,
                 timelineKeys,
+                timelineOptions,
               ) as StartTimeline,
               message: values.message,
-              website: "",
+              website: honeypot,
               turnstileToken,
             },
       );
@@ -273,6 +286,7 @@ export default function Form({
       } else if (state === "field_errors") {
         // Map server errors onto our fields (field names match inputs).
         const mapped: Record<string, string> = {};
+        let unmapped = false;
         for (const errItem of result.validationErrors) {
           const uiKey =
             errItem.field === "workEmail"
@@ -281,10 +295,17 @@ export default function Form({
                 ? "timeline"
                 : errItem.field;
           // Server messages are English-only — show our own copy (handover §3).
-          mapped[uiKey] = t(`form.errors.${uiKey}`);
+          // Fields without translated copy (e.g. honeypot/token) fall back to
+          // the general error rather than rendering a missing-key string.
+          if (t.has(`form.errors.${uiKey}`)) {
+            mapped[uiKey] = t(`form.errors.${uiKey}`);
+          } else {
+            unmapped = true;
+          }
         }
         setServerFieldErrors(mapped);
         setTouched(Object.fromEntries(Object.keys(mapped).map((k) => [k, "1"])));
+        if (unmapped) setGeneralError(t("form.submitError"));
       } else {
         // Rate limit / server error — show the general message.
         setGeneralError(t("form.submitError"));
@@ -292,6 +313,7 @@ export default function Form({
     } catch {
       setGeneralError(t("form.submitError"));
     } finally {
+      inFlight.current = false;
       setSubmitting(false);
     }
   };

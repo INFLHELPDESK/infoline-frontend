@@ -1770,12 +1770,14 @@
       "title": {
         "service": "Thanks — your inquiry is with our commercial team.",
         "project": "Thanks — your project brief has landed.",
-        "careers": "Thanks — your message is on its way to the right team."
+        "careers": "Thanks — your message is on its way to the right team.",
+        "vendor": "Thanks — your registration is with our procurement team."
       },
       "description": {
         "service": "A named account lead will reply to {email} within 1 business day with next steps. No further action is needed from you right now.",
         "project": "We'll review the brief and come back within 1 business day to scope the first conversation. No account needed — yet.",
-        "careers": "HR and Communications will review your message and reply within 1 business day if there's a fit."
+        "careers": "HR and Communications will review your message and reply within 1 business day if there's a fit.",
+        "vendor": "We'll review your details and reply to {email} within 1 business day."
       },
       "again": "Send another inquiry"
     },
