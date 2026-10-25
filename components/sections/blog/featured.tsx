@@ -28,7 +28,7 @@ export default function Featured({ post }: { post: BlogPost }) {
         <Reveal amount={0.2} duration={1.1}>
           <article className="group rounded-3xl border border-[#e0e0e0] bg-white p-2 shadow-[0_6px_13px_rgba(0,0,0,0.03),0_24px_24px_rgba(0,0,0,0.02)] transition-shadow duration-500 hover:shadow-[0_22px_48px_-20px_rgba(13,22,27,0.18)]">
             <Link
-              href={`/blog/${post.slug}`}
+              href={post.href ?? `/blog/${post.slug}`}
               className="grid rounded-2xl focus-visible:outline-2 focus-visible:outline-brandblue-500 md:grid-cols-[minmax(0,470px)_1fr]"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-100 md:aspect-auto md:min-h-[266px] md:rounded-e-none">

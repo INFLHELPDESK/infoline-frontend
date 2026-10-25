@@ -246,7 +246,7 @@ enabled in production. Nothing here has been run against live WordPress.
 | BLK-2 | 100-post lookup limit | Medium | OPEN |
 | BLK-3 | CMS posts missing from the sitemap | Medium | OPEN |
 | BLK-4 | CMS outage behaviour on Blog Detail | Medium | OPEN |
-| BLK-5 | Insights cache-key coupling | Low | OPEN |
+| BLK-5 | Insights cache-key coupling | Low | SUPERSEDED |
 
 ### BLK-1 — WPML activation and EN/AR language filtering
 
@@ -372,4 +372,8 @@ enabled in production. Nothing here has been run against live WordPress.
 - **Verification requirements:** A unit test in `tests/unit/wp/insights-feed.test.ts`
   asserting the cards are returned for `source: "cms"`; the existing Insights
   e2e link assertions stay green.
-- **Status:** OPEN
+- **Status:** SUPERSEDED. `/insights` no longer reads cards back from the
+  `QueryClient`: `loadInsightsListing` (`lib/insights-listing.ts`) returns the
+  items it fetched, and the page renders them directly (no dehydration, no
+  `getQueryData` cast). The legacy Posts feed (`lib/insights-feed.ts`,
+  `formats-live.tsx`) is unused and awaits the Posts-integration cleanup.

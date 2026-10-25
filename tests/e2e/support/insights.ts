@@ -1,6 +1,6 @@
 /**
  * The rendered "Formats" section of a server-rendered /insights page. The
- * whole document also carries the RSC payload (dehydrated posts, the static
+ * whole document also carries the RSC payload (locale messages, static
  * fallback props), so card assertions must look at this markup only.
  */
 export function formatsSection(html: string): string {
@@ -10,22 +10,21 @@ export function formatsSection(html: string): string {
 }
 
 /**
- * The dehydrated React Query state the page streams to the browser (inside the
- * RSC payload, so its quotes are backslash-escaped, to a depth that varies).
- * Only this region is asserted on for payload size and contents: the document
- * as a whole also carries the locale messages, which legitimately contain
- * words like "excerpt".
+ * CMS Insights as the stub serves them (tests/support/cms-stub/fixtures.mjs),
+ * newest first. Terms are English-only in the CMS, so card category labels come
+ * from the locale copy instead.
  */
-export function dehydratedQueries(html: string): string {
-  const match = /\\*"queries\\*":\[\{[\s\S]*?\\*"queryHash\\*"/.exec(html);
-  if (!match) throw new Error("no dehydrated query state in the server HTML");
-  return match[0];
-}
+export const INSIGHT_TITLES = {
+  lead: { en: "A score that had not moved in quarters", ar: "نتيجة لم تتحرك منذ أرباع" },
+  event: { en: "Example CX Forum 2026", ar: "منتدى تجربة العملاء ٢٠٢٦" },
+  news: { en: "Infoline renews its quality certification", ar: "إنفولاين تجدد شهادة الجودة" },
+  minimal: { en: "A minimal article", ar: "مقال مختصر" },
+} as const;
 
-/** True when the escaped payload has a JSON object key `key`. */
-export function payloadHasKey(payload: string, key: string): boolean {
-  return new RegExp(`\\\\*"${key}\\\\*":`).test(payload);
-}
-
-/** Fields a whole CMS list item has and a teaser card must not. */
-export const NON_CARD_FIELDS = ["databaseId", "uri", "content"];
+/** Router paths of those Insights (the CMS URI without the `/ar` segment). */
+export const INSIGHT_PATH = {
+  lead: "/insights/lead-article",
+  event: "/insights/event-conference",
+  news: "/insights/news-update",
+  minimal: "/insights/minimal-article",
+} as const;

@@ -17,8 +17,9 @@ export type Insight = {
 /**
  * Where the Insights "Formats" cards came from (rendered as
  * `data-content-source` so tests and operators can tell them apart):
- * - `cms`             WordPress posts
- * - `fallback-empty`  the CMS answered with no usable posts; static locale items
+ * - `cms`             WordPress Insights
+ * - `empty`           the CMS answered with no Insights in this language; empty state, no static items
+ * - `fallback-empty`  legacy Posts feed only (lib/insights-feed): no usable posts; static locale items
  * - `fallback-error`  the CMS request failed; static locale items
  */
-export type InsightsSource = "cms" | "fallback-empty" | "fallback-error";
+export type InsightsSource = "cms" | "empty" | "fallback-empty" | "fallback-error";

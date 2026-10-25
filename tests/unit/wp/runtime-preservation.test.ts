@@ -9,9 +9,9 @@ const EXTENSIONS = ["", ".ts", ".tsx", ".mts", ".js", ".jsx", ".mjs", ".json"];
 const WP_ENTRY = /^(lib\/wp\/|providers\/|lib\/content-adapters\.)/;
 
 /**
- * The routes wired to WordPress so far (/[locale]/insights and its blog detail
- * destination /[locale]/blog/[slug]) and the modules
- * built only for it. These may reach the WP layer; nothing else may reach them
+ * The routes wired to WordPress so far (/[locale]/insights, /[locale]/blog and
+ * the blog detail destination /[locale]/blog/[slug]) and the modules
+ * built only for them. These may reach the WP layer; nothing else may reach them
  * (a second page importing one is a second wired route). Adding an entry here
  * is the deliberate act of wiring another route.
  */
@@ -21,6 +21,11 @@ const WIRED_ROUTE_FILES = [
   "lib/insights-feed.ts",
   "lib/blog-post.ts",
   "app/[locale]/blog/[slug]/page.tsx",
+  "app/[locale]/(site)/blog/page.tsx",
+  "components/sections/blog/updates.tsx",
+  "lib/insights-actions.ts",
+  "lib/insights-cards.ts",
+  "lib/insights-listing.ts",
 ];
 
 /** Everything the running app can start from. */
@@ -118,7 +123,7 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
       for (const file of WIRED_ROUTE_FILES) expect(existsSync(join(root, file)), file).toBe(true);
     });
 
-    it("is confined to the Insights and blog detail routes and their dedicated modules", () => {
+    it("is confined to the Insights and Blog routes and their dedicated modules", () => {
       for (const file of WIRED_ROUTE_FILES) expect(file, file).toMatch(/insights|blog/);
     });
 
@@ -126,7 +131,7 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
       const hits = findWpReach(WIRED_ROUTE_FILES);
       expect(hits.has("lib/wp/server.ts")).toBe(true);
       expect(hits.has("lib/wp/hooks.ts")).toBe(true);
-      expect(hits.has("providers/index.ts")).toBe(true);
+      expect(hits.has("providers/query-client/get-query-client.ts")).toBe(true);
       expect(hits.has("lib/content-adapters.ts")).toBe(true);
     });
 
@@ -139,9 +144,10 @@ describe("WordPress infrastructure is reachable only from the wired route", () =
             return !!target && WP_ENTRY.test(target);
           }),
         );
-      // The blog detail page reaches the WP layer only through lib/blog-post.
-      const viaBlogPost = ["app/[locale]/blog/[slug]/page.tsx"];
-      expect(direct.sort()).toEqual(WIRED_ROUTE_FILES.filter((f) => !viaBlogPost.includes(f)).sort());
+      // These reach the WP layer only through another wired module: the blog
+      // detail page through lib/blog-post, the "Load more" grid through the server action.
+      const viaWired = ["app/[locale]/blog/[slug]/page.tsx", "components/sections/blog/updates.tsx"];
+      expect(direct.sort()).toEqual(WIRED_ROUTE_FILES.filter((f) => !viaWired.includes(f)).sort());
     });
   });
 

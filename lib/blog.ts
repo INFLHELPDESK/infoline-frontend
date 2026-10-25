@@ -1,5 +1,9 @@
 export type BlogPost = {
   slug: string;
+  /** CMS Insight id; set only on CMS-backed posts (de-duplicates paged results). */
+  id?: number;
+  /** Router path to open instead of `/blog/<slug>`; set only on CMS-backed posts. */
+  href?: string;
   category: string;
   date: string; // ISO, used for ordering
   dateLabel: string; // localized display date

@@ -107,10 +107,12 @@ for (const locale of locales) {
   });
 }
 
-test("blog index and sitemap keep their static behavior", async ({ request }) => {
+test("blog index lists Insight articles (not Posts) and the sitemap keeps its static behavior", async ({ request }) => {
   for (const locale of locales) {
     const blog = await (await request.get(`/${locale}/blog`)).text();
-    expect(rendersElementText(blog, messages[locale].Blog.posts[0].title)).toBe(true);
+    // The index is the CMS `article` Insight view (see blog-listing.spec.ts); the Posts-based CMS post is not on it.
+    expect(blog).toContain('data-content-source="cms"');
+    expect(rendersElementText(blog, messages[locale].Blog.posts[0].title)).toBe(false);
     expect(rendersElementText(blog, CMS[locale].title)).toBe(false);
   }
   const sitemap = await (await request.get("/sitemap.xml")).text();

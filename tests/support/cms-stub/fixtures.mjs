@@ -487,6 +487,41 @@ const INSIGHT_TOPICS = {
   "value-growth": "Value Growth",
 };
 
+/** Scenario name: enough English and Arabic articles to need a second page (Load more). */
+export const MANY_ARTICLES = "many-article-insights";
+
+/** Extra articles for `MANY_ARTICLES`, older than every base row (still newest first). */
+const EXTRA_ARTICLES = Array.from({ length: 14 }, (_, i) => ({
+  slug: `bulk-article-${i + 1}`,
+  type: "article",
+  topic: null,
+  date: `2026-08-${String(28 - i).padStart(2, "0")}T09:00:00`,
+  featured: false,
+  image: false,
+  translated: false,
+  title: { en: `Bulk article ${i + 1}`, ar: `مقال إضافي ${i + 1}` },
+}));
+
+/**
+ * Scenario name: 80 newer English-only articles sit in front of the real ones, so
+ * an Arabic term-side scan meets more than five consecutive pages (12 records
+ * each) without a single Arabic record before it finds one.
+ */
+export const BURIED_ARABIC = "arabic-articles-buried";
+
+/** English-only articles, newer than every base row. */
+const ENGLISH_ONLY_ARTICLES = Array.from({ length: 80 }, (_, i) => ({
+  slug: `english-only-${i + 1}`,
+  type: "article",
+  topic: null,
+  englishOnly: true,
+  date: `2026-12-${String(28 - (i % 28)).padStart(2, "0")}T${String(23 - Math.floor(i / 28)).padStart(2, "0")}:00:00`,
+  featured: false,
+  image: false,
+  translated: false,
+  title: { en: `English only ${i + 1}`, ar: "" },
+}));
+
 /** Newest first, as the CMS orders them (DATE DESC). EN and AR share the rows. */
 const INSIGHT_ROWS = [
   {
@@ -554,13 +589,24 @@ const INSIGHT_ROWS = [
   },
 ];
 
+/** Every row any scenario can serve; ids are stable across scenarios. */
+const ALL_INSIGHT_ROWS = [...INSIGHT_ROWS, ...EXTRA_ARTICLES, ...ENGLISH_ONLY_ARTICLES];
+const rowsFor = (variant) =>
+  variant === MANY_ARTICLES
+    ? [...INSIGHT_ROWS, ...EXTRA_ARTICLES]
+    : variant === BURIED_ARABIC
+      ? [...ENGLISH_ONLY_ARTICLES, ...INSIGHT_ROWS]
+      : INSIGHT_ROWS;
+/** A row exists in `locale` unless it is an English-only article. */
+const rowInLocale = (row, locale) => !(row.englishOnly && locale === "ar");
+
 const OTHER = { en: "ar", ar: "en" };
 const insightUri = (locale, slug) => `${prefix(locale)}/insights/${slug}/`;
 const insightId = (locale, index) => (locale === "ar" ? 9100 : 9000) + index;
 
 /** One Insight as the list selection returns it (`detail` adds body and SEO). */
 function insightNode(row, locale, variant, detail) {
-  const index = INSIGHT_ROWS.indexOf(row);
+  const index = ALL_INSIGHT_ROWS.indexOf(row);
   const title = row.title[locale];
   const node = {
     databaseId: insightId(locale, index),
@@ -626,8 +672,10 @@ function insightNode(row, locale, variant, detail) {
 
 /** Languages whose Insights exist for this variant. */
 const insightLocales = (variant) => (variant === NO_ARABIC_INSIGHTS ? ["en"] : ["en", "ar"]);
+/** The scenarios that change Insights data only (every other operation sees `full`). */
+const isInsightScenario = (variant) => variant === NO_ARABIC_INSIGHTS || variant === MANY_ARTICLES || variant === BURIED_ARABIC;
 /** The shape variant the node builders use (the scenario is not a shape). */
-const shapeOf = (variant) => (variant === NO_ARABIC_INSIGHTS ? "full" : variant);
+const shapeOf = (variant) => (isInsightScenario(variant) ? "full" : variant);
 
 const encodeCursor = (index) => Buffer.from(`arrayconnection:${index}`).toString("base64");
 const decodeCursor = (cursor) => {
@@ -651,8 +699,10 @@ function connection(nodes, { first = 12, after } = {}) {
 
 /** Every language's Insights, newest first (EN before AR on equal dates), filtered by `keep`. */
 function mixedInsightNodes(variant, keep) {
-  return INSIGHT_ROWS.filter(keep).flatMap((row) =>
-    insightLocales(variant).map((locale) => insightNode(row, locale, shapeOf(variant), false)),
+  return rowsFor(variant).filter(keep).flatMap((row) =>
+    insightLocales(variant)
+      .filter((locale) => rowInLocale(row, locale))
+      .map((locale) => insightNode(row, locale, shapeOf(variant), false)),
   );
 }
 
@@ -661,7 +711,9 @@ function insightsList(v, variant) {
   const nodes =
     variant === "empty" || !insightLocales(variant).includes(locale)
       ? []
-      : INSIGHT_ROWS.map((row) => insightNode(row, locale, shapeOf(variant), false));
+      : rowsFor(variant)
+          .filter((row) => rowInLocale(row, locale))
+          .map((row) => insightNode(row, locale, shapeOf(variant), false));
   return { insights: connection(nodes, v) };
 }
 
@@ -675,7 +727,7 @@ function insightByUri(v, variant) {
   const uri = String(v?.uri ?? "");
   const requested = localeOfUri(uri);
   const path = requested === "ar" ? uri.slice(3) : uri;
-  const row = INSIGHT_ROWS.find((r) => insightUri("en", r.slug) === path);
+  const row = rowsFor(variant).find((r) => insightUri("en", r.slug) === path);
   if (!row) return { insight: null };
   const served = insightLocales(variant).includes(requested) ? requested : "en";
   return { insight: insightNode(row, served, shapeOf(variant), true) };
@@ -685,8 +737,8 @@ function insightByUri(v, variant) {
 const termCount = (rows, variant) =>
   variant === "partial" ? null : rows.length * insightLocales(variant).length;
 
-const rowsOfType = (slug) => INSIGHT_ROWS.filter((r) => r.type === slug);
-const rowsOfTopic = (slug) => INSIGHT_ROWS.filter((r) => r.topic === slug);
+const rowsOfType = (slug, variant) => rowsFor(variant).filter((r) => r.type === slug);
+const rowsOfTopic = (slug, variant) => rowsFor(variant).filter((r) => r.topic === slug);
 
 const termNodes = (names, rowsOf, variant) =>
   variant === "empty"
@@ -694,14 +746,14 @@ const termNodes = (names, rowsOf, variant) =>
     : Object.entries(names).map(([slug, name]) => ({
         name,
         slug,
-        count: termCount(rowsOf(slug), variant),
+        count: termCount(rowsOf(slug, variant), variant),
       }));
 
 /** Term-side listing: the connection cannot filter by language, so it mixes them. */
 function termListing(root, names, rowsOf, v, variant) {
   const name = names[v?.slug];
   if (variant === "empty" || !name) return { [root]: null };
-  const rows = rowsOf(v.slug);
+  const rows = rowsOf(v.slug, variant);
   return {
     [root]: {
       name,
@@ -786,7 +838,7 @@ const OPERATIONS = {
     termListing("insightTopic", INSIGHT_TOPICS, rowsOfTopic, v, variant),
 };
 
-/** Operations whose data depends on the `NO_ARABIC_INSIGHTS` scenario. */
+/** Operations whose data depends on the Insights-only scenarios. */
 const INSIGHT_OPERATIONS = new Set([
   "Insights",
   "InsightByUri",
@@ -802,7 +854,6 @@ export function resolve(operation, variables, variant = "full") {
   const build = OPERATIONS[operation];
   if (!build) return undefined;
   // Every other operation sees the scenario as plain `full` data.
-  const effective =
-    variant === NO_ARABIC_INSIGHTS && !INSIGHT_OPERATIONS.has(operation) ? "full" : variant;
+  const effective = isInsightScenario(variant) && !INSIGHT_OPERATIONS.has(operation) ? "full" : variant;
   return build(variables ?? {}, effective);
 }

@@ -4,8 +4,10 @@
  * mutation, an unknown query) still fails the run.
  */
 export const ALLOWED_CMS_OPERATIONS: readonly string[] = [
-  "Posts", // /[locale]/insights (cards)
-  "PostBySlug", // /[locale]/blog/[slug] (CMS posts) and the Insights link check
+  "Insights", // /[locale]/insights (every Insight type)
+  "InsightTypeInsights", // /[locale]/blog (article term) and its "Load more" server action
+  "Posts", // /[locale]/blog/[slug] locale check
+  "PostBySlug", // /[locale]/blog/[slug] (CMS posts)
 ];
 
 /**

@@ -67,6 +67,15 @@ export default function Formats({
             </Link>
           </StaggerItem>
 
+          {contentSource === "empty" ? (
+            <p
+              data-empty=""
+              className="rounded-[20px] border border-[#e0e0e0] bg-white px-6 py-12 text-center text-[16px] leading-6 text-slate-600"
+            >
+              {t("formats.empty")}
+            </p>
+          ) : null}
+
           <Stagger
             as="div"
             className="grid grid-cols-1 gap-6 md:grid-cols-3"

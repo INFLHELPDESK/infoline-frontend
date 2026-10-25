@@ -19,7 +19,7 @@ export default function PostCard({ post }: { post: BlogPost }) {
       className="group h-full rounded-[20px] border border-[#e0e0e0] bg-white p-2 shadow-[0_12px_32px_rgba(90,103,126,0.08)] transition-shadow duration-500 hover:shadow-[0_22px_48px_-20px_rgba(13,22,27,0.18)]"
     >
       <Link
-        href={`/blog/${post.slug}`}
+        href={post.href ?? `/blog/${post.slug}`}
         className="flex h-full flex-col rounded-2xl focus-visible:outline-2 focus-visible:outline-brandblue-500"
       >
         <div className="relative aspect-[394/259] w-full overflow-hidden rounded-xl bg-slate-100">

@@ -1571,7 +1571,8 @@
       "allCta": {
         "label": "View all",
         "href": "/blog"
-      }
+      },
+      "empty": "New insights will appear here as soon as they are published."
     },
     "featured": {
       "eyebrow": "Featured proof",
@@ -1853,7 +1854,13 @@
       "meta": {
         "title": "Blog — Infoline",
         "description": "Articles, event notes and company news from the Infoline operations floor in Oman."
-      }
+      },
+      "empty": {
+        "title": "No articles yet",
+        "description": "New articles will appear here as soon as they are published."
+      },
+      "loadMore": "Load more",
+      "loadMoreError": "We couldn't load more articles. Please try again."
     },
     "posts": [
       {

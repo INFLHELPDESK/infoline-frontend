@@ -4,18 +4,13 @@ import Hero from "@/components/sections/insights/hero";
 import Callout from "@/components/sections/insights/callout";
 import Themes from "@/components/sections/insights/themes";
 import Proof from "@/components/sections/insights/proof";
-import FormatsLive from "@/components/sections/insights/formats-live";
+import Formats from "@/components/sections/insights/formats";
 import FeaturedProof from "@/components/sections/insights/featured-proof";
 import Cta from "@/components/sections/insights/cta";
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import type { Insight } from "@/lib/insights";
-import { loadInsightsFeed } from "@/lib/insights-feed";
-import { renderableSlugs } from "@/lib/blog-post";
+import { cardToInsight, toInsightCard, typeLabelsFromFilters } from "@/lib/insights-cards";
+import { INSIGHTS_PAGE_CARDS, loadInsightsListing } from "@/lib/insights-listing";
 import type { BlogPost } from "@/lib/blog";
-import { INSIGHTS_LIMIT } from "@/lib/content-adapters";
-import type { PostCard } from "@/lib/wp";
-import { wpKeys } from "@/lib/wp/keys";
-import { ProviderQueryWrapper } from "@/providers";
 import { getQueryClient } from "@/providers/query-client/get-query-client";
 import { localeAlternates } from "@/lib/site";
 
@@ -54,34 +49,31 @@ function withPostDetails(item: Insight, posts: BlogPost[]): Insight {
 
 export default async function InsightsPage() {
   const [t, locale] = await Promise.all([getTranslations(), getLocale()]);
-  // Static locale items: the fallback whenever the CMS has no usable posts.
-  const staticPosts = t.raw("Blog.posts") as BlogPost[];
-  const insights = (t.raw("Insights.items") as Insight[]).map((item) =>
-    withPostDetails(item, staticPosts),
-  );
-
-  // One QueryClient per request (never shared between users); the prefetch
-  // fills it and the boundary hands it to the client for hydration.
-  const queryClient = getQueryClient();
   const wpLocale = locale === "ar" ? "ar" : "en";
-  const feed = await loadInsightsFeed(queryClient, wpLocale);
 
-  // A CMS card links only to a blog detail page that actually renders (static
-  // locale posts, or a CMS post the detail route can show); otherwise it stays
-  // a plain, non-clickable card. Lookups share the Next data cache with the
-  // detail route and never touch this page's dehydrated QueryClient.
-  const cards =
-    feed.source === "cms"
-      ? (queryClient.getQueryData(wpKeys.latestPosts(wpLocale, INSIGHTS_LIMIT)) as PostCard[] | undefined) ?? []
-      : [];
-  const linkableSlugs = [
-    ...(await renderableSlugs(
-      staticPosts,
-      cards.slice(0, INSIGHTS_LIMIT).map((c) => c.slug),
-      wpLocale,
-    )),
-    ...staticPosts.map((p) => p.slug),
-  ];
+  // One QueryClient per request (never shared between users).
+  const listing = await loadInsightsListing(getQueryClient(), wpLocale, INSIGHTS_PAGE_CARDS);
+
+  let formats: React.ReactNode;
+  if (listing.status === "cms") {
+    const labels = typeLabelsFromFilters(t.raw("Blog.page.filters") as { id: string; label: string }[]);
+    formats = (
+      <Formats
+        insights={listing.items.map((item) => cardToInsight(toInsightCard(item, labels)))}
+        contentSource="cms"
+      />
+    );
+  } else if (listing.status === "empty") {
+    // The CMS answered and has nothing in this language: say so, never show static items.
+    formats = <Formats insights={[]} contentSource="empty" />;
+  } else {
+    // The CMS could not answer (already logged): the locale's static items.
+    const staticPosts = t.raw("Blog.posts") as BlogPost[];
+    const insights = (t.raw("Insights.items") as Insight[]).map((item) =>
+      withPostDetails(item, staticPosts),
+    );
+    formats = <Formats insights={insights} contentSource="fallback-error" />;
+  }
 
   return (
     <main className="overflow-x-clip">
@@ -89,15 +81,7 @@ export default async function InsightsPage() {
       <Callout />
       <Themes />
       <Proof />
-      <ProviderQueryWrapper>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <FormatsLive
-            fallback={insights}
-            source={feed.source}
-            linkableSlugs={linkableSlugs}
-          />
-        </HydrationBoundary>
-      </ProviderQueryWrapper>
+      {formats}
       <FeaturedProof />
       <Cta />
     </main>

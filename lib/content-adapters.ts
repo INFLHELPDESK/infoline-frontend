@@ -29,7 +29,7 @@ function htmlToParagraphs(html: string | null): string[] {
     .filter(Boolean);
 }
 
-function formatDate(iso: string, locale: string): string {
+export function formatDate(iso: string, locale: string): string {
   if (!iso) return "";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
