@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { loadInsightDetail, toInsightDetail } from "@/lib/insights-detail";
+import { loadInsightDetail, loadRelatedInsights, toInsightDetail } from "@/lib/insights-detail";
 import { WpRequestError } from "@/lib/wp/client";
 import type { Insight } from "@/lib/wp/types";
 
@@ -157,5 +157,25 @@ describe("toInsightDetail", () => {
     );
     expect(ar?.post.href).toBe("/insights/a-title");
     expect(ar?.post.href).not.toMatch(/\/ar\/ar|^\/ar/);
+  });
+});
+
+describe("loadRelatedInsights", () => {
+  const item = (id: number) => ({ ...insight({ databaseId: id, slug: `s${id}`, uri: `/insights/s${id}/` }) });
+  const listing = (ids: number[]) =>
+    vi.fn().mockResolvedValue({ status: "cms", items: ids.map(item), hasNextPage: false, endCursor: null });
+
+  it("asks for one extra record, drops the current one and de-duplicates", async () => {
+    const list = listing([1, 2, 2, 3, 4]);
+    const posts = await loadRelatedInsights("en", 1, {}, 3, list as never);
+    expect(list).toHaveBeenCalledWith({}, "en", 4);
+    expect(posts.map((p) => p.id)).toEqual([2, 3, 4]);
+  });
+
+  it("is empty on a CMS failure or an empty listing", async () => {
+    const error = vi.fn().mockResolvedValue({ status: "error", failure: { kind: "network" } });
+    const empty = vi.fn().mockResolvedValue({ status: "empty" });
+    expect(await loadRelatedInsights("en", 1, {}, 3, error as never)).toEqual([]);
+    expect(await loadRelatedInsights("ar", 1, {}, 3, empty as never)).toEqual([]);
   });
 });

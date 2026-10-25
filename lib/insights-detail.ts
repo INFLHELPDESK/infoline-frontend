@@ -1,7 +1,8 @@
 import type { BlogPost } from "@/lib/blog";
 import { sanitizeCmsHtml } from "@/lib/cms-html";
 import { formatDate, stripHtml } from "@/lib/content-adapters";
-import { insightHref, readingMinutes, toInsightCard, type TypeLabels } from "@/lib/insights-cards";
+import { cardToBlogPost, insightHref, readingMinutes, toInsightCard, type TypeLabels } from "@/lib/insights-cards";
+import { loadInsightsListing } from "@/lib/insights-listing";
 import { WpConfigError, isWpRequestError, type WpFailureKind } from "@/lib/wp/client";
 import { prefetchInsight } from "@/lib/wp/server";
 import type { WpLocale } from "@/lib/wp/api";
@@ -113,4 +114,28 @@ export async function loadInsightDetail(
     );
     return { kind: "error", error, failure };
   }
+}
+
+/** Cards in the related row (the design shows three). */
+export const RELATED_INSIGHTS = 3;
+
+/**
+ * Newest Insights of the same locale, minus the current one. One bounded
+ * listing request (limit + 1, so the current record can be dropped); a CMS
+ * failure or an empty answer is an empty row, which the layout hides.
+ */
+export async function loadRelatedInsights(
+  locale: WpLocale,
+  currentId: number | undefined,
+  labels: TypeLabels = {},
+  limit = RELATED_INSIGHTS,
+  load: typeof loadInsightsListing = loadInsightsListing,
+): Promise<BlogPost[]> {
+  const listing = await load(getQueryClient(), locale, limit + 1);
+  if (listing.status !== "cms") return [];
+  const seen = new Set<number | undefined>([currentId]);
+  const cards = listing.items
+    .map((item) => toInsightCard(item, labels))
+    .filter((c) => !seen.has(c.id) && seen.add(c.id));
+  return cards.slice(0, limit).map((card) => cardToBlogPost(card, locale));
 }

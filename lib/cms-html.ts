@@ -5,18 +5,21 @@
  *
  * - Tags outside the allowlist are dropped but their text is kept; script-like
  *   elements are dropped together with their content. Comments are dropped.
- * - The only attribute kept is `href` on `<a>`: http(s), `mailto:`, `tel:`,
- *   `#fragment` and root-relative paths. Everything else (`javascript:`, `data:`,
- *   protocol-relative and bare relative URLs) loses its link, keeping the text.
+ * - Attributes kept: `href` on `<a>` (http(s), `mailto:`, `tel:`, `#fragment` and
+ *   root-relative paths; everything else, `javascript:`, `data:`, protocol-relative
+ *   and bare relative URLs, loses its link, keeping the text) and, on `<img>`,
+ *   `src` (http(s) or root-relative only), `alt` and numeric `width`/`height`.
+ *   An `<img>` without a safe `src` is dropped. Images are emitted lazy-loaded.
+ * - `<figure>` and `<figcaption>` are kept (structure only, no attributes).
  * - External links open in a new tab with `noopener noreferrer`. Root-relative
  *   links in Arabic content get the `/ar` segment the router expects.
  * - Tags are rebalanced, so malformed CMS markup cannot leak into the page shell.
  */
 
 const ALLOWED = new Set([
-  "p", "h2", "h3", "h4", "ul", "ol", "li", "strong", "b", "em", "i", "blockquote", "a", "br",
+  "p", "h2", "h3", "h4", "ul", "ol", "li", "strong", "b", "em", "i", "blockquote", "a", "br", "img", "figure", "figcaption",
 ]);
-const VOID = new Set(["br"]);
+const VOID = new Set(["br", "img"]);
 /** Headings are demoted so the page keeps one `h1`. */
 const RENAME: Record<string, string> = { h1: "h2", h5: "h4", h6: "h4" };
 /** Dropped together with everything inside them. */
@@ -26,6 +29,12 @@ const DROP_WITH_CONTENT = new Set([
 
 const TAG = /<!--[\s\S]*?-->|<(\/?)([a-zA-Z][\w:-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)>/g;
 const HREF = /(?:^|\s)href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/i;
+
+/** Value of attribute `name` in a raw attribute string, or null. */
+function attrValue(attrs: string, name: string): string | null {
+  const m = new RegExp(`(?:^|[\\s"'])${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`, "i").exec(attrs);
+  return m ? (m[1] ?? m[2] ?? m[3] ?? "") : null;
+}
 
 const NAMED_ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", colon: ":", tab: "\t", newline: "\n" };
 
@@ -59,6 +68,14 @@ export function resolveCmsHref(
   }
   if (/^https?:\/\/[^/?#]/i.test(value)) return { href: value, kind: "external" };
   if (/^(mailto|tel):/i.test(value)) return { href: value, kind: "contact" };
+  return null;
+}
+
+/** Image URLs: http(s) or a single-slash root-relative path; never data:, javascript: or protocol-relative. */
+export function resolveCmsImageSrc(raw: string): string | null {
+  const value = decodeEntities(raw).replace(/[\u0000-\u001f\u007f\s]+/g, "");
+  if (!value || value.startsWith("//")) return null;
+  if (value.startsWith("/") || /^https?:\/\/[^/?#]/i.test(value)) return value;
   return null;
 }
 
@@ -105,6 +122,19 @@ export function sanitizeCmsHtml(html: string | null | undefined, locale: "en" | 
     if (closing) {
       if (tag === "a" && droppedAnchors > 0) droppedAnchors -= 1; // the close of a link we dropped
       else if (!VOID.has(tag) && open.includes(tag)) closeTo(tag);
+      continue;
+    }
+    if (tag === "img") {
+      const src = resolveCmsImageSrc(attrValue(attrs, "src") ?? "");
+      if (!src) continue;
+      const alt = decodeEntities(attrValue(attrs, "alt") ?? "");
+      const size = (n: string) => {
+        const v = attrValue(attrs, n);
+        return v && /^\d{1,5}$/.test(v) && Number(v) > 0 ? ` ${n}="${v}"` : "";
+      };
+      out.push(
+        `<img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}"${size("width")}${size("height")} loading="lazy" decoding="async">`,
+      );
       continue;
     }
     if (VOID.has(tag)) {

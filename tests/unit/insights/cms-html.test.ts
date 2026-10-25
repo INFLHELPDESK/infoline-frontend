@@ -85,3 +85,28 @@ describe("sanitizeCmsHtml", () => {
     });
   });
 });
+
+describe("images and figures", () => {
+  it("keeps a safe image with alt and size, lazy-loaded, and drops other attributes", () => {
+    expect(
+      sanitizeCmsHtml('<img src="https://cms.test/a.jpg?x=1&y=2" alt="A &amp; B" width="800" height="400" class="c" onerror="x()" srcset="evil 1x">'),
+    ).toBe('<img src="https://cms.test/a.jpg?x=1&amp;y=2" alt="A &amp; B" width="800" height="400" loading="lazy" decoding="async">');
+  });
+
+  it("keeps figure and figcaption, and an image with no alt gets an empty one", () => {
+    expect(sanitizeCmsHtml('<figure class="w"><img src="/wp/a.png"><figcaption>Cap <em>x</em></figcaption></figure>')).toBe(
+      '<figure><img src="/wp/a.png" alt="" loading="lazy" decoding="async"><figcaption>Cap <em>x</em></figcaption></figure>',
+    );
+  });
+
+  it.each(["javascript:alert(1)", "data:image/svg+xml,<svg/>", "//evil.test/a.png", "a.png", " jav&#x61;script:x", ""])(
+    "drops an image with unsafe src %j",
+    (src) => {
+      expect(sanitizeCmsHtml(`<p>t<img src="${src}" alt="a"></p>`)).toBe("<p>t</p>");
+    },
+  );
+
+  it("does not prefix /ar on image paths", () => {
+    expect(sanitizeCmsHtml('<img src="/wp/a.png" alt="">', "ar")).toContain('src="/wp/a.png"');
+  });
+});

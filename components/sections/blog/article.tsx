@@ -11,6 +11,8 @@ const cmsBodyClass = [
   "[&_h3]:text-[20px] [&_h3]:leading-7 [&_h3]:font-semibold [&_h3]:text-slate-900",
   "[&_h4]:text-[18px] [&_h4]:leading-7 [&_h4]:font-semibold [&_h4]:text-slate-900",
   "[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ps-6 [&_ol]:ps-6 [&_li]:mt-2",
+  "[&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-[20px]",
+  "[&_figure]:flex [&_figure]:flex-col [&_figure]:gap-3 [&_figcaption]:text-[14px] [&_figcaption]:leading-6 [&_figcaption]:text-slate-500",
   "[&_blockquote]:border-s-4 [&_blockquote]:border-brandblue-500 [&_blockquote]:ps-5 [&_blockquote]:text-slate-900",
 ].join(" ");
 

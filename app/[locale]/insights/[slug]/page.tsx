@@ -6,7 +6,7 @@ import SingleHero from "@/components/sections/blog/single-hero";
 import Article from "@/components/sections/blog/article";
 import Cta from "@/components/sections/home-1/cta";
 import ErrorPage, { errorButtonClass } from "@/components/sections/error/error-page";
-import { loadInsightDetail } from "@/lib/insights-detail";
+import { loadInsightDetail, loadRelatedInsights } from "@/lib/insights-detail";
 import { typeLabelsFromFilters } from "@/lib/insights-cards";
 import { buildInsightAlternates, verifyInsightTranslations } from "@/lib/insights-seo";
 import { getSiteUrl } from "@/lib/site";
@@ -67,6 +67,11 @@ export default async function InsightDetailPage({ params }: { params: Params }) 
 
   const { post, bodyHtml, readMinutes, event, backHref, type } = result.detail;
   const translations = await resolveTranslations(slug, locale);
+  const morePosts = await loadRelatedInsights(
+    locale === "ar" ? "ar" : "en",
+    post.id,
+    typeLabelsFromFilters((await getTranslations("Blog.page")).raw("filters") as { id: string; label: string }[]),
+  );
 
   // The soft 404 is a normal page of this route, so the group layout cannot
   // tell it apart: the shared CTA is rendered here, for found content only.
@@ -77,7 +82,7 @@ export default async function InsightDetailPage({ params }: { params: Params }) 
       />
       <main className="overflow-x-clip" data-content-source="cms" data-insight-type={type ?? undefined}>
         <SingleHero post={post} backHref={backHref} readMinutes={readMinutes} event={event} />
-        <Article post={post} morePosts={[]} bodyHtml={bodyHtml} />
+        <Article post={post} morePosts={morePosts} bodyHtml={bodyHtml} />
       </main>
       <Cta />
     </>
