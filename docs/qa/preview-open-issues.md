@@ -4,7 +4,7 @@ Tracker for issues found during Frontend Preview QA that are not yet resolved.
 Resolved issues are removed from this file (history lives in Git).
 
 **Branch:** `feature/home-2-redesign`
-**Last updated:** 2026-10-22
+**Last updated:** 2026-10-26
 
 ## Summary
 
@@ -19,6 +19,8 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-011](#pqa-011--home--what-changes--alternative-toggle-design-open-design-and-content-questions) | Home | What changes — alternative toggle design: open design/content questions | Medium | PENDING DESIGN / CONTENT REVIEW |
 | [PQA-012](#pqa-012--about--scale-and-credentials--lorem-ipsum-placeholder) | About | Scale and credentials — Lorem Ipsum placeholder (EN and AR) | High | OPEN — Production blocker, content missing |
 | [PQA-013](#pqa-013--solutions--partner-cta--arabic-secondary-label-placeholder) | Solutions | Partner CTA — Arabic secondary label is English | Low | PENDING CONTENT REVIEW |
+| [PQA-014](#pqa-014--contact--company-profile-link-blocked-by-missing-pdf) | Contact | Company profile link — blocked by missing PDF | Medium | BLOCKED — Awaiting asset |
+| [PQA-015](#pqa-015--solutions--technology-services-arabic-subtitle-pending) | Solutions | Technology Services — Arabic subtitle pending | Low | PENDING CONTENT REVIEW |
 
 ## Issue template
 
@@ -212,6 +214,27 @@ Copy this block for new issues.
   - [ ] `show` is consistent between English and Arabic, or the difference is confirmed as intended.
   - [ ] Only `SolutionsPage.partner.secondaryCta` in `locales/ar.json` changes.
   - [ ] Verified in RTL at 1440, 768 and 390px.
+
+### PQA-014 — Contact — Company profile link blocked by missing PDF
+
+- **Page:** Contact (`/contact`) — `components/sections/contact/route-cards.tsx`
+- **Priority:** Medium
+- **Status:** BLOCKED
+- **Description:** Figma shows an "Or download the company profile" link. The copy exists (`ContactPage` `profileLink`) but no approved PDF or URL exists in the repo (About documents also use `#`), so the link was not restored.
+- **Dependency:** Approved company profile PDF (EN, and AR if separate) and its download URL, shared with About documents.
+- **Acceptance criteria:**
+  - [ ] Link restored at the Figma position pointing to the real file.
+  - [ ] Verified in EN LTR and AR RTL.
+
+### PQA-015 — Solutions — Technology Services Arabic subtitle pending
+
+- **Page:** Solutions (`/solutions`) — service 07 `family` in `locales/ar.json`
+- **Priority:** Low
+- **Status:** PENDING CONTENT REVIEW
+- **Description:** English subtitle is now "Integrated Tech Solutions". Arabic still reads "التقنية والبيانات" (same as service 05); no approved Arabic exists.
+- **Dependency:** Approved Arabic subtitle (suggested: حلول تقنية متكاملة).
+- **Acceptance criteria:**
+  - [ ] Arabic `family` for `technology-services` updated once approved.
 
 ### Other untranslated Arabic labels — tracked under existing issues
 

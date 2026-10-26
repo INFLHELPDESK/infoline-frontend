@@ -90,11 +90,13 @@ export default function Form({
   const uid = useId();
 
   const { route } = useRouteSelection();
+  // First entry of the localized list is Oman; preselected per the design.
+  const defaultCountry = (t.raw("form.countries") as string[])[0] ?? "";
   const [values, setValues] = useState<Strings>({
     name: "",
     organisation: "",
     email: "",
-    country: "",
+    country: defaultCountry,
     service: "",
     projectType: "",
     timeline: "",
@@ -323,7 +325,7 @@ export default function Form({
       name: "",
       organisation: "",
       email: "",
-      country: "",
+      country: defaultCountry,
       service: "",
       projectType: "",
       timeline: "",
