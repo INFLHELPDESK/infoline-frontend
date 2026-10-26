@@ -60,7 +60,7 @@ Copy this block for new issues.
 - **Page:** Careers (`/careers`) — "Why join" card 4 and the "Ready for your next role?" CTA
 - **Priority:** Medium
 - **Status:** PENDING CONTENT REVIEW
-- **Description:** Arabic strings for card 4 and the new CTA (title, description, button labels) need native-speaker/client review. Current strings are in `locales/ar.json` under `CareersPage.learn`.
+- **Description:** Arabic strings for card 4 and the new CTA (title, description, button labels) need native-speaker/client review. Current strings are in `locales/ar.json` under `CareersPage.learn`. The same review should cover the Preview-only form notices shown when no CMS endpoint is configured: `CareersPage.apply.form.unavailable` and `ContactPage.form.unavailable` (unreviewed draft Arabic; they never render once the endpoint is set).
 - **Dependency:** Approved Arabic copy from a native speaker or the client.
 - **Acceptance criteria:**
   - [ ] Existing translations stay unchanged until replacements are provided.

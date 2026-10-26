@@ -6,6 +6,15 @@
  * literal `process.env.NEXT_PUBLIC_*` access so Next inlines it into the bundle.
  * Resolved per call, never at import time. Messages carry no secrets.
  */
+/**
+ * True when a CMS endpoint is configured. Forms use it to stay visible but
+ * disabled on a CMS-free Preview. Literal env access so Next inlines it, which
+ * keeps server and client renders in agreement.
+ */
+export function isCmsEndpointConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_WPGRAPHQL_ENDPOINT);
+}
+
 export function requireCmsEndpoint(): string {
   const endpoint = process.env.NEXT_PUBLIC_WPGRAPHQL_ENDPOINT;
   if (!endpoint) {

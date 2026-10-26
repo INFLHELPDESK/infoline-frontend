@@ -1338,6 +1338,7 @@
         "submit": "Send application",
         "submitting": "Sending…",
         "submitError": "Something went wrong sending your application. Please wait a few minutes and try again.",
+        "unavailable": "Applications are unavailable in this Preview. You can review the form, but nothing will be sent.",
         "errors": {
           "name": "Please enter your full name",
           "email": "Enter a valid email address",
@@ -1792,6 +1793,7 @@
         "scoping"
       ],
       "submitError": "Something went wrong sending your message. Please wait a few minutes and try again.",
+      "unavailable": "Form submissions are unavailable in this Preview. You can review the form, but nothing will be sent.",
       "submitting": "Sending…"
     },
     "success": {

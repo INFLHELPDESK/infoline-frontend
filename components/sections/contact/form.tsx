@@ -13,6 +13,7 @@ import {
   type ProjectType,
   type StartTimeline,
 } from "@/lib/forms";
+import { isCmsEndpointConfigured } from "@/lib/cms-endpoint";
 import { useRouteSelection, type RouteId } from "./route-context";
 import Rail from "./rail";
 
@@ -113,6 +114,7 @@ export default function Form({
   const [turnstileToken, setTurnstileToken] = useState("");
   // Synchronous guard: `submitting` state lags a render behind a fast double click.
   const inFlight = useRef(false);
+  const cmsReady = isCmsEndpointConfigured();
 
   const formRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
@@ -215,7 +217,7 @@ export default function Form({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (inFlight.current) return;
+    if (inFlight.current || !cmsReady) return;
     setTouched(Object.fromEntries(requiredKeys[route].map((k) => [k, "1"])));
     // Validate against current values now — `touched` state is not applied yet.
     if (requiredKeys[route].some((k) => clientErrorFor(k, true))) return;
@@ -764,6 +766,15 @@ export default function Form({
                         </p>
                       )}
 
+                      {!cmsReady && (
+                        <p
+                          role="status"
+                          className="mt-6 rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-[13px] font-medium text-slate-700"
+                        >
+                          {t("form.unavailable")}
+                        </p>
+                      )}
+
                       {/* Turnstile — inert until the backend sets the key. */}
                       <Turnstile
                         onToken={setTurnstileToken}
@@ -775,7 +786,7 @@ export default function Form({
                       <div className="mt-6 flex flex-wrap items-center gap-3.5">
                         <button
                           type="submit"
-                          disabled={submitting}
+                          disabled={submitting || !cmsReady}
                           className="group inline-flex h-11 items-center gap-2 rounded-lg bg-brandblue-500 px-4 text-[14px] font-medium text-white shadow-[0_8px_24px_-12px_rgba(28,151,212,.9)] transition-[background,box-shadow,transform] duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-brandblue-600 hover:shadow-[0_16px_34px_-14px_rgba(28,151,212,1)] disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {submitting ? t("form.submitting") : submitLabel}

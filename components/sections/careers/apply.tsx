@@ -7,6 +7,7 @@ import { ArrowRight, ChevronDown } from "lucide-react";
 import { Reveal } from "@/components/ui/motion";
 import Honeypot from "@/components/ui/forms/honeypot";
 import Turnstile from "@/components/ui/forms/turnstile";
+import { isCmsEndpointConfigured } from "@/lib/cms-endpoint";
 import { classifyInquiryResult, submitApplication } from "@/lib/forms";
 
 type Role = { title: string };
@@ -80,6 +81,7 @@ export default function Apply() {
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
   const [turnstileToken, setTurnstileToken] = useState("");
   const inFlight = useRef(false);
+  const cmsReady = isCmsEndpointConfigured();
   const cvInput = useRef<HTMLInputElement>(null);
 
   // A vacancy deep link wins until the visitor picks a role themselves.
@@ -113,7 +115,7 @@ export default function Apply() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inFlight.current) return;
+    if (inFlight.current || !cmsReady) return;
     setTouched(true);
     if (Object.keys(clientErrors()).length > 0) return;
 
@@ -309,12 +311,21 @@ export default function Apply() {
                     </p>
                   )}
 
+                  {!cmsReady && (
+                    <p
+                      role="status"
+                      className="mt-6 rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-[13px] font-medium text-slate-700"
+                    >
+                      {t("form.unavailable")}
+                    </p>
+                  )}
+
                   {/* Turnstile — inert until the backend sets the key. */}
                   <Turnstile onToken={setTurnstileToken} language={locale} className="mt-6" />
 
                   <button
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || !cmsReady}
                     className="group mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-brandblue-500 px-4 text-[14px] font-medium text-white shadow-[0_8px_24px_-12px_rgba(28,151,212,.9)] transition-[background,box-shadow] duration-300 hover:bg-brandblue-600 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {submitting ? t("form.submitting") : t("form.submit")}
