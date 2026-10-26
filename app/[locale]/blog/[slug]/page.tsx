@@ -2,9 +2,9 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link, redirect } from "@/i18n/navigation";
-import { loadInsightDetail } from "@/lib/insights-detail";
+import { RELATED_INSIGHTS, loadInsightDetail } from "@/lib/insights-detail";
 import { insightRoutePath } from "@/lib/insights-seo";
-import { typeLabelsFromFilters } from "@/lib/insights-cards";
+import { readingMinutes, typeLabelsFromFilters } from "@/lib/insights-cards";
 import SingleHero from "@/components/sections/blog/single-hero";
 import Article from "@/components/sections/blog/article";
 import { nextBlogPosts, type BlogPost } from "@/lib/blog";
@@ -79,16 +79,21 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   }
 
   const post = result.post;
-  const morePosts = nextBlogPosts(posts, post.slug, 2).filter(
-    (p) => p.slug !== post.slug,
+  // Up to RELATED_INSIGHTS other posts. The wrap-around can repeat a post when
+  // the locale has few of them, so each slug is kept once and never the current one.
+  const seen = new Set([post.slug]);
+  const morePosts = nextBlogPosts(posts, post.slug, RELATED_INSIGHTS).filter(
+    (p) => !seen.has(p.slug) && seen.add(p.slug),
   );
+  // Static posts only: same calculation as the Insights cards, from the post body.
+  const readMinutes = result.kind === "static" ? readingMinutes(post.body.join(" ")) : undefined;
 
   // The soft 404 above is a normal page of this route, so the group layout
   // cannot tell it apart: the shared CTA is rendered here, for found posts only.
   return (
     <>
       <main className="overflow-x-clip">
-        <SingleHero post={post} />
+        <SingleHero post={post} readMinutes={readMinutes} />
         <Article post={post} morePosts={morePosts} />
       </main>
       <Cta />

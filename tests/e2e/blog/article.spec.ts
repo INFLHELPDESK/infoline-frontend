@@ -56,6 +56,20 @@ for (const locale of locales) {
       for (const next of [second, third]) {
         await expect(page.locator(`main a[href="/${locale}/blog/${next.slug}"]`).first()).toBeAttached();
       }
+
+      // Reading time: same 200 wpm calculation as the Insights cards, from the body.
+      const words = post.body.join(" ").split(/s+/).filter(Boolean).length;
+      const minutes = new Intl.NumberFormat(locale, { style: "unit", unit: "minute", unitDisplay: "short" }).format(
+        Math.max(1, Math.ceil(words / 200)),
+      );
+      await expect(page.locator("main section").first()).toContainText(minutes);
+
+      // Related row: up to three distinct other posts (the shipped locale has four).
+      const hrefs = await page
+        .locator(`main a[href^="/${locale}/blog/"]`)
+        .evaluateAll((links) => links.map((l) => l.getAttribute("href")));
+      const related = new Set(hrefs.filter((h) => h !== `/${locale}/blog` && h !== `/${locale}/blog/${post.slug}`));
+      expect(related.size).toBe(3);
     });
 
     test("CMS post: header, share controls and body render through the local stub", async ({ page }) => {

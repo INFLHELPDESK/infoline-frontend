@@ -22,6 +22,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-014](#pqa-014--contact--company-profile-link-blocked-by-missing-pdf) | Contact | Company profile link — blocked by missing PDF | Medium | BLOCKED — Awaiting asset |
 | [PQA-015](#pqa-015--solutions--technology-services-arabic-subtitle-pending) | Solutions | Technology Services — Arabic subtitle pending | Low | PENDING CONTENT REVIEW |
 | [PQA-016](#pqa-016--home--client-logos-arabic-title-and-mislabeled-asset) | Home | Client logos — Arabic title pending; mislabeled `paew.svg` | Medium | PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION |
+| [PQA-017](#pqa-017--blog--article--content-and-cms-dependencies-from-qa-batch-3a) | Blog / Article | Content and CMS dependencies from QA batch 3A | Medium | PENDING CONTENT / CMS / DESIGN |
 
 ## Issue template
 
@@ -146,8 +147,8 @@ Copy this block for new issues.
 - **Priority:** Medium
 - **Status:** PARTIAL — layout, date, excerpt and Read more implemented; content dependencies remain
 - **Description:** Cards now render category, localized date, two-line excerpt and a "Read more →" affordance (inside the single card link). CMS cards take date and excerpt from the existing `posts` query (no contract change; the card projection now keeps `date` and a 160-character plain-text excerpt). Remaining gaps:
-  1. **Reading time (CMS):** WordPress returns no reading-time field and the list query carries no body, so CMS cards show none. Static fallback cards compute it from the locale post body (200 wpm).
-  2. **Static fallback content vs Figma:** the Figma sample shows "26 sep / 24 sep / 22 sep 2026", different excerpts, and titles for cards 2 and 3 that do not exist in the locale content. Static cards keep their own dates (17 Sep, 2 Aug, 10 Jun 2026) and excerpts from `Blog.posts`. The COPC card's excerpt there describes a utilities contact-centre story, which looks mismatched with its title.
+  1. **Reading time (CMS):** WordPress returns no reading-time field and the list query carries no body, so CMS cards show none. Static fallback cards compute it from the locale post body (200 wpm); every static post is ~140–170 words, so they all read "1 min" (correct arithmetic, QA IN-01). Static article pages now show the same calculation in the hero (Batch 3B).
+  2. **Static fallback content vs Figma:** the Figma sample shows "26 sep / 24 sep / 22 sep 2026", different excerpts, and titles for cards 2 and 3 that do not exist in the locale content. Static cards keep their own dates (17 Sep, 2 Aug, 10 Jun 2026) and excerpts from `Blog.posts`. The COPC card's excerpt there describes a utilities contact-centre story, which looks mismatched with its title. Root cause (QA IN-01 / AR-01): `Insights.items` titles the card "What a COPC audit actually measures…" while the `/blog/copc-audit` post in `Blog.posts` is titled "A score that had not moved in quarters…"; the excerpt comes from the post. Routing is correct; the two locale fixtures disagree. Pending a decision on which title is approved.
   3. **Static date data:** `Blog.posts` stores ISO dates in 2025 but display labels in 2026 (e.g. `2025-09-17` vs "17 Sep 2026"). Cards show the display label, as the Blog pages do; the source data needs a correction.
   4. **Label:** the action reuses the approved `Blog.page.readMore` ("Read more" / "اقرأ المزيد"); Figma shows "Read More".
 - **Dependency:** Backend decision on a reading-time field (or approval to fetch post content for the cards); client-approved static card copy and dates; confirmation of the "Read More" capitalisation.
@@ -156,6 +157,23 @@ Copy this block for new issues.
   - [ ] Static card dates, excerpts and titles match the approved content (including the COPC excerpt).
   - [ ] `Blog.posts` ISO `date` and `dateLabel` agree for every post, in English and Arabic.
   - [ ] Action label matches Figma in English and Arabic.
+
+### PQA-017 — Blog / Article — content and CMS dependencies from QA batch 3A
+
+- **Page:** Blog (`/blog`) and article detail (`/blog/[slug]`, `/insights/[slug]`)
+- **Priority:** Medium
+- **Status:** PENDING CONTENT / CMS / DESIGN — not frontend defects
+- **Description:** Preview has no CMS endpoint, so QA saw the static locale fallback. Findings (QA B-01, B-02, AR-02):
+  1. **Featured article:** the static fallback features `Blog.posts[0]` (`copc-audit`, category Articles); its title reads like a case-study headline. Figma's featured article ("Why attrition starts on day one…") is not in the locale content. CMS path features the `isFeatured` article (else newest), filtered to `article` type.
+  2. **Card count / Load more:** Load more already exists on the CMS path (page size 12, shown only when `hasNextPage`). The static fallback has 4 posts and no button. Figma's six cards need six or more CMS articles or a design-approved page size; no pagination is faked.
+  3. **Author block:** no author field in the CMS contract and no author component; Figma's author is a placeholder.
+  4. **Related section:** Figma title "Related articles" vs `Blog.page.single.moreLabel` "Keep reading" — pending design confirmation. Related count aligned to three in Batch 3B (static path shows up to three real posts).
+- **Dependency:** Approved featured article and copy; CMS data (articles, featured flag); design/backend decision on the author block; confirmation of the related-section title.
+- **Acceptance criteria:**
+  - [ ] Featured article approved and present in CMS or locale content.
+  - [ ] Blog card count and Load more verified against CMS data once connected.
+  - [ ] Author block built only from real author data with approved design.
+  - [ ] Related-section title confirmed.
 
 ### PQA-010 — Insights / Closing CTA — Arabic button labels missing
 
