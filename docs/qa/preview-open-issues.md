@@ -21,6 +21,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-013](#pqa-013--solutions--partner-cta--arabic-secondary-label-placeholder) | Solutions | Partner CTA — Arabic secondary label is English | Low | PENDING CONTENT REVIEW |
 | [PQA-014](#pqa-014--contact--company-profile-link-blocked-by-missing-pdf) | Contact | Company profile link — blocked by missing PDF | Medium | BLOCKED — Awaiting asset |
 | [PQA-015](#pqa-015--solutions--technology-services-arabic-subtitle-pending) | Solutions | Technology Services — Arabic subtitle pending | Low | PENDING CONTENT REVIEW |
+| [PQA-016](#pqa-016--home--client-logos-arabic-title-and-mislabeled-asset) | Home | Client logos — Arabic title pending; mislabeled `paew.svg` | Medium | PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION |
 
 ## Issue template
 
@@ -236,6 +237,22 @@ Copy this block for new issues.
 - **Acceptance criteria:**
   - [ ] Arabic `family` for `technology-services` updated once approved.
 
+### PQA-016 — Home — Client logos Arabic title and mislabeled asset
+
+- **Page:** Home (`/`) — `components/sections/home-1/clients.tsx` (H-05) and `components/sections/home/partners.tsx` (H-04)
+- **Priority:** Medium
+- **Status:** PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION (H-04 and H-05 are otherwise FIXED)
+- **Description:** Both missing sections are now built from the Figma handoff. (1) `HomeV1.clients.title` in `locales/ar.json` is an English placeholder (no approved Arabic for "Trusted by Oman's ministries, authorities and national institutions"); the Arabic eyebrow and description reuse the approved `Proof` strings. (2) `public/assets/clients/paew.svg` is actually the Social Insurance logo, not the Electricity & Water authority; other pages (Solutions, Industries, legacy home logos) still reference it under the Electricity & Water name. The Home section uses the Figma export `electricity-water.png` for PAEW and `paew.svg` for Social Insurance. The Home client row is static (single row from 1024px, wraps below) to match Figma; no approved Arabic was found elsewhere in the project. The partner logos and the Electricity & Water logo were exported from the Figma handoff as PNG, not vendor-supplied originals.
+- **Dependency:** Approved Arabic title; confirmation of the `paew.svg` mislabel and its fix on other pages; vector originals of the logos if available.
+- **Acceptance criteria:**
+  - [ ] `HomeV1.clients.title` in `locales/ar.json` replaced with approved copy.
+  - [ ] `paew.svg` renamed/replaced and other pages corrected.
+  - [ ] Verified in RTL at 1440, 768 and 390px.
+
 ### Other untranslated Arabic labels — tracked under existing issues
 
 No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` (PQA-007), `InsightsPage.proof.description` (PQA-008), `InsightsPage.cta.button.label` and `.secondaryButton.label` (PQA-010), `HomeV1.whatChangesToggle.description` (PQA-011).
+
+### Follow-up (unrelated to Batch 2) — Arabic hydration mismatch in Header
+
+On `/ar` the console reports a hydration mismatch on `Header` (`motion.header` `initial={{opacity:0}}`: server `opacity: "0"` vs client `opacity: 0`). Reproduced on unchanged HEAD `a7f5a23`, so it predates Batch 2. Not fixed here; needs its own ticket.

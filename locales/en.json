@@ -2266,6 +2266,53 @@
         "href": "/contact"
       },
       "image": "/assets/options/bg.jpg"
+    },
+    "clients": {
+      "eyebrow": "Trust built on proof",
+      "title": "Trusted by Oman's ministries, authorities and national institutions",
+      "description": "Contracted service relationships, grouped by sector. Public authorities carry the largest share of our delivered volume.",
+      "logos": [
+        {
+          "src": "/assets/clients/moh.svg",
+          "alt": "Ministry of Health"
+        },
+        {
+          "src": "/assets/clients/tra.svg",
+          "alt": "Telecommunications Regulatory Authority"
+        },
+        {
+          "src": "/assets/clients/asyad.svg",
+          "alt": "ASYAD"
+        },
+        {
+          "src": "/assets/clients/electricity-water.png",
+          "alt": "Public Authority for Electricity & Water"
+        },
+        {
+          "src": "/assets/clients/ncsi.svg",
+          "alt": "National Centre for Statistics & Information"
+        },
+        {
+          "src": "/assets/clients/manpower.svg",
+          "alt": "Ministry of Manpower"
+        },
+        {
+          "src": "/assets/clients/oman-post.svg",
+          "alt": "Oman Post"
+        },
+        {
+          "src": "/assets/clients/paew.svg",
+          "alt": "Public Authority for Social Insurance"
+        },
+        {
+          "src": "/assets/clients/al-raffd-fund.svg",
+          "alt": "Al Raffd Fund"
+        },
+        {
+          "src": "/assets/clients/consumer-protection.svg",
+          "alt": "Public Authority for Consumer Protection"
+        }
+      ]
     }
   },
   "ErrorPages": {

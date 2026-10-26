@@ -21,6 +21,12 @@ vi.mock("@/components/sections/home-1/proof", () => ({
 vi.mock("@/components/sections/home-1/three-ways", () => ({
   default: () => <section data-testid="section-three-ways" />,
 }));
+vi.mock("@/components/sections/home-1/clients", () => ({
+  default: () => <section data-testid="section-clients" />,
+}));
+vi.mock("@/components/sections/home/partners", () => ({
+  default: () => <section data-testid="section-partners" />,
+}));
 vi.mock("@/components/sections/home-1/what-changes", () => ({
   default: () => <section data-testid="changes-current" />,
 }));
@@ -35,7 +41,7 @@ async function renderHome(query: Record<string, string | string[] | undefined>) 
   return render(ui);
 }
 
-const OTHER_SECTIONS = ["hero", "why-trust", "what-we-do", "industries", "proof", "three-ways"];
+const OTHER_SECTIONS = ["hero", "why-trust", "what-we-do", "industries", "proof", "three-ways", "clients", "partners"];
 
 describe("Home › What changes variant selection", () => {
   it("renders the current design by default", async () => {

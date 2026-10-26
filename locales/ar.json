@@ -2266,6 +2266,53 @@
         "href": "/contact"
       },
       "image": "/assets/options/bg.jpg"
+    },
+    "clients": {
+      "eyebrow": "ثقة مبنية على الإثبات",
+      "title": "Trusted by Oman's ministries, authorities and national institutions",
+      "description": "علاقات خدمة تعاقدية مصنَّفة حسب القطاع. تحمل الجهات العامة أكبر حصة من حجم أعمالنا.",
+      "logos": [
+        {
+          "src": "/assets/clients/moh.svg",
+          "alt": "وزارة الصحة"
+        },
+        {
+          "src": "/assets/clients/tra.svg",
+          "alt": "هيئة تنظيم الاتصالات"
+        },
+        {
+          "src": "/assets/clients/asyad.svg",
+          "alt": "أسياد"
+        },
+        {
+          "src": "/assets/clients/electricity-water.png",
+          "alt": "الهيئة العامة للكهرباء والمياه"
+        },
+        {
+          "src": "/assets/clients/ncsi.svg",
+          "alt": "المركز الوطني للإحصاء والمعلومات"
+        },
+        {
+          "src": "/assets/clients/manpower.svg",
+          "alt": "وزارة القوى العاملة"
+        },
+        {
+          "src": "/assets/clients/oman-post.svg",
+          "alt": "بريد عمان"
+        },
+        {
+          "src": "/assets/clients/paew.svg",
+          "alt": "الهيئة العامة للتأمينات الاجتماعية"
+        },
+        {
+          "src": "/assets/clients/al-raffd-fund.svg",
+          "alt": "صندوق الرفد"
+        },
+        {
+          "src": "/assets/clients/consumer-protection.svg",
+          "alt": "الهيئة العامة لحماية المستهلك"
+        }
+      ]
     }
   },
   "ErrorPages": {

@@ -1,168 +1,134 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Reveal, MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
+import { Eyebrow } from "@/components/sections/home-1/shared";
 
-const partners = [
-  { name: "Elevatus", src: "/assets/partners/p1.svg" },
-  { name: "Konnect Insights", src: "/assets/partners/p2.svg" },
-  { name: "aspect", src: "/assets/partners/p3.svg" },
-  { name: "AVAYA", src: "/assets/partners/p4.svg" },
-  { name: "DXRepublic", src: "/assets/partners/p5.svg" },
-  { name: "Dion", src: "/assets/partners/p6.svg" },
-  { name: "Dubai Technologies", src: "/assets/partners/p7.svg" },
-  { name: "Ducont", src: "/assets/partners/p8.svg" },
+type Partner = { name: string; src: string };
+
+// Order and row split follow the Figma `section#partners` frame.
+const ROW_ONE: Partner[] = [
+  { name: "Dubai Technologies", src: "/assets/partners/dubai-technologies.png" },
+  { name: "Salesforce", src: "/assets/partners/salesforce.png" },
+  { name: "Konnect Insights", src: "/assets/partners/konnect-insights.png" },
+  { name: "Elevatus", src: "/assets/partners/elevatus.png" },
+  { name: "Locuz", src: "/assets/partners/locuz.png" },
+  { name: "Microsoft", src: "/assets/partners/microsoft.png" },
+  { name: "NCircle", src: "/assets/partners/ncircle.png" },
+  { name: "CX Republic", src: "/assets/partners/cx-republic.png" },
 ];
 
-function LogoPill({ name, src }: { name: string; src: string }) {
+const ROW_TWO: Partner[] = [
+  { name: "aspect", src: "/assets/partners/aspect.png" },
+  { name: "Dion", src: "/assets/partners/dion.png" },
+  { name: "In10s", src: "/assets/partners/in10s.png" },
+  { name: "Fluentgrid", src: "/assets/partners/fluentgrid.png" },
+  { name: "EMC", src: "/assets/partners/emc.png" },
+  { name: "SAP", src: "/assets/partners/sap.png" },
+  { name: "Tech Mahindra", src: "/assets/partners/tech-mahindra.png" },
+  { name: "Symantec", src: "/assets/partners/symantec.png" },
+  { name: "Avaya", src: "/assets/partners/avaya.png" },
+];
+
+function LogoPill({ name, src, hidden }: Partner & { hidden?: boolean }) {
   return (
-    <div className="shiny-chip shrink-0 mx-sm">
-      <div className="shiny-chip__inner w-[165px] h-15 flex items-center justify-center px-2xl py-lg">
-        <Image
-          src={src}
-          alt={name}
-          width={85}
-          height={45}
-          decoding="async"
-          className="h-[45px] w-auto w-full object-contain"
-        />
-      </div>
+    <li
+      className="mx-2 flex h-15 w-[165px] shrink-0 items-center justify-center rounded-full border border-white/40 bg-white/90 px-[22px]"
+      aria-hidden={hidden || undefined}
+    >
+      <Image
+        src={src}
+        alt={hidden ? "" : name}
+        width={86}
+        height={44}
+        loading="lazy"
+        decoding="async"
+        className="h-11 w-[86px] object-contain opacity-[0.72]"
+      />
+    </li>
+  );
+}
+
+function MarqueeRow({
+  partners,
+  direction,
+}: {
+  partners: Partner[];
+  direction: "left" | "right";
+}) {
+  return (
+    <div className="partners-marquee" dir="ltr">
+      <ul className={`partners-track partners-track--${direction}`}>
+        {[...partners, ...partners].map((p, i) => (
+          <LogoPill key={`${p.name}-${i}`} {...p} hidden={i >= partners.length} />
+        ))}
+      </ul>
     </div>
   );
 }
 
+/**
+ * Section 8 — "Clients buy our service. Partners build the platform
+ * underneath it." Dark band with two opposing logo rows (Figma
+ * `section#partners`). Rows pause on hover and stop under reduced motion.
+ */
 export default function Partners() {
   const t = useTranslations("Partners");
-  const track = [...partners, ...partners];
 
   return (
-    <section className="bg-ink py-30 overflow-hidden">
+    <section className="relative overflow-hidden bg-ink py-16 text-white lg:py-[90px]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-0 left-1/2 h-[300px] w-[635px] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(0,188,212,0.13)_0%,rgba(0,188,212,0)_70%)] blur-[13px]"
+      />
       <Stagger
         as="div"
-        className="container max-w-360 px-6 lg-px-10 text-center"
-        stagger={0.14}
+        className="relative mx-auto flex w-full max-w-[1127px] flex-col items-center px-6 text-center"
+        stagger={0.12}
         amount={0.4}
       >
-        <StaggerItem
-          as="p"
-          className="overline-sm-medium text-slate-400 mb-[18px]"
-        >
-          {t("eyebrow")}
+        <StaggerItem distance={24}>
+          <Eyebrow tone="dark">{t("eyebrow")}</Eyebrow>
         </StaggerItem>
         <MaskText
           as="h2"
-          className="heading-xl-bold text-[36px] text-white max-w-[35ch] mx-auto"
+          className="mt-5 max-w-[867px] text-[28px] leading-9 font-bold text-white sm:text-[36px] sm:leading-11"
           segments={[{ text: t("title") }]}
           amount={0.5}
           duration={0.8}
         />
         <StaggerItem
           as="p"
-          className="body-lg-regular text-slate-300 max-w-[85ch] mx-auto mt-[32px]"
+          className="mt-6 max-w-[929px] text-[16px] leading-6 text-slate-400"
         >
           {t("description")}
         </StaggerItem>
       </Stagger>
 
       <Reveal
-        className="mt-[60px] flex flex-col gap-y-[32px]"
+        className="relative mt-10 flex flex-col gap-9 lg:mt-[48px]"
         distance={48}
         blur={false}
         amount={0.2}
       >
-        <div
-          className="marquee-mask"
-          dir="ltr"
-          style={{ overflow: "hidden", width: "100%" }}
-        >
-          <div className="marquee-track marquee-track--left">
-            {track.map((p, i) => (
-              <LogoPill key={`row1-${p.name}-${i}`} {...p} />
-            ))}
-          </div>
-        </div>
-        <div
-          className="marquee-mask"
-          dir="ltr"
-          style={{ overflow: "hidden", width: "100%" }}
-        >
-          <div className="marquee-track marquee-track--right">
-            {track.map((p, i) => (
-              <LogoPill key={`row2-${p.name}-${i}`} {...p} />
-            ))}
-          </div>
-        </div>
+        <MarqueeRow partners={ROW_ONE} direction="left" />
+        <MarqueeRow partners={ROW_TWO} direction="right" />
       </Reveal>
 
       <style>{`
-        @property --chip-angle {
-          syntax: "<angle>";
-          initial-value: 0deg;
-          inherits: false;
-        }
-
-        .shiny-chip {
-          position: relative;
-          border-radius: 9999px;
-          padding: 1px;                       /* ring thickness */
-          background: rgba(255, 255, 250, 0.08); /* base ring (fallback) */
-          isolation: isolate;
-        }
-        .shiny-chip::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          padding: 1px;                       /* same as ring thickness */
-          background: conic-gradient(
-            from var(--chip-angle),
-            rgba(255, 255, 255, 0.08) 0deg,
-            rgba(255, 255, 255, 0.08) 200deg,
-            rgba(255, 255, 255, 0.95) 280deg,
-            rgba(255, 255, 255, 0.08) 360deg
-          );
-          /* show only the 1px ring, not the fill */
-          -webkit-mask:
-            linear-gradient(#000 0 0) content-box,
-            linear-gradient(#000 0 0);
-          -webkit-mask-composite: xor;
-                  mask-composite: exclude;
-          animation: chip-spin 3.5s linear infinite;
-          z-index: -1;
-        }
-        .shiny-chip__inner {
-          border-radius: inherit;
-          background: rgba(255, 255, 255, 0.04);
-        }
-
-        @keyframes chip-spin {
-          to { --chip-angle: 360deg; }
-        }
-
-        .marquee-mask {
+        .partners-marquee {
           overflow: hidden;
-          -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 2%, transparent);
+          width: 100%;
+          -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
         }
-        .marquee-track { display: flex; width: max-content; }
-        .marquee-track--left { animation: marquee-left 30s linear infinite; }
-        .marquee-track--right { animation: marquee-right 30s linear infinite; }
-        .marquee-mask:hover .marquee-track { animation-play-state: paused; }
-
-        @keyframes marquee-left {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-        @keyframes marquee-right {
-          from { transform: translateX(-50%); }
-          to { transform: translateX(0); }
-        }
-
+        .partners-track { display: flex; width: max-content; margin: 0; padding: 0; list-style: none; }
+        .partners-track--left { animation: partners-left 40s linear infinite; }
+        .partners-track--right { animation: partners-right 40s linear infinite; }
+        .partners-marquee:hover .partners-track { animation-play-state: paused; }
+        @keyframes partners-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes partners-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
         @media (prefers-reduced-motion: reduce) {
-          .marquee-track--left,
-          .marquee-track--right,
-          .shiny-chip::before {
-            animation: none;
-          }
+          .partners-track--left, .partners-track--right { animation: none; }
         }
       `}</style>
     </section>

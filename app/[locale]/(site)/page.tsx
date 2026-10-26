@@ -1,4 +1,6 @@
 import Hero from "@/components/sections/home-1/hero";
+import Clients from "@/components/sections/home-1/clients";
+import Partners from "@/components/sections/home/partners";
 import WhyTrust from "@/components/sections/home-1/why-trust";
 import WhatWeDo from "@/components/sections/home-1/what-we-do";
 import Industries from "@/components/sections/home-1/industries";
@@ -20,12 +22,14 @@ export default async function HomePage({
   return (
     <main className="overflow-x-clip">
       <Hero />
+      <Clients />
       <WhyTrust />
       <WhatWeDo />
       <Industries />
       {variant === "new" ? <WhatChangesToggle /> : <WhatChanges />}
       <Proof />
       <ThreeWays />
+      <Partners />
     </main>
   );
 }
