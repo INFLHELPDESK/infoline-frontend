@@ -23,7 +23,6 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-016](#pqa-016--home--client-logos-arabic-title-and-mislabeled-asset) | Home | Client logos — Arabic title pending; mislabeled `paew.svg` | Medium | PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION |
 | [PQA-017](#pqa-017--blog--article--content-and-cms-dependencies-from-qa-batch-3a) | Blog / Article | Content and CMS dependencies from QA batch 3A | Medium | PENDING CONTENT / CMS / DESIGN |
 | [PQA-019](#pqa-019--unconfirmed-content-differences-from-the-figma-vs-website-qa-report) | Home / About / Industries / Contact | Unconfirmed content differences from the Figma vs Website QA report | Medium | PENDING CONTENT / DESIGN DECISION |
-| [PQA-020](#pqa-020--contact-form-e2e-test-stale-after-country-default) | Contact (tests) | Contact form e2e test stale after Country default | Low | OPEN — Test update |
 
 ## Issue template
 
@@ -272,18 +271,8 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   5. **Contact details:** intro banner `connect@infoline.om` / `+968 2446 2626` vs head-office card `contact@infoline.om` / `+968 2416 2626`; Figma shows `.com`. Tel and Fax share one number.
   6. **Industries clients title:** "Named across all six sector groups" vs Figma "Named across the full catalogue."
   7. **Home:** stat label "Agents ready to help you" vs Figma "omani agents…" and the fifth 1,400+ stat; Vendors card wording; Home "What changes" heading (see PQA-011).
-  8. **Minor:** About values-chip punctuation; Contact Country default ("Oman" in Figma vs "Select country").
+  8. **Minor:** About values-chip punctuation.
 - **Dependency:** Client/designer decisions. Several look like Figma typos and should be confirmed with the designer.
 - **Acceptance criteria:**
   - [ ] Each item above is approved or dismissed in writing.
   - [ ] Approved changes applied in `locales/en.json` and `locales/ar.json` only.
-
-### PQA-020 — Contact form e2e test stale after Country default
-
-- **Page:** Contact (`/contact`) — `tests/e2e/contact/contact-form.spec.ts` ("service route: touched empty fields show every required error and block submit")
-- **Priority:** Low
-- **Status:** OPEN — Test update (not a product defect)
-- **Description:** Batch 1 (`a7f5a23`) pre-filled Country with the first option ("Oman") to match Figma (`defaultCountry` in `components/sections/contact/form.tsx`). The spec still expects a "Select your country" error after touching the empty Country field, so it fails at HEAD and on this branch (deterministic; unrelated to the motion changes).
-- **Dependency:** None. Update the spec to the approved behaviour (Country pre-filled, no required-country error on an untouched form).
-- **Acceptance criteria:**
-  - [ ] The spec no longer expects a Country error on an untouched form and passes.

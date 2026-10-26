@@ -80,14 +80,27 @@ test.describe("contact form — client validation", () => {
     const contact = new ContactPage(page);
     const api = await mockSubmitInquiry(page, reply.payload(inquiry.stored()));
     await contact.goto();
+    // Country is pre-filled (see the default-country test), so it is touched
+    // but is never an empty required field.
     await touch(contact, [en.name, en.organisation, en.workEmail, en.country, en.service, en.fix]);
 
     await contact.submitButton("service").click();
 
-    for (const key of ["name", "email", "organisation", "country", "service", "message"] as const) {
+    for (const key of ["name", "email", "organisation", "service", "message"] as const) {
       await expect(contact.error(en.errors[key])).toBeVisible();
     }
+    await expect(contact.error(en.errors.country)).toHaveCount(0);
     expect(await api.fetchCalls()).toBe(0);
+  });
+
+  test("country defaults to Oman and can be changed", async ({ page }) => {
+    const contact = new ContactPage(page);
+    await contact.goto();
+
+    await expect(contact.country).toHaveValue(country);
+    await expect(contact.country).toHaveValue("Oman");
+    await contact.country.selectOption(en.countries[1]);
+    await expect(contact.country).toHaveValue(en.countries[1]);
   });
 
   test("project route requires project type and timeline (blocked on resubmit)", async ({
@@ -149,6 +162,26 @@ test.describe("contact form — client validation", () => {
 });
 
 test.describe("contact form — service inquiry submission", () => {
+  test("submits the default country, or the one the user selected", async ({ page }) => {
+    const contact = new ContactPage(page);
+    const api = await mockSubmitInquiry(page, reply.payload(inquiry.stored()));
+    await contact.goto();
+
+    await contact.fillDetails({ ...applicant });
+    await contact.field(en.service).selectOption(service);
+    await contact.field(en.fix).fill(serviceMessage);
+    await contact.submitButton("service").click();
+    await expect(contact.successHeading("service")).toBeVisible();
+    expect(api.lastInput()).toMatchObject({ country: "Oman" });
+
+    await contact.goto();
+    await fillServiceInquiry(contact);
+    await contact.country.selectOption(en.countries[1]);
+    await contact.submitButton("service").click();
+    await expect(contact.successHeading("service")).toBeVisible();
+    expect(api.lastInput()).toMatchObject({ country: en.countries[1] });
+  });
+
   test("sends the documented GraphQL payload and shows the confirmation", async ({ page }) => {
     const contact = new ContactPage(page);
     const api = await mockSubmitInquiry(page, reply.payload(inquiry.stored()));
