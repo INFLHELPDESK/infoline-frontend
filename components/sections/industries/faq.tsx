@@ -74,14 +74,12 @@ export default function Faq() {
                   {isOpen && (
                     <motion.div
                       key="content"
-                      initial={
-                        reduce ? { opacity: 1 } : { height: 0, opacity: 0 }
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={
+                        reduce ? { duration: 0 } : { duration: 0.4, ease: EASE }
                       }
-                      animate={
-                        reduce ? { opacity: 1 } : { height: "auto", opacity: 1 }
-                      }
-                      exit={reduce ? { opacity: 1 } : { height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: EASE }}
                       className="overflow-hidden"
                     >
                       <p className="pe-14 pb-4 text-[14px] leading-6 text-slate-600">

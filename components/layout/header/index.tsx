@@ -110,9 +110,15 @@ export const Header = () => {
               ? "bg-white/85 backdrop-blur-[18px] backdrop-saturate-140 shadow-[0_1px_0_0_rgba(15,40,60,0.08)]"
               : "bg-ink backdrop-blur-[18px] backdrop-saturate-140 shadow-[0_1px_0_0_rgba(255,255,255,0.06)]"
         }`}
-        initial={reduce ? { opacity: 0 } : { y: -96, opacity: 0 }}
+        // `initial` must not depend on `reduce` (server renders reduce=false).
+        // Reduced motion snaps the slide and only fades.
+        initial={{ y: -96, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: EASE }}
+        transition={
+          reduce
+            ? { duration: 0.3, y: { duration: 0 } }
+            : { duration: 0.6, ease: EASE }
+        }
       >
         <div className="mx-auto flex h-21 max-w-360 items-center justify-between gap-7 px-6 md:px-12 xl:px-20">
           <Link

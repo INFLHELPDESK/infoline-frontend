@@ -19,10 +19,11 @@ import Rail from "./rail";
 type Strings = Record<string, string>;
 
 const fieldMotion = (reduce: boolean) => ({
-  initial: reduce ? { opacity: 0 } : { opacity: 0, height: 0 },
-  animate: reduce ? { opacity: 1 } : { opacity: 1, height: "auto" },
-  exit: reduce ? { opacity: 0 } : { opacity: 0, height: 0 },
-  transition: { duration: 0.4, ease: EASE },
+  // States must not depend on `reduce` (server renders reduce=false).
+  initial: { opacity: 0, height: 0 },
+  animate: { opacity: 1, height: "auto" },
+  exit: { opacity: 0, height: 0 },
+  transition: reduce ? { duration: 0 } : { duration: 0.4, ease: EASE },
   className: "overflow-hidden",
 });
 

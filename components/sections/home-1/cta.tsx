@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Stagger, StaggerItem } from "@/components/ui/motion";
 import { PillButton } from "./shared";
@@ -15,15 +15,20 @@ import { PillButton } from "./shared";
  */
 export default function Cta() {
   const t = useTranslations("HomeV1.cta");
-  const reduce = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-8%", "8%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], reduce ? [1, 1] : [1.12, 1]);
+  // Ranges must not depend on `useReducedMotion` (server renders it as false, so
+  // a client-only difference mismatches hydration). Reduced motion is applied in
+  // CSS instead (`motion-reduce:transform-none!`).
+  const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1.12, 1]);
 
   return (
     <section ref={ref} className="relative isolate overflow-hidden bg-black text-white">
-      <motion.div style={{ y, scale }} className="absolute inset-x-0 top-0 -z-10 h-[125%] lg:h-[140%]">
+      <motion.div
+        style={{ y, scale }}
+        className="absolute inset-x-0 top-0 -z-10 h-[125%] motion-reduce:transform-none! lg:h-[140%]"
+      >
         <Image
           src={t("image")}
           alt=""

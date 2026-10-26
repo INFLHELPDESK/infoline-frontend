@@ -12,7 +12,6 @@ Resolved issues are removed from this file (history lives in Git).
 | --- | --- | --- | --- | --- |
 | [PQA-001](#pqa-001--talent-network-cta-pending-destination) | Careers | Talent Network CTA — pending destination | Medium | BLOCKED — Awaiting decision |
 | [PQA-002](#pqa-002--careers-arabic-copy-pending-review) | Careers | Arabic copy — pending review | Medium | PENDING CONTENT REVIEW |
-| [PQA-003](#pqa-003--vacancy-apply-links-broken-navigation) | Careers | Vacancy Apply links — broken navigation | High | OPEN — Functional bug |
 | [PQA-004](#pqa-004--industries-badge--arabic-translation-pending) | Industries | Badge — Arabic translation pending | Low | PENDING CONTENT REVIEW |
 | [PQA-005](#pqa-005--about--who-we-are--arabic-copy-mismatch) | About | Who We Are — Arabic copy mismatch | Medium | PENDING CONTENT REVIEW |
 | [PQA-006](#pqa-006--about--built-on-trust--arabic-eyebrow-mismatch) | About / Built on Trust | Arabic eyebrow — mismatch with English | Medium | PENDING CONTENT REVIEW |
@@ -23,6 +22,8 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-015](#pqa-015--solutions--technology-services-arabic-subtitle-pending) | Solutions | Technology Services — Arabic subtitle pending | Low | PENDING CONTENT REVIEW |
 | [PQA-016](#pqa-016--home--client-logos-arabic-title-and-mislabeled-asset) | Home | Client logos — Arabic title pending; mislabeled `paew.svg` | Medium | PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION |
 | [PQA-017](#pqa-017--blog--article--content-and-cms-dependencies-from-qa-batch-3a) | Blog / Article | Content and CMS dependencies from QA batch 3A | Medium | PENDING CONTENT / CMS / DESIGN |
+| [PQA-019](#pqa-019--unconfirmed-content-differences-from-the-figma-vs-website-qa-report) | Home / About / Industries / Contact | Unconfirmed content differences from the Figma vs Website QA report | Medium | PENDING CONTENT / DESIGN DECISION |
+| [PQA-020](#pqa-020--contact-form-e2e-test-stale-after-country-default) | Contact (tests) | Contact form e2e test stale after Country default | Low | OPEN — Test update |
 
 ## Issue template
 
@@ -66,19 +67,6 @@ Copy this block for new issues.
   - [ ] Existing translations stay unchanged until replacements are provided.
   - [ ] Approved copy is applied in `locales/ar.json` only.
   - [ ] Card heights, wrapping and CTA layout verified in RTL at 1440, 768 and 390px.
-
-### PQA-003 — Vacancy Apply links — broken navigation
-
-- **Page:** Careers (`/careers`) — vacancies table, `components/sections/careers/vacancies.tsx`
-- **Priority:** High
-- **Status:** OPEN — Functional bug
-- **Description:** Each vacancy "Apply" link targets `#apply`, but `components/sections/careers/apply.tsx` is not rendered on the page, so the anchor does not exist and the links do nothing. Pinned by the known-defect test `[D-6]` in `tests/e2e/contact/careers-application.spec.ts`.
-- **Dependency:** Confirmation of the approved application flow. Do not invent a new route or form integration.
-- **Acceptance criteria:**
-  - [ ] Every Apply link reaches the approved application flow.
-  - [ ] No dead `#apply` anchors remain.
-  - [ ] `[D-6]` is updated to assert the fixed behaviour.
-  - [ ] Works in English LTR and Arabic RTL, with no layout shift or horizontal overflow.
 
 ### PQA-004 — Industries badge — Arabic translation pending
 
@@ -261,7 +249,7 @@ Copy this block for new issues.
 - **Priority:** Medium
 - **Status:** PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION (H-04 and H-05 are otherwise FIXED)
 - **Description:** Both missing sections are now built from the Figma handoff. (1) `HomeV1.clients.title` in `locales/ar.json` is an English placeholder (no approved Arabic for "Trusted by Oman's ministries, authorities and national institutions"); the Arabic eyebrow and description reuse the approved `Proof` strings. (2) `public/assets/clients/paew.svg` is actually the Social Insurance logo, not the Electricity & Water authority; other pages (Solutions, Industries, legacy home logos) still reference it under the Electricity & Water name. The Home section uses the Figma export `electricity-water.png` for PAEW and `paew.svg` for Social Insurance. The Home client row is static (single row from 1024px, wraps below) to match Figma; no approved Arabic was found elsewhere in the project. The partner logos and the Electricity & Water logo were exported from the Figma handoff as PNG, not vendor-supplied originals.
-- **Dependency:** Approved Arabic title; confirmation of the `paew.svg` mislabel and its fix on other pages; vector originals of the logos if available.
+- **Dependency:** Approved Arabic title; confirmation of the `paew.svg` mislabel and its fix on other pages; vector originals of the logos if available. **Batch 4B deliberately left `paew.svg` unchanged; it stays open until an approved replacement asset is supplied.**
 - **Acceptance criteria:**
   - [ ] `HomeV1.clients.title` in `locales/ar.json` replaced with approved copy.
   - [ ] `paew.svg` renamed/replaced and other pages corrected.
@@ -271,6 +259,31 @@ Copy this block for new issues.
 
 No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` (PQA-007), `InsightsPage.proof.description` (PQA-008), `InsightsPage.cta.button.label` and `.secondaryButton.label` (PQA-010), `HomeV1.whatChangesToggle.description` (PQA-011).
 
-### Follow-up (unrelated to Batch 2) — Arabic hydration mismatch in Header
+### PQA-019 — Unconfirmed content differences from the Figma vs Website QA report
 
-On `/ar` the console reports a hydration mismatch on `Header` (`motion.header` `initial={{opacity:0}}`: server `opacity: "0"` vs client `opacity: 0`). Reproduced on unchanged HEAD `a7f5a23`, so it predates Batch 2. Not fixed here; needs its own ticket.
+- **Page:** About, Home, Industries, Contact (QA report `Infoline_Figma_vs_Website_MFethi.docx`)
+- **Priority:** Medium
+- **Status:** PENDING CONTENT / DESIGN DECISION — no code change until approved
+- **Description:** Differences the QA report asks the team to confirm; none are frontend defects:
+  1. **About, Board of Directors:** website names (Khalifa Al Abri, Salim Al Hinai, Hamad Al Rawahi, Saif Al Amri, Bassim Al Kindi) and `I1`–`I5.svg` images differ from Figma, which repeats a placeholder name. Approved names and photos needed.
+  2. **Year:** About "Omanis promoted in 2024" vs Figma and Careers "2026".
+  3. **Founding year:** About "since 2004" vs Home and Careers "since 2003".
+  4. **Eight vs nine:** Home "What we do" says "Eight capabilities"; Solutions lists nine services.
+  5. **Contact details:** intro banner `connect@infoline.om` / `+968 2446 2626` vs head-office card `contact@infoline.om` / `+968 2416 2626`; Figma shows `.com`. Tel and Fax share one number.
+  6. **Industries clients title:** "Named across all six sector groups" vs Figma "Named across the full catalogue."
+  7. **Home:** stat label "Agents ready to help you" vs Figma "omani agents…" and the fifth 1,400+ stat; Vendors card wording; Home "What changes" heading (see PQA-011).
+  8. **Minor:** About values-chip punctuation; Contact Country default ("Oman" in Figma vs "Select country").
+- **Dependency:** Client/designer decisions. Several look like Figma typos and should be confirmed with the designer.
+- **Acceptance criteria:**
+  - [ ] Each item above is approved or dismissed in writing.
+  - [ ] Approved changes applied in `locales/en.json` and `locales/ar.json` only.
+
+### PQA-020 — Contact form e2e test stale after Country default
+
+- **Page:** Contact (`/contact`) — `tests/e2e/contact/contact-form.spec.ts` ("service route: touched empty fields show every required error and block submit")
+- **Priority:** Low
+- **Status:** OPEN — Test update (not a product defect)
+- **Description:** Batch 1 (`a7f5a23`) pre-filled Country with the first option ("Oman") to match Figma (`defaultCountry` in `components/sections/contact/form.tsx`). The spec still expects a "Select your country" error after touching the empty Country field, so it fails at HEAD and on this branch (deterministic; unrelated to the motion changes).
+- **Dependency:** None. Update the spec to the approved behaviour (Country pre-filled, no required-country error on an untouched form).
+- **Acceptance criteria:**
+  - [ ] The spec no longer expects a Country error on an untouched form and passes.

@@ -117,7 +117,7 @@ export function StaggerItem({
     <MotionTag
       variants={variants}
       className={className}
-      style={reduce ? undefined : { willChange: "transform, opacity, filter" }}
+      style={{ willChange: "transform, opacity, filter" }}
     >
       {children}
     </MotionTag>

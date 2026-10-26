@@ -53,15 +53,15 @@ export default function Catalogue() {
 
   const active = services.find((s) => s.id === activeId) ?? services[0];
 
-  // Entrance/exit for the swapping middle column (skipped under reduced motion).
-  const detailMotion = reduce
-    ? {}
-    : {
-        initial: { opacity: 0, y: 14, filter: "blur(6px)" },
-        animate: { opacity: 1, y: 0, filter: "blur(0px)" },
-        exit: { opacity: 0, y: -10, filter: "blur(6px)" },
-        transition: { duration: 0.5, ease: EASE },
-      };
+  // Entrance/exit for the swapping middle column. The states must not depend on
+  // `reduce` (the server renders reduce=false); reduced motion makes the
+  // transition instant instead.
+  const detailMotion = {
+    initial: { opacity: 0, y: 14, filter: "blur(6px)" },
+    animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+    exit: { opacity: 0, y: -10, filter: "blur(6px)" },
+    transition: reduce ? { duration: 0 } : { duration: 0.5, ease: EASE },
+  };
 
   return (
     <section id="catalogue" className="bg-white pt-20 pb-12">

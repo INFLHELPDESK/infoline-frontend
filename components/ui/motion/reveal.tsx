@@ -86,7 +86,7 @@ export function Reveal({
           : { duration, ease: EASE, delay }
       }
       className={className}
-      style={reduce ? undefined : { willChange: "transform, opacity, filter" }}
+      style={{ willChange: "transform, opacity, filter" }}
     >
       {children}
     </MotionTag>
