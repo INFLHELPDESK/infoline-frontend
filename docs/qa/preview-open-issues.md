@@ -24,6 +24,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-017](#pqa-017--blog--article--content-and-cms-dependencies-from-qa-batch-3a) | Blog / Article | Content and CMS dependencies from QA batch 3A | Medium | PENDING CONTENT / CMS / DESIGN |
 | [PQA-019](#pqa-019--unconfirmed-content-differences-from-the-figma-vs-website-qa-report) | Home / About / Industries / Contact | Unconfirmed content differences from the Figma vs Website QA report | Medium | PENDING CONTENT / DESIGN DECISION |
 | [PQA-020](#pqa-020--brand-typeface-avenir-not-bundled-pending-web-licence-and-files) | All pages | Brand typeface Avenir — implemented, pending Designer confirmation and licence record | Medium | IMPLEMENTED — Awaiting Designer confirmation / licence record |
+| [PQA-022](#pqa-022--home-industries--designer-conformity-follow-ups) | Home | Industries — Designer conformity follow-ups | Low | IMPLEMENTED — Awaiting Designer decisions |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -74,11 +75,11 @@ Copy this block for new issues.
 - **Page:** Industries / Home V1 Industries section (`components/sections/home-1/industries.tsx`); Industries page "How does CX differ by industry?" (`components/sections/industries/differ.tsx`)
 - **Priority:** Low
 - **Status:** PENDING CONTENT REVIEW
-- **Description:** The English badge now reads "CX / Industries" (`HomeV1.industries.eyebrow` and `IndustriesPage.differ.eyebrow` in `locales/en.json`). The Arabic badges are still `القطاعات` because no approved Arabic translation of "CX / Industries" exists.
+- **Description:** The Industries-page badge (`IndustriesPage.differ.eyebrow`) reads "CX / Industries". The Home badge (`HomeV1.industries.eyebrow`) was changed back to "Industries" on 2026-11-01 to match Figma node 406:3983 and the Designer report (white fill, 1px #EEE border also applied). The Arabic badges are unchanged (`القطاعات`) because no approved Arabic copy exists; for Home it now reads as the same meaning as the English, to be confirmed.
 - **Dependency:** Approved Arabic translation.
 - **Acceptance criteria:**
   - [ ] English and Arabic convey the same approved meaning.
-  - [ ] Only `HomeV1.industries.eyebrow` and `IndustriesPage.differ.eyebrow` change; unrelated Industries labels stay unchanged.
+  - [ ] Only `HomeV1.industries.eyebrow` and `IndustriesPage.differ.eyebrow` change; unrelated Industries labels stay unchanged. (Home: done, English "Industries". Industries page: still "CX / Industries", pending a decision on whether it should match.)
   - [ ] Badge verified in RTL at 1440, 768 and 390px.
 
 ### PQA-005 — About / Who We Are — Arabic copy mismatch
@@ -260,6 +261,25 @@ Copy this block for new issues.
 
 No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` (PQA-007), `InsightsPage.proof.description` (PQA-008), `InsightsPage.cta.button.label` and `.secondaryButton.label` (PQA-010), `HomeV1.whatChangesToggle.description` (PQA-011).
 
+### PQA-022 — Home Industries — Designer conformity follow-ups
+
+- **Page:** Home — Industries (`components/sections/home-1/industries.tsx`, `industry-cards.tsx`)
+- **Priority:** Low
+- **Status:** IMPLEMENTED — Awaiting Designer decisions
+- **Description:** Batch 6B applied the Designer conformity report for Figma node 406:3983: heading 36/44 Avenir Heavy #263238 with tracking 0 (section-specific classes; shared `sectionTitle` untouched), eyebrow "Industries" on a white chip with a 1px #EEE border, card titles 20/24 at CSS 900 (Heavy), the six approved Figma SVG icons (`public/assets/home-1/industries/*.svg`, exported unmodified, 20px), no autoplay (static, first card open, click/tap or keyboard focus opens a card, no hover switching), and the 8px backdrop blur on the Hero stats band.
+- **Dependency:** Designer answers to the open decisions below.
+- **Open Designer decisions:**
+  1. Keep or remove the visible "Explore sector" text and arrow on the open card (Figma shows icon, title and description only); it is unchanged for now.
+  2. Figma sets the eyebrow label in Inter Medium with -0.72px tracking; the site uses Avenir Medium (see PQA-020 item 2).
+  3. Figma wraps the heading onto two lines ("…start / here instead."); the site heading is one line at 1440px. Confirm the intended text-box width.
+  4. Mobile and tablet use a vertical card stack because Figma has desktop only; confirm.
+  5. Approved Arabic eyebrow (see PQA-004).
+  6. Hero: Omantel badge and fifth statistic, and the Hero secondary items from the Designer report (accent #3EC1F0, button padding 24px, button shadow, glow blur 12px) are not applied in this batch.
+- **Acceptance criteria:**
+  - [x] Industries heading, eyebrow, card titles, icons and Hero blur match Figma (computed styles checked at 1440, 768 and 390px, EN and AR).
+  - [x] No automatic rotation in either motion mode; keyboard focus and click open cards.
+  - [ ] Designer decisions above recorded.
+
 ### PQA-019 — Unconfirmed content differences from the Figma vs Website QA report
 
 - **Page:** About, Home, Industries, Contact (QA report `Infoline_Figma_vs_Website_MFethi.docx`)
@@ -293,8 +313,8 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Open Designer decisions:**
   1. 600 mapped to Heavy and 700 to Black for all site UI text (explicit in Figma for headings, inferred for small labels).
   2. The Figma eyebrow pill and some "Regular" subtitles still reference Inter in the file; the site now uses Avenir Medium and Roman for them.
-  3. Site section-title scale and tracking (64px with negative tracking) against the Home-2 frame (36px, normal tracking), now that Avenir is in place.
-  4. The Hero stats band: Figma has an 8px backdrop blur with the gradient (the build has the gradient only).
+  3. Site section-title scale and tracking (64px with negative tracking) against the Home-2 frame (36px, normal tracking), now that Avenir is in place. Home Industries now follows Figma (36/44, Heavy, tracking 0); the shared `sectionTitle` used by the other sections is unchanged and still needs a decision.
+  4. ~~The Hero stats band: Figma has an 8px backdrop blur.~~ Done 2026-11-01 (`backdrop-blur-[8px]` on the band, gradient kept).
 - **Font loading:** with preload off, English requests the four faces from the stylesheet (they start about 0.6 s later than with preload on and finish about 0.6 s later on a throttled connection, with no change in first contentful paint and no layout shift), and Arabic pages request no Avenir files (about 280 KB saved and first paint about 1.5 s faster on the same throttled test). WOFF2 versions of the same licensed files would shrink the English download further; that remains a production decision.
 - **Acceptance criteria:**
   - [x] Four Avenir faces loaded locally and applied to English; Tajawal unchanged for Arabic.

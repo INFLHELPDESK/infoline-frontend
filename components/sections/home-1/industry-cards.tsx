@@ -1,24 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import {
-  AnimatePresence,
-  motion,
-  useInView,
-  useReducedMotion,
-} from "framer-motion";
-import {
-  ArrowUpRight,
-  Building2,
-  Landmark,
-  RadioTower,
-  ShoppingBag,
-  Truck,
-  Wallet,
-  Zap,
-  type LucideIcon,
-} from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Building2 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { EASE } from "@/components/ui/motion/shared";
@@ -31,20 +16,23 @@ export type IndustryCard = {
   href: string;
 };
 
-/** Time each card stays open while the rail auto-advances. */
-const AUTO_MS = 5000;
 const SPRING = { type: "spring", stiffness: 170, damping: 26, mass: 0.9 } as const;
 
-/** Pick an icon from the sector id / slug (works for CMS slugs too). */
-function iconFor(id: string): LucideIcon {
+/**
+ * Approved Figma sector icons (exported as-is from the Infoline Handoff,
+ * node 406:3983) — picked from the sector id / slug (works for CMS slugs too).
+ * Unknown sectors fall back to a neutral building glyph.
+ */
+const ICON_BASE = "/assets/home-1/industries";
+function iconFor(id: string): string | null {
   const s = id.toLowerCase();
-  if (/(gov|public|citizen)/.test(s)) return Landmark;
-  if (/(telecom|tech)/.test(s)) return RadioTower;
-  if (/(logistic|transport|touris)/.test(s)) return Truck;
-  if (/(utilit|energy|environment)/.test(s)) return Zap;
-  if (/(bank|bfsi|financ|insur|fintech)/.test(s)) return Wallet;
-  if (/(real|commercial|consumer|retail)/.test(s)) return ShoppingBag;
-  return Building2;
+  if (/(gov|public|citizen)/.test(s)) return `${ICON_BASE}/government.svg`;
+  if (/(telecom|tech)/.test(s)) return `${ICON_BASE}/telecom.svg`;
+  if (/(logistic|transport|touris)/.test(s)) return `${ICON_BASE}/logistics.svg`;
+  if (/(utilit|energy|environment)/.test(s)) return `${ICON_BASE}/utilities.svg`;
+  if (/(bank|bfsi|financ|insur|fintech)/.test(s)) return `${ICON_BASE}/bfsi.svg`;
+  if (/(real|commercial|consumer|retail)/.test(s)) return `${ICON_BASE}/realestate.svg`;
+  return null;
 }
 
 /**
@@ -54,9 +42,9 @@ function iconFor(id: string): LucideIcon {
  * collapse into tall pills with a vertical title and an icon at the foot.
  * Mobile: the same idea stacked vertically (open card tall, others short bars).
  *
- * Opens on hover, focus or tap, and auto-advances while on screen and idle.
- * On touch, the first tap on a closed card opens it; a tap on the open card
- * follows its link. RTL is free: the row follows `dir`, and vertical titles
+ * Static: the first card is open and the rail never moves on its own. A
+ * click or tap on a closed card opens it; keyboard focus (focus-visible) also
+ * opens it. A click or tap on the open card follows its link. RTL is free: the row follows `dir`, and vertical titles
  * rotate the same way in both languages.
  */
 export default function IndustryCards({
@@ -67,33 +55,18 @@ export default function IndustryCards({
   exploreLabel: string;
 }) {
   const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const reduce = useReducedMotion();
-  const railRef = useRef<HTMLUListElement>(null);
-  const inView = useInView(railRef, { amount: 0.4 });
-
-  // Auto-advance, restarted whenever the open card changes.
-  useEffect(() => {
-    if (reduce || paused || !inView || items.length < 2) return;
-    const id = window.setTimeout(
-      () => setActive((i) => (i + 1) % items.length),
-      AUTO_MS,
-    );
-    return () => window.clearTimeout(id);
-  }, [active, paused, inView, reduce, items.length]);
 
   const transition = reduce ? { duration: 0 } : SPRING;
 
   return (
     <ul
-      ref={railRef}
-      onPointerLeave={() => setPaused(false)}
       className="flex flex-col gap-3 lg:h-[394px] lg:flex-row lg:gap-6"
     >
       {items.map((item, i) => {
         const open = i === active;
-        const SectorIcon = iconFor(item.id);
+        const iconSrc = iconFor(item.id);
 
         return (
           <motion.li
@@ -111,24 +84,18 @@ export default function IndustryCards({
             }}
             transition={transition}
             className="relative shrink-0 overflow-hidden border border-[#eeeeee] bg-ink lg:h-full! lg:min-w-[108px] lg:basis-[108px]"
-            onPointerEnter={(e) => {
-              if (e.pointerType === "mouse") {
-                setPaused(true);
-                setActive(i);
-              }
-            }}
           >
             <Link
               href={item.href}
               aria-label={`${item.title} — ${exploreLabel}`}
-              onFocus={() => {
-                setPaused(true);
-                setActive(i);
+              onFocus={(e) => {
+                // Keyboard focus opens the card; a pointer press also focuses
+                // the link, and must not navigate on that same click.
+                if (e.currentTarget.matches(":focus-visible")) setActive(i);
               }}
               onClick={(e) => {
                 if (!open) {
                   e.preventDefault();
-                  setPaused(true);
                   setActive(i);
                 }
               }}
@@ -169,10 +136,10 @@ export default function IndustryCards({
                     exit={{ opacity: 0, transition: { duration: 0.12 } }}
                     className="absolute inset-0 flex items-center justify-between gap-3 px-5 lg:flex-col lg:px-0 lg:pt-16 lg:pb-6"
                   >
-                    <span className="line-clamp-1 text-[16px] font-semibold text-white lg:line-clamp-2 lg:max-h-[260px] lg:rotate-180 lg:text-[20px] lg:leading-6 lg:[writing-mode:vertical-rl]">
+                    <span className="line-clamp-1 text-[16px] font-black text-white lg:line-clamp-2 lg:max-h-[260px] lg:rotate-180 lg:text-[20px] lg:leading-6 lg:[writing-mode:vertical-rl]">
                       {item.title}
                     </span>
-                    <IconDot icon={SectorIcon} />
+                    <IconDot src={iconSrc} />
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -191,9 +158,9 @@ export default function IndustryCards({
                     exit={{ opacity: 0, y: 12, transition: { duration: 0.15 } }}
                     className="absolute inset-x-0 bottom-0 flex items-start gap-4 p-5 sm:p-6 lg:min-w-[520px]"
                   >
-                    <IconDot icon={SectorIcon} />
+                    <IconDot src={iconSrc} />
                     <span className="flex min-w-0 flex-col">
-                      <span className="text-[18px] leading-7 font-semibold text-white sm:text-[20px]">
+                      <span className="text-[18px] leading-6 font-black text-white sm:text-[20px]">
                         {item.title}
                       </span>
                       <span className="mt-2 line-clamp-3 max-w-[460px] text-[14px] leading-5 text-white/85">
@@ -211,17 +178,6 @@ export default function IndustryCards({
                 )}
               </AnimatePresence>
 
-              {/* Auto-advance timer along the bottom of the open card */}
-              {open && !reduce && !paused && inView && items.length > 1 && (
-                <motion.span
-                  key={`timer-${active}`}
-                  aria-hidden
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: AUTO_MS / 1000, ease: "linear" }}
-                  className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-white/70 rtl:origin-right"
-                />
-              )}
             </Link>
           </motion.li>
         );
@@ -230,10 +186,14 @@ export default function IndustryCards({
   );
 }
 
-function IconDot({ icon: I }: { icon: LucideIcon }) {
+function IconDot({ src }: { src: string | null }) {
   return (
-    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-brandblue-600 shadow-[0_6px_16px_-6px_rgba(0,0,0,0.4)]">
-      <I aria-hidden className="size-4.5" strokeWidth={1.8} />
+    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white shadow-[0_6px_16px_-6px_rgba(0,0,0,0.4)]">
+      {src ? (
+        <Image src={src} alt="" width={20} height={20} aria-hidden unoptimized />
+      ) : (
+        <Building2 aria-hidden className="size-5 text-brandblue-600" strokeWidth={1.8} />
+      )}
     </span>
   );
 }

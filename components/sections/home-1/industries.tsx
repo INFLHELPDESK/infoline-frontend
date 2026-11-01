@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Stagger, StaggerItem } from "@/components/ui/motion";
-import { Eyebrow, sectionTitle } from "./shared";
+import { Eyebrow } from "./shared";
 import IndustryCards, { type IndustryCard } from "./industry-cards";
 
 /**
@@ -16,9 +16,9 @@ export default function Industries({ items }: { items?: IndustryCard[] }) {
       <div className="mx-auto w-full max-w-360 px-6 md:px-12 lg:px-20">
         <Stagger as="div" className="max-w-[907px]" stagger={0.12}>
           <StaggerItem direction="start" distance={24}>
-            <Eyebrow tone="muted">{t("eyebrow")}</Eyebrow>
+            <Eyebrow tone="outline">{t("eyebrow")}</Eyebrow>
           </StaggerItem>
-          <StaggerItem as="h2" direction="start" className={`mt-5 ${sectionTitle}`}>
+          <StaggerItem as="h2" direction="start" className="mt-5 text-[28px] leading-9 font-black tracking-normal text-[#263238] sm:text-[32px] sm:leading-10 lg:text-[36px] lg:leading-[44px]">
             {t("title")}
           </StaggerItem>
           <StaggerItem

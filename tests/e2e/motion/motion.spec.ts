@@ -16,8 +16,8 @@ import {
  */
 
 const industries = messages.en.HomeV1.industries;
-/** Mirrors AUTO_MS in components/sections/home-1/industry-cards.tsx. */
-const AUTO_MS = 5_000;
+/** Longer than the retired 5s autoplay period (design removed autoplay). */
+const WAIT_MS = 5_000;
 
 const rail = (page: Page) =>
   page
@@ -43,35 +43,37 @@ test.describe("homepage hydration", () => {
   });
 });
 
-test.describe("auto-advancing industry rail (homepage)", () => {
-  test("advances to the next card after AUTO_MS while in view", async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.clock.install();
+test.describe("static industry rail (homepage)", () => {
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    test(`never auto-advances (reducedMotion: ${reducedMotion})`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion });
+      await page.clock.install();
+      await page.goto("/en");
+      await waitForHydration(page, "main ul li a");
+      await scrollElementTo(page, rail(page), 200);
+      await expect(isOpen(page, 0)).toBeVisible();
+
+      for (let i = 0; i < 4; i++) await page.clock.runFor(WAIT_MS);
+      await expect(isOpen(page, 0)).toBeVisible();
+      await expect(isOpen(page, 1)).toHaveCount(0);
+    });
+  }
+
+  test("hovering a closed card does not switch cards", async ({ page }) => {
     await page.goto("/en");
     await scrollElementTo(page, rail(page), 200);
+    await card(page, 2).hover();
     await expect(isOpen(page, 0)).toBeVisible();
-
-    // The timer is armed by an effect once IntersectionObserver reports the
-    // rail in view; advance fake time in whole periods until it fires.
-    await expect(async () => {
-      await page.clock.runFor(AUTO_MS);
-      await expect(isOpen(page, 1)).toBeAttached({ timeout: 250 });
-    }).toPass({ timeout: 10_000 });
-    await expect(isOpen(page, 0)).toHaveCount(0);
+    await expect(isOpen(page, 2)).toHaveCount(0);
   });
 
-  test("never auto-advances under prefers-reduced-motion", async ({ page }) => {
-    await page.clock.install();
+  test("a mouse click on a closed card opens it without navigating", async ({ page }) => {
     await page.goto("/en");
-    await waitForHydration(page, "main ul li a");
     await scrollElementTo(page, rail(page), 200);
-    await expect(isOpen(page, 0)).toBeVisible();
-
-    // Same stepping as the motion-on test (which proves the timer arms
-    // within these periods once the rail is hydrated and in view).
-    for (let i = 0; i < 4; i++) await page.clock.runFor(AUTO_MS);
-    await expect(isOpen(page, 0)).toBeVisible();
-    await expect(isOpen(page, 1)).toHaveCount(0);
+    await card(page, 2).getByRole("link").click();
+    await expect(isOpen(page, 2)).toBeVisible();
+    await expect(isOpen(page, 0)).toHaveCount(0);
+    await expect(page).toHaveURL(/[/]en$/);
   });
 
   test("keyboard focus opens a card; activating the open card follows its link", async ({
