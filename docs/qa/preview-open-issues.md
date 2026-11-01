@@ -24,6 +24,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-017](#pqa-017--blog--article--content-and-cms-dependencies-from-qa-batch-3a) | Blog / Article | Content and CMS dependencies from QA batch 3A | Medium | PENDING CONTENT / CMS / DESIGN |
 | [PQA-019](#pqa-019--unconfirmed-content-differences-from-the-figma-vs-website-qa-report) | Home / About / Industries / Contact | Unconfirmed content differences from the Figma vs Website QA report | Medium | PENDING CONTENT / DESIGN DECISION |
 | [PQA-020](#pqa-020--brand-typeface-avenir-not-bundled-pending-web-licence-and-files) | All pages | Brand typeface Avenir not bundled — pending web licence and files | Medium | BLOCKED — Awaiting licence and font files |
+| [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
 
@@ -291,3 +292,21 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [ ] No unlicensed or locally installed Avenir files are committed.
   - [ ] Hero weights (800/900) verified once Avenir is available.
   - [ ] Verified in EN LTR and AR RTL at 1440, 768 and 390px.
+
+### PQA-021 — Unknown localized routes return HTTP 200 (soft 404)
+
+- **Page:** Unmatched URLs under a locale (for example `/en/zzz`, `/ar/a/b/c`) — `app/[locale]/[...rest]/page.tsx`
+- **Priority:** Medium for Preview; reassess before Production (SEO and monitoring)
+- **Status:** DEFERRED — Pending release decision (known soft-404 issue, not resolved)
+- **Owner:** Frontend / PM
+- **Description:** QA reported that unknown URLs show the correct 404 page but answer HTTP 200. Confirmed on the local production build and on `demo.infoline.om`; the cause is application code, not hosting. The catch-all route renders the themed 404 and deliberately does not call `notFound()`. The page is server-rendered with the site header and footer and is marked `noindex`, so search engines do not index it, but status-based monitoring and crawlers still see a 200. A technical spike on Next.js 16.3.1 (isolated copy, nothing merged) found:
+  1. **Current soft 404 (HTTP 200):** full server HTML with navigation, `noindex`, EN and AR.
+  2. **`notFound()` inside the catch-all:** returns HTTP 404 but the initial HTML is blank (the page appears only after client JavaScript), so it is not acceptable.
+  3. **Experimental `globalNotFound`:** returns HTTP 404 with server-rendered EN and AR content and `noindex`, but only after deleting the catch-all and `app/[locale]/not-found.tsx`, and the page loses the existing Header and Footer. Mirroring them into the global file failed (the server render fell back to a blank client shell). It also depends on a flag Next marks experimental.
+  4. **Not covered either way:** unknown Article and Insights slugs have their own soft 404 and return HTTP 200 once the CMS answers; with no CMS endpoint (the current demo build) they return HTTP 500 by design (a CMS outage is never a cacheable 404). Their behaviour must be verified separately when the CMS is connected.
+- **Decision:** The team deferred the implementation. No routing, Next.js configuration, component or test changes were made.
+- **Dependency:** PM/Designer decision on whether a correct HTTP 404 is worth a 404 page without the site navigation (or a design for that page), taken before Production.
+- **Acceptance criteria:**
+  - [ ] Decision recorded: keep the themed soft 404, or move to a real HTTP 404 (for example via `globalNotFound`) with an approved page design.
+  - [ ] If a real 404 is chosen: unknown localized URLs return HTTP 404 with visible server-rendered content in EN and AR, `noindex` stays, valid pages and redirects are unaffected, and the e2e 404 specs are updated.
+  - [ ] Unknown Article and Insights slugs verified against the connected CMS (themed not-found, no 500 for a missing post).
