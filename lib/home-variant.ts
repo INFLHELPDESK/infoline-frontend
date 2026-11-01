@@ -3,15 +3,17 @@
  *
  * `?homeVariant=new` renders the alternative toggle design; anything else
  * (missing, `current`, unknown, repeated) renders the existing design. The
- * switch is off on the Vercel Production environment, so the public site can
- * never show the alternative before it is approved.
+ * switch is opt-in: it exists only where `ENABLE_HOME_VARIANT_PREVIEW=1` is
+ * set, and never on the Vercel Production environment, so no public host can
+ * show the alternative before it is approved.
  */
 export type HomeVariant = "current" | "new";
 
 export function isHomeVariantPreviewEnabled(
   vercelEnv: string | undefined = process.env.VERCEL_ENV,
+  optIn: string | undefined = process.env.ENABLE_HOME_VARIANT_PREVIEW,
 ): boolean {
-  return vercelEnv !== "production";
+  return optIn === "1" && vercelEnv !== "production";
 }
 
 export function resolveHomeVariant(

@@ -86,6 +86,8 @@ export default defineConfig({
       command: `npm run start -- -p ${PORT} -H 127.0.0.1`,
       url: `${baseURL}/en`,
       reuseExistingServer: !CI,
+      // The experimental Home variant is opt-in (tests/e2e/home/what-changes-variant.spec.ts).
+      env: { ENABLE_HOME_VARIANT_PREVIEW: "1" },
       timeout: 120_000,
       stdout: "ignore",
       stderr: "pipe",

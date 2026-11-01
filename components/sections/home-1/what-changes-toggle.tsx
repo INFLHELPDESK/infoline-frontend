@@ -10,8 +10,8 @@ const WITH_ORDER = [3, 1, 2, 0];
 /**
  * Alternative "What changes with Infoline" design (Figma Home-2, nodes
  * 448:1675 "Without" and 448:1587 "With" — two states of one toggle design).
- * Internal review only: Home selects it with `?homeVariant=new` outside
- * Production. Eyebrow, tabs and pills use `HomeV1.whatChanges`; the heading
+ * Internal review only: Home selects it with `?homeVariant=new` only where
+ * `ENABLE_HOME_VARIANT_PREVIEW=1` is set (never on Production). Eyebrow, tabs and pills use `HomeV1.whatChanges`; the heading
  * and description use `HomeV1.whatChangesToggle` (Figma copy, user-confirmed).
  */
 export default function WhatChangesToggle() {

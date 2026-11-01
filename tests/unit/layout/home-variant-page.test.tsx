@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "@/app/[locale]/(site)/page";
 
 vi.mock("@/components/sections/home-1/hero", () => ({
@@ -36,6 +36,16 @@ vi.mock("@/components/sections/home-1/what-changes-toggle", () => ({
 
 afterEach(cleanup);
 
+/** A searchParams promise that fails the test if the page reads it. */
+function unreadableSearchParams(query: Record<string, string>) {
+  return new Proxy(Promise.resolve(query), {
+    get(target, prop, receiver) {
+      if (prop === "then") throw new Error("searchParams must not be read when the variant is unavailable");
+      return Reflect.get(target, prop, receiver);
+    },
+  });
+}
+
 async function renderHome(query: Record<string, string | string[] | undefined>) {
   const ui = await HomePage({ searchParams: Promise.resolve(query) } as never);
   return render(ui);
@@ -44,6 +54,11 @@ async function renderHome(query: Record<string, string | string[] | undefined>) 
 const OTHER_SECTIONS = ["hero", "why-trust", "what-we-do", "industries", "proof", "three-ways", "clients", "partners"];
 
 describe("Home › What changes variant selection", () => {
+  // The variant exists only where it is explicitly opted in (non-production).
+  beforeEach(() => {
+    vi.stubEnv("ENABLE_HOME_VARIANT_PREVIEW", "1");
+  });
+
   it("renders the current design by default", async () => {
     await renderHome({});
     expect(screen.getByTestId("changes-current")).toBeTruthy();
@@ -81,17 +96,32 @@ describe("Home › What changes variant selection", () => {
     }
   });
 
-  it("never exposes the new design on Vercel Production, and does not read the query", async () => {
+  it("renders the new design on Vercel Preview with the opt-in", async () => {
+    vi.stubEnv("VERCEL_ENV", "preview");
+    await renderHome({ homeVariant: "new" });
+    expect(screen.getByTestId("changes-new")).toBeTruthy();
+  });
+
+  it("never exposes the new design on Vercel Production, even with the opt-in, and does not read the query", async () => {
     vi.stubEnv("VERCEL_ENV", "production");
-    const searchParams = new Proxy(Promise.resolve({ homeVariant: "new" }), {
-      get(target, prop, receiver) {
-        if (prop === "then") throw new Error("searchParams must not be read on Production");
-        return Reflect.get(target, prop, receiver);
-      },
-    });
-    const ui = await HomePage({ searchParams } as never);
+    const ui = await HomePage({ searchParams: unreadableSearchParams({ homeVariant: "new" }) } as never);
     render(ui);
     expect(screen.getByTestId("changes-current")).toBeTruthy();
     expect(screen.queryByTestId("changes-new")).toBeNull();
   });
+});
+
+describe("Home › What changes variant without the opt-in", () => {
+  it.each([undefined, "development", "preview"])(
+    "keeps the current design for ?homeVariant=new and does not read the query (VERCEL_ENV=%s)",
+    async (env) => {
+      vi.stubEnv("ENABLE_HOME_VARIANT_PREVIEW", "");
+      if (env) vi.stubEnv("VERCEL_ENV", env);
+      const ui = await HomePage({ searchParams: unreadableSearchParams({ homeVariant: "new" }) } as never);
+      render(ui);
+      expect(screen.getByTestId("changes-current")).toBeTruthy();
+      expect(screen.queryByTestId("changes-new")).toBeNull();
+      for (const name of OTHER_SECTIONS) expect(screen.getAllByTestId(`section-${name}`)).toHaveLength(1);
+    },
+  );
 });

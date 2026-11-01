@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { isHomeVariantPreviewEnabled, resolveHomeVariant } from "@/lib/home-variant";
 
 describe("resolveHomeVariant", () => {
@@ -28,10 +28,33 @@ describe("resolveHomeVariant", () => {
 });
 
 describe("isHomeVariantPreviewEnabled", () => {
-  it("is off on Vercel Production only", () => {
-    expect(isHomeVariantPreviewEnabled("production")).toBe(false);
-    expect(isHomeVariantPreviewEnabled("preview")).toBe(true);
-    expect(isHomeVariantPreviewEnabled("development")).toBe(true);
-    expect(isHomeVariantPreviewEnabled(undefined)).toBe(true);
+  it("is off without the opt-in variable, in every environment", () => {
+    for (const env of [undefined, "development", "preview", "production"]) {
+      expect(isHomeVariantPreviewEnabled(env, undefined)).toBe(false);
+    }
+  });
+
+  it("is off for any opt-in value other than 1", () => {
+    for (const value of ["", "0", "true", "yes", "1 "]) {
+      expect(isHomeVariantPreviewEnabled("preview", value)).toBe(false);
+    }
+  });
+
+  it("is on with the opt-in outside Production (local, preview, self-hosted)", () => {
+    expect(isHomeVariantPreviewEnabled(undefined, "1")).toBe(true);
+    expect(isHomeVariantPreviewEnabled("development", "1")).toBe(true);
+    expect(isHomeVariantPreviewEnabled("preview", "1")).toBe(true);
+  });
+
+  it("stays off on Vercel Production even with the opt-in", () => {
+    expect(isHomeVariantPreviewEnabled("production", "1")).toBe(false);
+  });
+
+  it("reads both variables from the environment by default", () => {
+    vi.stubEnv("VERCEL_ENV", "preview");
+    vi.stubEnv("ENABLE_HOME_VARIANT_PREVIEW", "1");
+    expect(isHomeVariantPreviewEnabled()).toBe(true);
+    vi.stubEnv("VERCEL_ENV", "production");
+    expect(isHomeVariantPreviewEnabled()).toBe(false);
   });
 });

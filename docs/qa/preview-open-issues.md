@@ -177,7 +177,7 @@ Copy this block for new issues.
 
 ### PQA-011 — Home / What changes — alternative toggle design: open design and content questions
 
-- **Page:** Home (`/`) — `components/sections/home-1/what-changes-toggle*.tsx`, `what-changes-dial.tsx`; preview only via `?homeVariant=new` (off on Vercel Production)
+- **Page:** Home (`/`) — `components/sections/home-1/what-changes-toggle*.tsx`, `what-changes-dial.tsx`; preview only via `?homeVariant=new` (opt-in: requires `ENABLE_HOME_VARIANT_PREVIEW=1`; always off on Vercel Production)
 - **Priority:** Medium
 - **Status:** PENDING DESIGN / CONTENT REVIEW
 - **Description:** The alternative is the Figma Home-2 toggle design (nodes `448:1675` Without state and `448:1587` With state: tab toggle plus gauge, four pills per side). The brief expected three columns with a "Talk to an Expert" CTA; that matches the existing design, not these frames. Open points:
