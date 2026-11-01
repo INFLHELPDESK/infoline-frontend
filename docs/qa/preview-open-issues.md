@@ -4,7 +4,7 @@ Tracker for issues found during Frontend Preview QA that are not yet resolved.
 Resolved issues are removed from this file (history lives in Git).
 
 **Branch:** `feature/home-2-redesign`
-**Last updated:** 2026-10-26
+**Last updated:** 2026-11-01
 
 ## Summary
 
@@ -23,6 +23,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-016](#pqa-016--home--client-logos-arabic-title-and-mislabeled-asset) | Home | Client logos — Arabic title pending; mislabeled `paew.svg` | Medium | PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION |
 | [PQA-017](#pqa-017--blog--article--content-and-cms-dependencies-from-qa-batch-3a) | Blog / Article | Content and CMS dependencies from QA batch 3A | Medium | PENDING CONTENT / CMS / DESIGN |
 | [PQA-019](#pqa-019--unconfirmed-content-differences-from-the-figma-vs-website-qa-report) | Home / About / Industries / Contact | Unconfirmed content differences from the Figma vs Website QA report | Medium | PENDING CONTENT / DESIGN DECISION |
+| [PQA-020](#pqa-020--brand-typeface-avenir-not-bundled-pending-web-licence-and-files) | All pages | Brand typeface Avenir not bundled — pending web licence and files | Medium | BLOCKED — Awaiting licence and font files |
 
 ## Issue template
 
@@ -276,3 +277,17 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Acceptance criteria:**
   - [ ] Each item above is approved or dismissed in writing.
   - [ ] Approved changes applied in `locales/en.json` and `locales/ar.json` only.
+
+### PQA-020 — Brand typeface Avenir not bundled — pending web licence and files
+
+- **Page:** Site-wide — `app/[locale]/layout.tsx`, `app/[locale]/globals.css` (`--font-latin`)
+- **Priority:** Medium
+- **Status:** BLOCKED — Awaiting licence and font files
+- **Description:** Figma specifies Avenir (Latin) and Tajawal (Arabic). Avenir is commercially licensed and not bundled, so `--font-avenir` is unset and English text uses Inter as a temporary fallback (Tajawal is already applied for Arabic). Inter is not the approved brand font. Separate from this: the `font-latin` / `font-arabic` utilities previously generated no CSS (tokens were in `:root`, not `@theme`), so the site rendered in the system font stack instead of Inter/Tajawal. That token bug is fixed (`@theme inline` in `globals.css`) and is not tracked here; it is also unrelated to Hero weights 800/900, which Inter (loaded 400–700) cannot supply.
+- **Dependency:** Confirmation of the Avenir web-font licence and the licensed font files (Roman, Medium, Heavy, Black) from the client/designer.
+- **Acceptance criteria:**
+  - [ ] Web licence confirmed in writing; files supplied in the approved formats.
+  - [ ] Avenir registered so `--font-avenir` is defined; `--font-latin` then resolves to it with Inter as fallback.
+  - [ ] No unlicensed or locally installed Avenir files are committed.
+  - [ ] Hero weights (800/900) verified once Avenir is available.
+  - [ ] Verified in EN LTR and AR RTL at 1440, 768 and 390px.

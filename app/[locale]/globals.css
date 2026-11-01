@@ -6,10 +6,6 @@ body {
 }
 
 :root {
-  /* Figma: Avenir (Latin) / Tajawal (Arabic). --font-avenir is intentionally
-     undefined until licensed files are added, so Inter is the fallback. */
-  --font-latin: var(--font-avenir, var(--font-inter)), sans-serif;
-  --font-arabic: var(--font-tajawal), sans-serif;
   /* The site is a light design with dark sections that set their own bg —
      keep the canvas white so unstyled sections never fall back to a dark
      UA default in dark-mode browsers. */
@@ -21,6 +17,17 @@ body {
 }
 
 /* TailwindCSS global styles and resets */
+
+/* Figma: Avenir (Latin) / Tajawal (Arabic). Tailwind v4 only generates the
+   font-latin / font-arabic utilities from @theme tokens (plain :root custom
+   properties produce no class, so the body fell back to the system stack).
+   "inline" keeps the var() chain resolved at the element. --font-avenir is
+   intentionally undefined until licensed files are added, so Inter is the
+   temporary fallback. */
+@theme inline {
+  --font-latin: var(--font-avenir, var(--font-inter)), sans-serif;
+  --font-arabic: var(--font-tajawal), sans-serif;
+}
 
 @theme {
   /* Primitive palette — enables bg-brandblue-500, text-slate-900, etc. */
