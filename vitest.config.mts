@@ -18,6 +18,9 @@ export default defineConfig({
     // Pure helpers run in Node; component tests opt into jsdom per file
     // with a `// @vitest-environment jsdom` docblock.
     environment: "node",
+    // next-intl/middleware imports "next/server" without an extension, which
+    // Node ESM rejects; inlining lets Vite resolve it (routing tests).
+    server: { deps: { inline: ["next-intl"] } },
     restoreMocks: true,
     unstubEnvs: true,
     unstubGlobals: true,
