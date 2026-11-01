@@ -22,10 +22,9 @@ body {
    font-latin / font-arabic utilities from @theme tokens (plain :root custom
    properties produce no class, so the body fell back to the system stack).
    "inline" keeps the var() chain resolved at the element. --font-avenir is
-   intentionally undefined until licensed files are added, so Inter is the
-   temporary fallback. */
+   registered in layout.tsx (next/font/local). */
 @theme inline {
-  --font-latin: var(--font-avenir, var(--font-inter)), sans-serif;
+  --font-latin: var(--font-avenir), sans-serif;
   --font-arabic: var(--font-tajawal), sans-serif;
 }
 

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { Inter, Tajawal } from "next/font/google";
+import { Tajawal } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import CustomCursor from "@/components/ui/cursor";
 import { Header } from "@/components/layout/header";
@@ -9,15 +10,24 @@ import { Footer } from "@/components/layout/footer";
 import { HeaderThemeProvider } from "@/components/layout/header/theme";
 import { LocaleTargetsProvider } from "@/components/layout/header/locale-targets";
 import { SITE_NAME, getSiteUrl, localeAlternates } from "@/lib/site";
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+// Approved English face (Figma handoff): Avenir, from the supplied TTFs.
+// The files' OS/2 weights are not in visual order (Black=800 is heavier than
+// Heavy=900), so each CSS weight is declared explicitly to follow Figma, whose
+// "semibold" styles use Heavy and "bold" styles use Black:
+//   400 Roman | 500 Medium | 600 Heavy | 700-800 Black | 900 Heavy
+const avenir = localFont({
+  variable: "--font-avenir",
   display: "swap",
+  preload: false,
+  src: [
+    { path: "./fonts/Avenir-Roman.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/Avenir-Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/Avenir-Heavy.ttf", weight: "600", style: "normal" },
+    { path: "./fonts/Avenir-Black.ttf", weight: "700 800", style: "normal" },
+    { path: "./fonts/Avenir-Heavy.ttf", weight: "900", style: "normal" },
+  ],
 });
-// Approved Arabic face (Figma handoff). Avenir (Latin) is commercially
-// licensed and not bundled yet: `--font-avenir` stays unset, so Latin text
-// falls back to Inter (see --font-latin in globals.css).
+// Approved Arabic face (Figma handoff).
 const tajawal = Tajawal({
   variable: "--font-tajawal",
   subsets: ["arabic"],
@@ -70,7 +80,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${tajawal.variable} h-full antialiased`}
+      className={`${avenir.variable} ${tajawal.variable} h-full antialiased`}
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <body className={locale === "ar" ? "font-arabic" : "font-latin"}>

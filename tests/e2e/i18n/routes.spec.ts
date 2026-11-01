@@ -89,10 +89,30 @@ test.describe("locale resolution", () => {
     await expect(page).toHaveURL(/\/en$/);
   });
 
-  test("bare / redirects to /ar for an Arabic Accept-Language", async ({ browser, baseURL }) => {
+  // English is the confirmed default: neither the browser language nor a stored
+  // locale cookie may send the bare root anywhere else (localeDetection: false).
+  test("bare / redirects to /en for an Arabic Accept-Language", async ({ browser, baseURL }) => {
     const context = await browser.newContext({ baseURL, locale: "ar-OM" });
     const page = await context.newPage();
     await page.goto("/");
+    await expect(page).toHaveURL(/\/en$/);
+    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+    await context.close();
+  });
+
+  test("bare / redirects to /en even with an NEXT_LOCALE=ar cookie", async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, locale: "ar-OM" });
+    await context.addCookies([{ name: "NEXT_LOCALE", value: "ar", url: baseURL! }]);
+    const page = await context.newPage();
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/en$/);
+    await context.close();
+  });
+
+  test("explicit /ar still serves Arabic (RTL) for an English browser", async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, locale: "en-US" });
+    const page = await context.newPage();
+    await page.goto("/ar");
     await expect(page).toHaveURL(/\/ar$/);
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     await context.close();

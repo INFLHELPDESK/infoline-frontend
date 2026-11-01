@@ -23,7 +23,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-016](#pqa-016--home--client-logos-arabic-title-and-mislabeled-asset) | Home | Client logos — Arabic title pending; mislabeled `paew.svg` | Medium | PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION |
 | [PQA-017](#pqa-017--blog--article--content-and-cms-dependencies-from-qa-batch-3a) | Blog / Article | Content and CMS dependencies from QA batch 3A | Medium | PENDING CONTENT / CMS / DESIGN |
 | [PQA-019](#pqa-019--unconfirmed-content-differences-from-the-figma-vs-website-qa-report) | Home / About / Industries / Contact | Unconfirmed content differences from the Figma vs Website QA report | Medium | PENDING CONTENT / DESIGN DECISION |
-| [PQA-020](#pqa-020--brand-typeface-avenir-not-bundled-pending-web-licence-and-files) | All pages | Brand typeface Avenir not bundled — pending web licence and files | Medium | BLOCKED — Awaiting licence and font files |
+| [PQA-020](#pqa-020--brand-typeface-avenir-not-bundled-pending-web-licence-and-files) | All pages | Brand typeface Avenir — implemented, pending Designer confirmation and licence record | Medium | IMPLEMENTED — Awaiting Designer confirmation / licence record |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -281,17 +281,27 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 
 ### PQA-020 — Brand typeface Avenir not bundled — pending web licence and files
 
-- **Page:** Site-wide — `app/[locale]/layout.tsx`, `app/[locale]/globals.css` (`--font-latin`)
+- **Page:** Site-wide — `app/[locale]/layout.tsx`, `app/[locale]/globals.css` (`--font-latin`), `app/[locale]/fonts/`
 - **Priority:** Medium
-- **Status:** BLOCKED — Awaiting licence and font files
-- **Description:** Figma specifies Avenir (Latin) and Tajawal (Arabic). Avenir is commercially licensed and not bundled, so `--font-avenir` is unset and English text uses Inter as a temporary fallback (Tajawal is already applied for Arabic). Inter is not the approved brand font. Separate from this: the `font-latin` / `font-arabic` utilities previously generated no CSS (tokens were in `:root`, not `@theme`), so the site rendered in the system font stack instead of Inter/Tajawal. That token bug is fixed (`@theme inline` in `globals.css`) and is not tracked here; it is also unrelated to Hero weights 800/900, which Inter (loaded 400–700) cannot supply.
-- **Dependency:** Confirmation of the Avenir web-font licence and the licensed font files (Roman, Medium, Heavy, Black) from the client/designer.
+- **Status:** IMPLEMENTED — Awaiting Designer confirmation and licence record
+- **Description:** English now uses Avenir from the supplied desktop TTFs, loaded with `next/font/local` with `preload: false` (four files, about 630 KB raw and about 280 KB transferred, served as TTF without conversion); Inter is removed. Arabic stays on Tajawal. The files' OS/2 weights are not in visual order (Black is marked 800 but is heavier than Heavy, marked 900), so each CSS weight is declared explicitly to follow the Figma styles, whose "semibold" text uses Heavy and "bold" text uses Black:
+  - 400 Roman, 500 Medium, 600 Heavy, 700 and 800 Black, 900 Heavy (the Heavy file is declared twice, for 600 and 900).
+  - Verified in Chromium (platform font per weight, and network requests): each weight renders the intended face with no system fallback and no synthetic bolding. The same text measures identically at 600 and 900, and at 700 and 800.
+  - Before/after screenshots (EN and AR, 1440, 768 and 390px) show Avenir applied, no clipping or horizontal overflow, and some headings and chips now wrap differently because Avenir is narrower than Inter. This was a visual comparison, not a pixel-diff against Figma, and is not an approval.
+- **Licensing:** the Project Manager confirmed on 2026-11-01 that Infoline holds the rights to use these files on the website. No licence document is in the repository, the TTFs carry an "embedding: preview and print" flag (`fsType 4`) and empty licence fields, and the copyright is Linotype GmbH (2007). Keep the written licence or proof of purchase with the project record.
+- **Dependency:** Designer confirmation of the decisions below; the licence record; a production decision on file format and size.
+- **Open Designer decisions:**
+  1. 600 mapped to Heavy and 700 to Black for all site UI text (explicit in Figma for headings, inferred for small labels).
+  2. The Figma eyebrow pill and some "Regular" subtitles still reference Inter in the file; the site now uses Avenir Medium and Roman for them.
+  3. Site section-title scale and tracking (64px with negative tracking) against the Home-2 frame (36px, normal tracking), now that Avenir is in place.
+  4. The Hero stats band: Figma has an 8px backdrop blur with the gradient (the build has the gradient only).
+- **Font loading:** with preload off, English requests the four faces from the stylesheet (they start about 0.6 s later than with preload on and finish about 0.6 s later on a throttled connection, with no change in first contentful paint and no layout shift), and Arabic pages request no Avenir files (about 280 KB saved and first paint about 1.5 s faster on the same throttled test). WOFF2 versions of the same licensed files would shrink the English download further; that remains a production decision.
 - **Acceptance criteria:**
-  - [ ] Web licence confirmed in writing; files supplied in the approved formats.
-  - [ ] Avenir registered so `--font-avenir` is defined; `--font-latin` then resolves to it with Inter as fallback.
-  - [ ] No unlicensed or locally installed Avenir files are committed.
-  - [ ] Hero weights (800/900) verified once Avenir is available.
-  - [ ] Verified in EN LTR and AR RTL at 1440, 768 and 390px.
+  - [x] Four Avenir faces loaded locally and applied to English; Tajawal unchanged for Arabic.
+  - [x] CSS weights 400, 500, 600, 700, 800 and 900 verified to render the mapped faces.
+  - [ ] Designer confirms the weight mapping and the open items above.
+  - [ ] Licence document or proof of purchase recorded.
+  - [ ] Decision on TTF versus WOFF2 for production (preload is already off, so Arabic pages do not fetch Avenir).
 
 ### PQA-021 — Unknown localized routes return HTTP 200 (soft 404)
 
