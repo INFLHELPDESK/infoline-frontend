@@ -52,23 +52,33 @@ export default function Hero() {
 
           {/* Plain, unanimated h1 — it is the LCP element (same rule as the
               reference home), so it paints at full opacity immediately. */}
-          <h1 className="mt-7 text-[40px] leading-[1.1] font-bold tracking-[-0.03em] sm:text-[52px] lg:text-[66px] lg:leading-[1.2]">
+          <h1 className="mt-7 text-[40px] leading-[1.1] font-extrabold tracking-normal sm:text-[52px] lg:text-[56px] lg:leading-[70px]">
             {t("titleLead")}{" "}
             <span className="text-brandblue-400">{t("titleAccent")}</span>
           </h1>
 
           <StaggerItem
             as="p"
-            className="mt-5 max-w-[641px] text-[15px] leading-6 text-slate-100 sm:text-[16px]"
+            className="mt-5 max-w-[641px] text-[15px] leading-6 text-slate-100 sm:text-[16px] lg:text-[18px] lg:leading-7"
           >
             {t("description")}
           </StaggerItem>
 
           <StaggerItem className="mt-9 flex flex-wrap items-center gap-4">
-            <PillButton href={t("primaryCta.href")} size="lg">
+            <PillButton
+              href={t("primaryCta.href")}
+              size="lg"
+              className="lg:text-[18px] lg:leading-7 lg:[&_svg]:size-6"
+            >
               {t("primaryCta.label")}
             </PillButton>
-            <PillButton href={t("secondaryCta.href")} size="lg" variant="soft">
+            <PillButton
+              href={t("secondaryCta.href")}
+              size="lg"
+              variant="outline"
+              arrow={false}
+              className="[&:not(:hover)]:text-slate-700 lg:text-[18px] lg:leading-7"
+            >
               {t("secondaryCta.label")}
             </PillButton>
           </StaggerItem>
@@ -76,7 +86,7 @@ export default function Hero() {
       </div>
 
       {/* Stats rail */}
-      <div className="bg-[#041d2a]/55 backdrop-blur-lg">
+      <div className="bg-gradient-to-t from-[#041d2a]/54 to-transparent">
         <Stagger
           as="ul"
           className="mx-auto grid w-full max-w-360 grid-cols-2 px-6 sm:grid-cols-3 md:px-12 lg:grid-cols-5 lg:px-14"
@@ -92,7 +102,7 @@ export default function Hero() {
             >
               <p
                 dir="ltr"
-                className="flex h-10 items-end gap-1 text-[36px] leading-none font-semibold lg:h-14 text-white transition-colors duration-300 group-hover:text-brandblue-400 rtl:justify-end lg:text-[48px]"
+                className="flex h-10 items-end gap-1 text-[36px] leading-none font-black lg:h-14 text-white transition-colors duration-300 group-hover:text-brandblue-400 rtl:justify-end lg:text-[44px]"
               >
                 <CountUp value={stat.value} />
                 {stat.unit && (
@@ -101,7 +111,7 @@ export default function Hero() {
                   </span>
                 )}
               </p>
-              <p className="mt-3 max-w-[18ch] pt-5 text-[14px] leading-6 text-slate-500 sm:text-[16px]">
+              <p className="mt-3 max-w-[18ch] pt-5 text-[14px] leading-6 text-slate-100 sm:text-[16px] lg:text-[18px] lg:leading-7">
                 {stat.label}
               </p>
             </StaggerItem>
