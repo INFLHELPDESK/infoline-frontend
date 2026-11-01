@@ -13,7 +13,7 @@ export default function Cta() {
 
   return (
     <section className="pb-24">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Reveal
           as="div"
           className="relative overflow-hidden rounded-2xl bg-ink p-10 lg:px-11 lg:py-12"

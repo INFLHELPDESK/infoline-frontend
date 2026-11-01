@@ -23,7 +23,7 @@ export default function Faq() {
 
   return (
     <section className="bg-slate-25 pt-14 pb-24">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Stagger
           as="div"
           className="mb-6 flex flex-col gap-lg"
@@ -56,7 +56,8 @@ export default function Faq() {
                   aria-expanded={isOpen}
                   className={`flex w-full items-center py-[18px] pe-14 text-start ${isOpen ? "pb-2" : ""}`}
                 >
-                  <span className="text-[16px] leading-6 font-semibold text-slate-900">
+                  {/* Figma 406:3212: 20/24, Avenir Heavy (600 → Heavy face). */}
+                  <span className="text-[20px] leading-6 font-semibold text-slate-900">
                     {item.q}
                   </span>
                 </button>

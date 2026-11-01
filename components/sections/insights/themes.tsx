@@ -19,7 +19,7 @@ export default function Themes() {
 
   return (
     <section className="pt-6 pb-12">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Stagger as="div" stagger={0.12} amount={0.2}>
           <StaggerItem direction="start" className="mb-10 flex flex-col items-center text-center">
             <Eyebrow className="mb-4 border border-slate-100">

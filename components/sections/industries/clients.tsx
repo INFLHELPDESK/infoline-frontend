@@ -9,7 +9,7 @@ export default function Clients() {
 
   return (
     <section className="bg-white py-6xl">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <div className="">
           <Stagger
             as="div"

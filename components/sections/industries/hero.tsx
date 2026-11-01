@@ -3,6 +3,7 @@ import { PillButton } from "@/components/sections/home-1/shared";
 import { MainBackground } from "@/components/ui/background";
 import { Reveal, Stagger, StaggerItem, MaskText } from "@/components/ui/motion";
 import { Link } from "@/i18n/navigation";
+import HeroVideo from "@/components/sections/industries/hero-video";
 
 type Sector = {
   id: string;
@@ -16,19 +17,12 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-160 items-center overflow-hidden lg:min-h-[640px]">
-      {/* Layer 1 — background video. Muted/looped/playsInline so it autoplays
-          everywhere; aria-hidden because it is decorative. */}
-      <video
-        aria-hidden
+      {/* Layer 1 — decorative background video (muted, looped, inline). It
+          plays only while motion is allowed; reduced motion keeps a still frame. */}
+      <HeroVideo
+        src="/assets/industries-bg.webm"
         className="pointer-events-none absolute inset-0 -z-1 h-full w-full object-cover opacity-45"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-      >
-        <source src="/assets/industries-bg.webm" type="video/webm" />
-      </video>
+      />
 
       {/* Layer 2 — melt the video into ink at the edges so the copy and the
           sector index stay readable over the moving backdrop. */}
@@ -37,7 +31,7 @@ export default function Hero() {
         className="absolute inset-0 -z-2 bg-gradient-to-b from-ink via-ink/55 to-ink"
       />
 
-      <div className="mx-auto w-full max-w-360 px-6 pt-32 pb-16 lg:px-10 lg:py-24">
+      <div className="mx-auto w-full max-w-360 px-6 pt-32 pb-16 lg:px-10 xl:px-20 lg:py-24">
         <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_442px] lg:gap-20">
           {/* Left column */}
           <Stagger

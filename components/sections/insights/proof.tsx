@@ -17,7 +17,7 @@ export default function Proof() {
 
   return (
     <section className="pb-12">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Reveal
           as="div"
           className="relative overflow-hidden rounded-2xl bg-[#0D161B] px-7 py-10 lg:px-[42px] lg:py-[62px]"

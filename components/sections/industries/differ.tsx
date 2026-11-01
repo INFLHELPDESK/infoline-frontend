@@ -7,7 +7,7 @@ export default function Differ() {
 
   return (
     <section className="pt-20 pb-12">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <div className="rounded-2xl bg-ink p-8 ring-1 ring-white/10 lg:px-10 lg:py-14">
           <div className="grid gap-8 lg:grid-cols-[1fr_629px] lg:gap-16">
             <div>

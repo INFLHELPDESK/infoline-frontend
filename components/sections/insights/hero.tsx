@@ -24,7 +24,7 @@ export default function Hero() {
         aria-hidden
         className="pointer-events-none absolute -top-1/5 start-[-14%] aspect-square w-[43%] rounded-full bg-[radial-gradient(circle,#1C97D4_0%,transparent_68%)] opacity-30 blur-3xl"
       />
-      <div className="relative mx-auto w-full max-w-360 px-6 pb-20 pt-32 lg:px-10 lg:py-20">
+      <div className="relative mx-auto w-full max-w-360 px-6 pb-20 pt-32 lg:px-10 xl:px-20 lg:py-20">
         <Stagger
           as="div"
           className="grid items-center gap-2xl lg:grid-cols-[minmax(0,1fr)_448px] lg:gap-20"

@@ -107,7 +107,7 @@ export default function Sectors() {
         </Stagger>
 
         {/* The stack */}
-        <div className="flex flex-col gap-8 lg:gap-10">
+        <div className="flex flex-col gap-8 lg:gap-10 xl:px-10">
           {sectors.map((s, i) => {
             const imageFirst = i % 2 === 0;
             return (

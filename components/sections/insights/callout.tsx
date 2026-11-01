@@ -14,7 +14,7 @@ export default function Callout() {
 
   return (
     <section className="pt-16 pb-12">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Reveal
           as="div"
           className="relative flex flex-col items-center gap-8 overflow-hidden rounded-2xl bg-[#eef5fa] px-7 pb-10 lg:min-h-[268px] lg:flex-row lg:gap-0 lg:px-0 lg:pb-0"

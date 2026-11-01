@@ -25,6 +25,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-019](#pqa-019--unconfirmed-content-differences-from-the-figma-vs-website-qa-report) | Home / About / Industries / Contact | Unconfirmed content differences from the Figma vs Website QA report | Medium | PENDING CONTENT / DESIGN DECISION |
 | [PQA-020](#pqa-020--brand-typeface-avenir-not-bundled-pending-web-licence-and-files) | All pages | Brand typeface Avenir — implemented, pending Designer confirmation and licence record | Medium | IMPLEMENTED — Awaiting Designer confirmation / licence record |
 | [PQA-022](#pqa-022--home-industries--designer-conformity-follow-ups) | Home | Industries — Designer conformity follow-ups | Low | IMPLEMENTED — Awaiting Designer decisions |
+| [PQA-023](#pqa-023--industries--case-studies--insights--page-qa-follow-ups-batch-6c6d) | Industries / Case Studies / Insights | Page QA follow-ups (Batch 6C/6D) | Medium | IMPLEMENTED (local) — Awaiting review / Designer decisions |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -278,6 +279,31 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Acceptance criteria:**
   - [x] Industries heading, eyebrow, card titles, icons and Hero blur match Figma (computed styles checked at 1440, 768 and 390px, EN and AR).
   - [x] No automatic rotation in either motion mode; keyboard focus and click open cards.
+  - [ ] Designer decisions above recorded.
+
+### PQA-023 — Industries / Case Studies / Insights — page QA follow-ups (Batch 6C/6D)
+
+- **Page:** Industries (`components/sections/industries/*`), Case Studies (`components/sections/case-studies/*`), Insights (`components/sections/insights/*`). Figma frames: Industries 406:3027, Case Studies 406:4321, Insights 406:4761.
+- **Priority:** Medium
+- **Status:** IMPLEMENTED (local, uncommitted) — Awaiting review, preview deploy and Designer decisions
+- **Description:** Batch 6C compared the three pages with Figma; Batch 6D fixed the confirmed items below. Measured on a local build at 1440/1280/1024/768/390px, EN and AR; no horizontal overflow, console or hydration errors.
+  1. **Featured proof collision (6C F2), Insights:** below 1280px wide the image covered the metrics in both languages (overlap 160px at 1280 and 416px at 1024), and at 1440 the numbers touched it (gap 0; most visible in Arabic, where the screen edge faces them). Now side by side from 1280px only (stacked below, list then image). The list is at most 716px with a 40px logical gap before the image in both directions (Figma 406:4941: 716px list, 39px gap), and the image box takes the remaining width (min 380px; 484px at 1440) and crops the artwork without mirroring. After: gap 40px at 1280 and 1440, EN and AR.
+  2. **Hero video and reduced motion (6C F3), Industries only:** the video had `autoPlay` and kept playing with reduced motion on. `hero-video.tsx` now starts playback only while motion is allowed, pauses when the preference changes to reduce and resumes when it changes back; reduced motion shows the first frame. Checked in the browser (EN and AR): initial state, live toggle both ways, no hydration error. About and Solutions hero videos are unchanged (same pattern, see decision 4).
+  3. **Container inset (6C F1):** from 1280px (`xl:px-20`) content now sits at x=80 where Figma shows it: Industries hero, Differ card, sector cards, CTA, FAQ and clients; Case Studies chapters and CTA; every Insights section. 768 and 390px unchanged (24px); 1024–1279px unchanged (40px, the header uses 48px there). After at 1440: Case Studies chapter text 460–1355px (Figma 461–1356), Differ and Featured proof headings at 120px (Figma 121/120).
+  4. **Industries FAQ question (6C F5):** 16/24 → 20/24, weight 600 (Avenir Heavy per PQA-020; Tajawal in Arabic), per Figma 406:3212. Accordion and icon alignment unchanged.
+  5. **Card metadata at tablet width (6C F8), Insights Formats:** a wrapped line could start with a stranded `|` (EN 768: 3 of 3 cards, EN 1024 and 390: 1 card, AR 768: 3 of 3). A divider that wraps to the start of a line is now clipped; dividers between parts on one line are unchanged. After: no stranded divider at any width, EN or AR.
+- **Dependency:** Designer answers below; review and a preview deployment of the uncommitted changes.
+- **Open Designer decisions:**
+  1. Ambiguous insets left at 40px: Case Studies hero (Figma x=44) and the Industries "Six sector groups" header (Figma x=44, with the sector cards at 80). Confirm whether they should align with the 80px content.
+  2. 1024–1279px inset (no Figma frame at that width): keep 40px or follow the header (48px)?
+  3. Featured proof: the image is cropped (empty left margin first, then the screen edge), not mirrored in Arabic. Confirm the crop, or supply an Arabic or mirrored artwork.
+  4. About and Solutions hero videos still autoplay under reduced motion; apply the Industries treatment to them?
+  5. Deferred from 6C, not implemented: hero eyebrow and stat colour/weight (Figma #74C0E7 Medium / Heavy 32; site #4FC3F7 Regular / 700) on all three pages (F4); Industries section titles 40/44 vs Figma 36/44 (F6, see PQA-020 item 3); Industries hero copy sits 34px higher than Figma (F7).
+- **Acceptance criteria:**
+  - [x] Featured proof figures never overlap or touch the image (EN and AR, 1024–1440px).
+  - [x] Industries hero video never plays under reduced motion and follows live preference changes.
+  - [x] FAQ question 20/24 Heavy; metadata dividers never start a line.
+  - [ ] Verified on a preview deployment.
   - [ ] Designer decisions above recorded.
 
 ### PQA-019 — Unconfirmed content differences from the Figma vs Website QA report

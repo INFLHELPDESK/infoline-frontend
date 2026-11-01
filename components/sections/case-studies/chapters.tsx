@@ -37,7 +37,7 @@ export default function Chapters() {
 
   return (
     <section className="bg-white pt-20 pb-24">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <div className="flex flex-col gap-28 lg:gap-44">
           {chapters.map((c) => (
             <article

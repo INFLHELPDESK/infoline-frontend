@@ -21,9 +21,14 @@ export default function FeaturedProof() {
 
   return (
     <section className="pb-16">
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
-       <div className="relative flex flex-col gap-8 overflow-hidden rounded-2xl bg-[#eef5fa] px-6 py-10 lg:min-h-[473px] lg:px-10 lg:py-14">
-        <Stagger as="div" className="lg:max-w-[716px]" stagger={0.12} amount={0.2}>
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
+       {/* Side by side from xl only (stacked below). Per Figma 406:4941 the list
+           is at most 716px and keeps a 40px gap before the image, in both
+           directions; the image box takes the rest (min 380px) and crops the
+           artwork (empty margin first, never mirrored) instead of sliding under
+           the figures. `cqw` = card content width. */}
+       <div className="@container relative flex flex-col gap-8 overflow-hidden rounded-2xl bg-[#eef5fa] px-6 py-10 [--fp-img:max(380px,calc(100cqw_-_716px))] lg:px-10 lg:py-14 xl:min-h-[473px]">
+        <Stagger as="div" className="xl:max-w-[min(716px,calc(100cqw_-_var(--fp-img)))]" stagger={0.12} amount={0.2}>
           <StaggerItem direction="start" className="mb-10">
             <Eyebrow className="mb-4">{t("featured.eyebrow")}</Eyebrow>
             <h2 className="text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
@@ -58,13 +63,13 @@ export default function FeaturedProof() {
             ))}
           </ul>
         </Stagger>
-        <div className="relative mx-auto aspect-[604/473] w-full max-w-[420px] lg:absolute lg:bottom-0 lg:end-0 lg:mx-0 lg:h-[473px] lg:w-[604px] lg:max-w-[604px]">
+        <div className="relative mx-auto aspect-[604/473] w-full max-w-[420px] xl:absolute xl:bottom-0 xl:end-0 xl:mx-0 xl:aspect-auto xl:h-[473px] xl:w-(--fp-img) xl:max-w-[none]">
           <Image
             src="/assets/insights/insights.svg"
             alt={t("featuredImageAlt")}
             fill
-            sizes="(min-width: 1024px) 604px, 420px"
-            className="object-cover"
+            sizes="(min-width: 1280px) 484px, 420px"
+            className="object-cover object-[40%_center]"
           />
         </div>
        </div>

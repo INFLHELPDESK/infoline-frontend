@@ -44,7 +44,7 @@ export default function Formats({
 
   return (
     <section className="pt-4 pb-16" data-content-source={contentSource}>
-      <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Stagger as="div" stagger={0.12} amount={0.2}>
           <StaggerItem
             direction="start"
@@ -99,13 +99,23 @@ export default function Formats({
                     />
                   </div>
                   <div className="flex flex-1 flex-col px-4 pt-4 pb-5">
-                    <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] leading-5 text-slate-500">
-                      {meta.map((part, i) => (
-                        <span key={i} className="flex items-center gap-x-3">
-                          {i > 0 && <span aria-hidden className="h-3 w-px bg-slate-300" />}
-                          {part}
-                        </span>
-                      ))}
+                    {/* Every part after the first carries a leading divider. The
+                        row is pulled 13px (divider + gap) toward inline-start and
+                        clipped, and the first part pushed back by the same 13px,
+                        so a divider that wraps to the start of a line is hidden
+                        instead of left stranded there. */}
+                    <p className="overflow-hidden text-[14px] leading-5 text-slate-500">
+                      <span className="-ms-[13px] flex flex-wrap items-center gap-y-1">
+                        {meta.map((part, i) => (
+                          <span
+                            key={i}
+                            className={`flex items-center gap-x-3 me-3 ${i === 0 ? "ms-[13px]" : ""}`}
+                          >
+                            {i > 0 && <span aria-hidden className="h-3 w-px shrink-0 bg-slate-300" />}
+                            {part}
+                          </span>
+                        ))}
+                      </span>
                     </p>
                     <h3 className="mt-3 text-[16px] leading-6 font-bold text-slate-900">
                       {insight.title}
