@@ -68,6 +68,7 @@ export function PillButton({
   size = "md",
   className = "",
   arrow = true,
+  iconClassName = "size-4.5",
 }: {
   href: string;
   children: ReactNode;
@@ -75,6 +76,7 @@ export function PillButton({
   size?: "md" | "lg";
   className?: string;
   arrow?: boolean;
+  iconClassName?: string;
 }) {
   return (
     <Link
@@ -87,7 +89,7 @@ export function PillButton({
       {arrow && (
         <ArrowRight
           aria-hidden
-          className="size-4.5 transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"
+          className={`${iconClassName} transition-transform duration-300 [transition-timing-function:cubic-bezier(.16,1,.3,1)] group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1`}
         />
       )}
     </Link>

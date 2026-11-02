@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -12,10 +12,64 @@ import { PillButton } from "./shared";
  * handoff, 1280×422 block above the footer). The smoke photo sits at 30% over
  * black and fades to solid black towards the footer, drifting with a light
  * scroll parallax. Sits directly above the site footer, which is also black.
+ *
+ * The approved footage (Figma 4779866-hd_1920_1080_30fps) is mounted only after
+ * mount, and only when the user has not asked for reduced motion or data
+ * saving, so the server and first client render are identical (still image).
+ * It loads nothing until the section nears the viewport and pauses whenever it
+ * scrolls away or the tab is hidden. The still is the poster and fallback.
  */
 export default function Cta() {
   const t = useTranslations("HomeV1.cta");
   const ref = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [enabled, setEnabled] = useState(false);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } })
+      .connection?.saveData;
+    const sync = () => {
+      const on = !reduce.matches && !saveData;
+      setEnabled(on);
+      if (!on) setPlaying(false);
+    };
+    sync();
+    reduce.addEventListener("change", sync);
+    return () => reduce.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    const section = ref.current;
+    const video = videoRef.current;
+    if (!enabled || !section || !video) return;
+
+    let visible = false;
+    const update = () => {
+      if (visible && !document.hidden) {
+        if (video.preload !== "auto") video.preload = "auto";
+        void video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    };
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        update();
+      },
+      { rootMargin: "200px" },
+    );
+    io.observe(section);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", update);
+      video.pause();
+    };
+  }, [enabled]);
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   // Ranges must not depend on `useReducedMotion` (server renders it as false, so
   // a client-only difference mismatches hydration). Reduced motion is applied in
@@ -34,8 +88,24 @@ export default function Cta() {
           alt=""
           fill
           sizes="100vw"
-          className="object-cover object-center opacity-30"
+          className={`object-cover object-center transition-opacity duration-500 ${playing ? "opacity-0" : "opacity-30"}`}
         />
+        {enabled && (
+          <video
+            ref={videoRef}
+            aria-hidden
+            data-testid="cta-video"
+            className="absolute inset-0 size-full object-cover object-center opacity-30"
+            muted
+            loop
+            playsInline
+            preload="none"
+            tabIndex={-1}
+            onPlaying={() => setPlaying(true)}
+          >
+            <source src="/videos/4779866-hd_1920_1080_30fps.mp4" type="video/mp4" />
+          </video>
+        )}
       </motion.div>
       {/* Brand-blue tint (Figma: #1C97D4 at 16%) */}
       <div aria-hidden className="absolute inset-0 -z-10 bg-[#1c97d4]/16" />
@@ -49,7 +119,7 @@ export default function Cta() {
       >
         <StaggerItem
           as="h2"
-          className="max-w-[629px] text-[36px] leading-[1.1] font-medium tracking-[-0.02em] sm:text-5xl lg:text-[56px] lg:leading-[70px] lg:font-extrabold lg:tracking-normal"
+          className="max-w-[629px] text-[36px] leading-[1.1] font-medium tracking-[-0.02em] sm:text-5xl lg:text-[56px] lg:leading-[70px] lg:font-black lg:tracking-normal"
         >
           {t("title")}
         </StaggerItem>
@@ -57,7 +127,11 @@ export default function Cta() {
           {t("description")}
         </StaggerItem>
         <StaggerItem className="mt-9">
-          <PillButton href={t("cta.href")} className="w-[243px] text-[18px] shadow-[0_8px_24px_rgba(28,151,212,0.5)] sm:text-[18px]">
+          <PillButton
+            href={t("cta.href")}
+            iconClassName="size-6"
+            className="w-[243px] rounded-[8px]! px-5 text-[18px] shadow-[0_8px_24px_-12px_rgba(28,151,212,0.5)] sm:text-[18px]"
+          >
             {t("cta.label")}
           </PillButton>
         </StaggerItem>
