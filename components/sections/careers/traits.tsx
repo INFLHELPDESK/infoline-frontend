@@ -27,7 +27,7 @@ export default function Traits() {
           amount={0.3}
         >
           <StaggerItem className="mb-5" distance={24}>
-            <Eyebrow className="border border-slate-100">
+            <Eyebrow>
               {t("traits.eyebrow")}
             </Eyebrow>
           </StaggerItem>

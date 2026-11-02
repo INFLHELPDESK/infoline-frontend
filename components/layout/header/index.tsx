@@ -105,7 +105,7 @@ export const Header = () => {
       <motion.header
         className={`fixed inset-x-0 top-0 z-40 transition-[background-color,backdrop-filter,box-shadow] duration-300 ${
           !(scrolled || open)
-            ? "bg-transparent"
+            ? "bg-white/1 backdrop-blur-[9px]"
             : light
               ? "bg-white/85 backdrop-blur-[18px] backdrop-saturate-140 shadow-[0_1px_0_0_rgba(15,40,60,0.08)]"
               : "bg-ink backdrop-blur-[18px] backdrop-saturate-140 shadow-[0_1px_0_0_rgba(255,255,255,0.06)]"
@@ -200,6 +200,8 @@ export const Header = () => {
               icon={ArrowRight}
               size="md"
               iconPosition="right"
+              radiusClassName="rounded-md"
+              iconClassName="size-5"
             >
               {t("cta.label")}
             </Button>

@@ -18,7 +18,7 @@ export default function Hero() {
           <div className="grid gap-8 lg:grid-cols-[1fr_524px] lg:items-end lg:gap-20">
             <div>
               <StaggerItem className="mb-6">
-                <Eyebrow className="border border-slate-100">
+                <Eyebrow>
                   {t("hero.eyebrow")}
                 </Eyebrow>
               </StaggerItem>

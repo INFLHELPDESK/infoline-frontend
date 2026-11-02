@@ -35,7 +35,7 @@ export default function ThreeWays() {
       <div className="mx-auto w-full max-w-360 px-6 md:px-12 lg:px-20">
         <Stagger as="div" className="mx-auto flex max-w-[800px] flex-col items-center text-center" stagger={0.12}>
           <StaggerItem distance={24}>
-            <Eyebrow tone="muted">{t("eyebrow")}</Eyebrow>
+            <Eyebrow>{t("eyebrow")}</Eyebrow>
           </StaggerItem>
           <StaggerItem as="h2" className={`mt-6 ${sectionTitleXl}`}>
             {t("title")}

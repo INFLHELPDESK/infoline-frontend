@@ -11,15 +11,11 @@ import { Link } from "@/i18n/navigation";
  * arrow with `rtl:` so it reads correctly in Arabic without extra props.
  */
 
-type EyebrowTone = "light" | "muted" | "outline" | "dark";
+type EyebrowTone = "light" | "dark";
 
 const eyebrowTones: Record<EyebrowTone, string> = {
-  // White chip on the pale sections (Figma: #fff, text #1c97d4).
-  light: "bg-white text-brandblue-500",
-  // Grey chip on white sections (Figma: #f1f2f2).
-  muted: "bg-[#f1f2f2] text-brandblue-500",
-  // White chip with a 1px #eee border (Figma: Home Industries eyebrow).
-  outline: "border border-[#eee] bg-white text-brandblue-500",
+  // Canonical light chip (Figma: #fff fill, 1px #eee border, text #1c97d4).
+  light: "border border-[#eee] bg-white text-brandblue-500",
   // Frosted chip on dark sections (Figma: #fff @ 20%, text #74c0e7).
   dark: "bg-white/20 text-brandblue-300 backdrop-blur-md",
 };

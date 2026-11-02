@@ -73,7 +73,7 @@ export default function Catalogue() {
           stagger={0.15}
         >
           <StaggerItem direction="start">
-            <Eyebrow className="mb-4 border border-slate-100">
+            <Eyebrow className="mb-4">
               {t("catalogue.eyebrow")}
             </Eyebrow>
             <MaskText

@@ -14,7 +14,7 @@ export default function Credentials() {
       <div className="mx-auto grid w-full max-w-360 grid-cols-1 items-center gap-14 px-6 lg:grid-cols-[1.15fr_.85fr] lg:gap-20 lg:px-10">
         <div>
           <Reveal direction="start" distance={24} duration={0.7}>
-            <Eyebrow className="border border-slate-100">
+            <Eyebrow>
               {t("credentials.eyebrow")}
             </Eyebrow>
           </Reveal>

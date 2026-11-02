@@ -2,7 +2,6 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { CountUp, Stagger, StaggerItem } from "@/components/ui/motion";
 import { PillButton } from "./shared";
-import HeroBadge from "./hero-badge";
 
 type Stat = { value: string; unit?: string; label: string };
 
@@ -46,13 +45,9 @@ export default function Hero() {
           stagger={0.12}
           delayChildren={0.1}
         >
-          <StaggerItem distance={24}>
-            <HeroBadge label={t("badge")} />
-          </StaggerItem>
-
           {/* Plain, unanimated h1 — it is the LCP element (same rule as the
               reference home), so it paints at full opacity immediately. */}
-          <h1 className="mt-7 text-[40px] leading-[1.1] font-extrabold tracking-normal sm:text-[52px] lg:text-[56px] lg:leading-[70px]">
+          <h1 className="text-[40px] leading-[1.1] font-extrabold tracking-normal sm:text-[52px] lg:text-[56px] lg:leading-[70px]">
             {t("titleLead")}{" "}
             <span className="text-brandblue-400">{t("titleAccent")}</span>
           </h1>

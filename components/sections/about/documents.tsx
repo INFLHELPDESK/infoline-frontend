@@ -20,7 +20,7 @@ export default function Documents() {
     <section className="pt-12 pb-24 lg:pb-32">
       <div className="grid w-full max-w-360 grid-cols-1 items-start gap-12 px-6 lg:grid-cols-2 lg:gap-20 lg:px-30 mx-auto">
         <div>
-          <Eyebrow className="border border-slate-100">
+          <Eyebrow>
             {t("documents.eyebrow")}
           </Eyebrow>
           <MaskText

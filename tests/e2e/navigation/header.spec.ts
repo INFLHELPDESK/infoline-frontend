@@ -6,7 +6,8 @@ import { scrollToY } from "../support/motion";
 const header = (page: Page) => page.locator("header").first();
 const logo = (page: Page) => header(page).getByRole("img", { name: messages.en.Header.logoAlt });
 const darkLogo = (page: Page) => header(page).locator('img[src*="logo-dark"]');
-const TRANSPARENT = "rgba(0, 0, 0, 0)";
+// Figma at-rest header: rgba(255,255,255,0.01) over a 9px backdrop blur.
+const AT_REST_BG = /\/ 0\.0(1|0999+)\)$|^rgba\(255, 255, 255, 0\.01\)$/;
 
 test.describe("desktop navigation", () => {
   test("marks the current section and navigates between pages", async ({ page }) => {
@@ -37,17 +38,18 @@ test.describe("desktop navigation", () => {
 });
 
 test.describe("header theme", () => {
-  test("dark pages: transparent at the top, solid ink once scrolled past 16px", async ({ page }) => {
+  test("dark pages: 1% white + 9px blur at the top, solid ink once scrolled past 16px", async ({ page }) => {
     await page.goto("/en/about");
-    await expect(header(page)).toHaveCSS("background-color", TRANSPARENT);
+    await expect(header(page)).toHaveCSS("background-color", AT_REST_BG);
+    await expect(header(page)).toHaveCSS("backdrop-filter", "blur(9px)");
     await expect(logo(page)).toHaveCSS("opacity", "1");
 
     await scrollToY(page, 400);
-    await expect(header(page)).not.toHaveCSS("background-color", TRANSPARENT);
+    await expect(header(page)).not.toHaveCSS("background-color", AT_REST_BG);
     await expect(header(page)).toHaveClass(/bg-ink/);
 
     await scrollToY(page, 0);
-    await expect(header(page)).toHaveCSS("background-color", TRANSPARENT);
+    await expect(header(page)).toHaveCSS("background-color", AT_REST_BG);
   });
 
   test("restores the scrolled state when loading mid-page", async ({ page }) => {

@@ -10,6 +10,10 @@ interface CommonProps {
   size?: ButtonSize;
   icon?: LucideIcon;
   iconPosition?: "left" | "right";
+  /** Replaces the default icon size (size-3), e.g. "size-5". */
+  iconClassName?: string;
+  /** Replaces the size default radius, e.g. "rounded-md". */
+  radiusClassName?: string;
   className?: string;
   children?: ReactNode;
 }
@@ -80,6 +84,8 @@ export default function Button({
   size = "small",
   icon: Icon,
   iconPosition = "left",
+  iconClassName,
+  radiusClassName,
   ...rest
 }: ButtonProps) {
   const isIconOnly = variant === "icon";
@@ -88,7 +94,9 @@ export default function Button({
   const baseClasses = [
     "group inline-flex flex-none flex-wrap items-center justify-center whitespace-nowrap",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brandblue-300",
-    isIconOnly ? "rounded-full" : size === "md" ? "rounded-lg" : "rounded-md",
+    isIconOnly
+      ? "rounded-full"
+      : (radiusClassName ?? (size === "md" ? "rounded-lg" : "rounded-md")),
     isIconOnly ? s.iconPadding : `${s.padding} ${s.gap}`,
     s.text,
     s.tracking,
@@ -102,7 +110,7 @@ export default function Button({
 
   const iconSize = isIconOnly
     ? "size-[18px] rtl:rotate-180"
-    : "size-3 rtl:rotate-180";
+    : `${iconClassName ?? "size-3"} rtl:rotate-180`;
 
   // Arrow glides toward the reading direction on hover.
   const nudge =

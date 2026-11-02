@@ -21,7 +21,7 @@ export default function Clients() {
             stagger={0.14}
           >
             <StaggerItem className="flex flex-col items-start">
-              <Eyebrow className="mb-4 border border-slate-100">
+              <Eyebrow className="mb-4">
                 {t("clients.eyebrow")}
               </Eyebrow>
               <MaskText

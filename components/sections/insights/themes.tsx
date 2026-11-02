@@ -22,7 +22,7 @@ export default function Themes() {
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Stagger as="div" stagger={0.12} amount={0.2}>
           <StaggerItem direction="start" className="mb-10 flex flex-col items-center text-center">
-            <Eyebrow className="mb-4 border border-slate-100">
+            <Eyebrow className="mb-4">
               {t("themes.eyebrow")}
             </Eyebrow>
             <h2 className="text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">

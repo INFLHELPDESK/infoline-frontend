@@ -16,7 +16,7 @@ export default function Industries({ items }: { items?: IndustryCard[] }) {
       <div className="mx-auto w-full max-w-360 px-6 md:px-12 lg:px-20">
         <Stagger as="div" className="max-w-[907px]" stagger={0.12}>
           <StaggerItem direction="start" distance={24}>
-            <Eyebrow tone="outline">{t("eyebrow")}</Eyebrow>
+            <Eyebrow>{t("eyebrow")}</Eyebrow>
           </StaggerItem>
           <StaggerItem as="h2" direction="start" className="mt-5 text-[28px] leading-9 font-black tracking-normal text-[#263238] sm:text-[32px] sm:leading-10 lg:text-[36px] lg:leading-[44px]">
             {t("title")}

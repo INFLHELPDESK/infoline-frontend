@@ -63,7 +63,7 @@ export default function Leadership() {
     <section className="bg-white py-24 text-ink lg:py-32">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <div className="flex items-center flex-col text-center">
-          <Eyebrow className="border border-slate-100">
+          <Eyebrow>
             {t("leadership.eyebrow")}
           </Eyebrow>
           <MaskText

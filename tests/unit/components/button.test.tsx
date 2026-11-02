@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { ArrowRight } from "lucide-react";
 import Button from "@/components/ui/button";
 
 vi.mock("@/i18n/navigation", () => ({
@@ -32,5 +33,16 @@ describe("Button", () => {
     render(<Button href="/x">Link</Button>);
     const el = screen.getByRole("link", { name: "Link" });
     expect(el.className).toContain("focus-visible:outline-2");
+  });
+  it("lets a caller override radius and icon size without changing the md default", () => {
+    render(
+      <Button size="md" radiusClassName="rounded-md" iconClassName="size-5" icon={ArrowRight}>
+        Nav
+      </Button>,
+    );
+    const el = screen.getByRole("button", { name: "Nav" });
+    expect(el.className).toContain("rounded-md");
+    expect(el.className).not.toContain("rounded-lg");
+    expect(el.querySelector("svg")?.getAttribute("class")).toContain("size-5");
   });
 });

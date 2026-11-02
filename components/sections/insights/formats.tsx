@@ -51,7 +51,7 @@ export default function Formats({
             className="mb-11 flex flex-col items-start gap-6 md:flex-row md:items-start md:justify-between"
           >
             <div>
-              <Eyebrow className="mb-4 border border-slate-100">
+              <Eyebrow className="mb-4">
                 {t("formats.eyebrow")}
               </Eyebrow>
               <h2 className="max-w-[891px] text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
