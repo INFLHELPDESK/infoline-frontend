@@ -26,7 +26,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-020](#pqa-020--brand-typeface-avenir-not-bundled-pending-web-licence-and-files) | All pages | Brand typeface Avenir — implemented, pending Designer confirmation and licence record | Medium | IMPLEMENTED — Awaiting Designer confirmation / licence record |
 | [PQA-022](#pqa-022--home-industries--designer-conformity-follow-ups) | Home | Industries — Designer conformity follow-ups | Low | IMPLEMENTED — Awaiting Designer decisions |
 | [PQA-023](#pqa-023--industries--case-studies--insights--page-qa-follow-ups-batch-6c6d) | Industries / Case Studies / Insights | Page QA follow-ups (Batch 6C/6D) | Medium | IMPLEMENTED (local) — Awaiting review / Designer decisions |
-| [PQA-024](#pqa-024--home--partners--description-reuses-the-industries-copy) | Home | Partners — description reuses the Industries copy | Low | PENDING CONTENT / DESIGN DECISION |
+| [PQA-024](#pqa-024--home--partners--description-reuses-the-industries-copy) | Home | Partners — description reuses the Industries copy | Low | PARTIALLY RESOLVED — English done; Arabic pending approved translation |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -311,12 +311,14 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 
 - **Page:** Home — Partners (`components/sections/home/partners.tsx`, `Partners.description` in `locales/en.json` and `locales/ar.json`). Figma 406:4226 (text 406:4233).
 - **Priority:** Low
-- **Status:** PENDING CONTENT / DESIGN DECISION — no code change until approved
+- **Status:** PARTIALLY RESOLVED — English description updated; Arabic description pending approved translation
 - **Description:** Designer review `docs/qa/designer-reviews/Infoline-02-Partners-Section.pdf` (page 3): the Partners description ("Each sector page names the operations we already run there, the regulatory constraints we work inside, and the client results we can put in front of an evaluation committee.") describes sector pages, not partners. The build matches Figma, so this is not a frontend defect; the copy must be rewritten in Figma first. The same review's two styling findings (heading weight 800 per `heading/2xl/bold`; description `#90A4AE` per `content/base/inverse-tertiary`) are fixed in the Partners component. Note: in Arabic the heading is now Tajawal 800 (ExtraBold) rather than 700; in English, CSS 700 and 800 both use Avenir Black, so the English face is unchanged.
-- **Dependency:** Approved English and Arabic Partners description from the Designer / client.
+- **Resolution (English):** `Partners.description` in `locales/en.json` now reads "Our technology partners bring the platforms, infrastructure and specialist expertise that support the services we deliver." The English heading was already the approved text.
+- **Dependency:** Designer-approved Arabic Partners description. `locales/ar.json` still holds the old, now mismatched sector-page translation; it has not been edited or translated by engineering.
 - **Acceptance criteria:**
-  - [ ] Approved copy received and updated in Figma 406:4233.
-  - [ ] `Partners.description` updated in `locales/en.json` and `locales/ar.json` only.
+  - [x] Approved English copy received and updated in `locales/en.json`.
+  - [ ] Approved Arabic description received and updated in `locales/ar.json`.
+  - [ ] Designer confirms the Arabic title (`Partners.title`) corresponds to the English heading.
   - [ ] Designer confirms the Arabic heading weight (Tajawal 800).
 
 ### PQA-019 — Unconfirmed content differences from the Figma vs Website QA report
