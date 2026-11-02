@@ -15,6 +15,7 @@ vi.mock("@/components/sections/home-1/what-we-do", () => ({
 vi.mock("@/components/sections/home-1/industries", () => ({
   default: () => <section data-testid="section-industries" />,
 }));
+// Kept as a guard: the "Established in 2004" Proof section must not return to Home.
 vi.mock("@/components/sections/home-1/proof", () => ({
   default: () => <section data-testid="section-proof" />,
 }));
@@ -51,7 +52,7 @@ async function renderHome(query: Record<string, string | string[] | undefined>) 
   return render(ui);
 }
 
-const OTHER_SECTIONS = ["hero", "why-trust", "what-we-do", "industries", "proof", "three-ways", "clients", "partners"];
+const OTHER_SECTIONS = ["hero", "why-trust", "what-we-do", "industries", "three-ways", "clients", "partners"];
 
 describe("Home › What changes variant selection", () => {
   // The variant exists only where it is explicitly opted in (non-production).
@@ -108,6 +109,30 @@ describe("Home › What changes variant selection", () => {
     render(ui);
     expect(screen.getByTestId("changes-current")).toBeTruthy();
     expect(screen.queryByTestId("changes-new")).toBeNull();
+  });
+});
+
+describe("Home › section composition", () => {
+  // Figma Home-2 (406:3781): no "Established in 2004" section; Partners sits
+  // directly after What We Do (the What changes section) and before Three Ways.
+  it.each([
+    [{}, "changes-current"],
+    [{ homeVariant: "new" }, "changes-new"],
+  ])("renders the approved Figma order for %j", async (query, changes) => {
+    vi.stubEnv("ENABLE_HOME_VARIANT_PREVIEW", "1");
+    const { container } = await renderHome(query);
+    const order = Array.from(container.querySelectorAll("main > section"), (el) => el.getAttribute("data-testid"));
+    expect(order).toEqual([
+      "section-hero",
+      "section-clients",
+      "section-why-trust",
+      "section-what-we-do",
+      "section-industries",
+      changes,
+      "section-partners",
+      "section-three-ways",
+    ]);
+    expect(container.querySelector('[data-testid="section-proof"]')).toBeNull();
   });
 });
 
