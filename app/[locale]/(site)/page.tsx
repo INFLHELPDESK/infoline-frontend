@@ -19,7 +19,7 @@ export default async function HomePage({
     : "current";
 
   return (
-    <main className="overflow-x-clip">
+    <main className="home-headings overflow-x-clip">
       <Hero />
       <Clients />
       <WhyTrust />

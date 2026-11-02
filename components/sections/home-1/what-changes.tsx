@@ -96,7 +96,7 @@ function Column({
       >
         {headIcon[variant]}
       </span>
-      <h3 className="mt-3.5 text-[22px] leading-7 font-semibold text-slate-900 sm:text-[24px]">
+      <h3 className="mt-3.5 text-[22px] leading-7 font-semibold text-slate-900 sm:text-[24px] rtl:leading-[1.32]">
         {heading}
       </h3>
 

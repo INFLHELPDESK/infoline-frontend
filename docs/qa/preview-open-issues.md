@@ -4,7 +4,7 @@ Tracker for issues found during Frontend Preview QA that are not yet resolved.
 Resolved issues are removed from this file (history lives in Git).
 
 **Branch:** `feature/home-2-redesign`
-**Last updated:** 2026-11-01
+**Last updated:** 2026-11-02
 
 ## Summary
 
@@ -27,6 +27,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-022](#pqa-022--home-industries--designer-conformity-follow-ups) | Home | Industries — Designer conformity follow-ups | Low | IMPLEMENTED — Awaiting Designer decisions |
 | [PQA-023](#pqa-023--industries--case-studies--insights--page-qa-follow-ups-batch-6c6d) | Industries / Case Studies / Insights | Page QA follow-ups (Batch 6C/6D) | Medium | IMPLEMENTED (local) — Awaiting review / Designer decisions |
 | [PQA-024](#pqa-024--home--partners--description-reuses-the-industries-copy) | Home | Partners — description reuses the Industries copy | Low | PARTIALLY RESOLVED — English done; Arabic pending approved translation |
+| [PQA-025](#pqa-025--home--arabic-heading-typography-decisions) | Home (AR) | Arabic heading line-height and weights | Low | IMPLEMENTED (provisional) — Awaiting Designer decision |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -252,10 +253,10 @@ Copy this block for new issues.
 - **Page:** Home (`/`) — `components/sections/home-1/clients.tsx` (H-05) and `components/sections/home/partners.tsx` (H-04)
 - **Priority:** Medium
 - **Status:** PENDING CONTENT REVIEW / NEEDS ASSET CONFIRMATION (H-04 and H-05 are otherwise FIXED)
-- **Description:** Both missing sections are now built from the Figma handoff. (1) `HomeV1.clients.title` in `locales/ar.json` is an English placeholder (no approved Arabic for "Trusted by Oman's ministries, authorities and national institutions"); the Arabic eyebrow and description reuse the approved `Proof` strings. (2) `public/assets/clients/paew.svg` is actually the Social Insurance logo, not the Electricity & Water authority; other pages (Solutions, Industries, legacy home logos) still reference it under the Electricity & Water name. The Home section uses the Figma export `electricity-water.png` for PAEW and `paew.svg` for Social Insurance. The Home client row is static (single row from 1024px, wraps below) to match Figma; no approved Arabic was found elsewhere in the project. The partner logos and the Electricity & Water logo were exported from the Figma handoff as PNG, not vendor-supplied originals.
+- **Description:** Both missing sections are now built from the Figma handoff. (1) `HomeV1.clients.title` in `locales/ar.json` was an English placeholder; it now holds a PROVISIONAL Arabic translation of "Trusted by Oman's ministries, authorities and national institutions" («وزارات سلطنة عُمان وهيئاتها ومؤسساتها الوطنية تثق بنا»), awaiting Designer approval; the Arabic eyebrow and description reuse the approved `Proof` strings. (2) `public/assets/clients/paew.svg` is actually the Social Insurance logo, not the Electricity & Water authority; other pages (Solutions, Industries, legacy home logos) still reference it under the Electricity & Water name. The Home section uses the Figma export `electricity-water.png` for PAEW and `paew.svg` for Social Insurance. The Home client row is static (single row from 1024px, wraps below) to match Figma; no approved Arabic was found elsewhere in the project. The partner logos and the Electricity & Water logo were exported from the Figma handoff as PNG, not vendor-supplied originals.
 - **Dependency:** Approved Arabic title; confirmation of the `paew.svg` mislabel and its fix on other pages; vector originals of the logos if available. **Batch 4B deliberately left `paew.svg` unchanged; it stays open until an approved replacement asset is supplied.**
 - **Acceptance criteria:**
-  - [ ] `HomeV1.clients.title` in `locales/ar.json` replaced with approved copy.
+  - [ ] `HomeV1.clients.title` in `locales/ar.json` confirmed or replaced by Designer-approved copy (provisional translation in place).
   - [ ] `paew.svg` renamed/replaced and other pages corrected.
   - [ ] Verified in RTL at 1440, 768 and 390px.
 
@@ -363,6 +364,17 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [ ] Designer confirms the weight mapping and the open items above.
   - [ ] Licence document or proof of purchase recorded.
   - [ ] Decision on TTF versus WOFF2 for production (preload is already off, so Arabic pages do not fetch Avenir).
+
+### PQA-025 — Home — Arabic heading typography decisions
+
+- **Page:** Home (`/ar`) — `app/[locale]/globals.css` (`.home-headings`), `components/sections/home-1/what-changes.tsx`. Designer review `Infoline-05-Arabic-Build-Review.pdf`.
+- **Priority:** Low
+- **Status:** IMPLEMENTED (provisional) — Awaiting Designer decision
+- **Description:** Arabic Home h1/h2 headings now use a unitless line-height of 1.32 in RTL (about 72→95, 64→84.5, 56→74, 36→47.5px); the 22–24px what-changes card headings use the same ratio. English and body typography are unchanged. Tajawal loads 400/500/700/800 only, so heading weights 600 and 900 already render as 700 and 800; weights were deliberately not changed.
+- **Dependency:** Designer decision on the final Arabic type scale and one weight per heading level (including Industries at 900 and Partners at 800, see PQA-024), and whether to load Tajawal 600/900.
+- **Acceptance criteria:**
+  - [ ] Designer approves the 1.32 ratio or supplies per-size tokens.
+  - [ ] Designer fixes one heading weight per level using loaded weights, or approves loading 600/900.
 
 ### PQA-021 — Unknown localized routes return HTTP 200 (soft 404)
 

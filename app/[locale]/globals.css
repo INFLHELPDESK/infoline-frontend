@@ -912,3 +912,13 @@ html[dir="rtl"] body * {
 html[dir="rtl"] .font-mono {
   font-family: var(--font-arabic);
 }
+
+/* Arabic heading leading. Tajawal's marks above the line (hamza, shadda) and
+   deep descenders collide at the Latin display ratios (~1.09-1.25), so Home
+   h1/h2 get ~1.32 in RTL. Unitless, so it follows the fluid font sizes
+   (72 -> ~95, 64 -> ~84.5, 56 -> ~74, 36 -> ~47.5, 32 -> ~42, 28 -> ~37,
+   24 -> ~32). Provisional values pending Designer approval of the Arabic type
+   scale. Scoped to the Home <main>; English and body copy are untouched. */
+html[dir="rtl"] .home-headings :is(h1, h2) {
+  line-height: 1.32;
+}
