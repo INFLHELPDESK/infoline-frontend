@@ -2,7 +2,7 @@
 import { cleanup, render } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import Partners from "@/components/sections/home/partners";
+import Partners, { MARQUEE_COPIES } from "@/components/sections/home/partners";
 import ar from "@/locales/ar.json";
 import en from "@/locales/en.json";
 
@@ -57,11 +57,37 @@ describe("Home › Partners", () => {
     expect(visible.map((row) => row.length)).toEqual([8, 9]);
     expect(new Set(visible.flat()).size).toBe(17);
 
-    // Each track holds an identical aria-hidden copy, so the −50% travel loops seamlessly.
-    for (const track of tracks) {
-      const items = track.querySelectorAll("li");
-      const hidden = track.querySelectorAll("li[aria-hidden]");
-      expect(hidden.length * 2).toBe(items.length);
-    }
+    // Every track repeats its logo group MARQUEE_COPIES times in the same order;
+    // only the first group is exposed to assistive technology.
+    tracks.forEach((track, row) => {
+      const items = [...track.querySelectorAll("li")];
+      const group = visible[row].length;
+      expect(items).toHaveLength(group * MARQUEE_COPIES);
+      expect(track.querySelectorAll('li[aria-hidden="true"]')).toHaveLength(group * (MARQUEE_COPIES - 1));
+      const srcs = items.map((li) => li.querySelector("img")!.getAttribute("src"));
+      for (let copy = 1; copy < MARQUEE_COPIES; copy++) {
+        expect(srcs.slice(copy * group, (copy + 1) * group)).toEqual(srcs.slice(0, group));
+      }
+      for (const li of items.slice(group)) expect(li.querySelector("img")!.getAttribute("alt")).toBe("");
+    });
+  });
+
+  it("travels exactly one logo group per cycle and covers screens up to 2560px", () => {
+    const { container } = renderPartners("en");
+    const css = container.querySelector("style")!.textContent!;
+    const travel = `translateX(${-100 / MARQUEE_COPIES}%)`;
+    expect(css).toMatch(new RegExp(`partners-left \\{ from \\{ transform: translateX\\(0\\); \\} to \\{ transform: ${travel.replace(/[()%.]/g, "\\$&")}; \\} \\}`));
+    expect(css).toMatch(new RegExp(`partners-right \\{ from \\{ transform: ${travel.replace(/[()%.]/g, "\\$&")}; \\} to \\{ transform: translateX\\(0\\); \\} \\}`));
+    expect(css).toContain("partners-left 40s linear infinite");
+    expect(css).toContain("partners-right 40s linear infinite");
+
+    // Pills are fixed-width (165px + 2 x 8px margin), so a group's width is known
+    // without layout. A track covers the row while visible width <= (copies - 1) x group.
+    const pill = container.querySelector("ul.partners-track li")!;
+    expect(pill.className).toContain("w-[165px]");
+    expect(pill.className).toContain("mx-2");
+    const narrowestGroup = Math.min(...[...container.querySelectorAll("ul.partners-track")].map((t) => (t.children.length / MARQUEE_COPIES) * 181));
+    expect(narrowestGroup).toBe(1448);
+    expect((MARQUEE_COPIES - 1) * narrowestGroup).toBeGreaterThanOrEqual(2560);
   });
 });

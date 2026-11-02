@@ -48,6 +48,16 @@ function LogoPill({ name, src, hidden }: Partner & { hidden?: boolean }) {
   );
 }
 
+/**
+ * Logo groups per marquee track. Each cycle slides the track by exactly one
+ * group, so the row stays covered while the visible width is at most
+ * (copies - 1) x group width. Pills are a fixed 181px (165px + 16px margin),
+ * so the narrowest group is row one at 8 x 181 = 1448px: 4 copies cover up to
+ * 4344px (2560px screens and 3440px ultrawides). Two copies left a gap above
+ * 1448px. Only the first copy is exposed to assistive technology.
+ */
+export const MARQUEE_COPIES = 4;
+
 function MarqueeRow({
   partners,
   direction,
@@ -58,9 +68,9 @@ function MarqueeRow({
   return (
     <div className="partners-marquee" dir="ltr">
       <ul className={`partners-track partners-track--${direction}`}>
-        {[...partners, ...partners].map((p, i) => (
-          <LogoPill key={`${p.name}-${i}`} {...p} hidden={i >= partners.length} />
-        ))}
+        {Array.from({ length: MARQUEE_COPIES }, (_, copy) =>
+          partners.map((p) => <LogoPill key={`${copy}-${p.name}`} {...p} hidden={copy > 0} />),
+        )}
       </ul>
     </div>
   );
@@ -125,8 +135,8 @@ export default function Partners() {
         .partners-track--left { animation: partners-left 40s linear infinite; }
         .partners-track--right { animation: partners-right 40s linear infinite; }
         .partners-marquee:hover .partners-track { animation-play-state: paused; }
-        @keyframes partners-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @keyframes partners-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+        @keyframes partners-left { from { transform: translateX(0); } to { transform: translateX(${-100 / MARQUEE_COPIES}%); } }
+        @keyframes partners-right { from { transform: translateX(${-100 / MARQUEE_COPIES}%); } to { transform: translateX(0); } }
         @media (prefers-reduced-motion: reduce) {
           .partners-track--left, .partners-track--right { animation: none; }
         }
