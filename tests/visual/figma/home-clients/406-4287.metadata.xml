@@ -1,0 +1,45 @@
+<frame id="406:4287" name="clients" x="0" y="794" width="1440" height="454">
+  <frame id="406:4288" name="Frame 48" x="339" y="60" width="762" height="218">
+    <instance id="406:4289" name="Eyebrow" x="279" y="0" width="204" height="48" />
+    <text id="406:4290" name="Trusted by Oman&#39;s ministries, authorities and national institutions" x="0" y="65" width="762" height="88" />
+    <text id="406:4291" name="Contracted service relationships, grouped by sector. Public authorities carry the largest share of our delivered volume." x="0" y="170" width="762" height="48" />
+  </frame>
+  <frame id="406:4292" name="Frame 32" x="0" y="306" width="1440" height="88">
+    <frame id="406:4293" name="div" x="35" y="0" width="119" height="88">
+      <frame id="406:4294" name="Ministry of Health Oman" x="4" y="15.5" width="111" height="57" />
+    </frame>
+    <frame id="406:4295" name="client-logo-1" x="174" y="0" width="119" height="88">
+      <frame id="406:4296" name="Telecommunications Regulatory Authority" x="2" y="14.5" width="115" height="59" />
+      <frame id="406:4297" name="Frame 11" x="-64" y="-8.2578125" width="247" height="32">
+        <text id="406:4298" name="Telecommunications Regulatory Authority" x="13" y="9" width="221" height="14" />
+      </frame>
+    </frame>
+    <frame id="406:4299" name="div" x="313" y="0" width="119" height="88">
+      <frame id="406:4300" name="Asyad" x="4" y="15.5" width="111" height="57" />
+    </frame>
+    <frame id="406:4301" name="client-logo-2" x="452" y="0" width="119" height="88">
+      <frame id="406:4302" name="Telecommunications Regulatory Authority" x="2" y="14.5" width="115" height="59" />
+      <frame id="406:4303" name="Frame 11" x="-54.5" y="-8.2578125" width="228" height="32">
+        <text id="406:4304" name="Public Authority for Electricity &amp; Water" x="13" y="9" width="202" height="14" />
+      </frame>
+    </frame>
+    <frame id="406:4305" name="div" x="591" y="0" width="119" height="88">
+      <frame id="406:4306" name="Asyad" x="4" y="15.5" width="111" height="57" />
+    </frame>
+    <frame id="406:4307" name="div" x="730" y="0" width="119" height="88">
+      <frame id="406:4308" name="Asyad" x="-16" y="5.5" width="151" height="77" />
+    </frame>
+    <frame id="406:4309" name="div" x="869" y="0" width="119" height="88">
+      <frame id="406:4310" name="Asyad" x="0" y="13.5" width="119" height="61" />
+    </frame>
+    <frame id="406:4311" name="div" x="1008" y="0" width="119" height="88">
+      <frame id="406:4312" name="Asyad" x="-12" y="7.5" width="143" height="73" />
+    </frame>
+    <frame id="406:4313" name="div" x="1147" y="0" width="119" height="88">
+      <frame id="406:4314" name="Asyad" x="2" y="14.5" width="115" height="59" />
+    </frame>
+    <frame id="406:4315" name="div" x="1286" y="0" width="119" height="88">
+      <frame id="406:4316" name="Asyad" x="-8" y="9.5" width="135" height="69" />
+    </frame>
+  </frame>
+</frame>

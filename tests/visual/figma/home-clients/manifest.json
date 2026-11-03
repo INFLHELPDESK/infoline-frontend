@@ -1,0 +1,72 @@
+{
+  "$comment": "Figma references for the Home Clients section. Fetched from the Figma MCP and never regenerated from the browser. Tests refuse to run on a hash mismatch. To refresh: re-fetch, replace the file, update the hash (figma-visual-qa refs.mjs hash) and fetchedAt, and say so in the commit.",
+  "section": "home-clients",
+  "component": "components/sections/home-1/clients.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3781 Home-2 (section at y=794)",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-4287"
+  },
+  "fetchedAt": "2026-11-03",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157), account seat: View, plan tier: starter",
+  "references": [
+    {
+      "kind": "screenshot",
+      "file": "406-4287.en.1440.png",
+      "nodeId": "406:4287",
+      "nodeName": "clients",
+      "tool": "get_screenshot (maxDimension 1440)",
+      "language": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 454
+      },
+      "scale": 1,
+      "sha256": "452138bf1de2d4b6775f937e616b04a34fb9ee8c8ff46b45ad6a8abce6e01af7"
+    },
+    {
+      "kind": "variables",
+      "file": "406-4287.variables.json",
+      "nodeId": "406:4287",
+      "tool": "get_variable_defs",
+      "language": "en",
+      "sha256": "96ec3c111916b7f1c80ec95789517f0a30c4378c099c7c6c351a68720e9aa133"
+    },
+    {
+      "kind": "geometry",
+      "file": "406-4287.metadata.xml",
+      "nodeId": "406:4287",
+      "tool": "get_metadata (page 406:836, fetched 2026-11-03 in the Hero pilot session; this subtree was extracted programmatically from the saved response, not re-fetched)",
+      "language": "en",
+      "note": "Logo layer names are stale duplicates ('Asyad' x7, 'Telecommunications Regulatory Authority' x2). Use the slot geometry only; the screenshot shows the ten actual logos.",
+      "sha256": "6f7a33b6f6a994d469f3fd8d49db17fb62375e6559517a28e8e4f282e03155cc"
+    },
+    {
+      "kind": "design-context",
+      "file": "406-4287.design-context.extract.json",
+      "nodeId": "406:4287",
+      "tool": "get_design_context (skill figma-design-to-code; read-only lookup)",
+      "language": "en",
+      "note": "Partial agent transcription of the text response (values used by the spec only).",
+      "sha256": "a2a8ff6a22f65cae1edf35827fd810e0e0ab46fa5b4bbc63776d36c3e07d9220"
+    }
+  ],
+  "unavailable": [
+    {
+      "language": "ar",
+      "viewport": {
+        "width": 1440
+      },
+      "reason": "No Arabic frame. Pages 406:836 (Final design) and 406:10627 (Home page side-by-side) contain no Arabic-named text nodes (checked 2026-11-03). Page 0:1 (OLD Designs) was not searched."
+    },
+    {
+      "language": "en+ar",
+      "viewport": {
+        "width": "390, 768"
+      },
+      "reason": "Every frame on 406:836 is 1440 wide; no tablet/mobile frames."
+    }
+  ]
+}

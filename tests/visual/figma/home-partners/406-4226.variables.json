@@ -1,0 +1,18 @@
+{
+  "content/brand/default": "#1c97d4",
+  "content/brand/subtle": "#74c0e7",
+  "radius/full": "999",
+  "content/base/inverse": "#ffffff",
+  "Letter Spacing/tracking-normal": "0",
+  "font-size/text-4xl": "36",
+  "family/heading": "Avenir",
+  "line-height/leading-44": "44",
+  "font-weight/Black": "800",
+  "heading/2xl/bold": "Font(family: \"family/heading\", style: Black, size: font-size/text-4xl, weight: font-weight/Black, lineHeight: line-height/leading-44, letterSpacing: Letter Spacing/tracking-normal)",
+  "content/base/inverse-tertiary": "#90a4ae",
+  "font-size/text-lg": "16",
+  "family/primary": "Avenir",
+  "line-height/leading-24": "24",
+  "font-weight/Roman": "400",
+  "body/lg/regular": "Font(family: \"family/primary\", style: Roman, size: font-size/text-lg, weight: font-weight/Roman, lineHeight: line-height/leading-24, letterSpacing: Letter Spacing/tracking-normal)"
+}

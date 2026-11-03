@@ -1,0 +1,21 @@
+{
+  "$comment": "Values the spec uses that are not Figma variables. A partial agent transcription of the get_design_context response for 406:4226 (fetched 2026-11-03); the full response is React+Tailwind reference code and is not stored.",
+  "glows": {
+    "406:4227": { "role": "top", "width": 635, "height": 500.61, "top": "-36.83%", "blur": "13px", "gradient": "radial rgba(0,188,212,0.13) 0 -> rgba(0,188,212,0) 0.7" },
+    "406:4228": { "role": "bottom-left", "width": 640, "height": 472.98, "inset": "58.97% 61.87% -32.53% -6.32%", "blur": "13px", "gradient": "radial rgba(0,188,212,0.13) 0 -> rgba(0,188,212,0) 0.7" },
+    "406:4229": { "role": "bottom-right", "width": 640, "height": 472.98, "top": "58.97%", "right": 0, "blur": "13px", "gradient": "radial rgba(0,188,212,0.13) 0 -> rgba(0,188,212,0) 0.7" }
+  },
+  "eyebrow": { "node": "406:4231", "background": "rgba(255,255,255,0.2)", "height": 48, "paddingInline": 16, "gap": 8, "dot": 11, "font": "Inter Medium 18 / 1.2, tracking -0.72px", "color": "#74c0e7" },
+  "headerGap": { "eyebrowToTitle": 20 },
+  "rows": { "nodes": ["406:4234", "406:4259"], "width": 1278, "gap": 16, "justify": "center", "top": [361, 459] },
+  "pill": {
+    "width": 165,
+    "height": 60,
+    "background": "rgba(255,255,255,0.9)",
+    "border": "1px rgba(255,255,255,0.4) (some pills rgba(208,208,208,0.1))",
+    "paddingInline": 22,
+    "radius": "radius/full",
+    "logoBox": { "width": 85.85, "height": 43.99, "opacity": 0.72, "overflow": "clip" },
+    "note": "Each logo image is individually scaled and offset inside the logo box (e.g. 406:4240 99.512x51 at -6.07,-4; 406:4255 66x34 at 9.92,3)."
+  }
+}

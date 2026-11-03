@@ -1,0 +1,339 @@
+{
+  "constraints": {
+    "inkSize": "max(2px, 5%)",
+    "inkCentre": "2px",
+    "identityMargin": 0.05
+  },
+  "ink": [
+    {
+      "name": "title",
+      "figma": {
+        "x": 32,
+        "y": 5,
+        "width": 697,
+        "height": 73,
+        "pixels": 12939,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 32,
+        "y": 5,
+        "width": 698,
+        "height": 72,
+        "pixels": 12735,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "description",
+      "figma": {
+        "x": 25,
+        "y": 4,
+        "width": 713,
+        "height": 37,
+        "pixels": 3423,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 25,
+        "y": 5,
+        "width": 713,
+        "height": 36,
+        "pixels": 2781,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 1",
+      "figma": {
+        "x": 9,
+        "y": 29,
+        "width": 100,
+        "height": 31,
+        "pixels": 1041,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 9,
+        "y": 29,
+        "width": 100,
+        "height": 31,
+        "pixels": 1192,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 2",
+      "figma": {
+        "x": 18,
+        "y": 23,
+        "width": 83,
+        "height": 43,
+        "pixels": 591,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 18,
+        "y": 23,
+        "width": 83,
+        "height": 43,
+        "pixels": 676,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 3",
+      "figma": {
+        "x": 7,
+        "y": 29,
+        "width": 105,
+        "height": 30,
+        "pixels": 652,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 7,
+        "y": 28,
+        "width": 104,
+        "height": 31,
+        "pixels": 719,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 4",
+      "figma": {
+        "x": 22,
+        "y": 19,
+        "width": 74,
+        "height": 51,
+        "pixels": 783,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 14,
+        "y": 13,
+        "width": 89,
+        "height": 63,
+        "pixels": 1056,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 5",
+      "figma": {
+        "x": 9,
+        "y": 27,
+        "width": 100,
+        "height": 34,
+        "pixels": 960,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 25,
+        "y": 17,
+        "width": 69,
+        "height": 57,
+        "pixels": 761,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 6",
+      "figma": {
+        "x": 22,
+        "y": 14,
+        "width": 75,
+        "height": 62,
+        "pixels": 846,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 36,
+        "y": 11,
+        "width": 48,
+        "height": 67,
+        "pixels": 1143,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 7",
+      "figma": {
+        "x": 14,
+        "y": 31,
+        "width": 93,
+        "height": 31,
+        "pixels": 712,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 14,
+        "y": 31,
+        "width": 93,
+        "height": 31,
+        "pixels": 815,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 8",
+      "figma": {
+        "x": 35,
+        "y": 10,
+        "width": 49,
+        "height": 68,
+        "pixels": 1141,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 8,
+        "y": 27,
+        "width": 100,
+        "height": 34,
+        "pixels": 1087,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 9",
+      "figma": {
+        "x": 5,
+        "y": 36,
+        "width": 109,
+        "height": 16,
+        "pixels": 280,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 6,
+        "y": 36,
+        "width": 108,
+        "height": 16,
+        "pixels": 187,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "name": "logo 10",
+      "figma": {
+        "x": 28,
+        "y": 15,
+        "width": 62,
+        "height": 58,
+        "pixels": 904,
+        "background": "rgb(255, 255, 255)"
+      },
+      "build": {
+        "x": 28,
+        "y": 15,
+        "width": 62,
+        "height": 58,
+        "pixels": 963,
+        "background": "rgb(255, 255, 255)"
+      }
+    }
+  ],
+  "identity": [
+    {
+      "name": "logo 1",
+      "expected": 2,
+      "verdict": {
+        "status": "match",
+        "best": 0,
+        "margin": 0.5703508558818468,
+        "distance": 0.18568232662192397
+      }
+    },
+    {
+      "name": "logo 2",
+      "expected": 3,
+      "verdict": {
+        "status": "match",
+        "best": 1,
+        "margin": 0.4844255967060539,
+        "distance": 0.2191943127962085
+      }
+    },
+    {
+      "name": "logo 3",
+      "expected": 4,
+      "verdict": {
+        "status": "match",
+        "best": 2,
+        "margin": 0.5303992818795422,
+        "distance": 0.3113207547169812
+      }
+    },
+    {
+      "name": "logo 4",
+      "expected": 5,
+      "verdict": {
+        "status": "match",
+        "best": 3,
+        "margin": 0.43000756124733497,
+        "distance": 0.2732615083251714
+      }
+    },
+    {
+      "name": "logo 5",
+      "expected": 6,
+      "verdict": {
+        "status": "mismatch",
+        "best": 5,
+        "margin": 0.3291268732803052,
+        "distance": 0.38013371537726837
+      }
+    },
+    {
+      "name": "logo 6",
+      "expected": 7,
+      "verdict": {
+        "status": "mismatch",
+        "best": 7,
+        "margin": 0.40609112599798114,
+        "distance": 0.3296931877275091
+      }
+    },
+    {
+      "name": "logo 7",
+      "expected": 8,
+      "verdict": {
+        "status": "match",
+        "best": 6,
+        "margin": 0.6584937728393566,
+        "distance": 0.1362586605080831
+      }
+    },
+    {
+      "name": "logo 8",
+      "expected": 9,
+      "verdict": {
+        "status": "mismatch",
+        "best": 4,
+        "margin": 0.6277017704503336,
+        "distance": 0.145344943067649
+      }
+    },
+    {
+      "name": "logo 9",
+      "expected": 10,
+      "verdict": {
+        "status": "match",
+        "best": 8,
+        "margin": 0.21463639410187674,
+        "distance": 0.678125
+      }
+    },
+    {
+      "name": "logo 10",
+      "expected": 11,
+      "verdict": {
+        "status": "match",
+        "best": 9,
+        "margin": 0.639093420106701,
+        "distance": 0.0898785425101215
+      }
+    }
+  ]
+}

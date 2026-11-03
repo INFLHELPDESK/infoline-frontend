@@ -1,0 +1,15 @@
+{
+  "$comment": "Values the spec uses that are not Figma variables. A partial agent transcription of the get_design_context response for 406:4287 (fetched 2026-11-03); the full response is React+Tailwind reference code and is not stored.",
+  "layout": { "paddingBlock": 60, "gap": 28, "headerWidth": 762, "headerGap": 17 },
+  "eyebrow": { "node": "406:4289", "background": "#ffffff", "border": "1px #eeeeee", "height": 48, "paddingInline": 16, "gap": 8, "dot": 11, "font": "Inter Medium 18 / 1.2, tracking -0.72px", "color": "#1c97d4" },
+  "logoRow": { "node": "406:4292", "gap": 20, "justify": "center", "slot": { "width": 119, "height": 88, "padding": 30, "radius": "radius/xl" } },
+  "logoImages": {
+    "406:4294": [111, 57], "406:4296": [115, 59], "406:4300": [111, 57], "406:4302": [115, 59], "406:4306": [111, 57],
+    "406:4308": [151, 77], "406:4310": [119, 61], "406:4312": [143, 73], "406:4314": [115, 59], "406:4316": [135, 69]
+  },
+  "tooltips": {
+    "406:4297": { "slot": "406:4295 (2nd logo)", "text": "Telecommunications Regulatory Authority", "opacity": 0 },
+    "406:4303": { "slot": "406:4301 (4th logo)", "text": "Public Authority for Electricity & Water", "opacity": 0 },
+    "style": "white fill, 1px #abd7ed border, drop-shadow 0 2px 6px rgba(171,215,237,0.4), radius full, padding 8/12, Inter Medium 11/14 #157aac, centred 8.26px above the slot"
+  }
+}

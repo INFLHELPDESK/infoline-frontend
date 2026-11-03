@@ -1,0 +1,80 @@
+{
+  "$comment": "Figma references for the Home Partners section. Fetched from the Figma MCP and never regenerated from the browser. Tests refuse to run on a hash mismatch. To refresh: re-fetch, replace the file, update the hash (figma-visual-qa refs.mjs hash) and fetchedAt, and say so in the commit.",
+  "section": "home-partners",
+  "component": "components/sections/home/partners.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3781 Home-2 (section at y=6101)",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-4226"
+  },
+  "fetchedAt": "2026-11-03",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157), account seat: View, plan tier: starter",
+  "references": [
+    {
+      "kind": "screenshot",
+      "file": "406-4226.en.1440.png",
+      "nodeId": "406:4226",
+      "nodeName": "section#partners",
+      "tool": "get_screenshot (maxDimension 1440)",
+      "language": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 643
+      },
+      "scale": 1,
+      "note": "A static frame: both marquee rows are drawn at one arbitrary phase (row 1 starts at x=-76.5, row 2 at x=-166.5 within the 1278px row frames).",
+      "sha256": "c16f29b54b64f5c0860ffcd11d6a35fd5a9e75f6226d3b9ab57339333d8a90b2"
+    },
+    {
+      "kind": "variables",
+      "file": "406-4226.variables.json",
+      "nodeId": "406:4226",
+      "tool": "get_variable_defs",
+      "language": "en",
+      "sha256": "b151f3f01975092b8a093531864c8f83c222fdfcb49c32411c357b3f05ca8fa0"
+    },
+    {
+      "kind": "geometry",
+      "file": "406-4226.metadata.xml",
+      "nodeId": "406:4226",
+      "tool": "get_metadata (page 406:836, fetched 2026-11-03 in the Hero pilot session; this subtree was extracted programmatically from the saved response, not re-fetched)",
+      "language": "en",
+      "note": "Layer names inside the pill rows are stale duplicates (e.g. 'Elevatus' twice, 'Dion' twice). Use geometry only; the screenshot shows the actual logos and order.",
+      "sha256": "7bc3444002178680d0e69aa5e5817788b533f21d849c539bfa0e808516ea6302"
+    },
+    {
+      "kind": "design-context",
+      "file": "406-4226.design-context.extract.json",
+      "nodeId": "406:4226",
+      "tool": "get_design_context (skill figma-design-to-code; read-only lookup)",
+      "language": "en",
+      "note": "Partial agent transcription of the text response (values used by the spec only).",
+      "sha256": "f192bcd1c243cf72fc43a57f0824391914a73ae9c0ca9ff8160856da9e26d446"
+    }
+  ],
+  "unavailable": [
+    {
+      "language": "ar",
+      "viewport": {
+        "width": 1440
+      },
+      "reason": "No Arabic frame. Pages 406:836 (Final design) and 406:10627 (Home page side-by-side) contain no Arabic-named text nodes (checked 2026-11-03). Page 0:1 (OLD Designs) was not searched."
+    },
+    {
+      "language": "en+ar",
+      "viewport": {
+        "width": "390, 768"
+      },
+      "reason": "Every frame on 406:836 is 1440 wide (one 1530 component); no tablet/mobile frames."
+    },
+    {
+      "language": "en+ar",
+      "viewport": {
+        "width": "motion"
+      },
+      "reason": "Figma holds a static frame only. No marquee speed, direction or loop spec was found in the node or variables. Motion is checked against the implementation's own contract (40s/group, rows opposite, hover pause, reduced-motion stop; tests/e2e/home/partners-marquee.spec.ts), not against Figma."
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "rule": "r = measured/control is evidence only; verdicts from ink geometry + identity (see ink.json)",
+  "frame": {
+    "size": [
+      {
+        "width": 1440,
+        "height": 589
+      },
+      {
+        "width": 1440,
+        "height": 643
+      }
+    ],
+    "mismatch": 0.17739459535936616,
+    "regions": [
+      {
+        "name": "header",
+        "mismatchRatio": 0.07803790412486064
+      },
+      {
+        "name": "row 1",
+        "mismatchRatio": 0.4354851330203443
+      },
+      {
+        "name": "row 2",
+        "mismatchRatio": 0.45307772561293685
+      }
+    ]
+  },
+  "crops": [
+    {
+      "name": "title",
+      "node": "406:4232",
+      "measured": 0.08873335430428857,
+      "control": 0.17175212330921674,
+      "r": 0.5166361416361417
+    },
+    {
+      "name": "description",
+      "node": "406:4233",
+      "measured": 0.18285791173304627,
+      "control": 0.15949049156799425,
+      "r": 1.1465129358830146
+    },
+    {
+      "name": "row 1 pill salesforce",
+      "node": "406:4238",
+      "measured": 0.07363636363636364,
+      "control": 0.16121212121212122,
+      "r": 0.45676691729323304
+    },
+    {
+      "name": "row 1 pill konnect-insights",
+      "node": "406:4241",
+      "measured": 0.04606060606060606,
+      "control": 0.04525252525252525,
+      "r": 1.0178571428571428
+    },
+    {
+      "name": "row 1 pill elevatus",
+      "node": "406:4244",
+      "measured": 0.061414141414141414,
+      "control": 0.055656565656565654,
+      "r": 1.103448275862069
+    },
+    {
+      "name": "row 1 pill locuz",
+      "node": "406:4247",
+      "measured": 0.06606060606060606,
+      "control": 0.07666666666666666,
+      "r": 0.8616600790513834
+    },
+    {
+      "name": "row 1 pill microsoft",
+      "node": "406:4250",
+      "measured": 0.06361788617886178,
+      "control": 0.058231707317073174,
+      "r": 1.0924956369982546
+    },
+    {
+      "name": "row 1 pill ncircle",
+      "node": "406:4253",
+      "measured": 0.10444444444444445,
+      "control": 0.06424242424242424,
+      "r": 1.6257861635220128
+    },
+    {
+      "name": "row 2 pill dion",
+      "node": "406:4263",
+      "measured": 0.02808080808080808,
+      "control": 0.03383838383838384,
+      "r": 0.8298507462686566
+    },
+    {
+      "name": "row 2 pill in10s",
+      "node": "406:4266",
+      "measured": 0.0708080808080808,
+      "control": 0.06727272727272728,
+      "r": 1.0525525525525525
+    },
+    {
+      "name": "row 2 pill fluentgrid",
+      "node": "406:4269",
+      "measured": 0.04898989898989899,
+      "control": 0.06222222222222222,
+      "r": 0.7873376623376624
+    },
+    {
+      "name": "row 2 pill emc",
+      "node": "406:4272",
+      "measured": 0.10535353535353535,
+      "control": 0.058787878787878785,
+      "r": 1.7920962199312716
+    },
+    {
+      "name": "row 2 pill sap",
+      "node": "406:4275",
+      "measured": 0.1540650406504065,
+      "control": 0.09044715447154472,
+      "r": 1.7033707865168537
+    },
+    {
+      "name": "row 2 pill tech-mahindra",
+      "node": "406:4278",
+      "measured": 0.07489837398373984,
+      "control": 0.05416666666666667,
+      "r": 1.3827392120075048
+    },
+    {
+      "name": "row 2 pill symantec",
+      "node": "406:4281",
+      "measured": 0.052121212121212124,
+      "control": 0.06,
+      "r": 0.8686868686868687
+    }
+  ],
+  "self": 0
+}

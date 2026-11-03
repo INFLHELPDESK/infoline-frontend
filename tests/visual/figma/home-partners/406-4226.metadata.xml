@@ -1,0 +1,99 @@
+<frame id="406:4226" name="section#partners" x="0" y="6101" width="1440" height="643">
+  <rounded-rectangle id="406:4227" name="div" x="403" y="-236.81585693359375" width="635" height="500.6106872558594" />
+  <rounded-rectangle id="406:4228" name="div" x="-90.99851989746094" y="379.205078125" width="640" height="472.9842834472656" />
+  <rounded-rectangle id="406:4229" name="div" x="800" y="379.205078125" width="640" height="472.9842834472656" />
+  <frame id="406:4230" name="div" x="154" y="90" width="1127" height="156">
+    <instance id="406:4231" name="Eyebrow" x="503.5" y="0" width="120" height="48" />
+    <text id="406:4232" name="Clients buy our service. Partners build the platform underneath it." x="130" y="68" width="867" height="88" />
+  </frame>
+  <text id="406:4233" name="Our technology partners bring the platforms, infrastructure and specialist expertise that support the services we deliver." x="256" y="270" width="929" height="24" />
+  <frame id="406:4234" name="Frame 7" x="81" y="361" width="1278" height="60">
+    <frame id="406:4235" name="div" x="-76.5" y="0" width="165" height="60">
+      <frame id="406:4236" name="Elevatus" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4237" name="image 26" x="-0.074951171875" y="-1.0048828125" width="87.80487823486328" height="45" />
+      </frame>
+    </frame>
+    <frame id="406:4238" name="div" x="104.5" y="0" width="165" height="60">
+      <frame id="406:4239" name="Konnect Insights" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4240" name="image 25" x="-6.074951171875" y="-4.0048828125" width="99.51219940185547" height="51" />
+      </frame>
+    </frame>
+    <frame id="406:4241" name="div" x="285.5" y="0" width="165" height="60">
+      <frame id="406:4242" name="Aspect" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4243" name="image 24" x="-4.074951171875" y="-3.0048828125" width="95.60974884033203" height="49" />
+      </frame>
+    </frame>
+    <frame id="406:4244" name="div" x="466.5" y="0" width="165" height="60">
+      <frame id="406:4245" name="Avaya" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4246" name="image 18" x="-5.074951171875" y="-3.0048828125" width="96" height="49" />
+      </frame>
+    </frame>
+    <frame id="406:4247" name="div" x="647.5" y="0" width="165" height="60">
+      <frame id="406:4248" name="CX" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4249" name="image 19" x="-1.0751953125" y="-1.0048828125" width="88" height="45" />
+      </frame>
+    </frame>
+    <frame id="406:4250" name="div" x="828.5" y="0" width="164" height="60">
+      <frame id="406:4251" name="Dion" x="39.07500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4252" name="image 20" x="5.4248046875" y="1.9951171875" width="76" height="39" />
+      </frame>
+    </frame>
+    <frame id="406:4253" name="div" x="1008.5" y="0" width="165" height="60">
+      <frame id="406:4254" name="Dubai Technologies" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4255" name="image 21" x="9.9248046875" y="2.9951171875" width="66" height="34" />
+      </frame>
+    </frame>
+    <frame id="406:4256" name="div" x="1189.5" y="0" width="165" height="60">
+      <frame id="406:4257" name="Ducont" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4258" name="image 22" x="3.9248046875" y="0.9951171875" width="78" height="40" />
+      </frame>
+    </frame>
+  </frame>
+  <frame id="406:4259" name="Frame 8" x="81" y="459" width="1278" height="60">
+    <frame id="406:4260" name="div" x="-166.5" y="0" width="165" height="60">
+      <frame id="406:4261" name="Elevatus" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4262" name="image 27" x="2.925048828125" y="-0.0048828125" width="83" height="43" />
+      </frame>
+    </frame>
+    <frame id="406:4263" name="div" x="14.5" y="0" width="165" height="60">
+      <frame id="406:4264" name="Konnect Insights" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4265" name="image 28" x="-3.074951171875" y="-2.0048828125" width="92" height="47" />
+      </frame>
+    </frame>
+    <frame id="406:4266" name="div" x="195.5" y="0" width="165" height="60">
+      <frame id="406:4267" name="Aspect" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4268" name="image 29" x="2.925048828125" y="0.9951171875" width="80" height="41" />
+      </frame>
+    </frame>
+    <frame id="406:4269" name="div" x="376.5" y="0" width="165" height="60">
+      <frame id="406:4270" name="Avaya" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4271" name="image 30" x="-1.074951171875" y="-0.0048828125" width="87" height="44" />
+      </frame>
+    </frame>
+    <frame id="406:4272" name="div" x="557.5" y="0" width="165" height="60">
+      <frame id="406:4273" name="CX" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4274" name="image 31" x="8.9248046875" y="3.9951171875" width="68" height="35" />
+      </frame>
+    </frame>
+    <frame id="406:4275" name="div" x="738.5" y="0" width="164" height="60">
+      <frame id="406:4276" name="Dion" x="39.07500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4277" name="image 32" x="11.229681968688965" y="4.9951171875" width="64.39024353027344" height="33" />
+      </frame>
+    </frame>
+    <frame id="406:4278" name="div" x="918.5" y="0" width="164" height="60">
+      <frame id="406:4279" name="Dion" x="39.07500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4280" name="image 32" x="4.4248046875" y="1.9951171875" width="76" height="39" />
+      </frame>
+    </frame>
+    <frame id="406:4281" name="div" x="1098.5" y="0" width="165" height="60">
+      <frame id="406:4282" name="Dubai Technologies" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4283" name="image 33" x="-0.0751953125" y="-1.0048828125" width="87" height="45" />
+      </frame>
+    </frame>
+    <frame id="406:4284" name="div" x="1279.5" y="0" width="165" height="60">
+      <frame id="406:4285" name="Ducont" x="39.57500076293945" y="8.004999160766602" width="85.8499984741211" height="43.9900016784668">
+        <rounded-rectangle id="406:4286" name="image 23" x="9.9248046875" y="6.9951171875" width="67" height="35" />
+      </frame>
+    </frame>
+  </frame>
+</frame>

@@ -1,0 +1,426 @@
+{
+  "constraints": {
+    "inkSize": "max(2px, 5%)",
+    "inkCentre": "2px",
+    "identityMargin": 0.05
+  },
+  "ink": [
+    {
+      "name": "title",
+      "figma": {
+        "x": 77,
+        "y": 5,
+        "width": 713,
+        "height": 81,
+        "pixels": 12831,
+        "background": "rgb(13, 22, 27)"
+      },
+      "build": {
+        "x": 75,
+        "y": 4,
+        "width": 715,
+        "height": 81,
+        "pixels": 14584,
+        "background": "rgb(13, 22, 27)"
+      }
+    },
+    {
+      "name": "description",
+      "figma": {
+        "x": 36,
+        "y": 5,
+        "width": 857,
+        "height": 16,
+        "pixels": 3234,
+        "background": "rgb(13, 22, 27)"
+      },
+      "build": {
+        "x": 34,
+        "y": 5,
+        "width": 858,
+        "height": 16,
+        "pixels": 3251,
+        "background": "rgb(13, 22, 27)"
+      }
+    },
+    {
+      "name": "row 1 pill salesforce",
+      "figma": {
+        "x": 15,
+        "y": 2,
+        "width": 56,
+        "height": 39,
+        "pixels": 1477,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 19,
+        "y": 5,
+        "width": 48,
+        "height": 34,
+        "pixels": 1175,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 1 pill konnect-insights",
+      "figma": {
+        "x": 1,
+        "y": 13,
+        "width": 85,
+        "height": 14,
+        "pixels": 334,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 5,
+        "y": 14,
+        "width": 77,
+        "height": 13,
+        "pixels": 314,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 1 pill elevatus",
+      "figma": {
+        "x": 2,
+        "y": 16,
+        "width": 83,
+        "height": 11,
+        "pixels": 433,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 6,
+        "y": 17,
+        "width": 75,
+        "height": 10,
+        "pixels": 408,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 1 pill locuz",
+      "figma": {
+        "x": 29,
+        "y": 3,
+        "width": 28,
+        "height": 37,
+        "pixels": 629,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 30,
+        "y": 4,
+        "width": 27,
+        "height": 36,
+        "pixels": 668,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 1 pill microsoft",
+      "figma": {
+        "x": 8,
+        "y": 15,
+        "width": 67,
+        "height": 15,
+        "pixels": 351,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 4,
+        "y": 15,
+        "width": 76,
+        "height": 16,
+        "pixels": 457,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 1 pill ncircle",
+      "figma": {
+        "x": 16,
+        "y": 6,
+        "width": 54,
+        "height": 28,
+        "pixels": 478,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 9,
+        "y": 11,
+        "width": 70,
+        "height": 24,
+        "pixels": 761,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 2 pill dion",
+      "figma": {
+        "x": 6,
+        "y": 12,
+        "width": 74,
+        "height": 20,
+        "pixels": 169,
+        "background": "rgb(231, 233, 233)"
+      },
+      "build": {
+        "x": 18,
+        "y": 13,
+        "width": 57,
+        "height": 18,
+        "pixels": 98,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 2 pill in10s",
+      "figma": {
+        "x": 12,
+        "y": 6,
+        "width": 63,
+        "height": 32,
+        "pixels": 525,
+        "background": "rgb(231, 233, 233)"
+      },
+      "build": {
+        "x": 10,
+        "y": 5,
+        "width": 68,
+        "height": 35,
+        "pixels": 678,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 2 pill fluentgrid",
+      "figma": {
+        "x": 3,
+        "y": 5,
+        "width": 80,
+        "height": 31,
+        "pixels": 423,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 4,
+        "y": 5,
+        "width": 78,
+        "height": 31,
+        "pixels": 421,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 2 pill emc",
+      "figma": {
+        "x": 13,
+        "y": 10,
+        "width": 61,
+        "height": 21,
+        "pixels": 464,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 5,
+        "y": 8,
+        "width": 78,
+        "height": 26,
+        "pixels": 810,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 2 pill sap",
+      "figma": {
+        "x": 16,
+        "y": 8,
+        "width": 54,
+        "height": 27,
+        "pixels": 702,
+        "background": "rgb(231, 232, 233)"
+      },
+      "build": {
+        "x": 7,
+        "y": 4,
+        "width": 72,
+        "height": 36,
+        "pixels": 1270,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 2 pill tech-mahindra",
+      "figma": {
+        "x": 8,
+        "y": 13,
+        "width": 68,
+        "height": 18,
+        "pixels": 332,
+        "background": "rgb(231, 233, 233)"
+      },
+      "build": {
+        "x": 5,
+        "y": 13,
+        "width": 77,
+        "height": 20,
+        "pixels": 477,
+        "background": "rgb(231, 231, 232)"
+      }
+    },
+    {
+      "name": "row 2 pill symantec",
+      "figma": {
+        "x": 2,
+        "y": 12,
+        "width": 80,
+        "height": 20,
+        "pixels": 473,
+        "background": "rgb(231, 233, 233)"
+      },
+      "build": {
+        "x": 3,
+        "y": 13,
+        "width": 75,
+        "height": 19,
+        "pixels": 528,
+        "background": "rgb(231, 231, 232)"
+      }
+    }
+  ],
+  "identity": [
+    {
+      "name": "row 1 pill salesforce",
+      "expected": 2,
+      "verdict": {
+        "status": "match",
+        "best": 0,
+        "margin": 0.5022220627611791,
+        "distance": 0.08969804618117228
+      }
+    },
+    {
+      "name": "row 1 pill konnect-insights",
+      "expected": 3,
+      "verdict": {
+        "status": "match",
+        "best": 1,
+        "margin": 0.23477344151762758,
+        "distance": 0.34336609336609336
+      }
+    },
+    {
+      "name": "row 1 pill elevatus",
+      "expected": 4,
+      "verdict": {
+        "status": "match",
+        "best": 2,
+        "margin": 0.256411534720855,
+        "distance": 0.3003194888178914
+      }
+    },
+    {
+      "name": "row 1 pill locuz",
+      "expected": 5,
+      "verdict": {
+        "status": "match",
+        "best": 3,
+        "margin": 0.3405265822208825,
+        "distance": 0.2148760330578512
+      }
+    },
+    {
+      "name": "row 1 pill microsoft",
+      "expected": 6,
+      "verdict": {
+        "status": "match",
+        "best": 4,
+        "margin": 0.3262349808834327,
+        "distance": 0.2805383022774327
+      }
+    },
+    {
+      "name": "row 1 pill ncircle",
+      "expected": 7,
+      "verdict": {
+        "status": "uncertain",
+        "best": 0,
+        "margin": 0.020832875260200057,
+        "distance": 0.523351259552788
+      }
+    },
+    {
+      "name": "row 2 pill dion",
+      "expected": 8,
+      "verdict": {
+        "status": "uncertain",
+        "best": 0,
+        "margin": 0.006186964066234979,
+        "distance": 0.89988358556461
+      }
+    },
+    {
+      "name": "row 2 pill in10s",
+      "expected": 9,
+      "verdict": {
+        "status": "match",
+        "best": 1,
+        "margin": 0.46123186542770045,
+        "distance": 0.2819260293091417
+      }
+    },
+    {
+      "name": "row 2 pill fluentgrid",
+      "expected": 10,
+      "verdict": {
+        "status": "match",
+        "best": 2,
+        "margin": 0.2894049161537887,
+        "distance": 0.5102611940298507
+      }
+    },
+    {
+      "name": "row 2 pill emc",
+      "expected": 11,
+      "verdict": {
+        "status": "match",
+        "best": 3,
+        "margin": 0.5301399131142452,
+        "distance": 0.22668004012036114
+      }
+    },
+    {
+      "name": "row 2 pill sap",
+      "expected": 12,
+      "verdict": {
+        "status": "match",
+        "best": 4,
+        "margin": 0.6880324518638893,
+        "distance": 0.0892857142857143
+      }
+    },
+    {
+      "name": "row 2 pill tech-mahindra",
+      "expected": 13,
+      "verdict": {
+        "status": "match",
+        "best": 5,
+        "margin": 0.42679129270590577,
+        "distance": 0.32835820895522383
+      }
+    },
+    {
+      "name": "row 2 pill symantec",
+      "expected": 14,
+      "verdict": {
+        "status": "match",
+        "best": 6,
+        "margin": 0.2622417979823246,
+        "distance": 0.47473736868434213
+      }
+    }
+  ]
+}
