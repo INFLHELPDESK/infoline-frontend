@@ -1,5 +1,87 @@
 # Home Hero: Figma conformity pilot (2026-11-03)
 
+## Update: Hero fixes (after commit `6e452a3`)
+
+The three confirmed failures below are fixed in `hero.tsx` and `globals.css`.
+The Figma references, test code and Gate B budgets are unchanged.
+
+**Result:** `npm run test:visual` exits 0.
+
+| | Before (`6e452a3`) | After the fix |
+|---|---|---|
+| fail | 12 | 0 |
+| pass | 96 | 108 |
+| designer decision | 10 | 10 |
+| reference unavailable | 10 | 10 |
+| advisory | 3 | 3 |
+
+Evidence:
+[`2026-11-03.after-fix.summary.md`](2026-11-03.after-fix.summary.md) and
+`2026-11-03.after-fix.*.png`, against the `2026-11-03.*` before files.
+
+1. **Height 760 → 794.**
+   - `lg:min-h-[760px]` came with the initial page (`f12b3d2`) and had no
+     recorded rationale. It is now `lg:min-h-[794px]`, the Figma frame.
+   - The copy is anchored 188px from the top at `lg` (`lg:items-start
+     lg:pt-[188px]`), as in Figma.
+   - Stat columns at `lg` follow the Figma column: `py-9`, figure box 48,
+     label gap 8. The band is therefore 184px.
+   - Measured at 1440: headline y 188, CTAs 440 (Figma 439), band 610/184,
+     figure 646, label 702.
+   - At 1024 the band is 212px (EN), because labels wrap to three lines in the
+     narrower columns. There is no Figma frame at 1024.
+   - Below `lg`, `min-h-svh` is unchanged.
+   - Short viewports (1440×700): the Hero keeps its min-height and scrolls, as before.
+2. **`leading-none` = 0 (root cause).**
+   - Tailwind resolves `leading-<name>` from `--leading-*` and then from
+     `--spacing-*`, so `leading-none` hit `--spacing-none: 0rem`.
+   - `--leading-none: 1` (Tailwind's own value) is now defined in `@theme`.
+   - It is the only colliding `leading-*` utility: numeric ones use
+     `calc(var(--spacing) * N)`.
+   - Usages: the Hero (now uses explicit Figma values) and the language
+     switcher. The switcher's buttons and glyphs measured identical before and
+     after, at 390, 768, 1024 and 1440, in EN and AR.
+   - Hero stat figure: 44/48 at `lg` (`lg:leading-12`), 36/40 below.
+3. **"yrs" unit 20 → 16/24.**
+   - Avenir Heavy (weight 600 → Heavy face), on the figure's baseline
+     (`items-baseline`), as Figma sets "22yrs" inline.
+
+**Below `lg` (no Figma frame):** padding is compensated (`pt-11`, label `mt-3`
+without `pt-5`), so the figure and label glyphs sit exactly where they did
+before at 768 and 390, EN and AR. That's measured with text ranges and is
+pixel-identical.
+- The one visible change at those widths: the unit drops about 9px from a raised,
+  superscript-like position onto the figure's baseline. This is the Figma
+  alignment, applied consistently. **Designer to confirm for mobile.**
+
+**Still open (unchanged, documented):**
+- PQA-022 item 6: CTA padding and width, shadow, accent colour, glow.
+- PQA-020 item 4: blur hard edge.
+- PQA-019 item 7: five statistics and their wording.
+- PQA-025: Arabic line-height and Tajawal weights.
+- New observation, not fixed: the background photo is framed about 120px
+  differently in the vertical direction from Figma. Figma anchors the 949px
+  image at the top; the build uses `object-cover` at `70% center`. It's visible
+  in `2026-11-03.after-fix.en.1440.diff-vs-figma.png`. Designer to confirm
+  before any change.
+
+**Validation:**
+- `npm run test:visual`: 15 passed, 1 skipped (Arabic image comparison:
+  reference unavailable).
+- Related e2e specs (home, motion, navigation, layout, i18n): 161 passed.
+- Full e2e: 459 of 465 passed (338 chromium + 121 cms-scenarios, the latter
+  run with `--no-deps` after the chromium project failed).
+- The 6 failures are all `about/who-we-are.spec.ts` (photo-slice offset:
+  received 352 / 488.3 vs < 2).
+  - **Pre-existing, unrelated:** they fail identically on a clean build of
+    `6e452a3` with this fix stashed.
+  - Not addressed here.
+- Lint, typecheck: clean. Unit tests: 935 passed.
+
+---
+
+## Pilot findings (before the fix)
+
 **Scope:** `components/sections/home-1/hero.tsx` against Figma `406:3782`
 ([Infoline-Handoff](https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-3782)).
 EN and AR at 1440px, plus overflow smoke checks at 390, 768, 1024 and 1280.

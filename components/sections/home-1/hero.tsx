@@ -17,7 +17,10 @@ export default function Hero() {
   const stats = t.raw("stats") as Stat[];
 
   return (
-    <section className="relative isolate flex min-h-svh flex-col overflow-hidden bg-ink text-white lg:min-h-[760px]">
+    // From lg the Hero is the Figma frame (406:3782): 794px tall, copy anchored
+    // 188px from the top, stats band 184px (36 + 48 + 8 + 56 + 36). Below lg it
+    // fills the viewport (no Figma frame at those widths).
+    <section className="relative isolate flex min-h-svh flex-col overflow-hidden bg-ink text-white lg:min-h-[794px]">
       {/* Background photo + washes */}
       <Image
         src={t("image")}
@@ -38,7 +41,7 @@ export default function Hero() {
       />
 
       {/* Copy */}
-      <div className="mx-auto flex w-full max-w-360 flex-1 items-center px-6 pt-32 pb-12 md:px-12 lg:px-20 lg:pt-36">
+      <div className="mx-auto flex w-full max-w-360 flex-1 items-center px-6 pt-32 pb-12 md:px-12 lg:items-start lg:px-20 lg:pt-[188px]">
         <Stagger
           as="div"
           className="w-full max-w-[768px]"
@@ -93,20 +96,24 @@ export default function Hero() {
               as="li"
               key={`${stat.label}-${i}`}
               distance={24}
-              className="group border-white/10 py-6 max-lg:border-b sm:px-4 lg:py-10 lg:px-6 [&:nth-child(odd)]:max-sm:pe-4"
+              // Figma column: 36px block padding, figure 44/48, 8px gap, label
+              // 18/28. Below lg, pt-11 / mt-3 keep the figure and label glyphs
+              // where they sat before the figure had a real line box.
+              className="group border-white/10 pt-11 pb-6 max-lg:border-b sm:px-4 lg:py-9 lg:px-6 [&:nth-child(odd)]:max-sm:pe-4"
             >
+              {/* Unit sits on the figure's baseline, as in Figma ("22yrs"). */}
               <p
                 dir="ltr"
-                className="flex h-10 items-end gap-1 text-[36px] leading-none font-black lg:h-14 text-white transition-colors duration-300 group-hover:text-brandblue-400 rtl:justify-end lg:text-[44px]"
+                className="flex h-10 items-baseline gap-1 text-[36px] leading-10 font-black lg:h-12 text-white transition-colors duration-300 group-hover:text-brandblue-400 rtl:justify-end lg:text-[44px] lg:leading-12"
               >
                 <CountUp value={stat.value} />
                 {stat.unit && (
-                  <span className="pb-0.5 text-[16px] font-semibold lg:pb-1 lg:text-[20px]">
+                  <span className="text-[16px] leading-6 font-semibold">
                     {stat.unit}
                   </span>
                 )}
               </p>
-              <p className="mt-3 max-w-[18ch] pt-5 text-[14px] leading-6 text-slate-100 sm:text-[16px] lg:text-[18px] lg:leading-7">
+              <p className="mt-3 max-w-[18ch] text-[14px] leading-6 text-slate-100 sm:text-[16px] lg:mt-2 lg:text-[18px] lg:leading-7">
                 {stat.label}
               </p>
             </StaggerItem>

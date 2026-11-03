@@ -290,6 +290,10 @@ body {
   --spacing-4xl: 2rem;
   --spacing-5xl: 2.25rem;
   --spacing-6xl: 3rem;
+  /* Tailwind resolves `leading-<name>` from --leading-* first, then from
+     --spacing-*. Without this, `leading-none` matched --spacing-none above and
+     compiled to line-height: 0. Restores Tailwind's documented value. */
+  --leading-none: 1;
 
   /* Radius scale — extends rounded-* */
   --radius-none: 0rem;
