@@ -27,7 +27,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-022](#pqa-022--home-industries--designer-conformity-follow-ups) | Home | Industries — Designer conformity follow-ups | Low | IMPLEMENTED — Awaiting Designer decisions |
 | [PQA-023](#pqa-023--industries--case-studies--insights--page-qa-follow-ups-batch-6c6d) | Industries / Case Studies / Insights | Page QA follow-ups (Batch 6C/6D) | Medium | IMPLEMENTED (local) — Awaiting review / Designer decisions |
 | [PQA-024](#pqa-024--home--partners--description-reuses-the-industries-copy) | Home | Partners — description reuses the Industries copy | Low | PARTIALLY RESOLVED — English done; Arabic pending approved translation |
-| [PQA-025](#pqa-025--home--arabic-heading-typography-decisions) | Home (AR) | Arabic heading line-height and weights | Low | IMPLEMENTED (provisional) — Awaiting Designer decision |
+| [PQA-025](#pqa-025--home--industries--arabic-heading-typography-decisions) | Home / Industries (AR) | Arabic heading line-height and weights | Low | IMPLEMENTED (provisional) — Awaiting Designer decision |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -296,11 +296,12 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   5. **Card metadata at tablet width (6C F8), Insights Formats:** a wrapped line could start with a stranded `|` (EN 768: 3 of 3 cards, EN 1024 and 390: 1 card, AR 768: 3 of 3). A divider that wraps to the start of a line is now clipped; dividers between parts on one line are unchanged. After: no stranded divider at any width, EN or AR.
 - **Dependency:** Designer answers below; review and a preview deployment of the uncommitted changes.
 - **Open Designer decisions:**
-  1. Ambiguous insets left at 40px: Case Studies hero (Figma x=44) and the Industries "Six sector groups" header (Figma x=44, with the sector cards at 80). Confirm whether they should align with the 80px content.
+  1. Ambiguous insets left at 40px: Case Studies hero (Figma x=44) and the Industries "Six sector groups" header (Figma x=44, with the sector cards at 80). Confirm whether they should align with the 80px content. **Update (final browser audit, 2026-11-03):** Designer Fix #7 (`1e2d277`) moved the Industries "Six sector groups" header (eyebrow, heading and description) to the 80px container together with the cards, so it now sits 36px inside Figma 406:3194 (x=44). Still open: confirm 80px (aligned with the cards) or revert to Figma's 44px.
   2. 1024–1279px inset (no Figma frame at that width): keep 40px or follow the header (48px)?
   3. Featured proof: the image is cropped (empty left margin first, then the screen edge), not mirrored in Arabic. Confirm the crop, or supply an Arabic or mirrored artwork.
   4. About and Solutions hero videos still autoplay under reduced motion; apply the Industries treatment to them?
-  5. Deferred from 6C, not implemented: hero eyebrow and stat colour/weight (Figma #74C0E7 Medium / Heavy 32; site #4FC3F7 Regular / 700) on all three pages (F4); Industries section titles 40/44 vs Figma 36/44 (F6, see PQA-020 item 3); Industries hero copy sits 34px higher than Figma (F7).
+  5. Deferred from 6C, not implemented: hero eyebrow and stat colour/weight (Figma #74C0E7 Medium / Heavy 32; site #4FC3F7 Regular / 700) on all three pages (F4); Industries section titles 40/44 vs Figma 36/44 (F6, see PQA-020 item 3); Industries hero copy sits 34px higher than Figma (F7). **Final browser audit (2026-11-03, Preview `opya12z39`):** F4 eyebrow is resolved on Industries by Designer Fix #7 (#74C0E7, weight 500). F6 still applies to the Differ, FAQ and Clients titles (40/44, 600); the Clients title "Named across the full catalogue." renders 614px wide where Figma 406:3334 renders about 557px (≈36px, heavier) — inferred from rendered widths, Figma type values not read directly. F7 re-measured against Figma 406:3167: eyebrow y 144 vs 178 and h1 y 180 vs 214 (34px higher); h1→description gap 24px vs 5px; hero CTA 188×56 with a 16px "Talk to an expert" label vs Figma 218×56 "Talk to an Expert". The sector list matches within 5px.
+  6. Card stack exit (final browser audit, 2026-11-03): when the stack releases, the six stacked card shadows combine into a grey halo wider than the top card (Preview `opya12z39`, 1440px, EN and AR). Existing behaviour, not a regression; confirm it is acceptable or whether only the top card should cast the shadow.
 - **Acceptance criteria:**
   - [x] Featured proof figures never overlap or touch the image (EN and AR, 1024–1440px).
   - [x] Industries hero video never plays under reduced motion and follows live preference changes.
@@ -356,7 +357,7 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   1. 600 mapped to Heavy and 700 to Black for all site UI text (explicit in Figma for headings, inferred for small labels).
   2. The Figma eyebrow pill and some "Regular" subtitles still reference Inter in the file; the site now uses Avenir Medium and Roman for them.
   3. Site section-title scale and tracking (64px with negative tracking) against the Home-2 frame (36px, normal tracking), now that Avenir is in place. Home Industries now follows Figma (36/44, Heavy, tracking 0); the shared `sectionTitle` used by the other sections is unchanged and still needs a decision.
-  4. ~~The Hero stats band: Figma has an 8px backdrop blur.~~ Done 2026-11-01 (`backdrop-blur-[8px]` on the band, gradient kept).
+  4. ~~The Hero stats band: Figma has an 8px backdrop blur.~~ Done 2026-11-01 (`backdrop-blur-[8px]` on the band, gradient kept). **Follow-up (final browser audit, 2026-11-03):** the gradient fades correctly, but the blur stops at a hard horizontal edge at the band's top (y=536 at 1440px, EN and AR), where Figma 406:3782 dissolves into the photo (Hero PDF item 7). Not fixed; Designer to confirm whether the blur should be masked to fade in.
 - **Font loading:** with preload off, English requests the four faces from the stylesheet (they start about 0.6 s later than with preload on and finish about 0.6 s later on a throttled connection, with no change in first contentful paint and no layout shift), and Arabic pages request no Avenir files (about 280 KB saved and first paint about 1.5 s faster on the same throttled test). WOFF2 versions of the same licensed files would shrink the English download further; that remains a production decision.
 - **Acceptance criteria:**
   - [x] Four Avenir faces loaded locally and applied to English; Tajawal unchanged for Arabic.
@@ -365,12 +366,13 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [ ] Licence document or proof of purchase recorded.
   - [ ] Decision on TTF versus WOFF2 for production (preload is already off, so Arabic pages do not fetch Avenir).
 
-### PQA-025 — Home — Arabic heading typography decisions
+### PQA-025 — Home / Industries — Arabic heading typography decisions
 
-- **Page:** Home (`/ar`) — `app/[locale]/globals.css` (`.home-headings`), `components/sections/home-1/what-changes.tsx`. Designer review `Infoline-05-Arabic-Build-Review.pdf`.
+- **Page:** Home (`/ar`) and Industries (`/ar/industries`) — `app/[locale]/globals.css` (`.home-headings`, `.industries-headings`), `components/sections/home-1/what-changes.tsx`. Designer review `Infoline-05-Arabic-Build-Review.pdf`.
 - **Priority:** Low
 - **Status:** IMPLEMENTED (provisional) — Awaiting Designer decision
 - **Description:** Arabic Home h1/h2 headings now use a unitless line-height of 1.32 in RTL (about 72→95, 64→84.5, 56→74, 36→47.5px); the 22–24px what-changes card headings use the same ratio. English and body typography are unchanged. Tajawal loads 400/500/700/800 only, so heading weights 600 and 900 already render as 700 and 800; weights were deliberately not changed.
+- **Industries (final browser audit follow-up, 2026-11-03):** the same provisional 1.32 rule now also applies to Arabic Industries h1/h2 (the Medium audit finding: the 3-line "كيف تختلف تجربة العميل حسب القطاع؟" at 40/44 was visibly cramped). At 1440px: h1 48/56 (1.17) → 48/63.4; section h2s 40/44 (1.10) → 40/52.8; "ست مجموعات قطاعية" 36/44 (1.22) → 36/47.5. At 768/390px the 32px h2s go 35.2 → 42.2 and the 40px h1 46.8 → 52.8. Sizes and weights unchanged; English unchanged at every width. Industries h3 are deliberately excluded (sector card titles 28/36 and the "Your sector" band 36/44, both single-line at the audited widths) so the 498px sticky card height and the card stack are unaffected.
 - **Dependency:** Designer decision on the final Arabic type scale and one weight per heading level (including Industries at 900 and Partners at 800, see PQA-024), and whether to load Tajawal 600/900.
 - **Acceptance criteria:**
   - [ ] Designer approves the 1.32 ratio or supplies per-size tokens.

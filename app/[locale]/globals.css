@@ -918,8 +918,10 @@ html[dir="rtl"] .font-mono {
    h1/h2 get ~1.32 in RTL. Unitless, so it follows the fluid font sizes
    (72 -> ~95, 64 -> ~84.5, 56 -> ~74, 36 -> ~47.5, 32 -> ~42, 28 -> ~37,
    24 -> ~32). Provisional values pending Designer approval of the Arabic type
-   scale. Scoped to the Home <main>; English and body copy are untouched. */
-html[dir="rtl"] .home-headings :is(h1, h2) {
+   scale. Scoped to the Home and Industries <main>; English and body copy are
+   untouched, and h3 (Industries card titles) keeps its leading so the sticky
+   card height does not change. */
+html[dir="rtl"] :is(.home-headings, .industries-headings) :is(h1, h2) {
   line-height: 1.32;
 }
 

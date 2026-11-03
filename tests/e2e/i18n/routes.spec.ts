@@ -74,6 +74,30 @@ test.describe("home page content", () => {
   }
 });
 
+test.describe("Arabic heading leading (PQA-025)", () => {
+  // Tajawal needs ~1.32 leading for marks above/below the line; English keeps
+  // its Latin ratios. Home h1 56/70 and Industries h1 48/56 at desktop width.
+  const ratio = (page: import("@playwright/test").Page) =>
+    page.locator("main h1").evaluate((h) => {
+      const cs = getComputedStyle(h);
+      return parseFloat(cs.lineHeight) / parseFloat(cs.fontSize);
+    });
+  const cases = [
+    { path: "", en: 70 / 56 },
+    { path: "/industries", en: 56 / 48 },
+  ];
+
+  for (const { path, en } of cases) {
+    test(`/ar${path || "/"} h1 uses 1.32 leading; /en${path} keeps ${en.toFixed(2)}`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto(`/ar${path}`);
+      expect(await ratio(page)).toBeCloseTo(1.32, 2);
+      await page.goto(`/en${path}`);
+      expect(await ratio(page)).toBeCloseTo(en, 2);
+    });
+  }
+});
+
 test.describe("legacy /home-1 alias", () => {
   test("renders the homepage but is noindex and canonicalises to /en", async ({ page, baseURL }) => {
     const response = await page.goto("/en/home-1");

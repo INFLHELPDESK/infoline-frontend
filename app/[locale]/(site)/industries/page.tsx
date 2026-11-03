@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function IndustriesPage() {
   return (
-    <main className="overflow-x-clip">
+    <main className="industries-headings overflow-x-clip">
       <Hero />
       <Differ />
       <Sectors />
