@@ -119,14 +119,15 @@ test.describe("Case Studies › contact band video", () => {
         await expect(page.locator("video[data-testid=case-studies-cta-video]")).toHaveCount(0);
         const backdrop = band(page).locator("[aria-hidden=true].pointer-events-none").first();
         await expect(backdrop.locator("img")).toHaveCSS("opacity", "0.3");
-        // Tailwind v4 emits the tint via color-mix (computed as lab()); read it back as sRGB.
+        // Figma 557:1587 tint: #1C97D4 16% Linear Burn, rendered as black 16% (see
+        // cta-backdrop.tsx). Tailwind v4 emits it via color-mix; read it back as sRGB.
         const [r, g, b, a] = await backdrop.locator(":scope > div").nth(1).evaluate((el) => {
           const ctx = document.createElement("canvas").getContext("2d")!;
           ctx.fillStyle = getComputedStyle(el).backgroundColor;
           ctx.fillRect(0, 0, 1, 1);
           return Array.from(ctx.getImageData(0, 0, 1, 1).data);
         });
-        for (const [got, want] of [[r, 28], [g, 151], [b, 212], [a, Math.round(0.16 * 255)]]) {
+        for (const [got, want] of [[r, 0], [g, 0], [b, 0], [a, Math.round(0.16 * 255)]]) {
           expect(Math.abs(got - want)).toBeLessThanOrEqual(3);
         }
         expect(await css(backdrop.locator(":scope > div").nth(2), "background-image")).toMatch(
@@ -150,6 +151,7 @@ test.describe("Case Studies › contact band video", () => {
         await expect(video).toHaveJSProperty("loop", true);
         await expect(video).toHaveJSProperty("playsInline", true);
         await expect(video).toHaveCSS("opacity", "0.3");
+        await expect(video).toHaveCSS("object-position", "50% 50%"); // Figma Fill: centred cover
         await expect(video.locator("source")).toHaveAttribute("src", VIDEO_SRC);
         await expect(video).toHaveJSProperty("paused", true);
 
