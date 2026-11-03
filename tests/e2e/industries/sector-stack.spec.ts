@@ -76,6 +76,50 @@ for (const locale of ["en", "ar"]) {
     await expect(page.locator("article[id^='sec-']").nth(1).locator("h3")).toBeVisible();
   });
 
+  // Sample where the exit scale is active: the stack has released and card 1 has
+  // scrolled partly out of view (not the start of the stack).
+  const exitState = async (page: Page) => {
+    const end = await page.evaluate(() => {
+      const last = [...document.querySelectorAll("article[id^='sec-']")].pop()!;
+      return last.parentElement!.getBoundingClientRect().bottom + window.scrollY;
+    });
+    await scrollToY(page, end - 300);
+    return page.evaluate(() =>
+      [...document.querySelectorAll("article[id^='sec-']")].map((a) => {
+        const cs = getComputedStyle(a);
+        return { name: cs.animationName, transform: cs.transform };
+      }),
+    );
+  };
+
+  test(`${locale} / reduced motion: stack exit scaling is off at the end of the stack`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await setMotionPreference(page, "reduce");
+    await page.goto(`/${locale}/industries`);
+    await waitForHydration(page);
+    const state = await exitState(page);
+    expect(state).toHaveLength(6);
+    for (const s of state) {
+      expect(s.name).toBe("none");
+      expect(s.transform).toBe("none");
+    }
+    for (let i = 0; i < 6; i++) expect(await tilt(page, i)).toBe(0);
+    await expect(page.locator("article[id^='sec-'] h3")).toHaveCount(6);
+    for (const h of await page.locator("article[id^='sec-'] h3").all()) await expect(h).toBeVisible();
+  });
+
+  test(`${locale} / normal motion: stack exit still scales cards down`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await setMotionPreference(page, "no-preference");
+    await page.goto(`/${locale}/industries`);
+    await waitForHydration(page);
+    const state = await exitState(page);
+    for (const s of state) {
+      expect(s.name).toBe("stack-recede");
+      expect(parseFloat(s.transform.replace("matrix(", ""))).toBeLessThan(0.99);
+    }
+  });
+
   test(`${locale} / mobile: no tilt and no horizontal overflow`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}/industries`);

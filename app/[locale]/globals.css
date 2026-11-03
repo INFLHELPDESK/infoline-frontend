@@ -922,3 +922,13 @@ html[dir="rtl"] .font-mono {
 html[dir="rtl"] .home-headings :is(h1, h2) {
   line-height: 1.32;
 }
+
+/* Industries sector stack: `lg:animate-stack-recede` is emitted after (and so
+   beats) the `motion-reduce:` utility at equal specificity, leaving the
+   scroll-linked exit scale running under reduced motion. Unlayered, so it wins
+   over every Tailwind utility. */
+@media (prefers-reduced-motion: reduce) {
+  .sector-card {
+    animation: none;
+  }
+}

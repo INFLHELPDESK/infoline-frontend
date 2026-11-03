@@ -164,7 +164,7 @@ function SectorCard({
       ref={ref}
       id={`sec-${s.id}`}
       style={tiltEnabled ? { perspective: PERSPECTIVE } : undefined}
-      className="scroll-mt-[6.5rem] lg:sticky lg:top-[6.5rem] lg:origin-top lg:will-change-transform lg:animate-stack-recede lg:[animation-timeline:view()] lg:[animation-range:exit-crossing] motion-reduce:[animation:none]"
+      className="sector-card scroll-mt-[6.5rem] lg:sticky lg:top-[6.5rem] lg:origin-top lg:will-change-transform lg:animate-stack-recede lg:[animation-timeline:view()] lg:[animation-range:exit-crossing] motion-reduce:[animation:none]"
     >
       <motion.div
         style={
