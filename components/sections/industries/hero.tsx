@@ -45,14 +45,14 @@ export default function Hero() {
               className="mb-5 flex items-center gap-3.5"
               distance={40}
             >
-              <span className="text-[13px] uppercase leading-4 tracking-[1.5px] text-lightblue-300">
+              <span className="text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-brandblue-300">
                 {t("hero.eyebrow")}
               </span>
             </StaggerItem>
 
             <MaskText
               as="h1"
-              className="max-w-[665px] text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
+              className="max-w-[665px] text-[40px] font-extrabold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
               segments={[
                 { text: t("hero.titleLead") },
                 {
@@ -66,7 +66,7 @@ export default function Hero() {
 
             <StaggerItem
               as="p"
-              className="mt-6 max-w-[641px] text-[16px] leading-7 text-slate-200 lg:text-[18px]"
+              className="mt-6 max-w-[641px] text-[16px] leading-7 text-[#CFD8DC] lg:text-[18px]"
             >
               {t("hero.description")}
             </StaggerItem>

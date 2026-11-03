@@ -333,7 +333,7 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   3. **Founding year:** About "since 2004" vs Home and Careers "since 2003".
   4. **Eight vs nine:** Home "What we do" says "Eight capabilities"; Solutions lists nine services.
   5. **Contact details:** intro banner `connect@infoline.om` / `+968 2446 2626` vs head-office card `contact@infoline.om` / `+968 2416 2626`; Figma shows `.com`. Tel and Fax share one number.
-  6. **Industries clients title:** "Named across all six sector groups" vs Figma "Named across the full catalogue."
+  6. **Industries clients title:** English updated (Designer Fix #7) to the approved "Named across the full catalogue." Arabic (`IndustriesPage.clients.title`) still reads "أسماء عبر جميع المجموعات الست" ("across all six groups") and no longer matches the English; it is left unchanged until approved Arabic wording is supplied. The Arabic Industries hero eyebrow was shortened to "القطاعات" to mirror the English "Industries".
   7. **Home:** stat label "Agents ready to help you" vs Figma "omani agents…" and the fifth 1,400+ stat; Vendors card wording; Home "What changes" heading (see PQA-011).
   8. **Minor:** About values-chip punctuation.
 - **Dependency:** Client/designer decisions. Several look like Figma typos and should be confirmed with the designer.

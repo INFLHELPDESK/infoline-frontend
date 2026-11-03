@@ -4,7 +4,7 @@
   },
   "IndustriesPage": {
     "hero": {
-      "eyebrow": "Industries · 6 sector groups",
+      "eyebrow": "Industries",
       "titleLead": "Trusted operations, shaped for",
       "titleAccent": "your sector",
       "description": "Every sector has different service, regulatory and demand pressures. We bring local understanding and a trusted operating model shaped around your reality, not a generic template.",
@@ -180,7 +180,7 @@
     },
     "clients": {
       "eyebrow": "Clients",
-      "title": "Named across all six sector groups",
+      "title": "Named across the full catalogue.",
       "logos": [
         {
           "src": "/assets/clients/moh.svg",
