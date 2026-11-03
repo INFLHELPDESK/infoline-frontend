@@ -70,6 +70,16 @@ export function CountUp({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, inView]);
 
+  // A counter that has not been scrolled into view yet still shows its zero
+  // start; printing must show the real figure instead. If the element later
+  // enters view, the count-up still runs from zero as usual.
+  useEffect(() => {
+    if (!enabled) return;
+    const showFinal = () => setDisplay(value);
+    window.addEventListener("beforeprint", showFinal);
+    return () => window.removeEventListener("beforeprint", showFinal);
+  }, [enabled, value]);
+
   // Count up from zero every time it enters view.
   useEffect(() => {
     if (!enabled || !inView || !parsed) return;

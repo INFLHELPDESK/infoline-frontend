@@ -4,7 +4,7 @@ Tracker for issues found during Frontend Preview QA that are not yet resolved.
 Resolved issues are removed from this file (history lives in Git).
 
 **Branch:** `feature/home-2-redesign`
-**Last updated:** 2026-11-02
+**Last updated:** 2026-11-03
 
 ## Summary
 
@@ -28,6 +28,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-023](#pqa-023--industries--case-studies--insights--page-qa-follow-ups-batch-6c6d) | Industries / Case Studies / Insights | Page QA follow-ups (Batch 6C/6D) | Medium | IMPLEMENTED (local) — Awaiting review / Designer decisions |
 | [PQA-024](#pqa-024--home--partners--description-reuses-the-industries-copy) | Home | Partners — description reuses the Industries copy | Low | PARTIALLY RESOLVED — English done; Arabic pending approved translation |
 | [PQA-025](#pqa-025--home--industries--arabic-heading-typography-decisions) | Home / Industries (AR) | Arabic heading line-height and weights | Low | IMPLEMENTED (provisional) — Awaiting Designer decision |
+| [PQA-026](#pqa-026--case-studies--designer-fix-8-follow-ups) | Case Studies | Designer Fix #8 — design decisions and counter screen-reader gap | Low | IMPLEMENTED — Awaiting Designer decisions |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -300,7 +301,7 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   2. 1024–1279px inset (no Figma frame at that width): keep 40px or follow the header (48px)?
   3. Featured proof: the image is cropped (empty left margin first, then the screen edge), not mirrored in Arabic. Confirm the crop, or supply an Arabic or mirrored artwork.
   4. About and Solutions hero videos still autoplay under reduced motion; apply the Industries treatment to them?
-  5. Deferred from 6C, not implemented: hero eyebrow and stat colour/weight (Figma #74C0E7 Medium / Heavy 32; site #4FC3F7 Regular / 700) on all three pages (F4); Industries section titles 40/44 vs Figma 36/44 (F6, see PQA-020 item 3); Industries hero copy sits 34px higher than Figma (F7). **Final browser audit (2026-11-03, Preview `opya12z39`):** F4 eyebrow is resolved on Industries by Designer Fix #7 (#74C0E7, weight 500). F6 still applies to the Differ, FAQ and Clients titles (40/44, 600); the Clients title "Named across the full catalogue." renders 614px wide where Figma 406:3334 renders about 557px (≈36px, heavier) — inferred from rendered widths, Figma type values not read directly. F7 re-measured against Figma 406:3167: eyebrow y 144 vs 178 and h1 y 180 vs 214 (34px higher); h1→description gap 24px vs 5px; hero CTA 188×56 with a 16px "Talk to an expert" label vs Figma 218×56 "Talk to an Expert". The sector list matches within 5px.
+  5. Deferred from 6C, not implemented: hero eyebrow and stat colour/weight (Figma #74C0E7 Medium / Heavy 32; site #4FC3F7 Regular / 700) on all three pages (F4; resolved on Case Studies by Designer Fix #8, see PQA-026); Industries section titles 40/44 vs Figma 36/44 (F6, see PQA-020 item 3); Industries hero copy sits 34px higher than Figma (F7). **Final browser audit (2026-11-03, Preview `opya12z39`):** F4 eyebrow is resolved on Industries by Designer Fix #7 (#74C0E7, weight 500). F6 still applies to the Differ, FAQ and Clients titles (40/44, 600); the Clients title "Named across the full catalogue." renders 614px wide where Figma 406:3334 renders about 557px (≈36px, heavier) — inferred from rendered widths, Figma type values not read directly. F7 re-measured against Figma 406:3167: eyebrow y 144 vs 178 and h1 y 180 vs 214 (34px higher); h1→description gap 24px vs 5px; hero CTA 188×56 with a 16px "Talk to an expert" label vs Figma 218×56 "Talk to an Expert". The sector list matches within 5px.
   6. Card stack exit (final browser audit, 2026-11-03): when the stack releases, the six stacked card shadows combine into a grey halo wider than the top card (Preview `opya12z39`, 1440px, EN and AR). Existing behaviour, not a regression; confirm it is acceptable or whether only the top card should cast the shadow.
 - **Acceptance criteria:**
   - [x] Featured proof figures never overlap or touch the image (EN and AR, 1024–1440px).
@@ -377,6 +378,24 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Acceptance criteria:**
   - [ ] Designer approves the 1.32 ratio or supplies per-size tokens.
   - [ ] Designer fixes one heading weight per level using loaded weights, or approves loading 600/900.
+
+### PQA-026 — Case Studies — Designer Fix #8 follow-ups
+
+- **Page:** Case Studies (`components/sections/case-studies/*`, `components/ui/motion/count-up.tsx`). Figma 406:4321; review `docs/qa/designer-reviews/Infoline-07-Case-Studies-Page.pdf`.
+- **Priority:** Low
+- **Status:** IMPLEMENTED — Awaiting Designer decisions
+- **Description:** All four review findings are fixed: English weights (hero heading 800, eyebrow and "Headline movement" 500, hero and result figures 900, band heading 800), colours (eyebrow and stat figures #74C0E7, stat labels and hero sub-line #CFD8DC, band sub-line #E3E3E3), results card radius 16px, and the contact band (Figma 406:4474) now plays the approved clip at 30% under a 16% #1C97D4 tint and a fade to black, with the existing still at 30% as poster and fallback (no video under reduced motion or data saving; paused offscreen). Playback gating is shared with the site-wide CTA (`useAmbientVideo`). The page's closing "Start with the outcome you need" band is the shared CTA, which already used the clip. Counters: server render and reduced motion show final values; print now snaps unviewed counters to their final values; count-up unchanged.
+- **Open Designer decisions** (not implemented; not confirmed requirements):
+  1. Arabic weights: Arabic keeps the previous Tajawal weights (hero heading and figures 700, eyebrows 400, band heading 600) via `rtl:` overrides. See PQA-025.
+  2. Band gradient direction: the Figma API does not expose the video node's fills; the fade runs top to bottom, as on the shared CTA. Confirm.
+  3. Figma also shows a multiply blend over #263238 and a top-end "Back-Light" radial glow (406:4476), not in the review; not applied. Confirm whether they are required.
+  4. Fallback poster `/assets/options/bg.jpg` is 1349×201 and soft at full width (also used by the shared CTA). Supply a full-resolution frame of the clip if wanted.
+  5. Avenir licence record: see PQA-020.
+- **Accessibility (open):** before a counter scrolls into view it shows its zero start after hydration, so a screen reader's virtual cursor (and JavaScript-rendering crawlers) can read "0" instead of the result. A fix needs a change to the shared `CountUp` markup (for example a visually hidden final value with the animated text hidden from assistive technology), which affects every counter on the site; deferred for a separate decision.
+- **Acceptance criteria:**
+  - [x] Weights, colours, radius and band layers verified in the browser (EN and AR, 1440/768/390px) and covered by `tests/e2e/case-studies/designer-fixes.spec.ts`.
+  - [ ] Designer decisions above recorded.
+  - [ ] Decision on the counter screen-reader fix.
 
 ### PQA-021 — Unknown localized routes return HTTP 200 (soft 404)
 

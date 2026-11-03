@@ -7,3 +7,4 @@ export { ClipReveal } from "./reveal-image";
 export type { RevealDirection } from "./shared";
 export { SpotlightCard } from "./spotlight-card";
 export { ScrollProgress } from "./scroll-progress";
+export { useAmbientVideo } from "./use-ambient-video";

@@ -37,14 +37,14 @@ export default function Hero() {
             amount={0.3}
           >
             <StaggerItem className="mb-5" distance={40}>
-              <span className="text-[13px] leading-4 uppercase tracking-[1.5px] text-lightblue-300">
+              <span className="text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-brandblue-300 rtl:font-normal">
                 {t("hero.eyebrow")}
               </span>
             </StaggerItem>
 
             <MaskText
               as="h1"
-              className="max-w-[665px] text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
+              className="max-w-[665px] text-[40px] font-extrabold leading-[1.17] text-white rtl:font-bold lg:text-[48px] lg:leading-14"
               segments={[
                 { text: t("hero.titleLead") },
                 { text: t("hero.titleAccent") },
@@ -56,7 +56,7 @@ export default function Hero() {
 
             <StaggerItem
               as="p"
-              className="mt-6 max-w-[60ch] text-[16px] leading-7 text-slate-200 lg:text-[18px]"
+              className="mt-6 max-w-[60ch] text-[16px] leading-7 text-slate-100 lg:text-[18px]"
             >
               {t("hero.description")}
             </StaggerItem>
@@ -66,7 +66,7 @@ export default function Hero() {
           <div>
             <Stagger as="div" stagger={0.09} delayChildren={0.25} amount={0.2}>
               <StaggerItem className="mb-4" distance={24}>
-                <span className="text-[13px] leading-4 uppercase tracking-[1.5px] text-slate-400">
+                <span className="text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-400 rtl:font-normal">
                   {t("hero.movementLabel")}
                 </span>
               </StaggerItem>
@@ -76,10 +76,10 @@ export default function Hero() {
                     <div className="flex items-center justify-between gap-8 border-b border-[rgba(224,224,224,0.12)] py-3">
                       <CountUp
                         value={m.value}
-                        className="text-[32px] leading-10 font-bold tabular-nums text-lightblue-300 [direction:ltr]"
+                        className="text-[32px] leading-10 font-black tabular-nums text-brandblue-300 rtl:font-bold [direction:ltr]"
                       />
                       <div className="text-end">
-                        <div className="text-[14px] leading-5 font-medium text-slate-200">
+                        <div className="text-[14px] leading-5 font-medium text-slate-100">
                           {m.title}
                         </div>
                         <div className="mt-1.5 text-[13px] leading-5 text-slate-400">

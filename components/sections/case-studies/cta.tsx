@@ -1,11 +1,11 @@
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { PillButton } from "@/components/sections/home-1/shared";
-import { Reveal, Parallax } from "@/components/ui/motion";
+import { Reveal } from "@/components/ui/motion";
+import CtaBackdrop from "./cta-backdrop";
 
 /**
- * Closing CTA banner — the shared site-wide banner pattern (smoke photo
- * parallax behind a brand-dark panel), driven by the Case Studies strings.
+ * Closing contact band (Figma 406:4474) — the approved footage behind a
+ * brand-dark panel, driven by the Case Studies strings.
  */
 export default function Cta() {
   const t = useTranslations("CaseStudiesPage");
@@ -19,27 +19,16 @@ export default function Cta() {
           amount={0.25}
           duration={1.15}
         >
-          <Parallax
-            className="pointer-events-none absolute inset-x-0 -inset-y-[20%]"
-            speed={0.12}
-          >
-            <Image
-              src="/assets/options/bg.jpg"
-              alt=""
-              fill
-              aria-hidden
-              sizes="100vw"
-              className="object-cover object-top-right"
-              priority={false}
-            />
-          </Parallax>
+          <CtaBackdrop image="/assets/options/bg.jpg" />
 
           <div className="relative z-10 flex flex-col justify-between gap-6 md:items-center lg:flex-row">
             <div className="flex max-w-[989px] flex-col gap-3">
-              <h3 className="text-[28px] leading-9 font-semibold text-white lg:text-[36px] lg:leading-11">
+              {/* Figma heading/2xl/bold: Avenir Black (800). Arabic keeps its
+                  current Tajawal weight pending the Arabic type decision. */}
+              <h3 className="text-[28px] leading-9 font-extrabold text-white rtl:font-semibold lg:text-[36px] lg:leading-11">
                 {t("cta.title")}
               </h3>
-              <p className="text-[16px] leading-6 text-slate-100">
+              <p className="text-[16px] leading-6 text-[#e3e3e3]">
                 {t("cta.description")}
               </p>
             </div>

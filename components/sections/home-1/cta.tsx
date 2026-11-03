@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { Stagger, StaggerItem } from "@/components/ui/motion";
+import { Stagger, StaggerItem, useAmbientVideo } from "@/components/ui/motion";
 import { PillButton } from "./shared";
 
 /**
@@ -22,53 +22,7 @@ import { PillButton } from "./shared";
 export default function Cta() {
   const t = useTranslations("HomeV1.cta");
   const ref = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [enabled, setEnabled] = useState(false);
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } })
-      .connection?.saveData;
-    const sync = () => {
-      const on = !reduce.matches && !saveData;
-      setEnabled(on);
-      if (!on) setPlaying(false);
-    };
-    sync();
-    reduce.addEventListener("change", sync);
-    return () => reduce.removeEventListener("change", sync);
-  }, []);
-
-  useEffect(() => {
-    const section = ref.current;
-    const video = videoRef.current;
-    if (!enabled || !section || !video) return;
-
-    let visible = false;
-    const update = () => {
-      if (visible && !document.hidden) {
-        if (video.preload !== "auto") video.preload = "auto";
-        void video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    };
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting;
-        update();
-      },
-      { rootMargin: "200px" },
-    );
-    io.observe(section);
-    document.addEventListener("visibilitychange", update);
-    return () => {
-      io.disconnect();
-      document.removeEventListener("visibilitychange", update);
-      video.pause();
-    };
-  }, [enabled]);
+  const { videoRef, enabled, playing, onPlaying } = useAmbientVideo(ref);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   // Ranges must not depend on `useReducedMotion` (server renders it as false, so
@@ -101,7 +55,7 @@ export default function Cta() {
             playsInline
             preload="none"
             tabIndex={-1}
-            onPlaying={() => setPlaying(true)}
+            onPlaying={onPlaying}
           >
             <source src="/videos/4779866-hd_1920_1080_30fps.mp4" type="video/mp4" />
           </video>

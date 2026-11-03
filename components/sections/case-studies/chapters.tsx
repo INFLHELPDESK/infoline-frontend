@@ -190,7 +190,7 @@ export default function Chapters() {
 
                   <Stagger
                     as="ul"
-                    className={`mt-4 grid gap-3 rounded-2xl bg-[#fafafa] p-4 ${
+                    className={`mt-4 grid gap-3 rounded-xl bg-[#fafafa] p-4 ${
                       c.results.length >= 4
                         ? "grid-cols-2 lg:grid-cols-4"
                         : "grid-cols-1 sm:grid-cols-3"
@@ -209,7 +209,7 @@ export default function Chapters() {
                         <div className="flex h-full flex-col px-6 py-3">
                           <CountUp
                             value={r.value}
-                            className="w-fit text-[40px] font-bold leading-[1.17] text-brandblue-500 [direction:ltr] lg:text-[48px] lg:leading-14"
+                            className="w-fit text-[40px] font-black leading-[1.17] text-brandblue-500 rtl:font-bold [direction:ltr] lg:text-[48px] lg:leading-14"
                           />
                           <p className="pt-3 text-[14px] leading-5 text-slate-500">
                             <span className="font-medium text-brandblue-500">
