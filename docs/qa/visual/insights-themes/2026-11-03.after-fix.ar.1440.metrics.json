@@ -1,0 +1,36 @@
+{
+  "phase": "after-fix",
+  "locale": "ar",
+  "rMin": 0.8,
+  "region": {
+    "x": 338,
+    "y": 0,
+    "width": 744.5454711914062,
+    "height": 410
+  },
+  "sectionHeight": 410,
+  "measured": {
+    "pixels": 85294,
+    "r0": 0.9082174900204295,
+    "best": {
+      "r": 0.9082174900204295,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  "cross17": {
+    "pixels": 390,
+    "r0": 0.9961369005658551,
+    "best": {
+      "r": 0.9961369005658551,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  "controls": {
+    "hidden": 0,
+    "mirrored": 0.194
+  },
+  "frameMismatch": 0.13375090777051563,
+  "patternBoxMismatch": 0.060494352594532654
+}

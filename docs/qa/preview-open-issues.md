@@ -29,6 +29,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-024](#pqa-024--home--partners--description-reuses-the-industries-copy) | Home | Partners — description reuses the Industries copy | Low | PARTIALLY RESOLVED — English done; Arabic pending approved translation |
 | [PQA-025](#pqa-025--home--industries--arabic-heading-typography-decisions) | Home / Industries (AR) | Arabic heading line-height and weights | Low | IMPLEMENTED (provisional) — Awaiting Designer decision |
 | [PQA-026](#pqa-026--case-studies--designer-fix-8-follow-ups) | Case Studies | Designer Fix #8 — design decisions and counter screen-reader gap | Low | IMPLEMENTED — Awaiting Designer decisions |
+| [PQA-027](#pqa-027--insights--designer-fix-9-follow-ups) | Insights | Designer Fix #9 — pattern restored; site-wide items open | Low | IMPLEMENTED — Awaiting review |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -397,6 +398,18 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [x] Weights, colours, radius and band layers verified in the browser (EN and AR, 1440/768/390px) and covered by `tests/e2e/case-studies/designer-fixes.spec.ts`.
   - [ ] Designer decisions above recorded.
   - [ ] Decision on the counter screen-reader fix.
+
+### PQA-027 — Insights — Designer Fix #9 follow-ups
+
+- **Page:** Insights (`components/sections/insights/themes.tsx`). Figma 406:4761 (Content themes 406:4792); review `docs/qa/designer-reviews/Infoline-08-Insights-Page.pdf` (2026-11-03).
+- **Priority:** Low
+- **Status:** IMPLEMENTED — Awaiting review
+- **Description:** The one page-specific finding (Content themes background pattern missing) is fixed with the original Figma export of BG-pattern 406:4793 (grid + four crosses), byte-identical in `public/assets/insights/bg-pattern.svg`, at Figma's size and position behind the content. Evidence and checks: `docs/qa/visual/insights-themes/README.md`, `tests/visual/insights-themes.spec.ts`. The review's site-wide items also apply here and are **not** fixed on Insights: Avenir fallback (PQA-020); type weights, radii and secondary/brand-blue shades one step off (fixed on Case Studies only, PQA-026); the closing band (`components/sections/insights/cta.tsx`) is a static image, not the shared video backdrop (`useAmbientVideo`, PQA-026 item 6).
+- **Open Designer decisions** (not implemented; not confirmed requirements):
+  1. Below 1440 (no Figma frame) the pattern keeps its Figma size and offset and is trimmed by the viewport; at 390 three of the four crosses fall under the cards or off-screen. Confirm, or supply a mobile placement.
+- **Acceptance criteria:**
+  - [x] Pattern verified in the browser (EN and AR, 1440/768/390px) against the cached Figma export and frame.
+  - [ ] Site-wide items closed centrally (PQA-020, PQA-026).
 
 ### PQA-021 — Unknown localized routes return HTTP 200 (soft 404)
 

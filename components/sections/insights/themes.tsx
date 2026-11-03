@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Cpu, Rocket, Users, Zap, type LucideIcon } from "lucide-react";
 import { Eyebrow } from "@/components/sections/home-1/shared";
@@ -18,7 +19,22 @@ export default function Themes() {
   const items = t.raw("themes.items") as Theme[];
 
   return (
-    <section className="pt-6 pb-12">
+    // `isolate` keeps the pattern's negative z-index inside this section.
+    <section className="relative isolate pt-6 pb-12">
+      {/* Figma BG-pattern (406:4793): faint grid + four crosses, the original
+          export. Fixed Figma size at every width, 338px from the left of the
+          1440 frame (9.7px left of centre), 18px above the section; behind
+          the content, never mirrored in RTL. The page's overflow-x-clip trims
+          it on narrow screens. `max-w-[none]`, not `max-w-none`: the latter
+          resolves to the project's --spacing-none (0) in Tailwind v4. */}
+      <Image
+        src="/assets/insights/bg-pattern.svg"
+        alt=""
+        aria-hidden
+        width={744.545}
+        height={520}
+        className="pointer-events-none absolute -top-[18px] left-[calc(50%-382px)] -z-10 h-[520px] w-[744.545px] max-w-[none] select-none"
+      />
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10 xl:px-20">
         <Stagger as="div" stagger={0.12} amount={0.2}>
           <StaggerItem direction="start" className="mb-10 flex flex-col items-center text-center">

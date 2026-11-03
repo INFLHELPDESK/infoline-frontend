@@ -1,0 +1,22 @@
+{
+  "$comment": "Partial agent transcription of get_design_context for 406:4792 and 406:4793 (2026-11-03): only the values the spec uses. The section root is `relative size-full` with no overflow clip, so the pattern's overhang (18px above, 43px below the 459px frame) is not clipped by the frame.",
+  "406:4792": { "layout": "relative size-full", "clipsContent": false },
+  "406:4793": {
+    "name": "BG-pattern",
+    "layout": "absolute h-[520px] left-[338px] top-[-18px] w-[744.545px]",
+    "layerOrder": "first child: painted below the eyebrow, heading and card row",
+    "asset": "single SVG export of the whole group (asset 31f6b.svg): Vector 406:4794 + Groups 16-19 (crosses)",
+    "img": "alt=\"\", absolute inset-0 size-full",
+    "opacity": "none on the node; the SVG carries its own opacities (crosses 0.3/0.2/0.5/0.2)"
+  },
+  "crosses": {
+    "406:4795": { "name": "Group 16", "svgOpacity": 0.3 },
+    "406:4798": { "name": "Group 17", "svgOpacity": 0.2 },
+    "406:4801": { "name": "Group 19", "svgOpacity": 0.5 },
+    "406:4804": { "name": "Group 18", "svgOpacity": 0.2 }
+  },
+  "opaqueContent": {
+    "406:4807": "Eyebrow: bg surface/base/layer-1 (#fff)",
+    "406:4810,406:4818,406:4826,406:4834": "cards: bg surface/slate/subtlest (#f6f8f9)"
+  }
+}

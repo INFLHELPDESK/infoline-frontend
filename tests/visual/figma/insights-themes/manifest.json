@@ -1,0 +1,75 @@
+{
+  "$comment": "Figma references for the Insights Content Themes section. Fetched from the Figma MCP and never regenerated from the browser. Tests refuse to run on a hash mismatch. To refresh: re-fetch, replace the file, update the hash (figma-visual-qa refs.mjs hash) and fetchedAt, and say so in the commit.",
+  "section": "insights-themes",
+  "component": "components/sections/insights/themes.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:4761 Insights (section at y=858)",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-4792"
+  },
+  "fetchedAt": "2026-11-03",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157), account seat: View, plan tier: starter",
+  "references": [
+    {
+      "kind": "screenshot",
+      "file": "406-4792.en.1440.png",
+      "nodeId": "406:4792",
+      "nodeName": "Frame 2147259452 (Content themes)",
+      "tool": "get_screenshot (maxDimension 1440)",
+      "language": "en",
+      "viewport": { "width": 1440, "height": 459 },
+      "scale": 1,
+      "sha256": "a4dfdcfbd35c8adc186bd62babd1f167dd6c288387b211b82a140def601b50f1"
+    },
+    {
+      "kind": "variables",
+      "file": "406-4792.variables.json",
+      "nodeId": "406:4792",
+      "tool": "get_variable_defs",
+      "language": "en",
+      "note": "Reformatted (pretty-printed) from the one-line response; keys and values unchanged.",
+      "sha256": "377deea03e3dfdf8e3ee4ab5ebfc6b94093ef3464d652cec73ef5360c1e93c8c"
+    },
+    {
+      "kind": "geometry",
+      "file": "406-4792.metadata.xml",
+      "nodeId": "406:4792",
+      "tool": "get_metadata (node 406:4792)",
+      "language": "en",
+      "note": "Response body as returned. Children of BG-pattern carry section-relative coordinates in the response (e.g. Vector x=338 equals its parent's x), so the spec reads the cross boxes as section-relative, not nested.",
+      "sha256": "7f9b86b71903052242d0a36c7c43d519ff4d48af6e02ff0de03f8cf479558b7f"
+    },
+    {
+      "kind": "design-context",
+      "file": "406-4792.design-context.extract.json",
+      "nodeId": "406:4792",
+      "tool": "get_design_context on 406:4793 and 406:4792 (skill figma-design-to-code; read-only lookup)",
+      "language": "en",
+      "note": "Partial agent transcription of the text responses (values used by the spec only).",
+      "sha256": "701f3d9f76cb262c56fa32e9f2eba6509c0ee896565820bd64ce96d1a5b5bc53"
+    },
+    {
+      "kind": "asset",
+      "file": "406-4793.bg-pattern.svg",
+      "nodeId": "406:4793",
+      "tool": "get_design_context asset 31f6b.svg (the whole BG-pattern group: grid vector 406:4794 + crosses 406:4795/4798/4801/4804), downloaded with curl unchanged",
+      "language": "en",
+      "note": "public/assets/insights/bg-pattern.svg must stay byte-identical to this file (checked by the spec).",
+      "sha256": "f24f7a78273a418e2034267b16afbd269da665ebdf04da9d0d28666297e1197b"
+    }
+  ],
+  "unavailable": [
+    {
+      "language": "ar",
+      "viewport": { "width": 1440 },
+      "reason": "No Arabic frame for the Insights page; only 406:4761 (EN, 1440) exists on 406:836. AR checks are behaviour checks derived from the EN frame (pattern not mirrored, same position)."
+    },
+    {
+      "language": "en+ar",
+      "viewport": { "width": "390, 768" },
+      "reason": "Every frame on 406:836 is 1440 wide; no tablet/mobile frames. At 768/390 the spec checks the pattern keeps its Figma size and its Figma offset from the section centre (derived), with no overflow."
+    }
+  ]
+}

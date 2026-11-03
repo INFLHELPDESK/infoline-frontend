@@ -13,7 +13,7 @@ import { join } from "node:path";
 type Viewport = { width: number | string; height?: number };
 
 export type ReferenceEntry = {
-  kind: "screenshot" | "variables" | "geometry" | "design-context";
+  kind: "screenshot" | "variables" | "geometry" | "design-context" | "asset";
   file: string;
   nodeId: string;
   language: string;

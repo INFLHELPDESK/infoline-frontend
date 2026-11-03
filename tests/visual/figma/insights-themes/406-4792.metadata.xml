@@ -1,0 +1,57 @@
+<frame id="406:4792" name="Frame 2147259452" x="0" y="858" width="1440" height="459">
+  <frame id="406:4793" name="BG-pattern" x="338" y="-18" width="744.5454711914062" height="520">
+    <vector id="406:4794" name="Vector" x="337.99972718954086" y="-18.000000000007276" width="744.5454711914062" height="520" />
+    <frame id="406:4795" name="Group 16" x="903.9990234375" y="172" width="26" height="30" />
+    <frame id="406:4798" name="Group 17" x="462" y="132" width="26" height="30" />
+    <frame id="406:4801" name="Group 19" x="662.9990234375" y="333" width="26" height="30" />
+    <frame id="406:4804" name="Group 18" x="623" y="51" width="26" height="30" />
+  </frame>
+  <instance id="406:4807" name="Eyebrow" x="628.5" y="24" width="183" height="48" />
+  <text id="406:4808" name="Four territories we write from" x="390" y="96" width="660" height="44" />
+  <frame id="406:4809" name="Frame 2147259499" x="80" y="182" width="1276" height="198">
+    <frame id="406:4810" name="Frame 2147259449" x="0" y="0" width="304" height="198">
+      <frame id="406:4811" name="Frame 2147259446" x="24" y="24" width="256" height="150">
+        <frame id="406:4812" name="Frame 27" x="0" y="0" width="50" height="50">
+          <frame id="406:4813" name="user-group-02" x="11" y="11" width="28" height="28" />
+        </frame>
+        <frame id="406:4815" name="Frame 2147259498" x="0" y="70" width="256" height="80">
+          <text id="406:4816" name="Culture Excellence" x="0" y="0" width="139" height="24" />
+          <text id="406:4817" name="People, service culture, quality and capability" x="0" y="32" width="256" height="48" />
+        </frame>
+      </frame>
+    </frame>
+    <frame id="406:4818" name="Frame 2147259453" x="324" y="0" width="304" height="198">
+      <frame id="406:4819" name="Frame 2147259446" x="24" y="24" width="256" height="150">
+        <frame id="406:4820" name="Frame 27" x="0" y="0" width="50" height="50">
+          <frame id="406:4821" name="energy" x="11" y="11" width="28" height="28" />
+        </frame>
+        <frame id="406:4823" name="Frame 2147259498" x="0" y="70" width="256" height="80">
+          <text id="406:4824" name="Clarity &amp; Speed" x="0" y="0" width="118" height="24" />
+          <text id="406:4825" name="SLA discipline, process improvement and faster resolution" x="0" y="32" width="256" height="48" />
+        </frame>
+      </frame>
+    </frame>
+    <frame id="406:4826" name="Frame 2147259454" x="648" y="0" width="304" height="198">
+      <frame id="406:4827" name="Frame 2147259446" x="24" y="24" width="256" height="150">
+        <frame id="406:4828" name="Frame 27" x="0" y="0" width="50" height="50">
+          <frame id="406:4829" name="artificial-intelligence-04" x="11" y="11" width="28" height="28" />
+        </frame>
+        <frame id="406:4831" name="Frame 2147259498" x="0" y="70" width="256" height="80">
+          <text id="406:4832" name="AI &amp; Digital Acceleration" x="0" y="0" width="186" height="24" />
+          <text id="406:4833" name="Automation, analytics, digital CX and practical AI" x="0" y="32" width="256" height="48" />
+        </frame>
+      </frame>
+    </frame>
+    <frame id="406:4834" name="Frame 2147259455" x="972" y="0" width="304" height="198">
+      <frame id="406:4835" name="Frame 2147259446" x="24" y="24" width="256" height="150">
+        <frame id="406:4836" name="Frame 27" x="0" y="0" width="50" height="50">
+          <frame id="406:4837" name="rocket-01" x="11" y="11" width="28" height="28" />
+        </frame>
+        <frame id="406:4839" name="Frame 2147259498" x="0" y="70" width="256" height="80">
+          <text id="406:4840" name="Value Growth" x="0" y="0" width="102" height="24" />
+          <text id="406:4841" name="Managed services, efficiency and measurable outcomes" x="0" y="32" width="256" height="48" />
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+</frame>

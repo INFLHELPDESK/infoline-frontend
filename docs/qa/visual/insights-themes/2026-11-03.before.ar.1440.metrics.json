@@ -1,0 +1,33 @@
+{
+  "phase": "before",
+  "locale": "ar",
+  "rMin": 0.8,
+  "region": {
+    "x": 338,
+    "y": 0,
+    "width": 744.5454711914062,
+    "height": 410
+  },
+  "sectionHeight": 410,
+  "measured": {
+    "pixels": 85294,
+    "r0": 0,
+    "best": {
+      "r": 0,
+      "dx": -4,
+      "dy": -4
+    }
+  },
+  "cross17": {
+    "pixels": 390,
+    "r0": 0,
+    "best": {
+      "r": 0,
+      "dx": -4,
+      "dy": -4
+    }
+  },
+  "controls": null,
+  "frameMismatch": 0.13376301137739047,
+  "patternBoxMismatch": 0.06052054346046816
+}

@@ -2,3 +2,5 @@
 .husky/pre-commit text eol=lf
 # Figma references are verified by SHA-256 (tests/visual); keep them byte-exact.
 tests/visual/figma/** -text
+# Original Figma exports whose bytes the visual specs check against the cache.
+public/assets/insights/bg-pattern.svg -text
