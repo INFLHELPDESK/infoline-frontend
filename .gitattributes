@@ -1,2 +1,4 @@
 # Husky hooks run under sh; CRLF would break them on Windows checkouts.
 .husky/pre-commit text eol=lf
+# Figma references are verified by SHA-256 (tests/visual); keep them byte-exact.
+tests/visual/figma/** -text

@@ -1,0 +1,65 @@
+{
+  "$comment": "Figma references for the Home Hero. Fetched once from the Figma MCP server and never regenerated from the browser. The visual tests refuse to run if any file's SHA-256 differs from this record. To refresh: fetch again from Figma, replace the files, update the hashes and the date, and say so in the commit.",
+  "section": "home-hero",
+  "component": "components/sections/home-1/hero.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3781 Home-2",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-3782"
+  },
+  "fetchedAt": "2026-11-03",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157), account seat: View, plan tier: starter",
+  "references": [
+    {
+      "kind": "screenshot",
+      "file": "406-3782.en.1440.png",
+      "nodeId": "406:3782",
+      "nodeName": "Hero section",
+      "tool": "get_screenshot (maxDimension 1440, contentsOnly false)",
+      "language": "en",
+      "viewport": { "width": 1440, "height": 794 },
+      "pixelSize": { "width": 1440, "height": 794 },
+      "scale": 1,
+      "sha256": "8d008e352ea32e5fb6dedc2b7a630a689329d07e6053b755ce4d7c37c55172db"
+    },
+    {
+      "kind": "variables",
+      "file": "406-3782.variables.json",
+      "nodeId": "406:3782",
+      "tool": "get_variable_defs",
+      "language": "en",
+      "sha256": "35ceb1ccf16cf8fb74f50806762c36e61f48576be210c8840a07258667e58d5c"
+    },
+    {
+      "kind": "geometry",
+      "file": "406-3782.metadata.xml",
+      "nodeId": "406:3782",
+      "tool": "get_metadata",
+      "language": "en",
+      "sha256": "d5115371f1b931ab06e98ae1c5f8091196813e40f63dd2fd8d55240b566b6331"
+    },
+    {
+      "kind": "design-context",
+      "file": "406-3782.design-context.tsx.txt",
+      "nodeId": "406:3782",
+      "tool": "get_design_context (skill figma-design-to-code; read-only lookup)",
+      "language": "en",
+      "note": "The MCP response text was copied into this file by the agent (the tool returns text, not a file), with a provenance header added. Source for values that are not variables: visible button radius, band gradient stops, unit size, accent, shadow, glow.",
+      "sha256": "9fa2c7043267a5ec71fa47e41e131593b0a76476723eb1700e04af9e2b24d324"
+    }
+  ],
+  "unavailable": [
+    {
+      "language": "ar",
+      "viewport": { "width": 1440 },
+      "reason": "No Arabic frame exists. Checked pages 406:836 (Final design) and 406:10627 (Home page side-by-side): no Arabic-named text nodes, and the only Hero frames there are English. Page 0:1 (OLD Designs) was not searched."
+    },
+    {
+      "language": "en+ar",
+      "viewport": { "width": "390, 768, 1024, 1280" },
+      "reason": "Every frame on the Final design page is 1440 wide (or 1530 for one component). There are no mobile or tablet Hero frames."
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "reference": {
+    "file": "406-3782.en.1440.png",
+    "nodeId": "406:3782",
+    "sha256": "8d008e352ea32e5fb6dedc2b7a630a689329d07e6053b755ce4d7c37c55172db"
+  },
+  "threshold": 0.1,
+  "frame": {
+    "referenceSize": {
+      "width": 1440,
+      "height": 794
+    },
+    "actualSize": {
+      "width": 1440,
+      "height": 760
+    },
+    "mismatchRatio": 0.16394919590643275,
+    "regions": [
+      {
+        "name": "headline",
+        "mismatchRatio": 0.4440662202380952
+      },
+      {
+        "name": "sub-headline",
+        "mismatchRatio": 0.25186650323155785
+      },
+      {
+        "name": "ctas",
+        "mismatchRatio": 0.5897936855267271
+      },
+      {
+        "name": "stats band",
+        "mismatchRatio": 0.13508333333333333
+      }
+    ]
+  },
+  "aligned": [
+    {
+      "name": "headline",
+      "node": "406:3787",
+      "budget": 0.17,
+      "mismatchRatio": 0.08674665178571428
+    },
+    {
+      "name": "sub-headline",
+      "node": "406:3788",
+      "budget": null,
+      "mismatchRatio": 0.1490416759527524
+    },
+    {
+      "name": "primary CTA",
+      "node": "406:3790",
+      "budget": 0.5,
+      "mismatchRatio": 0.13519243313763862
+    },
+    {
+      "name": "secondary CTA",
+      "node": "406:3791",
+      "budget": 0.5,
+      "mismatchRatio": 0.14221364221364222
+    },
+    {
+      "name": "first stat label",
+      "node": "406:3795",
+      "budget": null,
+      "mismatchRatio": 0.06858564321250889
+    }
+  ],
+  "negativeControl": [
+    {
+      "name": "headline",
+      "budget": 0.17,
+      "mismatchRatio": 0.25492931547619047
+    },
+    {
+      "name": "sub-headline",
+      "budget": null,
+      "mismatchRatio": 0.20174949855137062
+    },
+    {
+      "name": "primary CTA",
+      "budget": 0.5,
+      "mismatchRatio": 0.9946183953033269
+    },
+    {
+      "name": "secondary CTA",
+      "budget": 0.5,
+      "mismatchRatio": 0.9914736164736164
+    },
+    {
+      "name": "first stat label",
+      "budget": null,
+      "mismatchRatio": 0.10563255152807392
+    }
+  ],
+  "selfCompare": 0
+}

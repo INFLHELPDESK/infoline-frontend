@@ -1,0 +1,92 @@
+// get_design_context, Figma auWXeXpbLl7wo8NCAirbMU node 406:3782, fetched 2026-11-03.
+// Verbatim reference code returned by the Figma MCP server (React + Tailwind
+// prototype, NOT project code). Asset URLs are temporary and expired after 7 days.
+// Used by tests/visual/home-hero.spec.ts for values that are not Figma variables:
+// visible button radius (Base layer = radius/lg), band gradient stops, "yrs" unit
+// 16/24 Heavy, accent #3ec1f0, primary drop-shadow, glow blur 12px / opacity 0.6.
+const assetPathPrefix = "https://www.figma.com/api/mcp/asset/5d03331e-74c6-4027-a7b4-675d8d6b0870";
+const imgImage15 = `${assetPathPrefix}/aca13.png`;
+const imgEndContent = `${assetPathPrefix}/eb031.svg`;
+
+export default function HeroSection() {
+  return (
+    <div className="bg-[#0d161b] relative size-full" data-node-id="406:3782" data-name="Hero section">
+      <div className="-translate-x-1/2 absolute h-[949px] left-1/2 top-0 w-[1440px]" data-node-id="406:3783" data-name="image 15">
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 overflow-hidden">
+            <img alt="" className="absolute h-[103.78%] left-[-0.03%] max-w-none top-0 w-[100.07%]" src={imgImage15} />
+          </div>
+          <div className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgba(13, 22, 27, 0.6) 0%, rgba(13, 22, 27, 0.6) 100%), linear-gradient(88.38331021271173deg, rgba(13, 22, 27, 0.7) 29.076%, rgba(13, 22, 27, 0) 99.18%)" }} />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute blur-[12px] left-[calc(50%-592px)] opacity-60 rounded-[410px] size-[618px] top-[-218px]" data-node-id="406:3784" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 618 618' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(43.699 0 0 43.699 309 309)'><stop stop-color='rgba(28,151,212,0.3)' offset='0'/><stop stop-color='rgba(28,151,212,0)' offset='0.68'/></radialGradient></defs></svg>\")" }} data-name="div" />
+      <div className="absolute content-stretch flex flex-col items-start left-[82px] top-[188px] w-[768px]" data-node-id="406:3785">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[20px] items-start leading-[0] not-italic relative shrink-0 tracking-[var(--letter-spacing\/tracking-normal,0px)] w-full" data-node-id="406:3786">
+          <div className="flex flex-col font-[family-name:var(--family\/heading,'Avenir:Black')] justify-center min-w-full relative shrink-0 text-[0px] text-white w-[min-content]" data-node-id="406:3787">
+            <p className="font-['Avenir:Black'] text-[56px]">
+              <span className="leading-[70px]">{`Customer operations built and managed in `}</span>
+              <span className="leading-[70px] text-[#3ec1f0]">Oman.</span>
+            </p>
+          </div>
+          <div className="flex flex-col font-[family-name:var(--family\/primary,'Avenir:Roman')] justify-center relative shrink-0 text-[color:var(--content\/base\/inverse-secondary,#cfd8dc)] text-[length:var(--font-size\/text-lg-plus,18px)] w-[641px]" data-node-id="406:3788">
+            <p className="leading-[var(--line-height\/leading-28,28px)]">CX operations, quality, training, workforce management, BI and technology — trusted, managed and delivered from Oman.</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-center flex flex-wrap gap-[0px_16px] items-center left-[81px] top-[439px]" data-node-id="406:3789" data-name="div">
+        <div className="content-stretch flex flex-col items-start relative rounded-[var(--radius\/md,8px)] shrink-0" data-node-id="406:3790" data-name="hero-Button">
+          <div className="bg-[var(--surface\/brand\/default,#1c97d4)] content-stretch drop-shadow-[0px_8px_12px_rgba(28,151,212,0.5)] flex gap-[var(--spacing\/sm,8px)] h-[56px] items-center justify-center px-[var(--spacing\/2xl,24px)] relative rounded-[var(--radius\/lg,12px)] shrink-0 w-full" data-node-id="I406:3790;2013:11965" data-name="Base">
+            <p className="[word-break:break-word] font-[family-name:var(--family\/primary,'Avenir:Medium')] leading-[var(--line-height\/leading-28,28px)] not-italic relative shrink-0 text-[color:var(--content\/base\/inverse,white)] text-[length:var(--font-size\/text-lg-plus,18px)] tracking-[var(--letter-spacing\/tracking-normal,0px)] whitespace-nowrap" data-node-id="I406:3790;2013:11967">
+              Talk to Our Team
+            </p>
+            <div className="relative shrink-0 size-[24px]" data-node-id="I406:3790;2013:11968" data-name="endContent">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEndContent} />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start relative rounded-[var(--radius\/md,8px)] shrink-0" data-node-id="406:3791" data-name="hero-Button">
+          <div className="bg-[var(--surface\/base\/layer-1,white)] border-[length:var(--thickness\/sm,1px)] border-[var(--border\/slate\/subtlest,#cfd8dc)] border-solid content-stretch flex gap-[var(--spacing\/sm,8px)] h-[56px] items-center justify-center px-[var(--spacing\/2xl,24px)] relative rounded-[var(--radius\/lg,12px)] shrink-0 w-full" data-node-id="I406:3791;2013:11970" data-name="Base">
+            <p className="[word-break:break-word] font-[family-name:var(--family\/primary,'Avenir:Medium')] leading-[var(--line-height\/leading-28,28px)] not-italic relative shrink-0 text-[color:var(--content\/base\/secondary,#455a64)] text-[length:var(--font-size\/text-lg-plus,18px)] tracking-[var(--letter-spacing\/tracking-normal,0px)] whitespace-nowrap" data-node-id="I406:3791;2013:11972">
+              Book a CX Workshop
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="[word-break:break-word] absolute backdrop-blur-[8px] bg-gradient-to-t bottom-0 content-stretch flex from-[rgba(4,29,42,0.54)] gap-[20px] items-center left-0 not-italic px-[57px] to-[97.115%] to-[rgba(4,29,42,0)] tracking-[var(--letter-spacing\/tracking-normal,0px)] w-[1440px]" data-node-id="406:3792">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-w-px px-[24px] py-[36px] relative rounded-[16px]" data-node-id="406:3793">
+          <p className="font-[family-name:var(--family\/heading,'Inter:Semi_Bold')] font-[var(--font-weight\/semibold,600)] leading-[0] min-w-full relative shrink-0 text-[0px] text-[color:var(--content\/brand\/emphasis,#157aac)] w-[min-content]" data-node-id="406:3794">
+            <span className="font-['Avenir:Heavy'] leading-[48px] text-[44px] text-white">22</span>
+            <span className="font-['Avenir:Heavy'] leading-[24px] text-[16px] text-white">yrs</span>
+          </p>
+          <p className="font-[family-name:var(--family\/primary,'Avenir:Roman')] leading-[var(--line-height\/leading-28,28px)] relative shrink-0 text-[color:var(--content\/base\/inverse-secondary,#cfd8dc)] text-[length:var(--font-size\/text-lg-plus,18px)] w-[201px]" data-node-id="406:3795">
+            Operating in Oman since 2003
+          </p>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-w-px px-[24px] py-[36px] relative rounded-[16px]" data-node-id="406:3796">
+          <p className="font-[family-name:var(--family\/heading,'Avenir:Heavy')] leading-[var(--line-height\/leading-48,48px)] min-w-full relative shrink-0 text-[color:var(--content\/base\/inverse,white)] text-[length:var(--font-size\/size-5xl,44px)] w-[min-content]" data-node-id="406:3797">
+            68
+          </p>
+          <p className="font-[family-name:var(--family\/primary,'Avenir:Roman')] leading-[var(--line-height\/leading-28,28px)] relative shrink-0 text-[color:var(--content\/base\/inverse-secondary,#cfd8dc)] text-[length:var(--font-size\/text-lg-plus,18px)] w-[160px]" data-node-id="406:3798">
+            Clients across six sectors
+          </p>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-w-px px-[24px] py-[36px] relative rounded-[16px]" data-node-id="406:3799">
+          <p className="font-[family-name:var(--family\/heading,'Avenir:Heavy')] leading-[var(--line-height\/leading-48,48px)] min-w-full relative shrink-0 text-[color:var(--content\/base\/inverse,white)] text-[length:var(--font-size\/size-5xl,44px)] w-[min-content]" data-node-id="406:3800">
+            400+
+          </p>
+          <p className="font-[family-name:var(--family\/primary,'Avenir:Roman')] leading-[var(--line-height\/leading-28,28px)] relative shrink-0 text-[color:var(--content\/base\/inverse-secondary,#cfd8dc)] text-[length:var(--font-size\/text-lg-plus,18px)] w-[202px]" data-node-id="406:3801">
+            omani agents ready to assist you
+          </p>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-w-px px-[24px] py-[36px] relative rounded-[16px]" data-node-id="406:3802">
+          <p className="font-[family-name:var(--family\/heading,'Avenir:Heavy')] leading-[var(--line-height\/leading-48,48px)] min-w-full relative shrink-0 text-[color:var(--content\/base\/inverse,white)] text-[length:var(--font-size\/size-5xl,44px)] w-[min-content]" data-node-id="406:3803">
+            6M+
+          </p>
+          <p className="font-[family-name:var(--family\/primary,'Avenir:Roman')] leading-[var(--line-height\/leading-28,28px)] relative shrink-0 text-[color:var(--content\/base\/inverse-secondary,#cfd8dc)] text-[length:var(--font-size\/text-lg-plus,18px)] w-[187px]" data-node-id="406:3804">
+            Customer transaction a year
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

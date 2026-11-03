@@ -1,0 +1,32 @@
+<frame id="406:3782" name="Hero section" x="0" y="0" width="1440" height="794">
+  <rounded-rectangle id="406:3783" name="image 15" x="0" y="0" width="1440" height="949" />
+  <rounded-rectangle id="406:3784" name="div" x="-181" y="-218" width="618" height="618" />
+  <frame id="406:3785" name="Frame 2147259528" x="82" y="188" width="768" height="216">
+    <frame id="406:3786" name="Frame 2147259527" x="0" y="0" width="768" height="216">
+      <text id="406:3787" name="Customer operations built and managed in Oman." x="0" y="0" width="768" height="140" />
+      <text id="406:3788" name="CX operations, quality, training, workforce management, BI and technology — trusted, managed and delivered from Oman." x="0" y="160" width="641" height="56" />
+    </frame>
+  </frame>
+  <frame id="406:3789" name="div" x="81" y="439" width="457" height="56">
+    <instance id="406:3790" name="hero-Button" x="0" y="0" width="219" height="56" />
+    <instance id="406:3791" name="hero-Button" x="235" y="0" width="222" height="56" />
+  </frame>
+  <frame id="406:3792" name="Frame 2147259332" x="0" y="610" width="1440" height="184">
+    <frame id="406:3793" name="Frame 2147259324" x="57" y="0" width="316.5" height="184">
+      <text id="406:3794" name="22yrs" x="24" y="36" width="268.5" height="48" />
+      <text id="406:3795" name="Operating in Oman since 2003" x="24" y="92" width="201" height="56" />
+    </frame>
+    <frame id="406:3796" name="Frame 2147259328" x="393.5" y="0" width="316.5" height="184">
+      <text id="406:3797" name="68" x="24" y="36" width="268.5" height="48" />
+      <text id="406:3798" name="Clients across six sectors" x="24" y="92" width="160" height="56" />
+    </frame>
+    <frame id="406:3799" name="Frame 2147259325" x="730" y="0" width="316.5" height="184">
+      <text id="406:3800" name="400+" x="24" y="36" width="268.5" height="48" />
+      <text id="406:3801" name="omani agents ready to assist you" x="24" y="92" width="202" height="56" />
+    </frame>
+    <frame id="406:3802" name="Frame 2147259326" x="1066.5" y="0" width="316.5" height="184">
+      <text id="406:3803" name="6M+" x="24" y="36" width="268.5" height="48" />
+      <text id="406:3804" name="Customer transaction a year" x="24" y="92" width="187" height="56" />
+    </frame>
+  </frame>
+</frame>
