@@ -84,10 +84,25 @@ describe("Home › Partners", () => {
     // Pills are fixed-width (165px + 2 x 8px margin), so a group's width is known
     // without layout. A track covers the row while visible width <= (copies - 1) x group.
     const pill = container.querySelector("ul.partners-track li")!;
-    expect(pill.className).toContain("w-[165px]");
-    expect(pill.className).toContain("mx-2");
+    expect(pill.className).toContain("sm:w-[165px]");
+    expect(pill.className).toContain("sm:mx-2");
     const narrowestGroup = Math.min(...[...container.querySelectorAll("ul.partners-track")].map((t) => (t.children.length / MARQUEE_COPIES) * 181));
     expect(narrowestGroup).toBe(1448);
     expect((MARQUEE_COPIES - 1) * narrowestGroup).toBeGreaterThanOrEqual(2560);
+  });
+
+  it("shrinks pills on mobile so 3-4 show at 375px without distorting logos", () => {
+    const { container } = renderPartners("en");
+    const pill = container.querySelector("ul.partners-track li")!;
+    const img = pill.querySelector("img")!;
+    // Mobile base: 100px pill + 2 x 4px margin = 108px, so 375px shows ~3.5 pills.
+    expect(pill.className).toMatch(/(^| )w-\[100px\]/);
+    expect(pill.className).toMatch(/(^| )mx-1( |$)/);
+    expect(375 / 108).toBeGreaterThanOrEqual(3);
+    expect(375 / 108).toBeLessThanOrEqual(4);
+    // Logo keeps object-contain (original aspect ratio) at both sizes.
+    expect(img.className).toContain("object-contain");
+    expect(img.className).toMatch(/(^| )w-\[68px\]/);
+    expect(img.className).toContain("sm:w-[86px]");
   });
 });

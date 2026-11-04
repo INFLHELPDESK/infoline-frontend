@@ -136,10 +136,12 @@ export default function IndustryCards({
                     exit={{ opacity: 0, transition: { duration: 0.12 } }}
                     className="absolute inset-0 flex items-center justify-between gap-3 px-5 lg:flex-col lg:px-0 lg:pt-16 lg:pb-6"
                   >
-                    <span className="line-clamp-1 text-[16px] font-black text-white lg:line-clamp-2 lg:max-h-[260px] lg:rotate-180 lg:text-[20px] lg:leading-6 lg:[writing-mode:vertical-rl]">
+                    {/* Mobile: icon leads the row (Designer: icon on the left);
+                        desktop keeps title on top, icon at the foot. */}
+                    <IconDot src={iconSrc} className="order-first lg:order-last" />
+                    <span className="min-w-0 flex-1 line-clamp-2 text-[16px] leading-5 font-black text-white lg:line-clamp-2 lg:max-h-[260px] lg:flex-none lg:rotate-180 lg:text-[20px] lg:leading-6 lg:[writing-mode:vertical-rl]">
                       {item.title}
                     </span>
-                    <IconDot src={iconSrc} />
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -186,9 +188,9 @@ export default function IndustryCards({
   );
 }
 
-function IconDot({ src }: { src: string | null }) {
+function IconDot({ src, className = "" }: { src: string | null; className?: string }) {
   return (
-    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white shadow-[0_6px_16px_-6px_rgba(0,0,0,0.4)]">
+    <span className={`grid size-10 shrink-0 place-items-center rounded-full bg-white shadow-[0_6px_16px_-6px_rgba(0,0,0,0.4)] ${className}`}>
       {src ? (
         <Image src={src} alt="" width={20} height={20} aria-hidden unoptimized />
       ) : (

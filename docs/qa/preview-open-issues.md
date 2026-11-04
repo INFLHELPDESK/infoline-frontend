@@ -36,6 +36,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-031](#pqa-031--about--leadership--designer-fix-10d-panel-borders) | About | Leadership — Designer Fix #10D panel borders (Finding #4) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-032](#pqa-032--about--company-documents-and-closing-band--designer-fix-10e) | About | Company Documents and Closing Band — Designer Fix #10E (Findings #5, #6) | Medium | Band: IMPLEMENTED (local). Cards: visual only — BLOCKED, awaiting approved PDFs |
 | [PQA-033](#pqa-033--careers--on-page-application-form-removed-vacancy-apply-has-no-destination) | Careers | Application form removed; vacancy Apply has no approved destination | High | IMPLEMENTED (local) — Apply BLOCKED, awaiting PM/content destination |
+| [PQA-034](#pqa-034--home--mobile-industries-icon-alignment-and-partners-pill-size-designer-mobile-review-1-2) | Home | Mobile Industries icon side/title wrap; Partners pill size | Medium | IMPLEMENTED (local) — AR icon side awaiting Designer |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -574,3 +575,27 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Dependency (PM/content):** No approved role-application destination exists (searched vacancy data, routes, CMS config, locales, docs, tracker). The vacancy Apply controls are therefore rendered as disabled buttons (`aria-label` "Apply — <role>"), not links; the broken `/careers?position=…#apply` deep link was removed. Needs an approved destination (route, external ATS or mailto) and whether `?position=` context should be passed. Previous ID collision: this entry was first written as PQA-026 (already Case Studies); renumbered, Case Studies entry untouched.
 - **Tests:** `tests/e2e/careers/page-composition.spec.ts` added. In `tests/e2e/contact/careers-application.spec.ts`, the D-6 test now asserts the unavailable Apply state and the REST `/apply` suite is `skip` until a flow is approved.
 - **Other Designer report 10 findings** (typography weights, Avenir fallback, radii, colours, video fill, hero brightness) are site-wide and tracked elsewhere (e.g. PQA-020); not changed here.
+
+### PQA-034 — Home — mobile Industries icon alignment and Partners pill size (Designer Mobile Review #1, #2)
+
+- **Page:** Home (`/`) — `components/sections/home-1/industry-cards.tsx`, `components/sections/home/partners.tsx`
+- **Priority:** Medium
+- **Status:** IMPLEMENTED (local) — one Designer decision open (Arabic icon side)
+- **Source:** `docs/qa/designer-reviews/Infoline-11-Mobile-Review.pdf`, findings 1 and 2 (reference viewport 375 × 812). Finding 3 (Solutions accordion) is not part of this entry. The PDF could not be rendered here (no PDF rasteriser), so the targets are the written requirements in the task brief; page screenshots in the PDF were not compared pixel-for-pixel.
+- **Root causes:**
+  1. Industries: in the collapsed mobile row the DOM order was title, then icon, so the icon sat on the trailing side while the open card put it on the leading side (the icon jumped sides on expand); the collapsed title was `line-clamp-1`, cutting "Utilities, Energy & Environment".
+  2. Partners: pills were a fixed 165 × 60 px with 8 px side margins (181 px pitch) at every width, so only about 2 fit in 375 px.
+- **Fix:** Industries: below `lg` the collapsed icon is `order-first` and the title is `min-w-0 flex-1 line-clamp-2` (desktop vertical rail unchanged). Partners: mobile base pill 100 × 44 px, `mx-1` (108 px pitch), logo box 68 × 32 px with `object-contain`; `sm:` (≥640 px) restores the previous 165 × 60 / 86 × 44 / `mx-2`.
+- **Measurements (375 px):**
+
+| | Before | After |
+|---|---|---|
+| Collapsed row icon (EN) | trailing (right) | leading (left), same side as the open card |
+| Collapsed title | 1 line, clipped | up to 2 lines, "Utilities, Energy & Environment" fully shown |
+| Partner pill | 165 × 60 px, 181 px pitch | 100 × 44 px, 108 px pitch |
+| Partner logo box | 86 × 44 px | 66 × 32 px (aspect kept, `object-contain`) |
+| Pills fully visible per row | about 2 (375 / 181 = 2.07) | 3 full + a partial fourth (375 / 108 = 3.5) |
+| 768 px / 1440 px pill | 165 × 60 px | 165 × 60 px (unchanged) |
+
+- **Verification:** EN and AR at 375, 390, 768 (and 1440 for the desktop check): no horizontal overflow, no console or page errors, marquee rows cover the whole cycle and wrap seamlessly, opposite directions, hover pause and reduced motion unchanged. Evidence: `docs/qa/visual/mobile-review/after/`. Tests: `tests/unit/components/partners.test.tsx`, `tests/e2e/home/partners-marquee.spec.ts` (pitch is now width-aware), new `tests/e2e/home/industry-cards-mobile.spec.ts`.
+- **Decision needed (Designer):** the brief says "icon on the left". In Arabic the icon follows the logical start (right) in both states, so it is consistent and never jumps. Forcing it to the physical left in AR would need an explicit Designer approval.

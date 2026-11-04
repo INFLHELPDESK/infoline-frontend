@@ -30,7 +30,8 @@ test.describe("Home › Partners marquee", () => {
             const edgeGap = () => {
               const first = track.firstElementChild!.getBoundingClientRect();
               const last = track.lastElementChild!.getBoundingClientRect();
-              return Math.max(0, first.left - 8 - box.left, box.right - (last.right + 8));
+              const m = parseFloat(getComputedStyle(track.firstElementChild!).marginLeft);
+              return Math.max(0, first.left - m - box.left, box.right - (last.right + m));
             };
             const onScreen = () =>
               [...track.children]
@@ -59,7 +60,9 @@ test.describe("Home › Partners marquee", () => {
         expect(result.map((r) => r.maxGap)).toEqual([0, 0]);
         expect(result.map((r) => r.seamless)).toEqual([true, true]);
         // Row one travels left by one group (8 pills), row two right by one group (9 pills).
-        expect(result.map((r) => r.travel)).toEqual([-1448, 1629]);
+        // Pill pitch: 108px below sm (640px), 181px from sm up.
+        const pitch = width < 640 ? 108 : 181;
+        expect(result.map((r) => r.travel)).toEqual([-8 * pitch, 9 * pitch]);
         expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
       });
     }

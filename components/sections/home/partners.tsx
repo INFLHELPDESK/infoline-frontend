@@ -32,7 +32,7 @@ const ROW_TWO: Partner[] = [
 function LogoPill({ name, src, hidden }: Partner & { hidden?: boolean }) {
   return (
     <li
-      className="mx-2 flex h-15 w-[165px] shrink-0 items-center justify-center rounded-full border border-white/40 bg-white/90 px-[22px]"
+      className="mx-1 flex h-11 w-[100px] shrink-0 items-center justify-center rounded-full border border-white/40 bg-white/90 px-4 sm:mx-2 sm:h-15 sm:w-[165px] sm:px-[22px]"
       aria-hidden={hidden || undefined}
     >
       <Image
@@ -42,7 +42,7 @@ function LogoPill({ name, src, hidden }: Partner & { hidden?: boolean }) {
         height={44}
         loading="lazy"
         decoding="async"
-        className="h-11 w-[86px] object-contain opacity-[0.72]"
+        className="h-8 w-[68px] object-contain opacity-[0.72] sm:h-11 sm:w-[86px]"
       />
     </li>
   );
