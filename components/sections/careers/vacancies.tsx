@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { Eyebrow } from "@/components/sections/home-1/shared";
-import { Link } from "@/i18n/navigation";
 import { MaskText, Stagger, StaggerItem, Reveal } from "@/components/ui/motion";
 
 type Role = { title: string; discipline: string; location: string };
@@ -116,15 +115,17 @@ export default function Vacancies() {
                     </span>
                   </div>
 
-                  {/* Apply — deep-links to the on-page application form with the role preselected. */}
+                  {/* Apply — no approved destination yet (PQA-033): rendered as an unavailable control, not a link. */}
                   <div className="sm:text-end">
-                    <Link
-                      href={`/careers?position=${encodeURIComponent(role.title)}#apply`}
-                      className="inline-flex items-center gap-2.5 text-[16px] leading-6 font-medium text-brandblue-500 transition-colors duration-300 hover:text-brandblue-600"
+                    <button
+                      type="button"
+                      disabled
+                      aria-label={`${col("apply")} — ${role.title}`}
+                      className="inline-flex cursor-not-allowed items-center gap-2.5 text-[16px] leading-6 font-medium text-brandblue-500 opacity-60"
                     >
                       {col("apply")}
-                      <ArrowRight className="size-[18px] transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-                    </Link>
+                      <ArrowRight className="size-[18px] rtl:rotate-180" />
+                    </button>
                   </div>
                 </div>
               </Reveal>

@@ -66,19 +66,12 @@ test.describe("careers page", () => {
     await expect(new ContactPage(page).routeCard("service")).toHaveAttribute("aria-pressed", "true");
   });
 
-  // FIXME(Designer fix #12): the on-page #apply form was removed from /careers to match Figma 406:4538.
-  // Vacancy Apply links still target `#apply` until the Designer/PM approve a destination (see docs/qa/preview-open-issues.md).
-  test.fixme("[D-6] vacancy 'Apply' links open the on-page application with the role preselected", async ({
-    page,
-  }) => {
+  test("vacancy Apply actions are unavailable buttons, not broken links (PQA-033)", async ({ page }) => {
     await page.goto("/en/careers");
-    const applyLinks = page.locator('main a[href$="#apply"]');
-    await expect(applyLinks).toHaveCount(roles.length);
-    await expect(page.locator("#apply")).toHaveCount(1);
-
-    await applyLinks.nth(1).click();
-    await expect(page.locator("#apply form")).toBeVisible();
-    await expect(apply(page).field(a.position)).toHaveValue(roles[1].title);
+    await expect(page.locator('main a[href*="#apply"]')).toHaveCount(0);
+    const buttons = page.locator("main li").getByRole("button", { name: /^Apply/ });
+    await expect(buttons).toHaveCount(roles.length);
+    for (let i = 0; i < roles.length; i++) await expect(buttons.nth(i)).toBeDisabled();
   });
 });
 

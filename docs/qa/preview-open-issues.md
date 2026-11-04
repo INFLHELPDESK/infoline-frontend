@@ -35,6 +35,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-030](#pqa-030--about--vision--mission--designer-fix-10c-composition) | About | Vision & Mission — Designer Fix #10C composition (Finding #3) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-031](#pqa-031--about--leadership--designer-fix-10d-panel-borders) | About | Leadership — Designer Fix #10D panel borders (Finding #4) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-032](#pqa-032--about--company-documents-and-closing-band--designer-fix-10e) | About | Company Documents and Closing Band — Designer Fix #10E (Findings #5, #6) | Medium | Band: IMPLEMENTED (local). Cards: visual only — BLOCKED, awaiting approved PDFs |
+| [PQA-033](#pqa-033--careers--on-page-application-form-removed-vacancy-apply-has-no-destination) | Careers | Application form removed; vacancy Apply has no approved destination | High | IMPLEMENTED (local) — Apply BLOCKED, awaiting PM/content destination |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -564,12 +565,12 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [ ] If a real 404 is chosen: unknown localized URLs return HTTP 404 with visible server-rendered content in EN and AR, `noindex` stays, valid pages and redirects are unaffected, and the e2e 404 specs are updated.
   - [ ] Unknown Article and Insights slugs verified against the connected CMS (themed not-found, no 500 for a missing post).
 
-### PQA-026 — Careers — on-page application form removed; vacancy Apply links have no target
+### PQA-033 — Careers — on-page application form removed; vacancy Apply has no destination
 
 - **Page:** Careers (`/careers`) — `app/[locale]/(site)/careers/page.tsx`, `components/sections/careers/vacancies.tsx`
 - **Priority:** High
 - **Status:** IMPLEMENTED (local) — Dependency open: Apply destination needs Designer/PM decision
 - **Description:** Designer report 10 (Figma `406:4538`) has no application form. The `<Apply />` section ("Apply for this role") was removed from the rendered page. The component `components/sections/careers/apply.tsx` is kept, unused. Approved order is now Hero, Capability, Learn, Traits, Vacancies, "Don't see your fit?" closing band.
-- **Dependency:** Each vacancy "Apply" link still points to `/careers?position=<role>#apply`, which no longer resolves to a section, so the click does nothing visible. No replacement flow was introduced (out of scope). Needs an approved destination (route, external ATS or mailto).
-- **Tests:** `tests/e2e/careers/page-composition.spec.ts` added. In `tests/e2e/contact/careers-application.spec.ts`, the D-6 apply-link test is `fixme` and the REST `/apply` suite is `skip` until a flow is approved.
+- **Dependency (PM/content):** No approved role-application destination exists (searched vacancy data, routes, CMS config, locales, docs, tracker). The vacancy Apply controls are therefore rendered as disabled buttons (`aria-label` "Apply — <role>"), not links; the broken `/careers?position=…#apply` deep link was removed. Needs an approved destination (route, external ATS or mailto) and whether `?position=` context should be passed. Previous ID collision: this entry was first written as PQA-026 (already Case Studies); renumbered, Case Studies entry untouched.
+- **Tests:** `tests/e2e/careers/page-composition.spec.ts` added. In `tests/e2e/contact/careers-application.spec.ts`, the D-6 test now asserts the unavailable Apply state and the REST `/apply` suite is `skip` until a flow is approved.
 - **Other Designer report 10 findings** (typography weights, Avenir fallback, radii, colours, video fill, hero brightness) are site-wide and tracked elsewhere (e.g. PQA-020); not changed here.
