@@ -30,8 +30,8 @@ for (const locale of locales) {
 
       const m = s.managedBranch;
       expect(s.catalogue.services).toHaveLength(8);
-      await expect(page.locator(`main a[href="/${locale}${DETAIL}"]`)).toHaveCount(2); // hero index + catalogue rail
-      await page.locator(`#catalogue a[href="/${locale}${DETAIL}"]`).click();
+      await expect(page.locator(`main a[href="/${locale}${DETAIL}"]:visible`)).toHaveCount(2); // hero index + the visible catalogue layout (rail or mobile row)
+      await page.locator(`#catalogue a[href="/${locale}${DETAIL}"]:visible`).click();
       await expect(page).toHaveURL(new RegExp(`${DETAIL}$`));
       await expect(page.getByRole("heading", { level: 1, name: m.title })).toBeVisible();
     });
@@ -55,7 +55,7 @@ for (const locale of locales) {
       await page.goto(`/${locale}/solutions`);
       await waitForHydration(page);
       for (const svc of s.catalogue.services) {
-        await page.locator("#catalogue button", { hasText: svc.title }).click();
+        await page.locator("#catalogue button:visible", { hasText: svc.title }).click();
         await expect(page.locator("#catalogue h2", { hasText: svc.title }).last()).toBeVisible();
       }
     });
