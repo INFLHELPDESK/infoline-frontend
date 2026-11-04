@@ -1,0 +1,25 @@
+{
+  "$comment": "Figma references for the About Leadership panels. Fetched once from the Figma MCP server and never regenerated from the browser. The visual tests refuse to run if any file's SHA-256 differs from this record. To refresh: fetch again from Figma, replace the files, update the hashes and the date, and say so in the commit.",
+  "section": "about-leadership",
+  "component": "components/sections/about/leadership.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3362 About us",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-3681"
+  },
+  "fetchedAt": "2026-11-04",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157)",
+  "references": [
+    { "kind": "screenshot", "file": "406-3681.en.1272.png", "nodeId": "406:3681", "nodeName": "Rectangle 123 (Board of Directors panel)", "tool": "get_screenshot (maxDimension 1272, contentsOnly false)", "language": "en", "viewport": { "width": 1272, "height": 318 }, "sha256": "f5881dc75eb2108f2e97d698353caddf4814664f797a50346569ab148a027a42" },
+    { "kind": "screenshot", "file": "406-3682.en.1094.png", "nodeId": "406:3682", "nodeName": "Rectangle 124 (Executive Leadership panel)", "tool": "get_screenshot (maxDimension 1094, contentsOnly false)", "language": "en", "viewport": { "width": 1094, "height": 652 }, "sha256": "a9f2b75bed2619c6006a14a3163fa5bc70bd06095728d2f64c745a30d2ec53a1" },
+    { "kind": "variables", "file": "406-3681.variables.json", "nodeId": "406:3681", "tool": "get_variable_defs", "language": "en", "sha256": "cdffba12a69ed5fae4d61e4269f8f9f8d529fe0f9bd7e9617d186d0a51ae27a6" },
+    { "kind": "geometry", "file": "406-3681.metadata.xml", "nodeId": "406:3362", "tool": "get_metadata (406:3362), Leadership nodes copied by hand", "language": "en", "note": "Hand-extracted from the About-page metadata response. y is offset by 4491 (the Leadership eyebrow top) so the virtual root sits at the origin; x is unchanged (the About frame is 1440 wide at x=0).", "sha256": "8cbdd5a7b274e0529abc743457cce48df6bd5d32c8766a36b81f68bd400e4529" },
+    { "kind": "design-context", "file": "406-3681.design-context.tsx.txt", "nodeId": "406:3681", "tool": "get_design_context (406:3681 and 406:3682, skill figma-design-to-code)", "language": "en", "note": "Hand-written summary. The border is a 1px dashed #abd7ed stroke, radius 24; the tool does not give the dash pattern, so 12px dash / 12px gap was measured from the two 1:1 Figma renders.", "sha256": "efcff8e857c09c43cfd5023dadc0458b2390d2d7ed393c4c50ad3e4845a5d37a" }
+  ],
+  "unavailable": [
+    { "language": "ar", "viewport": { "width": 1440 }, "reason": "No Arabic About frame in 406:3362. The panels are symmetric about the page centre, so AR is checked as a derived composition (same boxes)." },
+    { "language": "en+ar", "viewport": { "width": "390, 768" }, "reason": "Every frame on the Final design page is 1440 wide; no tablet/mobile About frames." }
+  ]
+}

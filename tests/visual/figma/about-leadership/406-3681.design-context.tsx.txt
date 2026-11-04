@@ -1,0 +1,12 @@
+// get_design_context for 406:3681 (Board of Directors panel) and 406:3682 (Executive Leadership panel), fetched 2026-11-04.
+// Both return the same single element (hand-copied):
+//   <div className="border border-[var(--border/brand/muted,#abd7ed)] border-dashed overflow-clip relative rounded-[24px] size-full" />
+// => 1px dashed stroke, colour token border/brand/muted = #abd7ed, corner radius 24, no fill.
+// The tool can only say "dashed"; the actual dash pattern was MEASURED from the 1:1 Figma renders (get_screenshot of each node):
+//   top/bottom edges: dash 12px, gap 12px (runs 12,12,12…); left/right edges: dash 12-13px, gap 11-12px; period ≈ 24px;
+//   the corner arcs are dashed too (no solid corner). Measured by scanning the edge pixel row/column for ink (R < 230) against the white render background.
+// Panel boxes (About frame 406:3362, 1440 wide), symmetric about the frame centre:
+//   406:3681  x=84   y=4735 w=1272 h=318   (inset 84 each side)
+//   406:3682  x=173  y=5102 w=1094 h=652   (inset 173 each side)
+// Labels 406:3683 (627.5,4717, 185x36) and 406:3685 (622,5084, 196x36) are centred on each panel's top edge.
+// Metadata.xml in this folder offsets y by 4491 (the Leadership eyebrow top, 406:3725); x is unchanged.

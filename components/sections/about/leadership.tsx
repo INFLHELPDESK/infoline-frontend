@@ -31,16 +31,35 @@ function PersonCard({
   );
 }
 
-/** Dashed container with a label straddling the top border, like a "boxed section" tag. */
+/**
+ * Dashed container with a label straddling the top border, like a "boxed section" tag.
+ * The outline is Figma 406:3681 / 406:3682: a 1px #ABD7ED stroke, radius 24, dash 12 /
+ * gap 12 (measured from the Figma renders). The browser's own `border-dashed` draws
+ * 3px marks and cannot be tuned, so the stroke is an SVG rect inset by half a pixel,
+ * which keeps the old border-box geometry.
+ */
 function DashedSection({
   label,
   children,
+  className = "",
 }: {
   label: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="relative mt-16 rounded-3xl border border-dashed border-[#ABD7ED] px-6 pb-10 pt-8 lg:px-10">
+    <div className={`relative mt-16 rounded-3xl px-6 pb-10 pt-8 lg:px-10 ${className}`}>
+      <svg aria-hidden className="pointer-events-none absolute inset-0 size-full overflow-visible">
+        <rect
+          x={0.5}
+          y={0.5}
+          rx={23.5}
+          fill="none"
+          stroke="#ABD7ED"
+          strokeDasharray="12 12"
+          className="h-[calc(100%-1px)] w-[calc(100%-1px)]"
+        />
+      </svg>
       <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-white px-2 py-2.5 text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-400">
         {label}
       </span>
@@ -79,7 +98,7 @@ export default function Leadership() {
         </div>
 
         {/* Board of Directors */}
-        <DashedSection label={t("leadership.boardLabel")}>
+        <DashedSection label={t("leadership.boardLabel")} className="xl:mx-[44px]">
           <Stagger
             as="div"
             className="grid grid-cols-2 lg:p-7 p-4 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5"
@@ -93,7 +112,7 @@ export default function Leadership() {
         </DashedSection>
 
         {/* Executive Leadership */}
-        <div className="lg:p-20">
+        <div className="lg:p-20 xl:px-[133px]">
           <DashedSection label={t("leadership.execLabel")}>
             <Stagger
               as="div"

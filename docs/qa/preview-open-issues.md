@@ -33,6 +33,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-028](#pqa-028--about--hero--designer-fix-10a-layer-conformity) | About | Hero — Designer Fix #10A layer conformity (Finding #1) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-029](#pqa-029--about--built-on-trust--designer-fix-10b-background-rings) | About | Built on Trust — Designer Fix #10B background rings (Finding #2) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-030](#pqa-030--about--vision--mission--designer-fix-10c-composition) | About | Vision & Mission — Designer Fix #10C composition (Finding #3) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
+| [PQA-031](#pqa-031--about--leadership--designer-fix-10d-panel-borders) | About | Leadership — Designer Fix #10D panel borders (Finding #4) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -484,6 +485,29 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [x] Heading 36/44, three lines at 1440; accent rule 11×129.
   - [x] Pattern, capsule, cut-out photo, crosses and gradient as separate original layers in the Figma order.
   - [x] Pattern overflows the right edge; no horizontal scroll at any width.
+  - [ ] Verified on a preview deployment.
+  - [ ] Designer decisions above recorded.
+
+### PQA-031 — About / Leadership — Designer Fix #10D panel borders
+
+- **Page:** About (`/about`) Leadership — `components/sections/about/leadership.tsx` (`DashedSection`, shared by both panels). Figma Board of Directors panel 406:3681 (x 84, 1272×318) and Executive Leadership panel 406:3682 (x 173, 1094×652), labels 406:3683 / 406:3685; designer report `docs/qa/designer-reviews/Infoline-09-About-Page.pdf`, Finding #4. Headings, portraits, names and roles are unchanged.
+- **Priority:** Low
+- **Status:** IMPLEMENTED (local) — Awaiting review, preview deploy and Designer decisions
+- **Description:** Confirmed root causes (baseline 1440×1080 build: 24 failing checks):
+  1. **Dashes:** the panels used the browser's `border-dashed` on a 1px border, which draws 3–4px marks with 1–2px gaps (255 dashes along the Board panel's bottom edge; Figma has 50). Figma's stroke is 1px `#ABD7ED`, radius 24, with a dash of about 12px and a gap of about 12px (measured from the 1:1 Figma renders, period 24; the tool only reports "dashed"; the designer report's 12/11 is within a pixel of this).
+  2. **Widths and insets:** the Board panel filled the container (1360 wide, x 40) and the Executive panel sat 80px inside it (1200 wide, x 120). Figma: 1272 at x 84 and 1094 at x 173, symmetric about the page centre.
+  The radius (24), colour and 1px width already matched.
+- **Corrections:** the outline is now a scoped SVG `rect` (inset half a pixel, `rx` 23.5, `stroke-dasharray` 12 12), inside the existing `DashedSection`, so the border-box geometry, label and padding are unchanged and no global style or dependency was touched. The Board panel gets `xl:mx-[44px]` and the Executive wrapper `xl:px-[133px]` (replacing the 80px side padding from 1280px up; vertical padding unchanged).
+- **Validation (EN and AR, 1440/768/390):** `tests/visual/about-leadership.spec.ts`: 24 → 0 failures. At 1440: widths 1272 / 1094, insets 84 / 173 on both sides, radius 24, colour `#abd7ed`, 1px, labels centred on the top edges. Dash pattern, same scan on the Figma render and on the build (fixed before measuring: medians within ±1px): bottom edge dash 12 → 13, gap 12 → 11; left edge dash 13 → 12, gap 12 → 12; dashes along the bottom edge 50 → 49 (Board) and 43 → 42 (Executive). The corner arcs are dashed in both (zoomed crops in the evidence folder); the dash phase differs by a few pixels. All ten portraits stay inside their panels at every width; no overflow or console errors. Evidence: `docs/qa/about-leadership/{before,after}`.
+- **Pre-existing, unrelated:** `tests/e2e/about/who-we-are.spec.ts` fails 6/6 on the original code (see PQA-028). The intermittent `about/cta.spec.ts` sub-pixel offset (see PQA-030) did not occur in this workstream's last run.
+- **Open Designer decisions:**
+  1. Below 1440 there is no Figma frame. The Figma insets apply from 1280px up; from 768 to 1279 the panels keep their previous widths and insets (the box change was limited to widths where Figma's 1440 layout can be scaled with confidence; narrowing the Executive panel further at 1024 was not tested), so the border changes there but not the box. Confirm, or supply tablet and mobile frames.
+  2. The dash phase (where the pattern starts on the path) is not specified; the SVG starts at the top edge after the top-left corner. Its start differs from Figma by a few pixels. Not gated.
+  3. Portrait placement inside the panels is outside this finding: Board portrait 1 is centred at x 256 against Figma's card centre 262.5 (the panel padding is not Figma's). Vertical spacing between and around the panels was not compared. Not changed.
+- **Acceptance criteria:**
+  - [x] Panels 1272 / 1094 wide at x 84 / 173 at 1440, symmetric.
+  - [x] 1px `#ABD7ED` outline, radius 24, long separated dashes (12 / 12) instead of 3px marks, continuous around the corners.
+  - [x] Portraits, names, roles and labels unchanged; no overflow or clipping at 1440, 768 and 390 (EN and AR).
   - [ ] Verified on a preview deployment.
   - [ ] Designer decisions above recorded.
 

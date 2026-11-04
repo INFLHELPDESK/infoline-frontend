@@ -1,0 +1,12 @@
+<frame id="leadership" name="Leadership (About frame y minus 4491; x unchanged)" x="0" y="0" width="1440" height="1290">
+  <instance id="406:3725" name="Eyebrow" x="623" y="0" width="194" height="48" />
+  <text id="406:3556" name="Leadership" x="253" y="72" width="934" height="44" />
+  <text id="406:3557" name="description" x="444" y="140" width="551" height="48" />
+  <frame id="406:3683" name="Board label" x="627.5" y="226" width="185" height="36" />
+  <rounded-rectangle id="406:3681" name="Rectangle 123 (Board of Directors panel)" x="84" y="244" width="1272" height="318" />
+  <frame id="406:3578" name="Board portraits row" x="158" y="293" width="1125" height="220.7744140625" />
+  <frame id="406:3685" name="Executive label" x="622" y="593" width="196" height="36" />
+  <rounded-rectangle id="406:3682" name="Rectangle 124 (Executive Leadership panel)" x="173" y="611" width="1094" height="652" />
+  <frame id="406:3670" name="CEO portrait" x="616" y="660" width="209" height="220.7744140625" />
+  <frame id="406:3629" name="Executive portraits row" x="272" y="960" width="896" height="220.7744140625" />
+</frame>
