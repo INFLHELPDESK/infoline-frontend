@@ -1,0 +1,27 @@
+// get_design_context output for 406:3444 (About / Hero section), fetched 2026-11-04. Transcribed by hand from the tool response (asset URLs omitted).
+// Key facts: Video-BG 406:3445 1453x817 @(-6,-115): overlay rgba(13,22,27,0.9) mix-blend-color-burn, NO other fill/gradient.
+// Glow 406:3446: 618px, blur 12px, top -103, radial gradient rgba(28,151,212,0.3) -> rgba(28,151,212,0) at 0.68.
+// Skyline 406:3454: 1440x1013 @(1,37), mask 1447.5x692.5 at (-10,86) relative -> abs (-9,123); hero frame 755 high so mask bottom (815.5) is cut by the section edge.
+// Hero background #0d161b.
+const assetPathPrefix = "<expired>";
+export default function HeroSection() {
+  return (
+    <div className="bg-[#0d161b] relative size-full" data-node-id="406:3444" data-name="Hero section">
+      <div className="-translate-x-1/2 absolute h-[817px] left-[calc(50%+0.5px)] top-[-115px] w-[1453px]" data-node-id="406:3445" data-name="Video-BG">
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 object-cover" />
+          <div className="absolute bg-[rgba(13,22,27,0.9)] inset-0 mix-blend-color-burn" />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute blur-[12px] left-1/2 rounded-[410px] size-[618px] top-[-103px]" data-node-id="406:3446" /* backgroundImage: radialGradient r=10 matrix(43.699 0 0 43.699 309 309): rgba(28,151,212,0.3) @0 -> rgba(28,151,212,0) @0.68 */ data-name="Glow" />
+      <div className="absolute h-[755px] left-0 right-0 top-0" data-node-id="406:3447" data-name="Content">
+        {/* h1 top-[229px] centre, 808 wide, 48/56 Black; sub top-[317px] centre, 641 wide, 16/24 #cfd8dc; eyebrow top 139, 13/16 Medium, tracking 1.5, #74c0e7 */}
+      </div>
+      <div className="absolute contents left-[-9px] top-[123px]" data-node-id="406:3452" data-name="PNG-parallax">
+        <div className="absolute h-[1013px] left-px mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-10px_86px] mask-size-[1447.5px_692.5px] top-[37px] w-[1440px]" data-node-id="406:3454" data-name="image 6">
+          {/* img object-cover size-full (png 1024x721) */}
+        </div>
+      </div>
+    </div>
+  );
+}

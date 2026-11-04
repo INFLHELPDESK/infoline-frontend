@@ -1,0 +1,26 @@
+{
+  "$comment": "Figma references for the About Hero. Fetched once from the Figma MCP server and never regenerated from the browser. The visual tests refuse to run if any file's SHA-256 differs from this record. To refresh: fetch again from Figma, replace the files, update the hashes and the date, and say so in the commit.",
+  "section": "about-hero",
+  "component": "components/sections/about/hero.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3362 About us",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-3444"
+  },
+  "fetchedAt": "2026-11-04",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157)",
+  "references": [
+    { "kind": "screenshot", "file": "406-3444.en.1440.png", "nodeId": "406:3444", "nodeName": "Hero section", "tool": "get_screenshot (maxDimension 1440, contentsOnly false)", "language": "en", "viewport": { "width": 1440, "height": 755 }, "sha256": "b9b6a62a59fce0ebc058c2d29a20dac1ac01b17c4c664a97813d09a280c6995e" },
+    { "kind": "variables", "file": "406-3444.variables.json", "nodeId": "406:3444", "tool": "get_variable_defs", "language": "en", "sha256": "beb8d3c0ffa0d94b28db5ec42001abab7e399865bf6b2fa1338b333018c139a7" },
+    { "kind": "geometry", "file": "406-3444.metadata.xml", "nodeId": "406:3444", "tool": "get_metadata (406:3362), Hero subtree copied by hand", "language": "en", "note": "Hand-extracted from the About-page metadata response; ids/boxes re-checked against it.", "sha256": "fcf9b59564d14231d0ef545dc7a494677dc5b3286074128229115ef768c1ad16" },
+    { "kind": "design-context", "file": "406-3444.design-context.tsx.txt", "nodeId": "406:3444", "tool": "get_design_context (skill figma-design-to-code)", "language": "en", "note": "Transcribed by hand with a provenance header; source for overlay, glow, mask values.", "sha256": "208bc49cac4786256c3de03761b512caec317bfa2b2c66b7dbe4be0c5524e70a" },
+    { "kind": "asset", "file": "406-3454.skyline.png", "nodeId": "406:3454", "tool": "get_design_context asset download (image 6 source)", "language": "en", "note": "1024x721 RGBA photo cutout. Used only to establish identity vs the repo asset; not shipped.", "sha256": "88673a03cd397d9ecdab47fabf77485b4af3d9dffe1fb34919d73d3c4cd371ce" }
+  ],
+  "unavailable": [
+    { "language": "ar", "viewport": { "width": 1440 }, "reason": "No Arabic About Hero frame in node 406:3362; AR is checked as a mirrored/derived composition only." },
+    { "language": "en+ar", "viewport": { "width": "390, 768" }, "reason": "Every frame on the Final design page is 1440 wide; no tablet/mobile About frames." },
+    { "language": "video", "viewport": { "width": 1440 }, "reason": "Figma's Video-BG video fill is not exported by get_design_context/get_screenshot as a separate asset; the source video cannot be verified from Figma. The repo's flying-birds.webm is retained (birds are visible in the Figma render)." }
+  ]
+}

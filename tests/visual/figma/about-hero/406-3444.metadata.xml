@@ -1,0 +1,15 @@
+<frame id="406:3444" name="Hero section" x="0" y="0" width="1440" height="755">
+  <rounded-rectangle id="406:3445" name="Video-BG" x="-6" y="-115" width="1453" height="817" />
+  <rounded-rectangle id="406:3446" name="Glow" x="411" y="-103" width="618" height="618" />
+  <frame id="406:3447" name="Content" x="0" y="0" width="1440" height="755">
+    <text id="406:3448" name="Running customer operations from Oman since 2004" x="316" y="173" width="808" height="112" />
+    <text id="406:3449" name="Part of Omantel Group, based at Knowledge Oasis Muscat" x="400" y="305" width="641" height="24" />
+    <frame id="406:3450" name="Frame 30" x="656" y="139" width="129" height="16">
+      <text id="406:3451" name="About Infoline" x="0" y="0" width="129" height="16" />
+    </frame>
+  </frame>
+  <frame id="406:3452" name="PNG-parallax" x="-9" y="123" width="1447.5" height="692.5">
+    <vector id="406:3453" name="Vector 13" x="-9" y="123" width="1447.5" height="692.5" />
+    <rounded-rectangle id="406:3454" name="image 6" x="1" y="37" width="1440" height="1013" />
+  </frame>
+</frame>

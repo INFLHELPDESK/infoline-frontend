@@ -4,7 +4,7 @@ Tracker for issues found during Frontend Preview QA that are not yet resolved.
 Resolved issues are removed from this file (history lives in Git).
 
 **Branch:** `feature/home-2-redesign`
-**Last updated:** 2026-11-03
+**Last updated:** 2026-11-04
 
 ## Summary
 
@@ -30,6 +30,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-025](#pqa-025--home--industries--arabic-heading-typography-decisions) | Home / Industries (AR) | Arabic heading line-height and weights | Low | IMPLEMENTED (provisional) — Awaiting Designer decision |
 | [PQA-026](#pqa-026--case-studies--designer-fix-8-follow-ups) | Case Studies | Designer Fix #8 — design decisions and counter screen-reader gap | Low | IMPLEMENTED — Awaiting Designer decisions |
 | [PQA-027](#pqa-027--insights--designer-fix-9-follow-ups) | Insights | Designer Fix #9 — pattern restored; site-wide items open | Low | IMPLEMENTED — Awaiting review |
+| [PQA-028](#pqa-028--about--hero--designer-fix-10a-layer-conformity) | About | Hero — Designer Fix #10A layer conformity (Finding #1) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -301,7 +302,7 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   1. Ambiguous insets left at 40px: Case Studies hero (Figma x=44) and the Industries "Six sector groups" header (Figma x=44, with the sector cards at 80). Confirm whether they should align with the 80px content. **Update (final browser audit, 2026-11-03):** Designer Fix #7 (`1e2d277`) moved the Industries "Six sector groups" header (eyebrow, heading and description) to the 80px container together with the cards, so it now sits 36px inside Figma 406:3194 (x=44). Still open: confirm 80px (aligned with the cards) or revert to Figma's 44px.
   2. 1024–1279px inset (no Figma frame at that width): keep 40px or follow the header (48px)?
   3. Featured proof: the image is cropped (empty left margin first, then the screen edge), not mirrored in Arabic. Confirm the crop, or supply an Arabic or mirrored artwork.
-  4. About and Solutions hero videos still autoplay under reduced motion; apply the Industries treatment to them?
+  4. About and Solutions hero videos still autoplay under reduced motion; apply the Industries treatment to them? **Update (2026-11-04):** the About hero now follows reduced motion (PQA-028); Solutions is still open.
   5. Deferred from 6C, not implemented: hero eyebrow and stat colour/weight (Figma #74C0E7 Medium / Heavy 32; site #4FC3F7 Regular / 700) on all three pages (F4; resolved on Case Studies by Designer Fix #8, see PQA-026); Industries section titles 40/44 vs Figma 36/44 (F6, see PQA-020 item 3); Industries hero copy sits 34px higher than Figma (F7). **Final browser audit (2026-11-03, Preview `opya12z39`):** F4 eyebrow is resolved on Industries by Designer Fix #7 (#74C0E7, weight 500). F6 still applies to the Differ, FAQ and Clients titles (40/44, 600); the Clients title "Named across the full catalogue." renders 614px wide where Figma 406:3334 renders about 557px (≈36px, heavier) — inferred from rendered widths, Figma type values not read directly. F7 re-measured against Figma 406:3167: eyebrow y 144 vs 178 and h1 y 180 vs 214 (34px higher); h1→description gap 24px vs 5px; hero CTA 188×56 with a 16px "Talk to an expert" label vs Figma 218×56 "Talk to an Expert". The sector list matches within 5px.
   6. Card stack exit (final browser audit, 2026-11-03): when the stack releases, the six stacked card shadows combine into a grey halo wider than the top card (Preview `opya12z39`, 1440px, EN and AR). Existing behaviour, not a regression; confirm it is acceptable or whether only the top card should cast the shadow.
 - **Acceptance criteria:**
@@ -410,6 +411,30 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Acceptance criteria:**
   - [x] Pattern verified in the browser (EN and AR, 1440/768/390px) against the cached Figma export and frame.
   - [ ] Site-wide items closed centrally (PQA-020, PQA-026).
+
+### PQA-028 — About / Hero — Designer Fix #10A layer conformity
+
+- **Page:** About (`/about`) Hero — `components/sections/about/hero.tsx`, `hero-video.tsx`. Figma 406:3444 (child of About 406:3362); designer report `docs/qa/designer-reviews/Infoline-09-About-Page.pdf`, Finding #1. Findings #2–6 are not part of this item. Hero copy and eyebrow are unchanged (confirmed correct by the Designer).
+- **Priority:** Low
+- **Status:** IMPLEMENTED (local) — Awaiting review, preview deploy and Designer decisions
+- **Description:** Confirmed root causes (baseline 1440×1080 build: 30 failing checks):
+  1. **Video:** rendered at 50% opacity, Normal blend. Figma 406:3445: full opacity under one `rgba(13,22,27,0.9)` overlay in Color Burn.
+  2. **Extra gradient:** a full-Hero `from-ink via-ink/55 to-ink` vertical gradient that Figma does not have.
+  3. **Glow:** 1100px, `rgba(15,94,133,0.42)`, no blur, top −35%. Figma 406:3446: 618px, `rgba(28,151,212,0.3)` fading to 0 at 68% of a 437px radius, 12px blur, top −103, centred.
+  4. **Skyline:** the old SVG carried an outdated mask (731px tall, 5.6% taller than Figma's 692.5) and was contained in a `min(50.5vw,82vh)` box, so its visible area was roughly half or less of Figma's (36–51% across baseline runs, the video frame varies) and ended in a visible cut. Figma 406:3452/3454: mask box −9,123 1447.5×692.5, extending 60.5px below the Hero.
+- **Corrections:** `hero-video.tsx` (new) reuses `useAmbientVideo`: lazy metadata load, plays only in view, pauses off-screen and in a hidden tab, never plays under reduced motion or data saving (first frame stays as the still); one CSS `mix-blend-mode: color-burn` overlay (the same operator as Figma). Glow, skyline box and mask now use the exact Figma geometry, scaled with the Hero width (`--u`). Assets: the original 2880×2027 RGBA skyline PNG extracted byte-for-byte from the old `hero-muscat.svg` (`hero-muscat.png`) and Figma's own mask path (`hero-mask.svg`). Parallax drift reduced to ±4% (Figma names the layer "PNG-parallax"). Reduced motion also resolves the About half of PQA-023 item 4.
+- **Validation (EN and AR, 1440/768/390):** `tests/visual/about-hero.spec.ts` (Gate A + Gate B + motion): 30 → 0 failures. Hero pixel mismatch 48.55% → 1.43%, skyline band 73.09% → 0.03% (advisory evidence). Skyline ink box and visible area within the predefined constraints. No overflow, console or hydration errors. Evidence: `docs/qa/about-hero/{before,after}`.
+- **Pre-existing, unrelated:** `tests/e2e/about/who-we-are.spec.ts` fails 6/6 (photo-slice offset) on the original code too (verified by rebuilding without these changes). Not touched.
+- **Open Designer decisions:**
+  1. The footage inside Video-BG is not exported by Figma's tools, so it cannot be verified; the existing `flying-birds.webm` is kept (its birds are visible in the Figma render). Color Burn with `#0d161b` at 90% leaves only ~10% of the video visible, so the result depends on the frame shown; the build's mismatch against the Figma frame is therefore advisory only, not a pixel-parity claim. Confirm the intended clip and frame.
+  2. No Figma frame at 768 or 390 and no Arabic Hero frame. Below 1440 the skyline scales with the width down to a 0.55 floor (not from Figma) so it does not shrink to a sliver; confirm, or supply mobile/tablet frames.
+  3. Figma's own mask ends 1.5px short of the right edge at 1440; reproduced as designed.
+- **Dead assets left in place (not part of this scope):** `public/assets/about/hero-muscat.svg` (7.8 MB), `hero-muscat.jpg` (opaque black sky, unsuitable), `mask-shape.svg` and the `.hero-mask` rule in `globals.css` are no longer referenced by the Hero.
+- **Acceptance criteria:**
+  - [x] Video, overlay, glow and skyline match Figma 406:3445/3446/3452/3454 (Gate A, ±2px).
+  - [x] Reduced motion, offscreen pause and resume verified in the browser.
+  - [ ] Verified on a preview deployment.
+  - [ ] Designer decisions above recorded.
 
 ### PQA-021 — Unknown localized routes return HTTP 200 (soft 404)
 

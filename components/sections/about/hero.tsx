@@ -6,58 +6,55 @@ import {
   MaskText,
   Parallax,
 } from "@/components/ui/motion";
+import HeroVideo from "./hero-video";
 
 export default function Hero() {
   const t = useTranslations("AboutPage");
 
   return (
-    <section className="relative isolate flex min-h-[640px] overflow-hidden bg-ink lg:min-h-[755px]">
-      {/* Layer 1 — flying-birds video fills the sky. Muted/looped/playsInline
-          so it autoplays everywhere; aria-hidden because it is decorative. */}
-      <video
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-2 h-full w-full object-cover opacity-50"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-      >
-        <source src="/assets/flying-birds.webm" type="video/webm" />
-      </video>
+    <section
+      // Figma 406:3444 "Hero section": 1440×755, #0d161b, clips its children.
+      // `--u` is one Figma px at this width (1440 → 1px); the skyline scales
+      // with the Hero so it keeps the design's proportions. The 0.55px floor
+      // is not from Figma (no tablet/mobile frames): it only keeps the skyline
+      // from shrinking to a sliver on phones.
+      style={{ "--u": "max(calc(100cqw / 1440), 0.55px)" } as React.CSSProperties}
+      className="relative isolate flex min-h-[640px] overflow-hidden bg-ink [container-type:inline-size] lg:min-h-[755px]"
+    >
+      {/* Layer 1+2 — Video-BG 406:3445: footage at 100% under ONE rgba(13,22,27,.9)
+          Color Burn overlay (no other gradient). See hero-video.tsx. */}
+      <HeroVideo />
 
-      {/* Layer 2 — melt the video into the ink at the edges and darken behind
-          the copy, so type contrast holds over the moving sky. */}
+      {/* Layer 3 — Glow 406:3446: 618px, blur 12px, top -103, centred;
+          radial rgba(28,151,212,.3) → 0 at 68% of the 437px gradient radius. */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-2 bg-gradient-to-b from-ink via-ink/55 to-ink"
+        data-testid="about-hero-glow"
+        className="pointer-events-none absolute left-1/2 top-[-103px] size-[618px] -translate-x-1/2 rounded-full blur-[12px] bg-[radial-gradient(circle_at_50%_50%,rgba(28,151,212,0.3)_0px,rgba(28,151,212,0)_297.2px)]"
       />
 
-      {/* Layer 3 — the Hero-section.svg centred radial glow. */}
+      {/* Layer 4 — PNG-parallax 406:3452: the skyline photo (image 6, 406:3454,
+          1440×1013 at +10,-86 inside the mask box) clipped by the Figma mask
+          (Vector 13, 1447.5×692.5 at -9,123). The box hangs 60.5px below the
+          Hero (815.5 − 755) so the section edge, not the mask, is the only cut. */}
       <div
         aria-hidden
-        className="absolute left-1/2 top-[-35%] -z-2 size-[120vmin] max-h-[1100px] max-w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(15,94,133,0.42)_0%,rgba(15,94,133,0.16)_38%,transparent_68%)]"
-      />
-
-      {/* Layer 4 — photo clipped to the Figma torn-skyline mask shape */}
-      <div
-        aria-hidden
-        className="hero-mask pointer-events-none absolute inset-x-0 bottom-0 -z-1 h-[max(320px,min(50.5vw,82vh))]"
+        data-testid="about-hero-skyline"
+        className="pointer-events-none absolute left-[calc(50%-729*var(--u))] bottom-[calc(-60.5*var(--u))] h-[calc(692.5*var(--u))] w-[calc(1447.5*var(--u))] [mask-image:url('/assets/about/hero-mask.svg')] [mask-repeat:no-repeat] [mask-size:100%_100%] [-webkit-mask-image:url('/assets/about/hero-mask.svg')] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:100%_100%]"
       >
-        {/* Drifting layer — oversized so parallax never exposes an edge.
-            The washes above are intentionally disabled (design uses the
-            unfiltered photo). */}
+        {/* Drifts a few % on scroll (desktop, motion allowed). The photo is
+            taller than the mask box on both sides, so no edge is exposed. */}
         <Parallax
-          className="absolute inset-x-0 lg:-inset-y-[50%] -inset-y-[5%]"
-          speed={0.15}
+          className="absolute left-[calc(10*var(--u))] top-[calc(-86*var(--u))] h-[calc(1013*var(--u))] w-[calc(1440*var(--u))]"
+          speed={0.04}
         >
           <Image
-            src="/assets/about/hero-muscat.svg"
+            src="/assets/about/hero-muscat.png"
             alt=""
             fill
             priority
             sizes="100vw"
-            className="object-contain object-bottom"
+            className="object-cover"
           />
         </Parallax>
       </div>
