@@ -61,6 +61,7 @@ Copy this block for new issues.
 - **Priority:** Medium
 - **Status:** BLOCKED — Awaiting decision
 - **Description:** The "Join Our Talent Network" button is rendered disabled. No approved destination or integration exists, so it is deliberately not linked.
+- **Designer fix #12 status (2026-11-04):** Figma 406:4538 shows this as a white, active secondary button beside "View Careers". Visual state: rendered white but still dimmed/disabled (not changed). Real destination availability: none found in routes, CMS data, locale config, docs or earlier QA. Functional status: unavailable (disabled button, no link, no `#`). Required approval: Designer/PM/content to name the destination (and whether the button should look active before it works).
 - **Dependency:** Destination confirmation from the designer/client.
 - **Acceptance criteria:**
   - [ ] Destination (route, form or external link) is approved in writing.
@@ -562,3 +563,13 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [ ] Decision recorded: keep the themed soft 404, or move to a real HTTP 404 (for example via `globalNotFound`) with an approved page design.
   - [ ] If a real 404 is chosen: unknown localized URLs return HTTP 404 with visible server-rendered content in EN and AR, `noindex` stays, valid pages and redirects are unaffected, and the e2e 404 specs are updated.
   - [ ] Unknown Article and Insights slugs verified against the connected CMS (themed not-found, no 500 for a missing post).
+
+### PQA-026 — Careers — on-page application form removed; vacancy Apply links have no target
+
+- **Page:** Careers (`/careers`) — `app/[locale]/(site)/careers/page.tsx`, `components/sections/careers/vacancies.tsx`
+- **Priority:** High
+- **Status:** IMPLEMENTED (local) — Dependency open: Apply destination needs Designer/PM decision
+- **Description:** Designer report 10 (Figma `406:4538`) has no application form. The `<Apply />` section ("Apply for this role") was removed from the rendered page. The component `components/sections/careers/apply.tsx` is kept, unused. Approved order is now Hero, Capability, Learn, Traits, Vacancies, "Don't see your fit?" closing band.
+- **Dependency:** Each vacancy "Apply" link still points to `/careers?position=<role>#apply`, which no longer resolves to a section, so the click does nothing visible. No replacement flow was introduced (out of scope). Needs an approved destination (route, external ATS or mailto).
+- **Tests:** `tests/e2e/careers/page-composition.spec.ts` added. In `tests/e2e/contact/careers-application.spec.ts`, the D-6 apply-link test is `fixme` and the REST `/apply` suite is `skip` until a flow is approved.
+- **Other Designer report 10 findings** (typography weights, Avenir fallback, radii, colours, video fill, hero brightness) are site-wide and tracked elsewhere (e.g. PQA-020); not changed here.

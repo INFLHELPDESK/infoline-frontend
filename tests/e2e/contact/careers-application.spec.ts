@@ -66,7 +66,9 @@ test.describe("careers page", () => {
     await expect(new ContactPage(page).routeCard("service")).toHaveAttribute("aria-pressed", "true");
   });
 
-  test("[D-6] vacancy 'Apply' links open the on-page application with the role preselected", async ({
+  // FIXME(Designer fix #12): the on-page #apply form was removed from /careers to match Figma 406:4538.
+  // Vacancy Apply links still target `#apply` until the Designer/PM approve a destination (see docs/qa/preview-open-issues.md).
+  test.fixme("[D-6] vacancy 'Apply' links open the on-page application with the role preselected", async ({
     page,
   }) => {
     await page.goto("/en/careers");
@@ -103,7 +105,8 @@ test.describe("contact form — careers route", () => {
   });
 });
 
-test.describe("careers application — REST /apply", () => {
+// Skipped: the on-page application form is not rendered (Figma 406:4538 has none). Component kept in components/sections/careers/apply.tsx.
+test.describe.skip("careers application — REST /apply", () => {
   test("[D-2] sends a multipart application with the role as position and the CV", async ({
     page,
   }) => {
