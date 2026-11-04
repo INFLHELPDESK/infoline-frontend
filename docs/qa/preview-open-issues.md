@@ -31,6 +31,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-026](#pqa-026--case-studies--designer-fix-8-follow-ups) | Case Studies | Designer Fix #8 — design decisions and counter screen-reader gap | Low | IMPLEMENTED — Awaiting Designer decisions |
 | [PQA-027](#pqa-027--insights--designer-fix-9-follow-ups) | Insights | Designer Fix #9 — pattern restored; site-wide items open | Low | IMPLEMENTED — Awaiting review |
 | [PQA-028](#pqa-028--about--hero--designer-fix-10a-layer-conformity) | About | Hero — Designer Fix #10A layer conformity (Finding #1) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
+| [PQA-029](#pqa-029--about--built-on-trust--designer-fix-10b-background-rings) | About | Built on Trust — Designer Fix #10B background rings (Finding #2) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -433,6 +434,29 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Acceptance criteria:**
   - [x] Video, overlay, glow and skyline match Figma 406:3445/3446/3452/3454 (Gate A, ±2px).
   - [x] Reduced motion, offscreen pause and resume verified in the browser.
+  - [ ] Verified on a preview deployment.
+  - [ ] Designer decisions above recorded.
+
+### PQA-029 — About / Built on Trust — Designer Fix #10B background rings
+
+- **Page:** About (`/about`) Built on Trust — `components/sections/about/accountability.tsx`. Figma 406:3363 (rings 406:3368/3369/3370, dots 406:3380–3428, eyebrow 406:3365); designer report `docs/qa/designer-reviews/Infoline-09-About-Page.pdf`, Finding #2. Heading, eyebrow, paragraphs, pills and animations are unchanged.
+- **Priority:** Low
+- **Status:** IMPLEMENTED (local) — Awaiting review, preview deploy and Designer decisions
+- **Description:** Confirmed root causes (baseline 1440×1080 build: 17 failing checks; ring/Figma correlation r −0.008):
+  1. **Distortion:** the ring image was `fill` + `h-full w-full` with no object-fit, so its box took the section's shape (1440×628 EN, 1440×580 AR) instead of the asset's 1439×715; the rings were squashed vertically and drawn at 0.81–0.88 of Figma scale.
+  2. **Cropping:** the asset `acc-bg.svg` is the Figma export clipped to a 715px frame (`clip-path` + background rect), so the outer rings were cut inside the file before the section clipped them again.
+  3. **Centre:** the ring centre followed the section height (EN 250px below the eyebrow top, AR 226px) instead of Figma's fixed 233px (933 − 700).
+- **Corrections:** new `public/assets/about/acc-rings.svg`, derived from the original Figma export (same circles, opacities and nine blurred dots; clip and background removed; viewBox centred on the rings). The component draws it at its own aspect ratio (height auto), 1 SVG unit = 1px at 1440, centred, with its centre 233 below the eyebrow top (never above 45% of the section, so it follows the content on tall narrow layouts). Still behind the content, `pointer-events: none`, empty alt and `aria-hidden`; the section's `overflow-hidden` is the only clip. Not mirrored in Arabic (Figma specifies none). Note: this project's `max-w-none` compiles to `max-width: var(--spacing-none)` (= 0), so the rule uses `max-w-[none]`; the global token was not touched.
+- **Validation (EN and AR, 1440/768/390):** `tests/visual/about-trust.spec.ts`: 17 → 0 failures. At 1440: radii 407.5/565.5/691.5, centre eyebrow top + 233, nine dots at their Figma offsets (worst 0px) and on the ring paths. Gate B: r 0.839 at shift (−1,0) against the Figma crop (fixed in advance: r ≥ 0.8, shift ≤ 2px), controls hidden 0 / moved 40px 0.003 (both below 0.8). No overflow or console errors. Evidence: `docs/qa/about-trust/{before,after}`. The section's own height is unchanged.
+- **Pre-existing, unrelated:** `tests/e2e/about/who-we-are.spec.ts` fails 6/6 on the original code (see PQA-028). `about/cta.spec.ts` (AR desktop, motion allowed) failed once in a parallel run on a mid-stagger 11px offset and passed 3/3 when rerun alone: timing flake in another section, not touched.
+- **Open Designer decisions:**
+  1. Figma lets the rings continue about 395px above this section, behind the "Who we are" photos with a fade, and gives the section 802px (108px above the eyebrow, 264px below the pills). The site section is 628px in English (64 above, 128 below) and clips at its own edges, so the inner ring's top (111px above the section) and bottom (about 77px below it) are cut. Showing complete circles needs either Figma's spacing or letting the rings overlap "Who we are", which means touching that section's layering. Not done: spacing is outside this finding.
+  2. No Figma frame at 768/390: the ring field scales with the width down to a 0.55 floor (not from Figma). At 390 it is shorter than the section (761px vs 860px), so about 90px at the bottom has no rings. Confirm, or supply mobile/tablet frames.
+- **Dead asset left in place:** `public/assets/about/acc-bg.svg` is no longer referenced.
+- **Acceptance criteria:**
+  - [x] Three concentric, circular rings, Figma scale, centred on the content (1440, EN and AR).
+  - [x] Dots on the ring paths at their Figma positions.
+  - [x] Behind the content, pointer-transparent, hidden from assistive technology, no overflow.
   - [ ] Verified on a preview deployment.
   - [ ] Designer decisions above recorded.
 

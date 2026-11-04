@@ -1,0 +1,24 @@
+{
+  "$comment": "Figma references for the About Built on Trust background rings. Fetched once from the Figma MCP server and never regenerated from the browser. The visual tests refuse to run if any file's SHA-256 differs from this record. To refresh: fetch again from Figma, replace the files, update the hashes and the date, and say so in the commit.",
+  "section": "about-trust",
+  "component": "components/sections/about/accountability.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3362 About us",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-3363"
+  },
+  "fetchedAt": "2026-11-04",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157)",
+  "references": [
+    { "kind": "screenshot", "file": "406-3363.en.1440.png", "nodeId": "406:3363", "nodeName": "Frame 2147259346 (Built on trust + Who we are overlay)", "tool": "get_screenshot (maxDimension 1439, contentsOnly false)", "language": "en", "viewport": { "width": 1439, "height": 1394 }, "sha256": "c0c9c179d1994a15959b95fc3f4821211a97201cc6d3d9d630dbc0e90832d640" },
+    { "kind": "variables", "file": "406-3363.variables.json", "nodeId": "406:3363", "tool": "get_variable_defs", "language": "en", "sha256": "c14e1018a274b9d56b494c003171ba54a944100bdfff3207e99545f903d3f777" },
+    { "kind": "geometry", "file": "406-3363.metadata.xml", "nodeId": "406:3363", "tool": "get_metadata (406:3362), Built on trust nodes copied by hand", "language": "en", "note": "Hand-extracted from the About-page metadata response (children are frame-relative); dot positions cross-checked against get_design_context bottom/left values.", "sha256": "5ce5cdffc2f23f2cb736b17f88183fde45be4adcdb2d7f846d0e2ed1d9d9907e" },
+    { "kind": "design-context", "file": "406-3363.design-context.tsx.txt", "nodeId": "406:3363", "tool": "get_design_context (skill figma-design-to-code)", "language": "en", "note": "Hand-written summary of ring/dot/eyebrow geometry from the tool response, with a provenance header.", "sha256": "e244ca5122c20e95c36bf237599d59f76299a64a65f4f799f261ab8872cc2628" }
+  ],
+  "unavailable": [
+    { "language": "ar", "viewport": { "width": 1440 }, "reason": "No Arabic About frame in 406:3362. AR is checked as a derived composition: Figma has no mirroring for this decoration, so it must be identical to EN (rings are symmetric about the centre; dots are not)." },
+    { "language": "en+ar", "viewport": { "width": "390, 768" }, "reason": "Every frame on the Final design page is 1440 wide; no tablet/mobile About frames." }
+  ]
+}
