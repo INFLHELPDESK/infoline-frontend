@@ -1,0 +1,10 @@
+// get_design_context for 406:3687 (Company Documents cards) and 406:3713 (closing band), fetched 2026-11-04. Hand-written facts.
+// Card (406:3688 / 406:3700): bg #ffffff, 1px solid #e0e0e0 (border/neutral/muted), radius 16 (radius/xl), padding 24,
+//   drop-shadow 0 6 6 rgba(52,55,70,.06), flex row, justify-between, items-center, 549 x 92.
+//   Left: 40px PDF icon, gap 12, title Avenir Heavy 14/20 #263238, meta Avenir Roman 13/20 #263238 (gap 4).
+//   Right: action "Download →" Avenir Medium 13/16, letter-spacing 1.5px (tracking-wider), uppercase, #1c97d4 (content/brand/default);
+//   frame 110 x 16 at x=415 (right edge 525 = 549 - 24), vertically centred.
+//   The arrow is a text glyph in the label ("Download →").
+//   Sizes in Figma: "PDF · 1.0 MB" (English), "PDF · 1.6 MB" (Arabic). The site shows 5.2 / 5.4 MB; no PDF exists to verify either.
+// Closing band 406:3713 (section#cta): 1278 x 242 at About x=81 y=6165, radius 20 (radius/2xl), fill #263238 (surface/base/strong),
+//   overflow clip, video 406:3714 (multiply), Back-Light 406:3715. It has NO surrounding slate strip: it sits on the page ground.

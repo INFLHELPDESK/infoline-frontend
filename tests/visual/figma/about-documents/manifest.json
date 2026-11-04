@@ -1,0 +1,25 @@
+{
+  "$comment": "Figma references for the About Company Documents cards and the closing band. Fetched once from the Figma MCP server and never regenerated from the browser. The visual tests refuse to run if any file's SHA-256 differs from this record. To refresh: fetch again from Figma, replace the files, update the hashes and the date, and say so in the commit.",
+  "section": "about-documents",
+  "component": "components/sections/about/documents.tsx, components/sections/about/cta.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3362 About us",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-3687"
+  },
+  "fetchedAt": "2026-11-04",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157)",
+  "references": [
+    { "kind": "screenshot", "file": "406-3687.en.573.png", "nodeId": "406:3687", "nodeName": "Company profile cards (573x224 including the 6px drop shadow)", "tool": "get_screenshot (maxDimension 573, contentsOnly false)", "language": "en", "viewport": { "width": 573, "height": 224 }, "sha256": "944a3844473a3de38613705dd5e58032e76a299140f8185bafbf7a288a089d91" },
+    { "kind": "variables", "file": "406-3687.variables.json", "nodeId": "406:3687", "tool": "get_variable_defs", "language": "en", "sha256": "02ef6f89600e68ad004e757832e0a3353180880025dcaae1e9f274c5924fa45a" },
+    { "kind": "geometry", "file": "406-3687.metadata.xml", "nodeId": "406:3687", "tool": "get_metadata (406:3362), card nodes copied by hand", "language": "en", "note": "Hand-extracted from the About-page metadata response and flattened to group-relative boxes (the cards group is at About x=715 y=5866). The closing band 406:3713 is listed as a second root (its About position is x=81 y=6165).", "sha256": "4825a58914e0d8c038065c8461b957045f2ae8e76b03ab7eca652f4432f5b374" },
+    { "kind": "design-context", "file": "406-3687.design-context.tsx.txt", "nodeId": "406:3687", "tool": "get_design_context (406:3687 and 406:3713, skill figma-design-to-code)", "language": "en", "note": "Hand-written summary with a provenance header: card spec, action typography and colour, band container.", "sha256": "4e1bbff5d2b3923386191e272d71d84aa332f14b17e713a5411030cc9b656395" }
+  ],
+  "unavailable": [
+    { "language": "ar", "viewport": { "width": 1440 }, "reason": "No Arabic About frame in 406:3362. AR is checked as a derived composition (mirrored action side, rotated arrow, letter-spacing reset by the site's Arabic rule)." },
+    { "language": "en+ar", "viewport": { "width": "390, 768" }, "reason": "Every frame on the Final design page is 1440 wide; no tablet/mobile About frames." },
+    { "language": "pdf", "viewport": { "width": 0 }, "reason": "The approved Company Profile PDFs (English and Arabic) do not exist in the repository, public assets, CMS fixtures or project docs. Figma's sizes (1.0 MB / 1.6 MB) cannot be verified, and the site's 5.2 / 5.4 MB cannot either." }
+  ]
+}

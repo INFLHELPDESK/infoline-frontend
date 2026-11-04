@@ -12,7 +12,7 @@ export default function Cta() {
   const t = useTranslations("AboutPage");
 
   return (
-    <section className="bg-[#f2f5f7] py-16 lg:py-20">
+    <section className="py-16 lg:py-20">
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="div"

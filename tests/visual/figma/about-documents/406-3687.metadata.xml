@@ -1,0 +1,13 @@
+<frame id="406:3687" name="Frame 2147259466 (company profile cards; About x=715 y=5866)" x="0" y="0" width="549" height="200">
+  <frame id="406:3688" name="Component 16 (English card)" x="0" y="0" width="549" height="92" />
+  <instance id="406:3694" name="File type icon" x="24" y="26" width="40" height="40" />
+  <text id="406:3696" name="Company Profile — English" x="76" y="24" width="178" height="20" />
+  <text id="406:3697" name="PDF · 1.0 MB" x="76" y="48" width="78" height="20" />
+  <frame id="406:3698" name="Download action" x="415" y="38" width="110" height="16" />
+  <frame id="406:3700" name="Component 17 (Arabic card)" x="0" y="108" width="549" height="92" />
+  <instance id="406:3706" name="File type icon" x="24" y="134" width="40" height="40" />
+  <text id="406:3708" name="Company Profile — Arabic" x="76" y="132" width="173" height="20" />
+  <text id="406:3709" name="PDF · 1.6 MB" x="76" y="156" width="78" height="20" />
+  <frame id="406:3710" name="Download action" x="415" y="146" width="110" height="16" />
+</frame>
+<frame id="406:3713" name="section#cta (closing band; About x=81 y=6165, a separate root here)" x="0" y="0" width="1278" height="242" />

@@ -34,6 +34,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-029](#pqa-029--about--built-on-trust--designer-fix-10b-background-rings) | About | Built on Trust — Designer Fix #10B background rings (Finding #2) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-030](#pqa-030--about--vision--mission--designer-fix-10c-composition) | About | Vision & Mission — Designer Fix #10C composition (Finding #3) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-031](#pqa-031--about--leadership--designer-fix-10d-panel-borders) | About | Leadership — Designer Fix #10D panel borders (Finding #4) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
+| [PQA-032](#pqa-032--about--company-documents-and-closing-band--designer-fix-10e) | About | Company Documents and Closing Band — Designer Fix #10E (Findings #5, #6) | Medium | Band: IMPLEMENTED (local). Cards: visual only — BLOCKED, awaiting approved PDFs |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -508,6 +509,39 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [x] Panels 1272 / 1094 wide at x 84 / 173 at 1440, symmetric.
   - [x] 1px `#ABD7ED` outline, radius 24, long separated dashes (12 / 12) instead of 3px marks, continuous around the corners.
   - [x] Portraits, names, roles and labels unchanged; no overflow or clipping at 1440, 768 and 390 (EN and AR).
+  - [ ] Verified on a preview deployment.
+  - [ ] Designer decisions above recorded.
+
+### PQA-032 — About / Company Documents and Closing Band — Designer Fix #10E
+
+- **Page:** About (`/about`) — `components/sections/about/documents.tsx` (Finding #5, Figma cards 406:3687: 406:3688 / 406:3700, action 406:3698 / 406:3710) and `components/sections/about/cta.tsx` (Finding #6, Figma band 406:3713); designer report `docs/qa/designer-reviews/Infoline-09-About-Page.pdf`.
+- **Priority:** Medium (the missing PDFs block a working download; shares its dependency with PQA-014)
+- **Status:** Finding #6 IMPLEMENTED (local). Finding #5: **visual implementation complete; functional download NOT verified and BLOCKED** — no approved PDF exists.
+- **Root causes (baseline 1440×1080 build: 17 failing checks):**
+  1. **#5 — no action:** `documents.tsx` rendered the DOWNLOAD action only when `href !== "#"`, and both items in `locales/en.json` and `locales/ar.json` are `"#"`, so neither card showed an action.
+  2. **#6 — slate strip:** the closing-band `<section>` carried `bg-[#f2f5f7]` (rgb 242, 245, 247). Figma places the band directly on the page ground (white).
+- **Document availability (searched before implementing):** no `.pdf` is tracked or present in `public/` (the only PDFs in the repo are the designer review reports); no URL is in the locale data (`href: "#"`), `lib/`, `.env.example`, the CMS stub (`profileEnFile` / `profileArFile` are `null` in `tests/support/cms-stub/fixtures.mjs`) or `docs/backend`. `COMPANY_PROFILE` / `getCompanyProfile()` exist for the CMS (`aboutSettings.companyProfile.profileEnFile.node.mediaItemUrl`, `fileSize`) but the About page does not use them, and the production CMS must not be contacted from tests. The file sizes are unverified in both directions: Figma shows 1.0 MB (EN) and 1.6 MB (AR), the site shows 5.2 / 5.4 MB. Nothing was invented or placeholder-generated.
+- **Corrections:**
+  - Cards: every card now shows the DOWNLOAD label and arrow at the trailing end (Figma: 13/16, Avenir Medium, uppercase, 1.5px tracking, 24px from the edge, vertically centred; the arrow icon rotates in RTL). While `href` is `"#"` the action is a **disabled grey `<button>`** (`text-slate-400`, `cursor-not-allowed`, not focusable, no link or download target, `aria-label` "Download: <title>"), so no card looks or acts like a working download. With a real `href` the whole card becomes a plain `<a href download>` (the i18n `Link` would prefix the locale onto a file path), the action is brand blue (`#1c97d4`) and there is a `focus-visible` outline. Card icon, title, sizes, background, border, radius and layout are unchanged.
+  - Band: `bg-[#f2f5f7]` removed from the section only; the panel, spacing (`py-16 lg:py-20`), buttons and media are untouched. The section is now transparent over the white page, like the Documents section above it. The site-wide video-fill discrepancy was not touched.
+- **Validation (EN and AR, 1440/768/390):** `tests/visual/about-documents.spec.ts`: 17 → 0 failures (179 passes). Both cards 549×92 with a 16px gap, the action 25px (24 + 1px border) from the trailing edge, vertically centred, typography per Figma, honesty checks (disabled button, not focusable, not brand blue, no anchor) pass; the band section is `rgba(0,0,0,0)` over a white ground, both CTA buttons keep `/<locale>/contact` and `/<locale>/solutions`; no overflow, no console errors. `tests/unit/components/about-documents.test.tsx` (3 tests) covers the disabled state in EN and AR and, with a fixture href that exists only in the test, the real-link state (anchor with `download`, brand blue, focus outline). Evidence: `docs/qa/about-documents/{before,after}`.
+- **Not verified:** a real download in the browser (there is no file): link target, MIME type, file size, Arabic/English mapping, and the live brand-blue state on the page.
+- **Pre-existing, unrelated:** `tests/e2e/about/who-we-are.spec.ts` fails 6/6 on the original code (PQA-028). The intermittent `about/cta.spec.ts` offset (PQA-030) did not occur in this workstream's last run.
+- **Content dependency (shared with PQA-014):**
+  1. Approved Company Profile PDFs, English and Arabic, with their real sizes and a stable download URL (a file in `public/` or the CMS `aboutSettings.companyProfile` media fields).
+  2. If the CMS is the source: wire `getCompanyProfile()` into the About page (it is not wired today), and replace the unverified sizes with the real `fileSize`.
+  3. Then set the two `documents.items[].href` values (or the CMS data) and re-run `about-documents.spec.ts` plus a manual download check in EN and AR.
+- **Open Designer decisions:**
+  1. The unavailable state is grey, not Figma's brand blue, deliberately, so it cannot be mistaken for a working link. Confirm, or provide a "coming soon" treatment.
+  2. Card radius: the cards use `rounded-2xl` (20px here); Figma `radius/xl` is 16px. Kept (the existing radius was to be preserved).
+  3. Band panel: Figma is 1278 wide at x=81 with radius 20; the site is 1360 wide at x=40 (the 40px container inset) with radius 20 and a 240px panel (Figma 242). The designer confirmed the band layout is correct, so unchanged.
+  4. Title weight (Figma Avenir Heavy 900, site bold 700) follows the site-wide mapping (PQA-020).
+- **Acceptance criteria:**
+  - [x] Both cards show the DOWNLOAD label and arrow at the trailing end, per Figma (visual).
+  - [x] Unavailable cards cannot be mistaken for working downloads (disabled, grey, no link).
+  - [x] Closing band sits on the white page ground; layout, buttons and media unchanged.
+  - [ ] Approved PDFs supplied; each card downloads the right localised file (verified in EN and AR).
+  - [ ] Real file sizes confirmed.
   - [ ] Verified on a preview deployment.
   - [ ] Designer decisions above recorded.
 

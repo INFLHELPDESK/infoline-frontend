@@ -1,14 +1,18 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { Link } from "@/i18n/navigation";
 import { Eyebrow } from "@/components/sections/home-1/shared";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 
 type Doc = { title: string; meta: string; cta: string; href: string };
 
 /**
- * Company documents — download rows for the company profile. The PDFs are not yet
+ * Company documents — download rows for the company profile (Figma 406:3687). The
+ * approved PDFs do not exist yet (PQA-032). Each row always shows the DOWNLOAD action,
+ * but while its href is "#" the action is a disabled, grey button: no link, no download
+ * target, not focusable, so nothing pretends to work. Once a row has a real href the
+ * whole card becomes a download link and the action turns brand blue.
+ * (Original note follows.) The PDFs are not yet
  * wired up: rows whose href is "#" render as inert cards (no dead link, no download
  * prompt) until the files are supplied.
  */
@@ -63,7 +67,7 @@ export default function Documents() {
                     {doc.meta}
                   </span>
                 </span>
-                {available && (
+                {available ? (
                   <span className="inline-flex flex-none items-center gap-1.5 text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-brandblue-500">
                     {doc.cta}
                     <ArrowRight
@@ -71,18 +75,29 @@ export default function Documents() {
                       strokeWidth={1.75}
                     />
                   </span>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    aria-label={`${doc.cta}: ${doc.title}`}
+                    className="inline-flex flex-none cursor-not-allowed items-center gap-1.5 text-[13px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-400"
+                  >
+                    {doc.cta}
+                    <ArrowRight className="size-4 rtl:rotate-180" strokeWidth={1.75} />
+                  </button>
                 )}
               </>
             );
             return (
               <StaggerItem key={doc.title}>
                 {available ? (
-                  <Link
+                  <a
+                    download
                     href={doc.href}
-                    className={`${rowClass} transition-colors hover:border-brandblue-500/50`}
+                    className={`${rowClass} transition-colors hover:border-brandblue-500/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brandblue-500`}
                   >
                     {row}
-                  </Link>
+                  </a>
                 ) : (
                   <div className={rowClass}>{row}</div>
                 )}
