@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Eyebrow } from "@/components/sections/home-1/shared";
 import Icon from "@/components/ui/icon";
 import Button from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { MaskText, Stagger, StaggerItem } from "@/components/ui/motion";
 import { EASE } from "@/components/ui/motion/shared";
 
@@ -36,6 +37,36 @@ export default function Catalogue() {
   const reduce = useReducedMotion();
 
   const [activeId, setActiveId] = useState(services[0].id);
+  // Below `lg` the rail is a stacked accordion: the active row's panel sits
+  // directly under it and may be collapsed. Desktop always keeps one panel open
+  // (`max-lg:hidden` on the panel is the only place this state is applied).
+  const [collapsed, setCollapsed] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const scrollTo = useRef<string | null>(null);
+
+  const select = (id: string) => {
+    if (id === activeId && !isDesktop) {
+      setCollapsed((c) => !c);
+      return;
+    }
+    if (!isDesktop) scrollTo.current = id;
+    setActiveId(id);
+    setCollapsed(false);
+  };
+
+  // After switching rows on mobile the previously open panel collapses above the
+  // new row and can push it off-screen; bring the row back under the header.
+  useEffect(() => {
+    const id = scrollTo.current;
+    scrollTo.current = null;
+    if (!id) return;
+    const row = document.getElementById(`cat-btn-${id}`);
+    if (!row) return;
+    const top = row.getBoundingClientRect().top;
+    if (top < 96 || top > window.innerHeight - 96) {
+      row.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    }
+  }, [activeId, reduce]);
 
   // Sync from hero deep-links (#cat-<id>) on mount and on hashchange.
   useEffect(() => {
@@ -43,7 +74,10 @@ export default function Catalogue() {
       const hash = window.location.hash.replace(/^#/, "");
       if (hash.startsWith("cat-")) {
         const id = hash.slice(4);
-        if (services.some((s) => s.id === id)) setActiveId(id);
+        if (services.some((s) => s.id === id)) {
+          setActiveId(id);
+          setCollapsed(false);
+        }
       }
     };
     apply();
@@ -52,6 +86,7 @@ export default function Catalogue() {
   }, [services]);
 
   const active = services.find((s) => s.id === activeId) ?? services[0];
+  const activeIndex = services.indexOf(active);
 
   // Entrance/exit for the swapping middle column. The states must not depend on
   // `reduce` (the server renders reduce=false); reduced motion makes the
@@ -105,19 +140,24 @@ export default function Catalogue() {
         </div>
 
         {/* Interactive card */}
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-[#cfd8dc] bg-white lg:grid-cols-[260px_1fr]">
-          {/* LEFT RAIL */}
-          <div className="border-b border-[#cfd8dc] lg:border-e lg:border-b-0">
-            <div className="flex overflow-x-auto lg:flex-col lg:overflow-visible">
-              {services.map((s) => {
+        <div className="flex flex-col overflow-hidden rounded-2xl border border-[#cfd8dc] bg-white lg:grid lg:grid-cols-[260px_1fr]">
+          {/* LEFT RAIL — desktop: vertical list. Below lg the wrappers use
+              `display: contents` so rows and the panel become siblings of one
+              flex column, ordered via --o (row i = 2i, its panel = 2i + 1). */}
+          <div className="max-lg:contents lg:border-e">
+            <div className="max-lg:contents lg:flex lg:flex-col">
+              {services.map((s, i) => {
                 const isActive = s.id === activeId;
                 return (
                   <button
                     key={s.id}
                     type="button"
-                    onClick={() => setActiveId(s.id)}
-                    aria-pressed={isActive}
-                    className={`group relative flex shrink-0 flex-col items-start border-s-2 p-4 text-start transition-colors lg:w-full lg:shrink lg:border-b lg:border-b-[#cfd8dc] lg:last:border-b-0 ${
+                    id={`cat-btn-${s.id}`}
+                    onClick={() => select(s.id)}
+                    aria-expanded={isActive && !collapsed}
+                    aria-controls="cat-panel"
+                    style={{ "--o": i * 2 } as React.CSSProperties}
+                    className={`group relative flex w-full scroll-mt-24 shrink-0 flex-col items-start border-s-2 border-b border-b-[#cfd8dc] p-4 pe-12 text-start transition-colors max-lg:[order:var(--o)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brandblue-500 lg:shrink lg:pe-4 lg:last:border-b-0 ${
                       isActive
                         ? "border-brandblue-500"
                         : "border-transparent hover:bg-slate-50"
@@ -147,13 +187,20 @@ export default function Catalogue() {
                     <span className="relative z-10 ps-6 text-[13px] leading-5 text-slate-400">
                       {s.family}
                     </span>
+                    <ChevronDown
+                      aria-hidden
+                      className={`absolute end-4 top-1/2 z-10 size-5 -translate-y-1/2 transition-transform duration-300 motion-reduce:transition-none lg:hidden ${
+                        isActive && !collapsed ? "rotate-180 text-brandblue-500" : "text-slate-400"
+                      }`}
+                    />
                   </button>
                 );
               })}
               {/* 09 — its own detail route rather than an in-card view. */}
               <Link
                 href="/solutions/managed-branch-retail"
-                className="group relative flex shrink-0 flex-col items-start border-s-2 border-transparent p-4 text-start transition-colors hover:bg-slate-50 lg:w-full lg:shrink"
+                style={{ "--o": services.length * 2 } as React.CSSProperties}
+                className="group relative flex w-full shrink-0 flex-col items-start border-s-2 border-transparent p-4 pe-12 text-start transition-colors hover:bg-slate-50 max-lg:[order:var(--o)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brandblue-500 lg:shrink lg:pe-4"
               >
                 <span className="relative z-10 flex items-center gap-2 text-[13px] leading-5 font-medium">
                   <span className="tabular-nums text-slate-400">
@@ -164,12 +211,24 @@ export default function Catalogue() {
                 <span className="relative z-10 ps-6 text-[13px] leading-5 text-slate-400">
                   {managed("family")}
                 </span>
+                <ArrowRight
+                  aria-hidden
+                  className="absolute end-4 top-1/2 z-10 size-5 -translate-y-1/2 text-slate-400 rtl:rotate-180 lg:hidden"
+                />
               </Link>
             </div>
           </div>
 
           {/* MIDDLE — detail copy, changes per service */}
-          <div className="relative flex min-h-110 flex-col gap-10 overflow-hidden p-6 lg:flex-row lg:justify-between lg:gap-12 lg:p-8">
+          <div
+            id="cat-panel"
+            role="region"
+            aria-labelledby={`cat-btn-${active.id}`}
+            style={{ "--o": activeIndex * 2 + 1 } as React.CSSProperties}
+            className={`relative flex flex-col gap-10 overflow-hidden border-b border-[#cfd8dc] p-6 max-lg:[order:var(--o)] lg:min-h-110 lg:flex-row lg:justify-between lg:gap-12 lg:border-b-0 lg:p-8 ${
+              collapsed ? "max-lg:hidden" : ""
+            }`}
+          >
             <Image
               src="/assets/solutions/ellipse-17.svg"
               alt=""
@@ -188,7 +247,7 @@ export default function Catalogue() {
             />
             <AnimatePresence mode="wait">
               <motion.div
-                key={active.id}
+                key={`${active.id}-${collapsed ? "c" : "o"}`}
                 {...detailMotion}
                 className="relative max-w-[622px] flex-1"
               >

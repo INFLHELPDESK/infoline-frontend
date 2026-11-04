@@ -37,6 +37,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-032](#pqa-032--about--company-documents-and-closing-band--designer-fix-10e) | About | Company Documents and Closing Band — Designer Fix #10E (Findings #5, #6) | Medium | Band: IMPLEMENTED (local). Cards: visual only — BLOCKED, awaiting approved PDFs |
 | [PQA-033](#pqa-033--careers--on-page-application-form-removed-vacancy-apply-has-no-destination) | Careers | Application form removed; vacancy Apply has no approved destination | High | IMPLEMENTED (local) — Apply BLOCKED, awaiting PM/content destination |
 | [PQA-034](#pqa-034--home--mobile-industries-icon-alignment-and-partners-pill-size-designer-mobile-review-1-2) | Home | Mobile Industries icon side/title wrap; Partners pill size | Medium | IMPLEMENTED (local) — AR icon side awaiting Designer |
+| [PQA-035](#pqa-035--solutions--mobile-tab-strip-replaced-with-a-stacked-accordion-designer-mobile-review-3) | Solutions | Mobile tab strip replaced by accordion | Medium | IMPLEMENTED (local) |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -599,3 +600,15 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 
 - **Verification:** EN and AR at 375, 390, 768 (and 1440 for the desktop check): no horizontal overflow, no console or page errors, marquee rows cover the whole cycle and wrap seamlessly, opposite directions, hover pause and reduced motion unchanged. Evidence: `docs/qa/visual/mobile-review/after/`. Tests: `tests/unit/components/partners.test.tsx`, `tests/e2e/home/partners-marquee.spec.ts` (pitch is now width-aware), new `tests/e2e/home/industry-cards-mobile.spec.ts`.
 - **Decision needed (Designer):** the brief says "icon on the left". In Arabic the icon follows the logical start (right) in both states, so it is consistent and never jumps. Forcing it to the physical left in AR would need an explicit Designer approval.
+
+### PQA-035 — Solutions — mobile tab strip replaced with a stacked accordion (Designer Mobile Review #3)
+
+- **Page:** Solutions (`/en/solutions`, `/ar/solutions`) — `components/sections/solutions/catalogue.tsx`
+- **Priority:** Medium
+- **Status:** IMPLEMENTED (local) — one a11y trade-off recorded below
+- **Source:** `docs/qa/designer-reviews/Infoline-11-Mobile-Review.pdf`, finding 3. A recommended interaction, not a Figma frame: verified functionally, not as pixel parity (the PDF could not be rendered here).
+- **Previous limitation:** below `lg` the 9 services were a horizontal scrolling strip of buttons (`overflow-x-auto`), so most services were off-screen, and the detail panel sat below the whole strip.
+- **New behaviour (below 1024 px, including 768 px tablet):** all 9 services stack vertically; each row shows number, title, descriptor and a chevron. The first service is open by default. Tapping a row opens its panel directly under it and closes the previous one; tapping the open row closes it. After switching on mobile the row is scrolled back under the header if it left the viewport (instant with reduced motion). Row 09 stays a link to its own route (arrow indicator). Rows are `<button aria-expanded aria-controls="cat-panel">` with a visible focus outline; the panel is `role="region"` labelled by the open row. Desktop (≥1024 px) keeps the 260 px rail and side panel; the open service cannot be collapsed there.
+- **Implementation:** no duplicated data or markup. The same buttons and the single detail panel are reordered below `lg` with `display: contents` wrappers and CSS `order` (row i = 2i, its panel = 2i+1). Content and animation (existing fade/blur swap, instant under reduced motion) are unchanged. `aria-pressed` was replaced by `aria-expanded`.
+- **Verification:** EN and AR at 375, 390, 768, 1440: one column, no horizontal overflow, one row open at a time, panel directly beneath its row, keyboard Enter/Space, reduced motion, RTL chevron on the end side. Evidence: `docs/qa/visual/solutions-mobile/{before,after}/`. Tests: new `tests/e2e/solutions/catalogue-mobile-accordion.spec.ts`; existing `tests/e2e/solutions/solutions.spec.ts` unchanged and passing.
+- **Remaining decision / trade-off:** because the panel is a single element moved visually, its DOM position stays after the last row. Screen-reader and Tab order therefore reach the panel's CTA after the remaining rows, not right after the open row. Fixing it needs duplicated panel markup or a different structure; deferred pending a decision. Also: Designer may want the open row to be non-collapsible (current: tap-to-close).
