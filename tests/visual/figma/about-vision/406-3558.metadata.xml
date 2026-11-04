@@ -1,0 +1,13 @@
+<frame id="406:3558" name="Frame 2147259452" x="0" y="0" width="1440" height="466">
+  <text id="406:3559" name="heading" x="111" y="133" width="611" height="132" />
+  <instance id="406:3560" name="Eyebrow" x="82" y="47" width="183" height="48" />
+  <rounded-rectangle id="406:3562" name="BG-pattern" x="656" y="-91" width="847.636" height="592" />
+  <rounded-rectangle id="406:3564" name="Rectangle 118 (capsule)" x="763.64" y="255.13" width="593.461" height="175.903" />
+  <rounded-rectangle id="406:3565" name="pexels-thirdman-7984483 1 (photo)" x="778.89" y="55.21" width="563.935" height="376.003" />
+  <frame id="406:3566" name="Group 16 (cross)" x="1166.37" y="83.01" width="23.321" height="26.909" />
+  <frame id="406:3569" name="Group 17 (cross)" x="1074.88" y="128.76" width="23.321" height="26.909" />
+  <frame id="406:3572" name="Group 18 (cross)" x="983.39" y="83.01" width="23.321" height="26.909" />
+  <rounded-rectangle id="406:3575" name="Rectangle 119 (capsule gradient)" x="763.64" y="255.13" width="593.461" height="175.903" />
+  <text id="406:3576" name="mission copy" x="82" y="299" width="557" height="120" />
+  <rounded-rectangle id="406:3577" name="Rectangle 120 (accent rule)" x="82" y="133" width="11" height="129" />
+</frame>

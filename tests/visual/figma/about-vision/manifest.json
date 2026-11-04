@@ -1,0 +1,24 @@
+{
+  "$comment": "Figma references for the About Vision & Mission section. Fetched once from the Figma MCP server and never regenerated from the browser. The visual tests refuse to run if any file's SHA-256 differs from this record. To refresh: fetch again from Figma, replace the files, update the hashes and the date, and say so in the commit.",
+  "section": "about-vision",
+  "component": "components/sections/about/vision.tsx",
+  "figma": {
+    "fileKey": "auWXeXpbLl7wo8NCAirbMU",
+    "fileName": "Infoline-Handoff",
+    "page": "406:836 Final design",
+    "parentFrame": "406:3362 About us",
+    "url": "https://www.figma.com/design/auWXeXpbLl7wo8NCAirbMU/Infoline-Handoff?node-id=406-3558"
+  },
+  "fetchedAt": "2026-11-04",
+  "fetchedBy": "Figma MCP (plugin figma 2.2.157)",
+  "references": [
+    { "kind": "screenshot", "file": "406-3558.en.1440.png", "nodeId": "406:3558", "nodeName": "Frame 2147259452 (Vision & Mission)", "tool": "get_screenshot (maxDimension 1440, contentsOnly false)", "language": "en", "viewport": { "width": 1440, "height": 466 }, "sha256": "836d00edb93ce6abbcce81f148abefe0a0e8e39653d833676aeee76ff178073c" },
+    { "kind": "variables", "file": "406-3558.variables.json", "nodeId": "406:3558", "tool": "get_variable_defs", "language": "en", "sha256": "c2c0879c6ac699602fee21b8804f2d84fbfa48bd6e1f62c1b5948f7781571fc4" },
+    { "kind": "geometry", "file": "406-3558.metadata.xml", "nodeId": "406:3558", "tool": "get_metadata (406:3362) + get_design_context left/top values, hand-flattened", "language": "en", "note": "Group 15 children are listed flat with section-relative boxes (the metadata response gives them section-relative inside a group, which the loader would otherwise nest). Values cross-checked against the design context left/top/width/height.", "sha256": "c9af63bfcc99d3b6e628b3463b9e7239a795793af9451da1debd876a6b01969d" },
+    { "kind": "design-context", "file": "406-3558.design-context.tsx.txt", "nodeId": "406:3558", "tool": "get_design_context (skill figma-design-to-code)", "language": "en", "note": "Hand-written summary of layer order, colours, gradient and sizes from the tool response, with a provenance header. Identity of the photo: the PNG downloaded from Figma (406:3565) is byte-identical (SHA-256 f2b3a3b476aec384679006b862522471fac22b2357ca658ef40333f2168e78f7) to the 4096x2731 image embedded in the repo's old vision.svg, now shipped as public/assets/about/vision-people.png.", "sha256": "8fa0ba35d5413a52b1c45602f9eff5bbf39565aac16a729f0f8e83f0c76baa5d" }
+  ],
+  "unavailable": [
+    { "language": "ar", "viewport": { "width": 1440 }, "reason": "No Arabic About frame in 406:3362. AR is checked as a derived composition: Figma specifies no mirroring, so the photo and cut-out are never mirrored; only the column order follows the page direction." },
+    { "language": "en+ar", "viewport": { "width": "390, 768" }, "reason": "Every frame on the Final design page is 1440 wide; no tablet/mobile About frames." }
+  ]
+}

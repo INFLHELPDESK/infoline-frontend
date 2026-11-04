@@ -1,0 +1,11 @@
+// get_design_context output for 406:3558 (About / Vision & Mission), fetched 2026-11-04. Hand-extracted facts (asset URLs omitted).
+// Section 1440x466, bg #ecf4f9 (surface/brand/subtlest). Group 15 (406:3561) children use section-relative left/top below.
+// Heading 406:3559: 36px / 44px, Avenir Black (800), #263238, box x=111 y=133 w=611 -> three lines at 1440 (h=132).
+// Accent rule 406:3577: #1c97d4, x=82 y=133, 11 x 129 (heading top aligned, 3px shorter than the heading box).
+// Layer order bottom -> top:
+//   BG-pattern 406:3562      svg 847.636x592 at (656,-91) -> overflows the right edge (656+847.6 = 1503.6) and the section top/bottom
+//   Capsule    406:3564      #1c97d4, 593.461x175.903 at (763.64,255.13), radius 100 (a full pill)
+//   Photo      406:3565      png 4096x2731 RGBA cut-out, 563.935x376.003 at (778.89,55.21), radius 81, object-cover
+//   Crosses    406:3566/3569/3572  svg 23.32x26.91 (opacity .5) at (1166.37,83.01) (1074.88,128.76) (983.39,83.01)
+//   Gradient   406:3575      same box as the capsule, radius 100, top->bottom rgba(15,78,110,0) -> rgba(15,78,110,.3)
+// Photo and capsule share a bottom edge (431.2 / 431.0). Eyebrow 406:3560 at (82,47); mission copy x=82, width 557.

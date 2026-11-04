@@ -32,6 +32,7 @@ Resolved issues are removed from this file (history lives in Git).
 | [PQA-027](#pqa-027--insights--designer-fix-9-follow-ups) | Insights | Designer Fix #9 — pattern restored; site-wide items open | Low | IMPLEMENTED — Awaiting review |
 | [PQA-028](#pqa-028--about--hero--designer-fix-10a-layer-conformity) | About | Hero — Designer Fix #10A layer conformity (Finding #1) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-029](#pqa-029--about--built-on-trust--designer-fix-10b-background-rings) | About | Built on Trust — Designer Fix #10B background rings (Finding #2) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
+| [PQA-030](#pqa-030--about--vision--mission--designer-fix-10c-composition) | About | Vision & Mission — Designer Fix #10C composition (Finding #3) | Low | IMPLEMENTED (local) — Awaiting Designer decisions |
 | [PQA-021](#pqa-021--unknown-localized-routes-return-http-200-soft-404) | All pages | Unknown localized routes return HTTP 200 (soft 404) | Medium | DEFERRED — Pending release decision |
 
 ## Issue template
@@ -457,6 +458,32 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
   - [x] Three concentric, circular rings, Figma scale, centred on the content (1440, EN and AR).
   - [x] Dots on the ring paths at their Figma positions.
   - [x] Behind the content, pointer-transparent, hidden from assistive technology, no overflow.
+  - [ ] Verified on a preview deployment.
+  - [ ] Designer decisions above recorded.
+
+### PQA-030 — About / Vision & Mission — Designer Fix #10C composition
+
+- **Page:** About (`/about`) Vision & Mission — `components/sections/about/vision.tsx`. Figma 406:3558 (heading 406:3559, rule 406:3577, pattern 406:3562, capsule 406:3564, photo 406:3565, crosses 406:3566/3569/3572, gradient 406:3575); designer report `docs/qa/designer-reviews/Infoline-09-About-Page.pdf`, Finding #3. Copy is unchanged.
+- **Priority:** Low
+- **Status:** IMPLEMENTED (local) — Awaiting review, preview deploy and Designer decisions
+- **Description:** Confirmed root causes (baseline 1440×1080 build: 70 failing checks):
+  1. **Heading:** `lg:text-[40px]` against Figma's 36/44, so it wrapped to four lines instead of three.
+  2. **Accent rule:** `self-stretch` with a 6px top offset, so it was 170px tall (the four-line heading) and 6px below the heading top; Figma: 11×129, top aligned with the heading, 18px gap (was 16).
+  3. **Composition:** one flattened 10.3MB `vision.svg` (grid, capsule, photo and crosses merged, 707×505) rendered at 700×500; Figma has five separate layers at fixed offsets, the pattern overflowing the right edge.
+- **Corrections:** heading `lg:text-[36px]` (leading 44 unchanged, mobile 32 unchanged); rule `lg:h-[129px] lg:self-start lg:mt-0`, gap `lg:gap-[18px]` (below lg it still spans the wrapped heading). The composition is rebuilt from the original layers, positioned from the capsule at the Figma offsets and scaled by `--u` (1px from 1440): `vision-pattern.svg` and `vision-cross.svg` (the three Figma crosses are identical to 0.01px, so one file is reused), the capsule `#1c97d4` as a pill, the cut-out photo `vision-people.png`, and the `rgba(15,78,110,0) → 0.3` gradient above the photo. The photo is the original: the Figma 406:3565 PNG and the image embedded in the old SVG have the same SHA-256 (f2b3a3b4…), extracted without re-encoding. Not mirrored in Arabic; decorative (`alt=""`, `aria-hidden`). The grid is `lg:items-start` so the photo sits 8.21px below the eyebrow top as in Figma. The flattened `vision.svg` is removed (no other reference).
+- **Validation (EN and AR, 1440/768/390):** `tests/visual/about-vision.spec.ts`: 70 → 0 failures. At 1440: heading 36/44 on three lines, rule 11×129 top-aligned, every layer within ±2px of Figma relative to the capsule and (EN) absolute, order and gradient as designed. Composition pixel mismatch 25.84% → 0.73%; pattern and crosses correlate r 0.907 at shift (0,0) (fixed in advance: r ≥ 0.8, shift ≤ 2px; hidden 0.001, moved 40px −0.032). No overflow or console errors. Evidence: `docs/qa/about-vision/{before,after}`.
+- **Layout consequence:** the section is 640px tall at 1440 (EN and AR), was 713px in English, because the composition no longer forces a taller row. Neighbouring sections move up by 73px but are unchanged themselves.
+- **Pre-existing, unrelated:** `tests/e2e/about/who-we-are.spec.ts` fails 6/6 on the original code (see PQA-028). `tests/e2e/about/cta.spec.ts` fails intermittently on a sub-pixel button-row offset during the stagger (seen before this work in PQA-029's run; again here, in a different variant, and 1 of 3 isolated reruns). Neither touched.
+- **Open Designer decisions:**
+  1. Text inset: Figma has the eyebrow, rule and paragraphs at x=82 (heading at 111); the site's About container (`lg:px-10`) puts them at x=40, so the heading starts at about 69. The composition itself is at its absolute Figma x. Same family as PQA-023 item 3; not changed here.
+  2. Section spacing: Figma's section is 466px (eyebrow 47px from the top); the site keeps `py-32` (eyebrow 128px from the top), so it is 640px.
+  3. Heading weight: Figma Avenir Black (800); every About heading is semibold (600) on the site (PQA-020).
+  4. No Figma frame at 768/390 or in Arabic: below 1440 the composition scales with the width (fitted to the column when stacked, 0.5 floor from lg), and the Arabic column order simply follows the page direction.
+  5. The Vision paragraph copy differs from Figma ("…performance" without the closing period; the "Our mission:" label is `brandblue-400` against Figma's #1c97d4 Medium) and was left unchanged.
+- **Acceptance criteria:**
+  - [x] Heading 36/44, three lines at 1440; accent rule 11×129.
+  - [x] Pattern, capsule, cut-out photo, crosses and gradient as separate original layers in the Figma order.
+  - [x] Pattern overflows the right edge; no horizontal scroll at any width.
   - [ ] Verified on a preview deployment.
   - [ ] Designer decisions above recorded.
 
