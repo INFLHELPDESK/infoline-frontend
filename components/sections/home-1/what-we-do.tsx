@@ -23,15 +23,6 @@ export default function WhatWeDo({ items }: { items?: CapabilityItem[] }) {
 
   return (
     <section className="relative isolate overflow-hidden bg-ink py-20 text-white sm:py-24 lg:pt-20 lg:pb-32">
-      {/* Concentric rings, top end corner (Figma Ellipse 16/17) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -end-12 -top-28 -z-10 size-[339px] animate-[spin_60s_linear_infinite] rounded-full border border-brandblue-500/15"
-      >
-        <span className="absolute inset-14 rounded-full border border-brandblue-500/30" />
-        <span className="absolute start-1/2 top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brandblue-500/60 rtl:translate-x-1/2" />
-      </div>
-
       <div className="mx-auto w-full max-w-360 px-6 md:px-12 lg:px-20">
         <Stagger as="div" className="mx-auto flex max-w-[655px] flex-col items-center text-center" stagger={0.12}>
           <StaggerItem distance={24}>
