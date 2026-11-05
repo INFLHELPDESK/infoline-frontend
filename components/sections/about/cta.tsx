@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Button from "@/components/ui/button";
-import { Reveal, Parallax } from "@/components/ui/motion";
+import { Reveal } from "@/components/ui/motion";
+import BandVideoBackdrop from "@/components/ui/band-video-backdrop";
 
 /**
  * Closing CTA banner, built on the shared banner pattern (parallax photo behind a
@@ -20,20 +20,7 @@ export default function Cta() {
           amount={0.25}
           duration={1.15}
         >
-          <Parallax
-            className="pointer-events-none absolute inset-x-0 -inset-y-[20%]"
-            speed={0.12}
-          >
-            <Image
-              src="/assets/options/bg.jpg"
-              alt=""
-              fill
-              aria-hidden
-              sizes="100vw"
-              className="object-cover object-top-right"
-              priority={false}
-            />
-          </Parallax>
+          <BandVideoBackdrop image="/assets/options/bg.jpg" />
 
           <div className="relative z-10 flex flex-col items-start gap-6">
             <div className="flex max-w-[927px] flex-col gap-3">
