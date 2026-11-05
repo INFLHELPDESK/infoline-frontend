@@ -65,3 +65,47 @@ test.describe("Arabic 36px headings share Tajawal 800", () => {
     expect(weights).not.toContain("600");
   });
 });
+
+// Follow-up: every remaining 36px heading was classified against its own Figma
+// node. Black = heading/2xl/bold (800); Heavy = heading/2xl/semibold (600).
+test.describe("Remaining section headings follow their own Figma style", () => {
+  const black = [
+    ["/en/about", /Accountability for outcomes/, "406:3364"],
+    ["/en/about", /Building capability in Oman/, "406:3542"],
+    ["/en/about", /^Leadership$/, "406:3556"],
+    ["/en/about", /Want to know how we can support/, "406:3719"],
+    ["/en/careers", /Capability built locally/, "406:4653"],
+    ["/en/careers", /Learn customer operations/, "406:4611"],
+    ["/en/careers", /Don't see your fit/, "406:4585"],
+    ["/en/insights", /Three operations, three numbers/, "406:4909"],
+    ["/en/insights", /Want the detail behind the result/, "406:4976"],
+    ["/en/contact", /Talk to a trusted partner/, "406:5040"],
+  ] as const;
+  const heavy = [
+    ["/en/careers", /Roles we're hiring for now/, "406:4542"],
+    ["/en/careers", /Service mindset, and the ability/, "406:4670"],
+    ["/en/insights", /What results has Infoline delivered/, "406:4766"],
+    ["/en/insights", /Four territories we write from/, "406:4808"],
+    ["/en/insights", /Featured proof/, "406:4946"],
+  ] as const;
+
+  for (const [path, text, node] of black) {
+    test(`Black 36/44 · ${node} · ${path}`, async ({ page }) => {
+      await page.goto(path);
+      await waitForHydration(page);
+      const h = page.locator("main h1, main h2, main h3").filter({ hasText: text }).first();
+      await h.scrollIntoViewIfNeeded();
+      expect(await metrics(h)).toMatchObject({ size: "36px", weight: "800" });
+      await expect(h).toHaveCSS("line-height", "44px");
+    });
+  }
+  for (const [path, text, node] of heavy) {
+    test(`Heavy 36/44 (kept at 600) · ${node} · ${path}`, async ({ page }) => {
+      await page.goto(path);
+      await waitForHydration(page);
+      const h = page.locator("main h1, main h2, main h3").filter({ hasText: text }).first();
+      await h.scrollIntoViewIfNeeded();
+      expect(await metrics(h)).toMatchObject({ size: "36px", weight: "600" });
+    });
+  }
+});

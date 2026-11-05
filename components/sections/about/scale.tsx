@@ -24,7 +24,7 @@ export default function Scale() {
             </Reveal>
             <MaskText
               as="h2"
-              className="mt-5 text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-white"
+              className="mt-5 text-[32px] leading-[1.1] font-extrabold lg:text-[36px] lg:leading-11 text-white"
               segments={[{ text: t("scale.title") }]}
               amount={0.5}
               duration={0.85}

@@ -44,7 +44,7 @@ export default function Learn() {
 
             <MaskText
               as="h2"
-              className="mt-6 max-w-[551px] text-[32px] leading-[1.1] font-semibold text-white lg:text-[40px] lg:leading-11"
+              className="mt-6 max-w-[551px] text-[32px] leading-[1.1] font-extrabold text-white lg:text-[36px] lg:leading-11"
               segments={[{ text: t("learn.title") }]}
               stagger={0.05}
               duration={0.85}

@@ -45,7 +45,7 @@ export default function WhoWeAre() {
           </StaggerItem>
           <MaskText
             as="h2"
-            className="mt-5 max-w-[622px] text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-slate-900"
+            className="mt-5 max-w-[622px] text-[32px] leading-[1.1] font-extrabold lg:text-[36px] lg:leading-11 text-slate-900"
             segments={[
               { text: t("whoWeAre.titleLead") },
               {

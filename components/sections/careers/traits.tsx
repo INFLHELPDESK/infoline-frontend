@@ -34,7 +34,7 @@ export default function Traits() {
 
           <MaskText
             as="h2"
-            className="max-w-[766px] text-[32px] leading-[1.1] font-semibold lg:text-[40px] lg:leading-11 text-ink"
+            className="max-w-[766px] text-[32px] leading-[1.1] font-semibold lg:text-[36px] lg:leading-11 text-ink"
             segments={[{ text: t("traits.title") }]}
             stagger={0.05}
             duration={0.85}
