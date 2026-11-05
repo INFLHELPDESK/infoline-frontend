@@ -22,7 +22,7 @@ export default function Clients() {
               </Eyebrow>
               <MaskText
                 as="h2"
-                className="text-start text-[32px] leading-[1.1] font-semibold text-slate-900 lg:text-[40px] lg:leading-11"
+                className="text-start text-[32px] leading-[1.1] font-extrabold text-slate-900 lg:text-[36px] lg:leading-11"
                 segments={[{ text: t("clients.title") }]}
                 amount={0.5}
                 duration={0.8}

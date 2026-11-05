@@ -101,7 +101,7 @@ export default function Chapters() {
               <div>
                 <MaskText
                   as="h2"
-                  className="max-w-[895px] text-[28px] font-bold leading-9 text-ink lg:text-[36px] lg:leading-11"
+                  className="max-w-[895px] text-[28px] font-bold rtl:font-extrabold leading-9 text-ink lg:text-[36px] lg:leading-11"
                   segments={[{ text: c.title }]}
                   amount={0.3}
                   stagger={0.05}

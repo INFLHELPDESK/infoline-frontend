@@ -31,7 +31,7 @@ const avenir = localFont({
 const tajawal = Tajawal({
   variable: "--font-tajawal",
   subsets: ["arabic"],
-  weight: ["400", "500", "700", "800"],
+  weight: ["400", "500", "700", "800", "900"],
   display: "swap",
 });
 

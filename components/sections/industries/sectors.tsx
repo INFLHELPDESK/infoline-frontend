@@ -108,7 +108,7 @@ export default function Sectors() {
             </Eyebrow>
             <MaskText
               as="h2"
-              className="max-w-[16ch] text-[32px] leading-[1.1] font-black text-slate-900 lg:text-[36px] lg:leading-11"
+              className="max-w-[16ch] text-[32px] leading-[1.1] font-black rtl:font-extrabold text-slate-900 lg:text-[36px] lg:leading-11"
               segments={[{ text: t("sectors.title") }]}
               amount={0.5}
               duration={0.8}

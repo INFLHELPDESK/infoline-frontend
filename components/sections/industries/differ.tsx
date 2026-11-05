@@ -16,7 +16,7 @@ export default function Differ() {
               </Eyebrow>
               <MaskText
                 as="h2"
-                className="max-w-[16ch] text-[32px] leading-[1.1] font-semibold text-white lg:text-[40px] lg:leading-11"
+                className="max-w-[16ch] text-[32px] leading-[1.1] font-extrabold text-white lg:text-[36px] lg:leading-11"
                 segments={[{ text: t("differ.title") }]}
                 amount={0.5}
                 duration={0.8}

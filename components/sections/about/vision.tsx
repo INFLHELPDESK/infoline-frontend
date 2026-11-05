@@ -33,7 +33,7 @@ export default function Vision() {
             />
             <MaskText
               as="h2"
-              className="max-w-[611px] text-[32px] leading-[1.1] font-semibold lg:text-[36px] lg:leading-11 text-slate-900"
+              className="max-w-[611px] text-[32px] leading-[1.1] font-extrabold lg:text-[36px] lg:leading-11 text-slate-900"
               segments={[{ text: t("vision.title") }]}
               amount={0.5}
               duration={0.85}
