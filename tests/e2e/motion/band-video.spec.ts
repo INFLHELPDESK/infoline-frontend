@@ -2,11 +2,11 @@ import { test, expect, waitForHydration } from "../support/fixtures";
 import { scrollElementTo } from "../support/motion";
 
 /**
- * About and Insights closing bands › background video (designer review
+ * About, Insights, Industries and Careers closing bands › background video (designer review
  * 2026-11-05, finding #2). The still is always the poster/fallback; the footage
  * mounts only when motion is permitted, plays in view and pauses offscreen.
  */
-const pages = ["about", "insights"] as const;
+const pages = ["about", "insights", "industries", "careers"] as const;
 
 for (const slug of pages) {
   test.describe(`${slug} closing band › video`, () => {
