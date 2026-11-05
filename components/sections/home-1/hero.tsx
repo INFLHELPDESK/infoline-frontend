@@ -87,7 +87,7 @@ export default function Hero() {
       <div className="bg-gradient-to-t from-[#041d2a]/54 to-transparent backdrop-blur-[8px]">
         <Stagger
           as="ul"
-          className="mx-auto grid w-full max-w-360 grid-cols-2 px-6 sm:grid-cols-3 md:px-12 lg:grid-cols-5 lg:px-14"
+          className="mx-auto grid w-full max-w-360 grid-cols-2 px-6 md:px-12 lg:grid-cols-4 lg:px-14"
           stagger={0.08}
           amount={0.4}
         >

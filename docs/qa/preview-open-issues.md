@@ -341,12 +341,12 @@ No new entries; each is already recorded: `AboutPage.cta.secondaryButton.label` 
 - **Status:** PENDING CONTENT / DESIGN DECISION — no code change until approved
 - **Description:** Differences the QA report asks the team to confirm; none are frontend defects:
   1. **About, Board of Directors:** website names (Khalifa Al Abri, Salim Al Hinai, Hamad Al Rawahi, Saif Al Amri, Bassim Al Kindi) and `I1`–`I5.svg` images differ from Figma, which repeats a placeholder name. Approved names and photos needed.
-  2. **Year:** About "Omanis promoted in 2024" vs Figma and Careers "2026".
-  3. **Founding year:** About "since 2004" vs Home and Careers "since 2003".
+  2. **Year:** About "Omanis promoted in 2024" vs Figma and Careers "2026". **Resolved 2026-11-05 (designer review #8):** About EN/AR now "2026", matching Careers (same 45 figure) and the designer. Figma About node not re-fetched; PM to confirm 2026 is the factual year.
+  3. **Founding year:** About "since 2004" vs Home and Careers "since 2003". **Open (designer review #7, 2026-11-05):** designer says the design reads 2004, but live Figma 406:3795 still reads "Operating in Oman since 2003" (checked 2026-11-05). Home hero (`HomeV1.hero.stats`, EN+AR) and `Proof.stats` left at 2003. PM must confirm 2003 vs 2004; Figma 406:3795 needs updating or the designer must confirm it is stale.
   4. **Eight vs nine:** Home "What we do" says "Eight capabilities"; Solutions lists nine services.
   5. **Contact details:** intro banner `connect@infoline.om` / `+968 2446 2626` vs head-office card `contact@infoline.om` / `+968 2416 2626`; Figma shows `.com`. Tel and Fax share one number.
   6. **Industries clients title:** English updated (Designer Fix #7) to the approved "Named across the full catalogue." Arabic (`IndustriesPage.clients.title`) still reads "أسماء عبر جميع المجموعات الست" ("across all six groups") and no longer matches the English; it is left unchanged until approved Arabic wording is supplied. The Arabic Industries hero eyebrow was shortened to "القطاعات" to mirror the English "Industries".
-  7. **Home:** stat label "Agents ready to help you" vs Figma "omani agents…" and the fifth 1,400+ stat; Vendors card wording; Home "What changes" heading (see PQA-011).
+  7. **Home:** **Resolved 2026-11-05 (designer review #6):** fifth 1,400+ stat removed (EN+AR); grid now 4 columns; EN labels now "Omani agents ready to assist you" (capitalised; Figma has lowercase "omani") and "Customer transaction a year" (verbatim Figma; probable singular typo, designer to confirm). **Arabic dependency:** "موظف جاهز لمساعدتك" and "معاملة عملاء سنويًا" unchanged — approved Arabic for the new wording is needed. Still open:  Vendors card wording; Home "What changes" heading (see PQA-011).
   8. **Minor:** About values-chip punctuation.
 - **Dependency:** Client/designer decisions. Several look like Figma typos and should be confirmed with the designer.
 - **Acceptance criteria:**
