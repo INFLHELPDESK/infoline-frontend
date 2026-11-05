@@ -25,4 +25,24 @@ describe("approved statistics content", () => {
     expect(JSON.stringify(ar)).not.toContain("تمت ترقيتهم في 2024");
     expect(JSON.stringify(ar)).toContain("تمت ترقيتهم في 2026");
   });
+
+  // Designer review of 2026-11-05 (#7) supersedes the older Figma 406:3795 year.
+  it("company founding year is 2004 in every locale and statistic", () => {
+    expect(en.HomeV1.hero.stats[0].label).toBe("Operating in Oman since 2004");
+    expect(ar.HomeV1.hero.stats[0].label).toBe("نعمل في عُمان منذ 2004");
+    expect(en.Proof.stats[0].label).toBe("In continuous operation since 2004.");
+    expect(ar.Proof.stats[0].label).toBe("في تشغيل متواصل منذ 2004.");
+    expect(JSON.stringify(en)).not.toContain("since 2003");
+    expect(JSON.stringify(ar)).not.toContain("منذ 2003");
+  });
+
+  it("flags Arabic labels that still need approved translations", () => {
+    // Arabic wording for the reworded English labels is not yet supplied; keep it unchanged.
+    expect(ar.HomeV1.hero.stats.map((s) => s.label)).toEqual([
+      "نعمل في عُمان منذ 2004",
+      "عميلاً عبر ستة قطاعات",
+      "موظف جاهز لمساعدتك",
+      "معاملة عملاء سنويًا",
+    ]);
+  });
 });
