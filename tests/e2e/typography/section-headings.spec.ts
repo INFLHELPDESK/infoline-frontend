@@ -43,6 +43,9 @@ test.describe("Arabic 36px headings share Tajawal 800", () => {
     ["/ar/industries", /كيف تختلف تجربة العميل/],
     ["/ar/about", /أن نجعل عمليات العملاء/],
     ["/ar/case-studies", /مؤشر لم يتحرك/],
+    ["/ar/solutions", /تسع خدمات، نموذج تشغيل واحد/],
+    ["/ar/solutions", /أسئلة يطرحها المشترون/],
+    ["/ar/solutions", /ابنِ حلولاً موثوقة/],
   ] as const) {
     test(`${path}: ${text.source}`, async ({ page }) => {
       await page.goto(path);
@@ -80,6 +83,10 @@ test.describe("Remaining section headings follow their own Figma style", () => {
     ["/en/insights", /Three operations, three numbers/, "406:4909"],
     ["/en/insights", /Want the detail behind the result/, "406:4976"],
     ["/en/contact", /Talk to a trusted partner/, "406:5040"],
+    ["/en/solutions", /Nine services, one operating model/, "406:2676"],
+    ["/en/solutions", /Questions buyers usually ask/, "406:2805"],
+    ["/en/solutions", /Named across the full catalogue/, "406:2840"],
+    ["/en/solutions", /Build trusted solutions with Infoline/, "406:2795"],
   ] as const;
   const heavy = [
     ["/en/careers", /Roles we're hiring for now/, "406:4542"],

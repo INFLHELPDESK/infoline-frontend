@@ -28,7 +28,7 @@ export default function Faq() {
             <Eyebrow className="mb-6">{t("faq.eyebrow")}</Eyebrow>
             <MaskText
               as="h2"
-              className="text-[32px] leading-[1.1] font-semibold text-slate-900 lg:text-[40px] lg:leading-11"
+              className="text-[32px] leading-[1.1] font-extrabold text-slate-900 lg:text-[36px] lg:leading-11"
               segments={[{ text: t("faq.title") }]}
               amount={0.5}
               duration={0.8}
