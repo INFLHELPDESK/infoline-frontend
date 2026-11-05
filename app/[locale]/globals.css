@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Figma reference dumps (design-context code) are test fixtures, not source:
+   Tailwind would read their escaped `var(--a/b)` strings as classes and emit
+   invalid CSS that breaks `next dev`. */
+@source not "../../tests/visual/figma";
+
 body {
   padding: 0;
   margin: 0;
