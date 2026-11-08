@@ -69,7 +69,7 @@ export default function Vacancies() {
           <span className="text-[14px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-600">
             {col("location")}
           </span>
-          <span className="text-end text-[14px] leading-4 font-medium uppercase tracking-[1.5px] text-slate-600">
+          <span className="text-end text-[14px] leading-4 font-medium uppercase tracking-[1.5px] whitespace-nowrap text-slate-600">
             {col("apply")}
           </span>
         </div>
@@ -121,7 +121,7 @@ export default function Vacancies() {
                       type="button"
                       disabled
                       aria-label={`${col("apply")} — ${role.title}`}
-                      className="inline-flex cursor-not-allowed items-center gap-2.5 text-[16px] leading-6 font-medium text-brandblue-500 opacity-60"
+                      className="inline-flex cursor-not-allowed items-center gap-2.5 whitespace-nowrap text-[16px] leading-6 font-medium text-brandblue-500 opacity-60"
                     >
                       {col("apply")}
                       <ArrowRight className="size-[18px] rtl:rotate-180" />

@@ -15,7 +15,7 @@ describe("approved statistics content", () => {
     expect(en.HomeV1.hero.stats.slice(1).map((s) => s.label)).toEqual([
       "Clients across six sectors",
       "Omani agents ready to assist you",
-      "Customer transaction a year",
+      "Customer transactions a year", // plural: Designer closure report, 7 Nov 2026
     ]);
   });
 

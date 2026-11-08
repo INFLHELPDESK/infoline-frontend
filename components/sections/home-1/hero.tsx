@@ -113,7 +113,7 @@ export default function Hero() {
                   </span>
                 )}
               </p>
-              <p className="mt-3 max-w-[18ch] text-[14px] leading-6 text-slate-100 sm:text-[16px] lg:mt-2 lg:text-[18px] lg:leading-7">
+              <p className="mt-3 max-w-[18ch] rtl:max-w-[26ch] text-[14px] leading-6 text-slate-100 sm:text-[16px] lg:mt-2 lg:text-[18px] lg:leading-7">
                 {stat.label}
               </p>
             </StaggerItem>

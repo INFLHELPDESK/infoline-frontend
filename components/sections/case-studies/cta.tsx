@@ -23,8 +23,8 @@ export default function Cta() {
 
           <div className="relative z-10 flex flex-col justify-between gap-6 md:items-center lg:flex-row">
             <div className="flex max-w-[989px] flex-col gap-3">
-              {/* Figma heading/2xl/bold: Avenir Black (800). Arabic keeps its
-                  current Tajawal weight pending the Arabic type decision. */}
+              {/* Figma heading/2xl/bold: Avenir Black (900); Arabic uses the
+                  nearest Tajawal weight (closure report, 7 Nov 2026). */}
               <h3 className="text-[28px] leading-9 font-black text-white lg:text-[36px] lg:leading-11">
                 {t("cta.title")}
               </h3>
