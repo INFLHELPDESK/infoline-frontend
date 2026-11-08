@@ -101,7 +101,7 @@ export default function Chapters() {
               <div>
                 <MaskText
                   as="h2"
-                  className="max-w-[895px] text-[28px] font-bold rtl:font-extrabold leading-9 text-ink lg:text-[36px] lg:leading-11"
+                  className="max-w-[895px] text-[28px] font-black leading-9 text-ink lg:text-[36px] lg:leading-11"
                   segments={[{ text: c.title }]}
                   amount={0.3}
                   stagger={0.05}
@@ -209,7 +209,7 @@ export default function Chapters() {
                         <div className="flex h-full flex-col px-6 py-3">
                           <CountUp
                             value={r.value}
-                            className="w-fit text-[40px] font-black leading-[1.17] text-brandblue-500 rtl:font-bold [direction:ltr] lg:text-[48px] lg:leading-14"
+                            className="w-fit text-[40px] font-extrabold leading-[1.17] text-brandblue-500 rtl:font-bold [direction:ltr] lg:text-[48px] lg:leading-14"
                           />
                           <p className="pt-3 text-[14px] leading-5 text-slate-500">
                             <span className="font-medium text-brandblue-500">

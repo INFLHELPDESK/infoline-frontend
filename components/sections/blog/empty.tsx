@@ -11,7 +11,7 @@ export default function Empty() {
   return (
     <section className="bg-white py-24 lg:py-32" data-empty="">
       <div className="mx-auto w-full max-w-360 px-6 text-center lg:px-10">
-        <h2 className="text-[28px] leading-9 font-semibold text-slate-900 lg:text-[32px] lg:leading-10">
+        <h2 className="text-[28px] leading-9 font-extrabold text-slate-900 lg:text-[32px] lg:leading-10">
           {t("empty.title")}
         </h2>
         <p className="mx-auto mt-4 max-w-[560px] text-[16px] leading-6 text-slate-600">

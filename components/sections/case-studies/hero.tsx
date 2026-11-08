@@ -44,7 +44,7 @@ export default function Hero() {
 
             <MaskText
               as="h1"
-              className="max-w-[665px] text-[40px] font-extrabold leading-[1.17] text-white rtl:font-bold lg:text-[48px] lg:leading-14"
+              className="max-w-[665px] text-[40px] font-black leading-[1.17] text-white lg:text-[48px] lg:leading-14"
               segments={[
                 { text: t("hero.titleLead") },
                 { text: t("hero.titleAccent") },
@@ -76,7 +76,7 @@ export default function Hero() {
                     <div className="flex items-center justify-between gap-8 border-b border-[rgba(224,224,224,0.12)] py-3">
                       <CountUp
                         value={m.value}
-                        className="text-[32px] leading-10 font-black tabular-nums text-brandblue-300 rtl:font-bold [direction:ltr]"
+                        className="text-[32px] leading-10 font-extrabold tabular-nums text-brandblue-300 rtl:font-bold [direction:ltr]"
                       />
                       <div className="text-end">
                         <div className="text-[14px] leading-5 font-medium text-slate-100">

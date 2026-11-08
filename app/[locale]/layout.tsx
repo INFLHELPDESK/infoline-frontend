@@ -11,10 +11,14 @@ import { HeaderThemeProvider } from "@/components/layout/header/theme";
 import { LocaleTargetsProvider } from "@/components/layout/header/locale-targets";
 import { SITE_NAME, getSiteUrl, localeAlternates } from "@/lib/site";
 // Approved English face (Figma handoff): Avenir, from the supplied TTFs.
-// The files' OS/2 weights are not in visual order (Black=800 is heavier than
-// Heavy=900), so each CSS weight is declared explicitly to follow Figma, whose
-// "semibold" styles use Heavy and "bold" styles use Black:
-//   400 Roman | 500 Medium | 600 Heavy | 700-800 Black | 900 Heavy
+// Avenir Black sits above Heavy, so Black carries the higher number. Designer
+// closure report (7 Nov 2026) corrected the design-system variables:
+//   font-weight/Black = 900 (Figma "bold" styles), font-weight/Heavy = 800
+// (Figma "semibold" styles). The TTFs OS/2 weights are not in visual order
+// (Black=800 is heavier than Heavy=900), so each CSS weight is declared
+// explicitly. 600 and 700 are kept only so non-heading text that is not on
+// the heading scale (labels, buttons, figures) renders exactly as before.
+//   400 Roman | 500 Medium | 600 Heavy | 700 Black | 800 Heavy | 900 Black
 const avenir = localFont({
   variable: "--font-avenir",
   display: "swap",
@@ -23,8 +27,9 @@ const avenir = localFont({
     { path: "./fonts/Avenir-Roman.ttf", weight: "400", style: "normal" },
     { path: "./fonts/Avenir-Medium.ttf", weight: "500", style: "normal" },
     { path: "./fonts/Avenir-Heavy.ttf", weight: "600", style: "normal" },
-    { path: "./fonts/Avenir-Black.ttf", weight: "700 800", style: "normal" },
-    { path: "./fonts/Avenir-Heavy.ttf", weight: "900", style: "normal" },
+    { path: "./fonts/Avenir-Black.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/Avenir-Heavy.ttf", weight: "800", style: "normal" },
+    { path: "./fonts/Avenir-Black.ttf", weight: "900", style: "normal" },
   ],
 });
 // Approved Arabic face (Figma handoff).

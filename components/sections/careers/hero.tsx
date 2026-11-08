@@ -45,7 +45,7 @@ export default function Hero() {
           {/* Title — "Build your career with a trusted team" */}
           <MaskText
             as="h1"
-            className="flex max-w-[665px] items-center justify-center text-center text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
+            className="flex max-w-[665px] items-center justify-center text-center text-[40px] font-black leading-[1.17] text-white lg:text-[48px] lg:leading-14"
             segments={[{ text: t("hero.title") }]}
             stagger={0.05}
             duration={0.9}

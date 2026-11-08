@@ -73,7 +73,7 @@ export default function Cta() {
       >
         <StaggerItem
           as="h2"
-          className="max-w-[629px] text-[36px] leading-[1.1] font-medium tracking-[-0.02em] sm:text-5xl lg:text-[56px] lg:leading-[70px] lg:font-black lg:tracking-normal"
+          className="max-w-[629px] text-[36px] leading-[1.1] font-medium tracking-[-0.02em] sm:text-5xl lg:text-[56px] lg:leading-[70px] lg:font-extrabold lg:tracking-normal"
         >
           {t("title")}
         </StaggerItem>

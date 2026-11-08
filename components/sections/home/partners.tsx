@@ -101,7 +101,7 @@ export default function Partners() {
         </StaggerItem>
         <MaskText
           as="h2"
-          className="mt-5 max-w-[867px] text-[28px] leading-9 font-extrabold text-white sm:text-[36px] sm:leading-11"
+          className="mt-5 max-w-[867px] text-[28px] leading-9 font-black text-white sm:text-[36px] sm:leading-11"
           segments={[{ text: t("title") }]}
           amount={0.5}
           duration={0.8}

@@ -25,7 +25,7 @@ export default function Clients() {
           </StaggerItem>
           <StaggerItem
             as="h2"
-            className="mt-[17px] text-[28px] leading-9 font-bold rtl:font-extrabold text-slate-900 sm:text-[36px] sm:leading-11"
+            className="mt-[17px] text-[28px] leading-9 font-black text-slate-900 sm:text-[36px] sm:leading-11"
           >
             {t("title")}
           </StaggerItem>

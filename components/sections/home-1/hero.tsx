@@ -50,7 +50,7 @@ export default function Hero() {
         >
           {/* Plain, unanimated h1 — it is the LCP element (same rule as the
               reference home), so it paints at full opacity immediately. */}
-          <h1 className="text-[40px] leading-[1.1] font-extrabold tracking-normal sm:text-[52px] lg:text-[56px] lg:leading-[70px]">
+          <h1 className="text-[40px] leading-[1.1] font-black tracking-normal sm:text-[52px] lg:text-[56px] lg:leading-[70px]">
             {t("titleLead")}{" "}
             <span className="text-brandblue-400">{t("titleAccent")}</span>
           </h1>
@@ -104,7 +104,7 @@ export default function Hero() {
               {/* Unit sits on the figure's baseline, as in Figma ("22yrs"). */}
               <p
                 dir="ltr"
-                className="flex h-10 items-baseline gap-1 text-[36px] leading-10 font-black lg:h-12 text-white transition-colors duration-300 group-hover:text-brandblue-400 rtl:justify-end lg:text-[44px] lg:leading-12"
+                className="flex h-10 items-baseline gap-1 text-[36px] leading-10 font-extrabold lg:h-12 text-white transition-colors duration-300 group-hover:text-brandblue-400 rtl:justify-end lg:text-[44px] lg:leading-12"
               >
                 <CountUp value={stat.value} />
                 {stat.unit && (

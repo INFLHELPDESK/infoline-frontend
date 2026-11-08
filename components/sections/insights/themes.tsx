@@ -41,7 +41,7 @@ export default function Themes() {
             <Eyebrow className="mb-4">
               {t("themes.eyebrow")}
             </Eyebrow>
-            <h2 className="text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
+            <h2 className="text-[28px] leading-9 font-extrabold lg:text-[36px] lg:leading-11 text-slate-900">
               {t("themes.title")}
             </h2>
           </StaggerItem>

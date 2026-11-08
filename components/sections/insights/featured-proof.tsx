@@ -31,7 +31,7 @@ export default function FeaturedProof() {
         <Stagger as="div" className="xl:max-w-[min(716px,calc(100cqw_-_var(--fp-img)))]" stagger={0.12} amount={0.2}>
           <StaggerItem direction="start" className="mb-10">
             <Eyebrow className="mb-4">{t("featured.eyebrow")}</Eyebrow>
-            <h2 className="text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
+            <h2 className="text-[28px] leading-9 font-extrabold lg:text-[36px] lg:leading-11 text-slate-900">
               {t("featured.title")}
             </h2>
           </StaggerItem>

@@ -7,9 +7,9 @@ import PostCard from "./card";
 const cmsBodyClass = [
   "flex flex-col gap-7 text-[16px] leading-7 text-slate-600 lg:text-[18px]",
   "[&_a]:text-brandblue-600 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-brandblue-500",
-  "[&_h2]:text-[24px] [&_h2]:leading-8 [&_h2]:font-semibold [&_h2]:text-slate-900",
-  "[&_h3]:text-[20px] [&_h3]:leading-7 [&_h3]:font-semibold [&_h3]:text-slate-900",
-  "[&_h4]:text-[18px] [&_h4]:leading-7 [&_h4]:font-semibold [&_h4]:text-slate-900",
+  "[&_h2]:text-[24px] [&_h2]:leading-8 [&_h2]:font-extrabold [&_h2]:text-slate-900",
+  "[&_h3]:text-[20px] [&_h3]:leading-7 [&_h3]:font-extrabold [&_h3]:text-slate-900",
+  "[&_h4]:text-[18px] [&_h4]:leading-7 [&_h4]:font-extrabold [&_h4]:text-slate-900",
   "[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ps-6 [&_ol]:ps-6 [&_li]:mt-2",
   "[&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-[20px]",
   "[&_figure]:flex [&_figure]:flex-col [&_figure]:gap-3 [&_figcaption]:text-[14px] [&_figcaption]:leading-6 [&_figcaption]:text-slate-500",
@@ -97,7 +97,7 @@ export default function Article({
         {/* Related articles */}
         {morePosts.length > 0 && (
           <div className="mt-16 lg:mt-[78px]">
-            <h2 className="mb-6 text-[28px] leading-9 font-semibold text-slate-900 lg:text-[32px] lg:leading-10">
+            <h2 className="mb-6 text-[28px] leading-9 font-extrabold text-slate-900 lg:text-[32px] lg:leading-10">
               {t("single.moreLabel")}
             </h2>
             <Stagger

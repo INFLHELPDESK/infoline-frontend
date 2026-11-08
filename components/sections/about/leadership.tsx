@@ -87,7 +87,7 @@ export default function Leadership() {
           </Eyebrow>
           <MaskText
             as="h2"
-            className="mt-5 text-[32px] leading-[1.1] font-extrabold lg:text-[36px] lg:leading-11 text-slate-900"
+            className="mt-5 text-[32px] leading-[1.1] font-black lg:text-[36px] lg:leading-11 text-slate-900"
             segments={[{ text: t("leadership.title") }]}
             amount={0.5}
             duration={0.85}

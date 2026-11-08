@@ -40,7 +40,7 @@ export default function Callout() {
           <div className="relative lg:ps-[467px] lg:pe-10">
             <MaskText
               as="h2"
-              className="mb-4 max-w-[617px] text-[28px] leading-9 font-semibold text-slate-900 lg:text-[36px] lg:leading-11"
+              className="mb-4 max-w-[617px] text-[28px] leading-9 font-extrabold text-slate-900 lg:text-[36px] lg:leading-11"
               segments={[
                 { text: t("callout.titleLead") },
                 { text: t("callout.titleAccent"), className: "text-brandblue-500" },

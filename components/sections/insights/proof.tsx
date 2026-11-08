@@ -39,7 +39,7 @@ export default function Proof() {
               <Eyebrow tone="dark" className="mb-6">
                 {t("proof.eyebrow")}
               </Eyebrow>
-              <h2 className="max-w-[551px] text-[28px] leading-9 font-extrabold text-white lg:text-[36px] lg:leading-11">
+              <h2 className="max-w-[551px] text-[28px] leading-9 font-black text-white lg:text-[36px] lg:leading-11">
                 {t("proof.title")}
               </h2>
               <p className="mt-6 max-w-[431px] text-[16px] leading-6 text-slate-300">

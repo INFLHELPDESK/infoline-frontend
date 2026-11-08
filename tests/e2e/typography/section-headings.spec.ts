@@ -1,10 +1,13 @@
 import { test, expect, waitForHydration } from "../support/fixtures";
 
 /**
- * Designer review 2026-11-05, findings #1, #4 and #5.
- * Figma heading/2xl/bold = Avenir Black 36/44 (406:3207, 406:3267, 406:3338,
- * 406:3559); Avenir Black is CSS 800. Arabic 36px headings share one weight
- * (Tajawal 800) and Tajawal 900 is registered. Tajawal has no 600 at all.
+ * Designer review 2026-11-05 (findings #1, #4, #5) as corrected by the closure
+ * report of 2026-11-07, which supersedes the earlier Black/Heavy numbers:
+ * font-weight/Black = 900 (Figma "bold" styles), font-weight/Heavy = 800
+ * ("semibold" styles). heading/2xl/bold = Avenir Black 36/44 (406:3207,
+ * 406:3267, 406:3338, 406:3559). Arabic uses the nearest Tajawal weight, which
+ * is the same number now that 600 is off the scale (Tajawal ships 400/500/700/
+ * 800/900, no 600), so no per-locale override is needed.
  */
 test.use({ reducedMotion: "reduce", viewport: { width: 1440, height: 1080 } });
 
@@ -16,7 +19,7 @@ const metrics = (l: import("@playwright/test").Locator) =>
     return { size: s.fontSize, weight: s.fontWeight, family: s.fontFamily.split(",")[0].replace(/"/g, "") };
   });
 
-test.describe("English section headings (Figma Black 36/44)", () => {
+test.describe("English section headings (Figma Black 36/44, CSS 900)", () => {
   for (const [path, text] of [
     ["/en/industries", /How does CX differ by industry/],
     ["/en/industries", /Questions buyers usually ask/],
@@ -28,31 +31,31 @@ test.describe("English section headings (Figma Black 36/44)", () => {
       await waitForHydration(page);
       const h = heading(page, text);
       await h.scrollIntoViewIfNeeded();
-      expect(await metrics(h)).toMatchObject({ size: "36px", weight: "800" });
+      expect(await metrics(h)).toMatchObject({ size: "36px", weight: "900" });
       await expect(h).toHaveCSS("line-height", "44px");
     });
   }
 });
 
-test.describe("Arabic 36px headings share Tajawal 800", () => {
-  for (const [path, text] of [
-    ["/ar", /وزارات سلطنة عُمان/],
-    ["/ar", /إذا كنت تفكر بالقطاعات/],
-    ["/ar", /العملاء يشترون خدمتنا/],
-    ["/ar/industries", /ست مجموعات قطاعية/],
-    ["/ar/industries", /كيف تختلف تجربة العميل/],
-    ["/ar/about", /أن نجعل عمليات العملاء/],
-    ["/ar/case-studies", /مؤشر لم يتحرك/],
-    ["/ar/solutions", /تسع خدمات، نموذج تشغيل واحد/],
-    ["/ar/solutions", /أسئلة يطرحها المشترون/],
-    ["/ar/solutions", /ابنِ حلولاً موثوقة/],
+test.describe("Arabic 36px headings use the nearest Tajawal weight (Black 900, Heavy 800)", () => {
+  for (const [path, text, weight] of [
+    ["/ar", /وزارات سلطنة عُمان/, "900"],
+    ["/ar", /إذا كنت تفكر بالقطاعات/, "800"],
+    ["/ar", /العملاء يشترون خدمتنا/, "900"],
+    ["/ar/industries", /ست مجموعات قطاعية/, "800"],
+    ["/ar/industries", /كيف تختلف تجربة العميل/, "900"],
+    ["/ar/about", /أن نجعل عمليات العملاء/, "900"],
+    ["/ar/case-studies", /مؤشر لم يتحرك/, "900"],
+    ["/ar/solutions", /تسع خدمات، نموذج تشغيل واحد/, "900"],
+    ["/ar/solutions", /أسئلة يطرحها المشترون/, "900"],
+    ["/ar/solutions", /ابنِ حلولاً موثوقة/, "900"],
   ] as const) {
-    test(`${path}: ${text.source}`, async ({ page }) => {
+    test(`${path}: ${text.source} → ${weight}`, async ({ page }) => {
       await page.goto(path);
       await waitForHydration(page);
       const h = heading(page, text);
       await h.scrollIntoViewIfNeeded();
-      expect(await metrics(h)).toMatchObject({ size: "36px", weight: "800", family: expect.stringContaining("Tajawal") });
+      expect(await metrics(h)).toMatchObject({ size: "36px", weight, family: expect.stringContaining("Tajawal") });
     });
   }
 
@@ -70,7 +73,7 @@ test.describe("Arabic 36px headings share Tajawal 800", () => {
 });
 
 // Follow-up: every remaining 36px heading was classified against its own Figma
-// node. Black = heading/2xl/bold (800); Heavy = heading/2xl/semibold (600).
+// node. Black = heading/2xl/bold (900); Heavy = heading/2xl/semibold (800).
 test.describe("Remaining section headings follow their own Figma style", () => {
   const black = [
     ["/en/about", /Accountability for outcomes/, "406:3364"],
@@ -97,22 +100,22 @@ test.describe("Remaining section headings follow their own Figma style", () => {
   ] as const;
 
   for (const [path, text, node] of black) {
-    test(`Black 36/44 · ${node} · ${path}`, async ({ page }) => {
+    test(`Black 36/44 (900) · ${node} · ${path}`, async ({ page }) => {
+      await page.goto(path);
+      await waitForHydration(page);
+      const h = page.locator("main h1, main h2, main h3").filter({ hasText: text }).first();
+      await h.scrollIntoViewIfNeeded();
+      expect(await metrics(h)).toMatchObject({ size: "36px", weight: "900" });
+      await expect(h).toHaveCSS("line-height", "44px");
+    });
+  }
+  for (const [path, text, node] of heavy) {
+    test(`Heavy 36/44 (800) · ${node} · ${path}`, async ({ page }) => {
       await page.goto(path);
       await waitForHydration(page);
       const h = page.locator("main h1, main h2, main h3").filter({ hasText: text }).first();
       await h.scrollIntoViewIfNeeded();
       expect(await metrics(h)).toMatchObject({ size: "36px", weight: "800" });
-      await expect(h).toHaveCSS("line-height", "44px");
-    });
-  }
-  for (const [path, text, node] of heavy) {
-    test(`Heavy 36/44 (kept at 600) · ${node} · ${path}`, async ({ page }) => {
-      await page.goto(path);
-      await waitForHydration(page);
-      const h = page.locator("main h1, main h2, main h3").filter({ hasText: text }).first();
-      await h.scrollIntoViewIfNeeded();
-      expect(await metrics(h)).toMatchObject({ size: "36px", weight: "600" });
     });
   }
 });

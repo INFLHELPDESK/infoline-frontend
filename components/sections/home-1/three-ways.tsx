@@ -76,7 +76,7 @@ export default function ThreeWays() {
                     >
                       <PillarIcon aria-hidden className="size-5 text-black" strokeWidth={1.7} />
                     </span>
-                    <h3 className="mt-7 text-[28px] leading-10 font-semibold sm:text-[32px]">
+                    <h3 className="mt-7 text-[28px] leading-10 font-extrabold sm:text-[32px]">
                       {p.title}
                     </h3>
                     <p className="mt-1 max-w-[18ch] text-[14px] leading-5 text-slate-700">

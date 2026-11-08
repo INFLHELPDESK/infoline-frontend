@@ -19,7 +19,7 @@ export default function Featured({ post }: { post: BlogPost }) {
       <div className="mx-auto w-full max-w-360 px-6 lg:px-10">
         <Reveal
           as="p"
-          className="mb-6 text-[28px] leading-9 font-semibold text-slate-900 lg:text-[32px] lg:leading-10"
+          className="mb-6 text-[28px] leading-9 font-extrabold text-slate-900 lg:text-[32px] lg:leading-10"
           amount={0.4}
         >
           {t("featuredLabel")}

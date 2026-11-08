@@ -109,7 +109,7 @@ export default function Catalogue() {
             </Eyebrow>
             <MaskText
               as="h2"
-              className="max-w-[16ch] text-[32px] leading-[1.1] font-extrabold text-slate-900 lg:text-[36px] lg:leading-11"
+              className="max-w-[16ch] text-[32px] leading-[1.1] font-black text-slate-900 lg:text-[36px] lg:leading-11"
               segments={[{ text: t("catalogue.title") }]}
               amount={0.5}
               duration={0.8}
@@ -315,7 +315,7 @@ function DetailBody({
   return (
     <>
       <Icon src={s.icon} className="size-6 text-brandblue-500" aria-hidden />
-      <Title className="mt-4 text-[24px] leading-7 font-semibold text-slate-900">
+      <Title className="mt-4 text-[24px] leading-7 font-extrabold text-slate-900">
         {s.title}
       </Title>
       <h3 className="mt-6 text-[16px] leading-6 font-medium text-slate-900">{s.headline}</h3>

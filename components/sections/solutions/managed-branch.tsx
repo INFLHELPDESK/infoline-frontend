@@ -103,7 +103,7 @@ export default function ManagedBranch() {
                   className="size-6 text-brandblue-500"
                   aria-hidden
                 />
-                <h1 className="mt-4 text-[24px] leading-7 font-semibold text-slate-900">
+                <h1 className="mt-4 text-[24px] leading-7 font-extrabold text-slate-900">
                   {m("title")}
                 </h1>
                 <h2 className="mt-6 text-[16px] leading-6 font-medium text-slate-900">

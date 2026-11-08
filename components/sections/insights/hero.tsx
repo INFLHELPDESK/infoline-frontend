@@ -37,7 +37,7 @@ export default function Hero() {
             </p>
             <MaskText
               as="h1"
-              className="max-w-[665px] text-[40px] font-bold leading-[1.17] text-white lg:text-[48px] lg:leading-14"
+              className="max-w-[665px] text-[40px] font-black leading-[1.17] text-white lg:text-[48px] lg:leading-14"
               segments={[
                 { text: t("hero.titleLead") },
                 { text: t("hero.titleAccent") },

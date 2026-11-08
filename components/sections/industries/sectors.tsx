@@ -108,7 +108,7 @@ export default function Sectors() {
             </Eyebrow>
             <MaskText
               as="h2"
-              className="max-w-[16ch] text-[32px] leading-[1.1] font-black rtl:font-extrabold text-slate-900 lg:text-[36px] lg:leading-11"
+              className="max-w-[16ch] text-[32px] leading-[1.1] font-extrabold text-slate-900 lg:text-[36px] lg:leading-11"
               segments={[{ text: t("sectors.title") }]}
               amount={0.5}
               duration={0.8}
@@ -205,7 +205,7 @@ function SectorCard({
                   </span>
                   <span className="block h-0.5 w-[49px] bg-brandblue-500" />
                 </div>
-                <h3 className="text-[28px] leading-9 font-black text-slate-900">
+                <h3 className="text-[28px] leading-9 font-extrabold text-slate-900">
                   {s.title}
                 </h3>
               </div>

@@ -20,7 +20,7 @@ export default function Credentials() {
           </Reveal>
           <MaskText
             as="h2"
-            className="mt-5 max-w-[708px] text-[32px] leading-[1.1] font-extrabold lg:text-[36px] lg:leading-11 text-slate-900"
+            className="mt-5 max-w-[708px] text-[32px] leading-[1.1] font-black lg:text-[36px] lg:leading-11 text-slate-900"
             segments={[
               {
                 text: t("credentials.titleLead"),

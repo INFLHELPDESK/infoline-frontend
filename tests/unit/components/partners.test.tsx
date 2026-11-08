@@ -32,8 +32,8 @@ describe("Home › Partners", () => {
     const heading = container.querySelector("h2")!;
     const description = container.querySelector("section p")!;
 
-    // Figma heading/2xl/bold: Avenir Black, weight 800, 36/44 from sm.
-    expect(heading.className).toContain("font-extrabold");
+    // Figma heading/2xl/bold: Avenir Black, weight 900 (closure report 2026-11-07), 36/44 from sm.
+    expect(heading.className).toContain("font-black");
     expect(heading.className).toContain("sm:text-[36px]");
     expect(heading.className).toContain("sm:leading-11");
     expect(heading.className).not.toContain("font-bold");

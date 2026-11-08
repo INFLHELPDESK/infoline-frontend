@@ -31,7 +31,7 @@ export default function Capability() {
 
           <MaskText
             as="h2"
-            className="max-w-[660px] text-[32px] leading-[1.1] font-extrabold lg:text-[36px] lg:leading-11 text-ink"
+            className="max-w-[660px] text-[32px] leading-[1.1] font-black lg:text-[36px] lg:leading-11 text-ink"
             segments={[{ text: t("capability.title") }]}
             stagger={0.05}
             duration={0.85}

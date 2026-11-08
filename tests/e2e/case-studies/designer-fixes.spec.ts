@@ -44,13 +44,14 @@ test.describe("Case Studies › typography and colour", () => {
       const movementLabel = hero(page).getByText(t.hero.movementLabel, { exact: true });
       const bandHeading = band(page).getByRole("heading", { name: t.cta.title });
 
-      // English: Figma tokens. Arabic: the pre-fix Tajawal weights (pending decision).
-      expect(await css(page.locator("main h1"), "font-weight")).toBe(en ? "800" : "700");
+      // Closure report 2026-11-07: Black = 900, Heavy = 800; Arabic uses the nearest Tajawal weight
+      // (same number for headings). Figures keep Arabic Tajawal Bold (700), an intentional exception.
+      expect(await css(page.locator("main h1"), "font-weight")).toBe("900");
       expect(await css(eyebrow, "font-weight")).toBe(en ? "500" : "400");
       expect(await css(movementLabel, "font-weight")).toBe(en ? "500" : "400");
-      expect(await css(heroFigures(page), "font-weight")).toBe(en ? "900" : "700");
-      expect(await css(resultFigures(page).first(), "font-weight")).toBe(en ? "900" : "700");
-      expect(await css(bandHeading, "font-weight")).toBe(en ? "800" : "600");
+      expect(await css(heroFigures(page), "font-weight")).toBe(en ? "800" : "700");
+      expect(await css(resultFigures(page).first(), "font-weight")).toBe(en ? "800" : "700");
+      expect(await css(bandHeading, "font-weight")).toBe("900");
 
       // Colours are locale-independent.
       expect(await css(eyebrow, "color")).toBe(rgb.brandblue300);

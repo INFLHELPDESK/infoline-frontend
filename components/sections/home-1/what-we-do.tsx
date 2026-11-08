@@ -60,7 +60,7 @@ export default function WhatWeDo({ items }: { items?: CapabilityItem[] }) {
                       className="size-9 text-brandblue-500 transition-transform duration-500 [transition-timing-function:cubic-bezier(.34,1.56,.64,1)] group-hover:scale-110 group-hover:-rotate-6"
                     />
                   )}
-                  <h3 className="mt-5 text-[22px] leading-9 font-semibold transition-colors duration-300 group-hover:text-brandblue-500 sm:text-[28px]">
+                  <h3 className="mt-5 text-[22px] leading-9 font-extrabold transition-colors duration-300 group-hover:text-brandblue-500 sm:text-[28px]">
                     {item.title}
                   </h3>
                   <p className="mt-2 max-w-[42ch] text-[15px] leading-6 text-slate-100 sm:text-[16px]">

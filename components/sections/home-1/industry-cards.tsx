@@ -139,7 +139,7 @@ export default function IndustryCards({
                     {/* Mobile: icon leads the row (Designer: icon on the left);
                         desktop keeps title on top, icon at the foot. */}
                     <IconDot src={iconSrc} className="order-first lg:order-last" />
-                    <span className="min-w-0 flex-1 line-clamp-2 text-[16px] leading-5 font-black text-white lg:line-clamp-2 lg:max-h-[260px] lg:flex-none lg:rotate-180 lg:text-[20px] lg:leading-6 lg:[writing-mode:vertical-rl]">
+                    <span className="min-w-0 flex-1 line-clamp-2 text-[16px] leading-5 font-extrabold text-white lg:line-clamp-2 lg:max-h-[260px] lg:flex-none lg:rotate-180 lg:text-[20px] lg:leading-6 lg:[writing-mode:vertical-rl]">
                       {item.title}
                     </span>
                   </motion.span>
@@ -162,7 +162,7 @@ export default function IndustryCards({
                   >
                     <IconDot src={iconSrc} />
                     <span className="flex min-w-0 flex-col">
-                      <span className="text-[18px] leading-6 font-black text-white sm:text-[20px]">
+                      <span className="text-[18px] leading-6 font-extrabold text-white sm:text-[20px]">
                         {item.title}
                       </span>
                       <span className="mt-2 line-clamp-3 max-w-[460px] text-[14px] leading-5 text-white/85">

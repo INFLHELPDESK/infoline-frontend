@@ -12,6 +12,18 @@ import { join } from "node:path";
 
 type Viewport = { width: number | string; height?: number };
 
+/**
+ * Designer closure report (7 Nov 2026): the Latin font-weight variables were inverted in the
+ * design system and are being corrected in the Figma file. The cached reference files below
+ * keep the values captured at the time (Black 800, Heavy 900) so their SHA-256 provenance
+ * stays valid; token() answers with the corrected values until the references are re-captured.
+ * Avenir Black sits above Heavy, so Black carries the higher number.
+ */
+const CORRECTED_VARIABLES: Record<string, string> = {
+  "font-weight/Black": "900",
+  "font-weight/Heavy": "800",
+};
+
 export type ReferenceEntry = {
   kind: "screenshot" | "variables" | "geometry" | "design-context" | "asset";
   file: string;
@@ -99,9 +111,10 @@ export function loadReferences(section: string) {
 
   return {
     manifest,
-    /** Figma variable value by token name; throws on unknown tokens (no guessing). */
+    /** Figma variable value by token name; throws on unknown tokens (no guessing).
+     *  The two Latin weight variables use the Designer-corrected values (see CORRECTED_VARIABLES). */
     token(name: string): string {
-      const value = variables[name];
+      const value = CORRECTED_VARIABLES[name] ?? variables[name];
       if (value === undefined) throw new Error(`${section}: Figma variable "${name}" is not in the reference`);
       return value;
     },

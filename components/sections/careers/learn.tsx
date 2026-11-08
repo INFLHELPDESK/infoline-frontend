@@ -44,7 +44,7 @@ export default function Learn() {
 
             <MaskText
               as="h2"
-              className="mt-6 max-w-[551px] text-[32px] leading-[1.1] font-extrabold text-white lg:text-[36px] lg:leading-11"
+              className="mt-6 max-w-[551px] text-[32px] leading-[1.1] font-black text-white lg:text-[36px] lg:leading-11"
               segments={[{ text: t("learn.title") }]}
               stagger={0.05}
               duration={0.85}
@@ -58,7 +58,7 @@ export default function Learn() {
 
             <div className="mt-14 flex w-full max-w-[1162px] flex-col gap-6 rounded-[20px] border border-brandblue-500/60 bg-[rgba(29,38,43,0.6)] p-6 text-start shadow-[0_24px_40px_0_rgba(62,193,240,0.12)] backdrop-blur-[6px] lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:p-8">
               <div className="flex max-w-[687px] flex-col gap-3">
-                <h3 className="text-[24px] leading-7 font-semibold text-white">
+                <h3 className="text-[24px] leading-7 font-extrabold text-white">
                   {t("learn.cta.title")}
                 </h3>
                 <p className="text-[16px] leading-6 text-[#CFD8DC]">

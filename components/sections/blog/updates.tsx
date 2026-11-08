@@ -75,7 +75,7 @@ export default function Updates({
           amount={0.4}
         >
           <StaggerItem>
-            <h2 className="text-[28px] leading-9 font-semibold text-slate-900 lg:text-[32px] lg:leading-10">
+            <h2 className="text-[28px] leading-9 font-extrabold text-slate-900 lg:text-[32px] lg:leading-10">
               {t("allUpdatesLabel")}
             </h2>
           </StaggerItem>

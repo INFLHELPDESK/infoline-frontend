@@ -26,7 +26,7 @@ export default function Rail() {
     >
       {/* FAQ card */}
       <StaggerItem className="rounded-2xl bg-white p-6 border border-[#e0e0e0]">
-        <h3 className="text-[16px] leading-6 font-semibold text-slate-900">{t("faq.title")}</h3>
+        <h3 className="text-[16px] leading-6 font-extrabold text-slate-900">{t("faq.title")}</h3>
         <p className="mt-3 text-[14px] leading-5 text-slate-600">
           {t("faq.description")}
         </p>
@@ -41,7 +41,7 @@ export default function Rail() {
 
       {/* Head office + map */}
       <StaggerItem className="overflow-hidden rounded-2xl bg-white p-6 border border-[#e0e0e0]">
-        <h3 className="text-[16px] leading-6 font-semibold text-slate-900">
+        <h3 className="text-[16px] leading-6 font-extrabold text-slate-900">
           {t("office.title")}
         </h3>
         <p className="mt-3 text-[14px] leading-5 text-slate-600">
@@ -85,7 +85,7 @@ export default function Rail() {
 
       {/* Socials — reuses the footer's brand glyphs and link data */}
       <StaggerItem className="rounded-2xl bg-white p-6 border border-[#e0e0e0]">
-        <h3 className="text-[16px] leading-6 font-semibold text-slate-900">
+        <h3 className="text-[16px] leading-6 font-extrabold text-slate-900">
           {t("social.title")}
         </h3>
         <p className="mt-3 text-[14px] leading-5 text-slate-600">

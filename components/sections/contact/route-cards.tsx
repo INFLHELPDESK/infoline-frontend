@@ -45,7 +45,7 @@ export default function RouteCards() {
             <Eyebrow>{t("label")}</Eyebrow>
           </StaggerItem>
           <StaggerItem>
-            <h2 className="mt-3 text-center text-[24px] leading-9 font-semibold text-slate-900 lg:text-[28px]">
+            <h2 className="mt-3 text-center text-[24px] leading-9 font-extrabold text-slate-900 lg:text-[28px]">
               {t("title")}
             </h2>
           </StaggerItem>

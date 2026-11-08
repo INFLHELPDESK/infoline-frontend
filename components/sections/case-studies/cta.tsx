@@ -25,7 +25,7 @@ export default function Cta() {
             <div className="flex max-w-[989px] flex-col gap-3">
               {/* Figma heading/2xl/bold: Avenir Black (800). Arabic keeps its
                   current Tajawal weight pending the Arabic type decision. */}
-              <h3 className="text-[28px] leading-9 font-extrabold text-white rtl:font-semibold lg:text-[36px] lg:leading-11">
+              <h3 className="text-[28px] leading-9 font-black text-white lg:text-[36px] lg:leading-11">
                 {t("cta.title")}
               </h3>
               <p className="text-[16px] leading-6 text-[#e3e3e3]">

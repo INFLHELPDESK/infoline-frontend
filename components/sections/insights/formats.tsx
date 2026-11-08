@@ -54,7 +54,7 @@ export default function Formats({
               <Eyebrow className="mb-4">
                 {t("formats.eyebrow")}
               </Eyebrow>
-              <h2 className="max-w-[891px] text-[28px] leading-9 font-semibold lg:text-[36px] lg:leading-11 text-slate-900">
+              <h2 className="max-w-[891px] text-[28px] leading-9 font-extrabold lg:text-[36px] lg:leading-11 text-slate-900">
                 {t("formats.title")}
               </h2>
             </div>

@@ -19,7 +19,7 @@ export default function Cta() {
 
           <div className="relative z-10 flex flex-col justify-between gap-6 md:items-center lg:flex-row">
             <div className="flex max-w-[874px] flex-col gap-4">
-              <h3 className="text-[28px] leading-9 font-semibold text-white lg:text-[36px] lg:leading-11">
+              <h3 className="text-[28px] leading-9 font-extrabold text-white lg:text-[36px] lg:leading-11">
                 {t("cta.title")}
               </h3>
               <p className="text-[16px] leading-6 text-slate-100">

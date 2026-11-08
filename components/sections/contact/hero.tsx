@@ -24,7 +24,7 @@ export default function Hero() {
               </StaggerItem>
               <MaskText
                 as="h1"
-                className="max-w-[495px] text-[32px] font-extrabold leading-[1.1] text-slate-900 lg:text-[36px] lg:leading-11"
+                className="max-w-[495px] text-[32px] font-black leading-[1.1] text-slate-900 lg:text-[36px] lg:leading-11"
                 segments={[
                   { text: t("hero.titleLead") },
                   { text: t("hero.titleAccent") },

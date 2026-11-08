@@ -26,7 +26,7 @@ for (const locale of ["en", "ar"] as const) {
         rail.evaluate((ul) =>
           [...ul.children].map((li) => {
             const icon = li.querySelector<HTMLElement>("span.grid.size-10");
-            const title = icon?.parentElement?.querySelector<HTMLElement>(":scope > span.font-black, :scope > span > span.font-black");
+            const title = icon?.parentElement?.querySelector<HTMLElement>(":scope > span.font-extrabold, :scope > span > span.font-extrabold");
             const row = li.getBoundingClientRect();
             const i = icon!.getBoundingClientRect();
             const t = title!.getBoundingClientRect();

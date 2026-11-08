@@ -41,9 +41,9 @@ export function Eyebrow({
 
 /** Heading sizes from Figma: 64px section titles, 72px on the proof/solutions blocks. */
 export const sectionTitle =
-  "text-[34px] leading-[1.12] font-semibold tracking-[-0.02em] sm:text-5xl lg:text-[64px] lg:leading-[1.09]";
+  "text-[34px] leading-[1.12] font-extrabold tracking-[-0.02em] sm:text-5xl lg:text-[64px] lg:leading-[1.09]";
 export const sectionTitleXl =
-  "text-[36px] leading-[1.1] font-semibold tracking-[-0.02em] sm:text-5xl lg:text-[72px] lg:leading-[1.1]";
+  "text-[36px] leading-[1.1] font-extrabold tracking-[-0.02em] sm:text-5xl lg:text-[72px] lg:leading-[1.1]";
 
 type ButtonVariant = "primary" | "soft" | "outline" | "ghostDark";
 
